@@ -1,0 +1,104 @@
+{
+  "extracted_at": "2026-02-02T17:07:20.121057+00:00",
+  "models": [
+    {
+      "name": "ControlParameters",
+      "kind": "ndb.Model",
+      "properties": [
+        {
+          "name": "user_summary_last_update_datetime",
+          "type": "DateTimeProperty",
+          "line": 7
+        },
+        {
+          "name": "user_integrity_last_update_datetime",
+          "type": "DateTimeProperty",
+          "line": 8
+        },
+        {
+          "name": "update_datetime",
+          "type": "DateTimeProperty",
+          "line": 9
+        }
+      ],
+      "file": "db/controlparameters.py",
+      "line": 6
+    },
+    {
+      "name": "Lead",
+      "kind": "ndb.Model",
+      "properties": [
+        {
+          "name": "user_id",
+          "type": "IntegerProperty",
+          "line": 10
+        },
+        {
+          "name": "firstName",
+          "type": "StringProperty",
+          "line": 11
+        },
+        {
+          "name": "lastName",
+          "type": "StringProperty",
+          "line": 12
+        },
+        {
+          "name": "email",
+          "type": "StringProperty",
+          "line": 13
+        },
+        {
+          "name": "phone",
+          "type": "StringProperty",
+          "line": 14
+        },
+        {
+          "name": "phoneRaw",
+          "type": "StringProperty",
+          "line": 15
+        },
+        {
+          "name": "eventbriteId",
+          "type": "IntegerProperty",
+          "line": 17
+        },
+        {
+          "name": "crmId",
+          "type": "StringProperty",
+          "line": 19
+        },
+        {
+          "name": "updateTime",
+          "type": "DateTimeProperty",
+          "line": 20
+        }
+      ],
+      "file": "db/user.py",
+      "line": 5
+    },
+    {
+      "name": "FileModel",
+      "kind": "ndb.Model",
+      "properties": [
+        {
+          "name": "filename",
+          "type": "StringProperty",
+          "line": 37
+        },
+        {
+          "name": "date_created",
+          "type": "DateTimeProperty",
+          "line": 38
+        },
+        {
+          "name": "date_updated",
+          "type": "DateTimeProperty",
+          "line": 39
+        }
+      ],
+      "file": "pyutils/upload.py",
+      "line": 36
+    }
+  ]
+}
