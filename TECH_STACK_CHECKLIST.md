@@ -40,7 +40,9 @@
 | `ndb.BooleanProperty` | `Boolean` | Type mapping |
 | `ndb.DateTimeProperty` | `DateTime` | Type mapping |
 | `ndb.TextProperty` | `String` @db.Text | Type mapping |
-| `ndb.Key` | Auto-increment ID | Key handling |
+| `ndb.Key` | **UUID or Serialized key** | ⚠️ DECISION REQUIRED - See `docs/decisions/MIGRATION_DECISIONS.md` |
+| Entity groups | `parentId` self-relation | ⚠️ Use Prisma self-relations |
+| Ancestor queries | Recursive CTEs | ⚠️ Requires PostgreSQL hierarchy queries |
 
 **Extract to:** `specs/extracted/models.json`
 **Create:** `specs/database/schema.prisma`
@@ -133,29 +135,42 @@ zod  # Validation
 
 ## Missing from Current Setup
 
+### Critical Decisions (BLOCKING Build Phase)
+
+See `docs/decisions/MIGRATION_DECISIONS.md` for full details.
+
+```text
+[ ] DB Key Strategy        (docs/decisions/MIGRATION_DECISIONS.md #1)
+[ ] Upload Strategy        (docs/decisions/MIGRATION_DECISIONS.md #3)
+[ ] Session Strategy       (docs/decisions/MIGRATION_DECISIONS.md #5)
+[ ] Jobs Extraction        (specs/extracted/jobs.json)
+[ ] Images Extraction      (specs/extracted/images.json)
+```
+
 ### Need to Add
 
-1. **Prisma Schema** (`specs/database/schema.prisma`)
-   - Map NDB models to PostgreSQL
-   - Define relationships
+1. ✅ **Critical Decisions Doc** - DONE (`docs/decisions/MIGRATION_DECISIONS.md`)
+   - 10 critical decisions based on web research
+   - Must be reviewed before build phase
 
-2. **Next.js App Structure** (`app/` directory)
+2. ⚠️ **Prisma Schema** (`specs/database/schema.prisma`)
+   - Map NDB models to PostgreSQL
+   - Define self-referencing relations for entity groups
+   - **BLOCKED**: Waiting for DB key strategy decision
+
+3. ⏳ **Next.js App Structure** (`app/` directory)
    - Not created yet (waiting for build phase)
    - Will be created by PROMPT_build.md
 
-3. **TypeScript Step Definitions** (`test/typescript/steps/`)
+4. ⏳ **TypeScript Step Definitions** (`test/typescript/steps/`)
    - Skeleton files needed
    - Mirror Python steps
 
-4. **Environment Configuration**
+5. ⏳ **Environment Configuration**
    - `.env.local` template
    - GCS credentials
    - SendGrid API key
    - Database connection string
-
-5. **Docker for Python 2.7**
-   - Optional: Container for running legacy tests
-   - Ensures consistent environment
 
 ---
 
