@@ -1,3 +1,6 @@
+# Claude trace (local debug only)
+.claude-trace/
+
 # Dependencies
 node_modules/
 .pnp
@@ -7,13 +10,13 @@ node_modules/
 coverage/
 *.lcov
 
-# Next.js
+# Next.js / Bun
 .next/
 out/
 build/
 dist/
 
-# Production
+# Logs
 *.log
 *.log.*
 
@@ -39,6 +42,3 @@ bun.lockb
 
 # Bun
 bun.lockb
-
-# Legacy (read-only reference)
-legacy/

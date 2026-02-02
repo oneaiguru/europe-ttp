@@ -1,0 +1,4 @@
+google-cloud-storage
+requests-toolbelt
+# google-cloud-datastore==1.15.3
+# google-cloud-ndb==1.0.0

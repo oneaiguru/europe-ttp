@@ -1,0 +1,154 @@
+
+/* Overriding DataTables button as well */
+.dt-button.an-simple-button, a.an-simple-button, input.an-simple-button, button.an-simple-button {
+  padding: 3px;
+  padding-right: 13px;
+  padding-left: 13px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  font-size: 13px;
+  line-height: 25px;
+  font-family: 'Ubuntu', sans-serif; 
+  /*color: #3db270;*/
+  display: inline-block;
+  /* do not change l&f in iOS */
+  -webkit-appearance:none; 
+  cursor: pointer;
+  -webkit-box-shadow: 0px 2px 1px 0px rgba(213,213,213,0.90);
+  -moz-box-shadow: 0px 2px 1px 0px rgba(213,213,213,0.90);
+  box-shadow: 0px 2px 1px 0px rgba(213,213,213,0.90);
+  background-color: #e9e9e9;
+  color: #000;
+
+  /* Make text not selectable */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+/* Overriding DataTables button as well */
+.dt-button.an-simple-button:hover, a.an-simple-button:hover, input.an-simple-button:hover, button.an-simple-button:hover,
+.dt-button.an-simple-button:focus, a.an-simple-button:focus, input.an-simple-button:focus, button.an-simple-button:focus {
+  padding: 3px;
+  padding-right: 13px;
+  padding-left: 13px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  font-size: 13px;
+  line-height: 25px;
+  font-family: 'Ubuntu', sans-serif; 
+  /*color: #3db270;*/
+  display: inline-block;
+  /* do not change l&f in iOS */
+  -webkit-appearance:none; 
+  cursor: pointer;
+  -webkit-box-shadow: 0px 2px 1px 0px rgba(213,213,213,0.90);
+  -moz-box-shadow: 0px 2px 1px 0px rgba(213,213,213,0.90);
+  box-shadow: 0px 2px 1px 0px rgba(213,213,213,0.90);
+  background-color: #f2f2f2;
+  color: #555;
+}
+
+.an-c2a-button {
+  padding: 3px;
+  padding-right: 13px;
+  padding-left: 13px;
+  border-radius: 3px;
+  border: 1px solid #00a259;
+  font-size: 13px;
+  line-height: 25px;
+  font-family: 'Ubuntu', sans-serif; 
+  display: inline-block;
+  /* do not change l&f in iOS */
+  -webkit-appearance:none; 
+  cursor: pointer;
+  -webkit-box-shadow: 0px 2px 1px 0px rgba(0,114,63,0.90);
+  -moz-box-shadow: 0px 2px 1px 0px rgba(0,114,63,0.90);
+  box-shadow: 0px 2px 1px 0px rgba(0,114,63,0.90);
+  background-color: #00a259;
+  color: white;
+
+  /* Make text not selectable */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.an-c2a-button:hover, 
+.an-c2a-button:focus {
+  padding: 3px;
+  padding-right: 13px;
+  padding-left: 13px;
+  border-radius: 3px;
+  border: 1px solid #00b362;
+  font-size: 13px;
+  line-height: 25px;
+  font-family: 'Ubuntu', sans-serif; 
+  display: inline-block;
+  /* do not change l&f in iOS */
+  -webkit-appearance:none; 
+  cursor: pointer;
+  -webkit-box-shadow: 0px 2px 1px 0px rgba(0,114,63,0.90);
+  -moz-box-shadow: 0px 2px 1px 0px rgba(0,114,63,0.90);
+  box-shadow: 0px 2px 1px 0px rgba(0,114,63,0.90);
+  background-color: #00b362;
+  color: white;
+}
+
+.an-2nd-c2a-button {
+  padding: 3px;
+  padding-right: 13px;
+  padding-left: 13px;
+  border-radius: 3px;
+  border: 1px solid #f2994d;
+  font-size: 13px;
+  line-height: 25px;
+  font-family: 'Ubuntu', sans-serif; 
+  display: inline-block;
+  /* do not change l&f in iOS */
+  -webkit-appearance:none; 
+  cursor: pointer;
+  -webkit-box-shadow: 0px 2px 1px 0px rgba(238,85,73,0.90);
+  -moz-box-shadow: 0px 2px 1px 0px rgba(238,85,73,0.90);
+  box-shadow: 0px 2px 1px 0px rgba(238,85,73,0.90);
+  background-color: #f2994d;
+  color: white;
+
+  /* Make text not selectable */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.an-2nd-c2a-button:hover, 
+.an-2nd-c2a-button:focus {
+  padding: 3px;
+  padding-right: 13px;
+  padding-left: 13px;
+  border-radius: 3px;
+  border: 1px solid #f2ac62;
+  font-size: 13px;
+  line-height: 25px;
+  font-family: 'Ubuntu', sans-serif; 
+  display: inline-block;
+  /* do not change l&f in iOS */
+  -webkit-appearance:none; 
+  cursor: pointer;
+  -webkit-box-shadow: 0px 2px 1px 0px rgba(238, 85, 73, 0.90);
+  -moz-box-shadow: 0px 2px 1px 0px rgba(238, 85, 73, 0.90);
+  box-shadow: 0px 2px 1px 0px rgba(238, 85, 73, 0.90);
+  background-color: #f2ac62;
+  color: white;
+}
+
+div.an-button-vertical_separator { 
+  display: inline-block;
+  border: none;
+  border-left: 1px solid #eee;
+  width: 1px;
+  margin: 0 3px;
+  line-height: 30px;
+}

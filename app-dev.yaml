@@ -1,0 +1,93 @@
+application: artofliving-ttcdesk-dev
+version: 2
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /blank.html
+  static_files: blank.html
+  upload: blank.html
+  secure: always
+
+- url: /
+  script: ttc_portal.app
+  login: required
+  secure: always
+
+- url: /images
+  static_dir: images
+  secure: always
+
+- url: /tabs/.*
+  script: tabs.app
+  login: required
+  secure: always
+
+- url: /form/.*
+  script: form.app
+  login: required
+  secure: always
+
+- url: /users/.*
+  script: ttc_portal_user.app
+  login: required
+  secure: always
+
+- url: /storage
+  static_dir: storage
+  login: required
+  secure: always
+
+- url: /javascript
+  static_dir: javascript
+  login: required
+  secure: always
+
+- url: /styles
+  static_dir: styles
+  secure: always
+
+- url: /docs
+  static_dir: docs
+  login: required
+  secure: always
+
+- url: /ext
+  static_dir: ext
+
+- url: /api/.*
+  script: api.app
+  login: required
+  secure: always
+
+- url: /upload/.*
+  script: upload.app
+  login: required
+  secure: always
+
+- url: /createpdf
+  script: createpdf.app
+  login: required
+  secure: always
+
+#- url: /.*
+#  script: not_found.app
+
+# [START libraries]
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
+# [END libraries]
+
+env_variables:
+  GOOGLE_MAPS_API_KEY: 'AIzaSyCRXv1cpuBAO5GFZhjR3VT96QOnbuGPvKY'
+  GOOGLE_PUBLIC_API_KEY: 'AIzaSyBQiCn_c9vD0BQWiXvSvK6JeJJ_KWDSpTM '
+  SERVICE_JSON_FILE: 'artofliving-ttcdesk-dev-b3dbc09298ee.json'
+
+
+
+
+

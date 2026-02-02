@@ -1,0 +1,793 @@
+{
+	"form_name": "TTC Evaluation",
+	"form_type": "ttc_evaluation",
+	"dep_list": ["ttc_evaluator_profile"],
+	"form_description": "Note: This TTC Evaluation form should be filled by Art of Living Teachers only. Please answer all questions truthfully and with detail and clarity. Your responses will remain confidential and will only be reviewed by the TTC Trainers and the TTC desk team.",
+	"is_multi_instance_form": "true",
+
+	"from_email": "amit.nair@artofliving.org",
+	"user_confirmation_email": {
+		"message": "Dear {i_name}, <br><br> Your Evaluation has been submitted successfully for candidate {i_volunteer_name} for the upcoming TTC <b>{dates}</b>. <br><br> Jai Gurudev<br> TTC Desk<br>",
+		"subject": "Your Evaluation for {i_volunteer_name} for the upcoming TTC {dates} has been submitted"
+	},
+	"owner_confirmation_email": {
+		"message": "Dear TTC Desk,<br><br> {i_name} has submitted their evaluation for candidate {i_volunteer_name} for the upcoming TTC <b>{dates}</b>.<br><br> Jai Gurudev<br> TTC Desk, USA<br>",
+		"subject": "{i_name} has submitted their evaluation for {i_volunteer_name} for TTC {dates}"
+	},
+
+	"pages": [
+		{
+			"page_name": "New Evaluation",
+			"questions": [
+				{
+					"id": "i_volunteer_name",
+					"order": "1",
+					"question": "Candidate Name",
+					"type": "text"
+				},
+				{
+					"id": "i_volunteer_email",
+					"order": "2",
+					"question": "Candidate Email",
+					"type": "email",
+					"is_form_instance_identifier": "true"
+				},
+				{
+					"id": "i_ttc_country_and_dates",
+					"order": "4",
+					"question": "Select TTC",
+					"type": "select",
+					"source": "ttc_country_and_dates.json",
+					"is_form_instance_identifier": "true"
+				}
+			],
+			"is_form_instance_identifier": "true"
+		},
+		{
+			"page_name": "Evaluating Teacher's Personal Information",
+			"questions": [
+				{
+					"id": "i_name",
+					"order": "7",
+					"question": "Name (First and Last)",
+					"type": "text"
+				},
+				{
+					"id": "i_email_aol",
+					"order": "8",
+					"question": "Email Address (artofliving.org)",
+					"type": "email"
+				},
+				{
+					"id": "i_primaryphone",
+					"order": "9",
+					"question": "Primary Phone Number",
+					"type": "text"
+				},
+				{
+					"id": "i_teaching_cities",
+					"order": "10",
+					"question": "City/Cities where you teach",
+					"type": "textarea"
+				},
+				{
+					"id": "i_teaching_start_date",
+					"order": "11",
+					"question": "Date you began teaching the Art of Living / Yesplus Course (mm/yyyy)",
+					"type": "text",
+					"date_format": "M yy",
+					"mask_pattern": "99/9999",
+					"helper": "Please enter numbers only"
+				},
+				{
+					"id": "i_taught_count",
+					"order": "19",
+					"display_value": "Please state the number of courses that you have taught in the last 3 years (including courses other than Art of Living (Part 1)",
+					"type": "header",
+					"helper": "Please put a 0 against the course types that don't apply to your teaching experience and expertise"
+				},
+				{
+					"id": "i_taught_count_newformat",
+					"order": "13",
+					"question": "Happiness Program / Yesplus Course",
+					"type": "text"
+				},
+				{
+					"id": "i_taught_count_oldformat",
+					"order": "14",
+					"question": "Art of Living Course / Yesplus Course (old format)",
+					"type": "text"
+				},
+				{
+					"id": "i_taught_count_sahaj",
+					"order": "15",
+					"question": "Sahaj Samadhi Meditation Course",
+					"type": "text"
+				},
+				{
+					"id": "i_taught_count_other",
+					"order": "16",
+					"question": "Other",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"page_name": "Familiarity with the applicant",
+			"questions": [
+				{
+					"id": "i_volunteer_years_known",
+					"order": "19",
+					"question": "For how many years have you known the applicant as a volunteer?",
+					"type": "text"
+				},
+				{
+					"id": "i_volunteer_service_activities",
+					"order": "20",
+					"question": "What service activities (courses/events/ongoing projects) do you know the applicant to have participated in locally/regionally/nationally?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_work_with_teacher",
+					"order": "13",
+					"question": "Please select the option that most closely describes how the applicant has worked with you directly",
+					"type": "checkbox_group",
+					"display_values": [
+						{"value": "organized_hp_yp_course", "display": "Organized Happiness Program / Yesplus Course"},
+						{"value": "assisted_hp_yp_course", "display": "Assisted Happiness Program / Yesplus Course"},
+						{"value": "service_project", "display": "Worked on other service projects with you"}
+					]
+				}
+			]
+		},
+		{
+			"page_name": "Applicant evaluation",
+			"questions": [
+				{
+					"id": "i_volunteer_indepth_conversation",
+					"order": "26",
+					"question": "Have you had an in-depth conversation with the applicant to understand their readines for the TTC and their compliance with the TTC requirements, please explain.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_satisfy_requirements",
+					"order": "29",
+					"question": "Based on the conversation, can you confirm that the applicant satisfies ALL the TTC requirements? If you are unsure, please verify with the applicant before responding.",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{
+							"value": "no", 
+							"display": "No",
+							"dep_list": [
+								"i_volunteer_not_satisfy_requirements_reason"
+							]
+						}
+					]
+				},
+				{
+					"id": "i_volunteer_not_satisfy_requirements_reason",
+					"order": "27",
+					"question": "If you have responded 'No' to the above question, please explain which requirements are missing.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_physical_fitness",
+					"order": "30",
+					"question": "Please comment on the applicant's ability to physically handle the rigors of a 2 week intensive TTC program",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_mental_fitness",
+					"order": "31",
+					"question": "Please comment on the applicants overall mental fitness, emotional stability and any other relevant behavioral issues you may have noticed",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_family_support",
+					"order": "31",
+					"question": "Does the applicant's have support from family for becoming an Art of Living teacher? Please explain.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_vegetarian",
+					"order": "32",
+					"question": "Please comment on whether the applicant is 100% vegetarian, and free from use of alcohol, tobacco and recreational drugs for at least 6 months.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_connection_to_Guruji",
+					"order": "33",
+					"question": "Please comment on the applicant's connection to Guruji.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_represent_aol",
+					"order": "34",
+					"question": "Please comment on whether the applicant is suitable and capable of representing the Art of Living Foundation as a teacher",
+					"type": "textarea"
+				}
+
+			]
+		},
+		{
+			"page_name": "Course organizing questions",
+			"questions": [
+				{
+					"id": "i_courses_org_for_teacher",
+					"order": "45",
+					"question": "How many courses has the applicant organized for you?",
+					"type": "text"
+				},
+				{
+					"id": "i_volunteer_lead_org",
+					"order": "46",
+					"question": "Were they a lead organizer on at least one of these courses?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_lead_org_work",
+					"order": "13",
+					"question": "Pick one course that the applicant lead organized for you, where they took the most ownership for the course. Please specify the responsibilities they took",
+					"type": "checkbox_group",
+					"display_values": [
+						{"value": "listing", "display": "Listing the course on online registration portal"},
+						{"value": "venue_logistics", "display": "Arranging venue and logistics"},
+						{"value": "leadteam", "display": "Bringing a team of volunteers together and leading them."},
+						{"value": "enrollment", "display": "Driving outreach and enrollment"},
+						{"value": "personal_enrollment", "display": "Enrolling participants for the course personally"},
+						{"value": "day2day_logistics", "display": "Setting up the room and the day-to-day logistics of the course"},
+						{"value": "ownership", "display": "Taking complete ownership of the course without the need for follow-up"},
+						{"value": "accounting", "display": "Completing the accounting for the course within two weeks from the end of the course"},
+						{"value": "reunions", "display": "Attending course reunions"}
+					]
+				},
+				{
+					"id": "i_lead_org_introtalks_led",
+					"order": "57",
+					"question": "Please comment on the total number of introductory talks/info session that the applicant LED ON THEIR OWN for this course, number of people in attendence per session on an average, and number of people who registered for the course from the sessions?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_lead_org_personal_enrollment_count",
+					"order": "58",
+					"question": "How many people did the applicant personally enroll for the course?",
+					"type": "text"
+				},
+				{
+					"id": "i_lead_org_course_participant_count",
+					"order": "59",
+					"question": "How many total number of participants were there on the course?",
+					"type": "text"
+				},
+				{
+					"id": "i_lead_org_leadership_skills",
+					"order": "60",
+					"question": "Please comment on their overall organizing/team-building/leadership skills, giving 2-3 specific examples",
+					"type": "textarea"
+				}
+			]
+		},
+		{
+			"page_name": "Course assisting questions",
+			"questions": [
+				{
+					"id": "i_volunteer_assist",
+					"order": "62",
+					"question": "Did the applicant 'assist' you on a course that you taught? 'Assist' means that they sat through the entire course and led Yoga/Pranayams/some basic knowledge point/processes/games, under your guidance.",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_assist_participant_count",
+					"order": "63",
+					"question": "Total number of participants on the course?",
+					"type": "text"
+				},
+				{
+					"id": "i_assist_processes",
+					"order": "64",
+					"question": "Please provide details of the knowledge points/processes/games that the applicant led during the course,commenting on their ability to deliver it in a clear, crisp, interactive style.",
+					"type": "textarea"
+				}
+			]
+		},
+		{
+			"page_name": "General Skills",
+			"questions": [{
+					"id": "i_volunteer_rating_leadership_question",
+					"order": "76",
+					"question": "On a scale of 1-5, 5 being the highest, please rate this applicant for their Leadership abilities",
+					"type": "question"
+				},
+				{
+					"id": "i_volunteer_rating_leadership_follow_instruction",
+					"order": "77",
+					"question": "Follows instructions from lead teacher",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_leadership_listener",
+					"order": "78",
+					"question": "Good listener",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_leadership_speaks_up",
+					"order": "79",
+					"question": "Speaks up if they think something can be changed or done better",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_leadership_honest",
+					"order": "80",
+					"question": "Honest and has integrity",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_leadership_respectful_demeanour",
+					"order": "81",
+					"question": "Has a respectful demeanour towards all",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_leadership_teamplayer",
+					"order": "82",
+					"question": "Works well in a team",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_leadership_leads_by_example",
+					"order": "83",
+					"question": "Leads by example",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_leadership_explanation",
+					"order": "84",
+					"question": "If you gave them a score 2 or less for any of the categories, please give details on why you gave a low score",
+					"type": "textarea",
+					"helper": "If not applicable, please put N/A in the box below"
+				},
+				{
+					"id": "i_volunteer_rating_communication_question",
+					"order": "85",
+					"question": "On a scale of 1-5, 5 being the highest, please rate this applicant for their Communication Skills",
+					"type": "question"
+				},
+				{
+					"id": "i_volunteer_rating_communication_spoken_english",
+					"order": "85",
+					"question": "Fluency in spoken English - grammar, sentence formation, clarity of speech",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_communication_written_english",
+					"order": "86",
+					"question": "Written English - grammar, sentence formation",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_communication_confidence",
+					"order": "87",
+					"question": "Ability to speak confidently in front of a group of 10+ people",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_communication_connection",
+					"order": "88",
+					"question": "Ability to connect with the group they are speaking to",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_communication_interactive",
+					"order": "89",
+					"question": "Interactive style of communication",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_communication_presence",
+					"order": "90",
+					"question": "Presence",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_communication_awareness",
+					"order": "91",
+					"question": "General awareness/sensitivity to audience they are speaking to",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_communication_explanation",
+					"order": "92",
+					"question": "If you gave them a score 2 or less for any of the categories, please give details on why you gave a low score",
+					"type": "textarea",
+					"helper": "If not applicable, please put N/A in the box below"
+				},
+				{
+					"id": "i_volunteer_rating_communication_question",
+					"order": "85",
+					"question": "On a scale of 1-5, 5 being the highest, please rate this applicant for their Course Organizational Skills",
+					"type": "question"
+				},
+				{
+					"id": "i_volunteer_rating_org_skills_big_vision",
+					"order": "93",
+					"question": "Have a big vision",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_org_skills_planning",
+					"order": "94",
+					"question": "Create a detailed plan",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_org_skills_plan_execution",
+					"order": "95",
+					"question": "Follow through &amp; execute the plan",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_org_skills_creativity",
+					"order": "96",
+					"question": "Creativity &amp; risk taking ",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_org_skills_motivation",
+					"order": "97",
+					"question": "Keep oneself &amp; the team motivated",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_org_skills_consistency",
+					"order": "98",
+					"question": "Consistency in outreach",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_org_skills_stretch",
+					"order": "99",
+					"question": "Willingness to stretch beyond their comfort zone",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_org_skills_faith",
+					"order": "100",
+					"question": "Faith on Guruji",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_org_skills_explanation",
+					"order": "101",
+					"question": "If you gave them a score 2 or less for any of the categories, please give details on why you gave a low score",
+					"type": "textarea",
+					"helper": "If not applicable, please put N/A in the box below"
+				},
+				{
+					"id": "i_volunteer_rating_communication_question",
+					"order": "85",
+					"question": "On a scale of 1-5, 5 being the highest, please rate this applicant for their Retention Skills",
+					"type": "question"
+				},
+				{
+					"id": "i_volunteer_rating_retention_skills_connecting",
+					"order": "102",
+					"question": "Connecting with participants during a course",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_retention_skills_attendence",
+					"order": "103",
+					"question": "Attending follow-ups, reunion &amp; satsangs after the course",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_retention_skills_kit",
+					"order": "104",
+					"question": "Keeping in touch with participants individually",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_retention_skills_inspire_next_steps",
+					"order": "105",
+					"question": "Inspiring participants to take the next steps",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_retention_skills_nurture",
+					"order": "106",
+					"question": "Nurture participants to become volunteers",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_retention_skills_build_vol_team",
+					"order": "107",
+					"question": "Building volunteer teams to work on courses/service projects ",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_volunteer_rating_retention_skills_explanation",
+					"order": "108",
+					"question": "If you gave them a score 2 or less for any of the categories, please give details on why you gave a low score",
+					"type": "textarea",
+					"helper": "If not applicable, please put N/A in the box below"
+				},
+				{
+					"id": "i_volunteer_personality",
+					"order": "109",
+					"question": "Describe the applicant's personality",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_strengths",
+					"order": "110",
+					"question": "Please specify 3 strengths of the applicant with examples",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_improvements",
+					"order": "111",
+					"question": "Please specify 3 areas of improvement for the applicant with examples",
+					"type": "textarea"
+				}
+			]
+		},
+		{
+			"page_name": "Applicant Readiness",
+			"questions": [
+				{
+					"id": "i_volunteer_suited_teaching",
+					"order": "13",
+					"question": "Please select the option that most closely describes how the applicant has worked with you directly",
+					"type": "checkbox_group",
+					"display_values": [
+						{"value": "aol", "display": "Art of Living"},
+						{"value": "yesplus", "display": "<b>yes</b>plus"},
+						{"value": "ae", "display": "Art Excel"},
+						{"value": "yes", "display": "YES!"}
+					]
+				},
+				{
+					"id": "i_volunteer_teaching_readiness",
+					"order": "117",
+					"question": "Based on your assessment at this time, please rate the readiness of this applicant to be part of this upcoming TTC",
+					"type": "select",
+					"display_values": [
+						{"value": "ready_now", "display": "Ready Now"},
+						{"value": "ready_next_ttc", "display": "Ready by next TTC"},
+						{"value": "ready_in_the_future", "display": "May be ready in the future"}
+					]
+				},
+				{
+					"id": "i_volunteer_teaching_readiness_explanation",
+					"order": "118",
+					"question": "If you selected 'Ready Now', please explain why. If you selected any other option, please suggest the areas they need to focus on to become strong and come for future TTC.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_areas_suggestions",
+					"order": "118",
+					"question": "After the applicant comes back from TTC, please let us know which geographic areas would you like to see him/her teach and develop? Please also let us know If you prefer that they teach and help grow the existing center. Your inputs in this will greatly help us guide them.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_volunteer_area_in_charge",
+					"order": "111",
+					"question": "Please name the person that is in charge of the course scheduling activities in applicant's area, if any.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_misc_comments",
+					"order": "121",
+					"question": "Do you have any other comments for TTC desk?",
+					"type": "textarea"
+				}
+			]
+		}
+	]
+}

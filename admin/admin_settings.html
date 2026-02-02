@@ -1,0 +1,560 @@
+<script type="text/javascript" src="javascript/typeahead.bundle.js"></script>
+<link rel="stylesheet" type="text/css" href="styles/an-typeahead.css">
+
+<script type="text/javascript">
+
+    function disableInputs(is_recoverable) {
+        $("input[id^=i_],textarea[id^=i_],select[id^=i_]").prop("disabled", true);
+        if (!is_recoverable) {
+            $('input[name=btns_save_submit]').remove();
+            $('#step_submit').show();
+        } else {
+            $('#step_submit').hide();
+        }
+    }
+
+    function enableInputs() {
+        $("input[id^=i_],textarea[id^=i_],select[id^=i_]").prop("disabled", false);
+        $('#step_submit').show();
+    }
+
+    // [START global_variables] ---------------------------------------------------------------------------
+    var repeat_question_list = {
+        "i_whitelisted_user": [
+            "i_whitelisted_user_name", 
+            "i_whitelisted_user_email"
+        ]
+    };
+
+    // This is not defined as a constant since if empty_form reloads it causes redefinition issue
+    var REPEATER_DISPLAY_INPUT_CNT = 2;
+    // [END global_variables] -----------------------------------------------------------------------------
+
+    var tempYes = function () { };
+    var tempNo = function () { };
+
+    function new_repeat_entry(id) {
+        console.log("[new_repeat_entry] New repeat entry for " + id);
+        $('#' + id).append($('<option>', {
+            value: "new_entry",
+            text: "New Entry"
+        }));
+        $('#' + id).val("new_entry");
+        var input_list = repeat_question_list[id];
+        for (var i = 0; i < input_list.length; i++) {
+            console.log("[new_repeat_entry] Enabling " + input_list[i]);
+            $('#' + input_list[i]).val("");
+
+            $("label[for='" + input_list[i] + "']").show();
+            $('#' + input_list[i]).show();
+            $("label[for=" + input_list[i] + "_hidden]").show();
+            $('#' + input_list[i] + '_hidden').show();
+            $('input[name=' + input_list[i] + ']').show();
+            $('div[name=' + input_list[i] + ']').show();
+            $('label[name=' + input_list[i] + ']').show();
+        }
+        $('#' + id + '_save').show();
+    }
+
+    function remove_repeat_entry(id) {
+        var _val = $('#' + id).val();
+        if (_val == 'new_entry') {
+            $('#' + id).val("summary").change();
+        } else {
+            if (_val == "" || _val == 'summary' || _val == 'new_entry') {
+                postErrorMessage("Please select an entry from the dropdown to delete");
+                return false;
+            } else {
+                $("#" + id + " option[value='" + _val + "']").remove();
+                $('#' + id).val("summary").change();
+            }
+        }
+    }
+
+    function save_repeat_entry(id) {
+        var _val = $('#' + id).val();
+        if (_val == 'new_entry') {
+            var input_list = repeat_question_list[id];
+            if (!checkFieldsNonEmpty(input_list)) {
+                postErrorMessage("Please enter all details to save");
+                return false;
+            }
+            if (true) {//checkEmailField('i_eval_teacher_email')) {
+
+                // [START setting_display_name_for_repeat_entry]
+                var _name = "";
+                for (let i = 0; i < Math.min(input_list.length, REPEATER_DISPLAY_INPUT_CNT); i++) {
+                    let _n = "";
+                    const _ip_id = input_list[i];
+                    var _ip = $('#' + _ip_id);
+                    if (_ip.val()) {
+                        _n = _ip.val().trim();
+                        var _input_type = _ip.attr('type');
+                        if (_input_type && _input_type != 'hidden') {
+                            if (_input_type == 'checkbox' || _input_type == 'radio') {
+                                _n = $("label[for='" + _ip_id + "']");
+                            } else {
+                                _n = _ip.val();
+                            }
+                        } else if (_ip.is("select")) {
+                            _n = $('#' + _ip_id + ' option:selected').text();
+                        }
+                    }
+                    if (_n != "") {
+                        if (_name != "") {
+                            _name += " • ";
+                        }
+                        _name += _n;
+                    }
+                }
+                if (_name == "") {
+                    _name = "Entry";
+                }
+                // [END setting_display_name_for_repeat_entry]
+
+                var _obj = {};
+                for (var i = 0; i < input_list.length; i++) {
+                    // if hidden elements, then check if radio or checkbox
+                    var _i_hidden = $('#' + input_list[i] + '_hidden');
+                    if (_i_hidden.length > 0) {
+                        if (_i_hidden.val() == 'checkbox_group') {
+                            $('input[id^=' + input_list[i] + '][type=checkbox]').each(function (i, obj) {
+                                if ($(this).is(':visible')) {
+                                    console.log("[save_repeat_entry] Saving " + input_list[i]);
+                                    var _i_val = document.getElementById($(this).attr('id')).checked;
+                                    _obj[$(this).attr('id')] = _i_val;
+                                }
+                            });
+                        } else if (_i_hidden.val() == 'radio') {
+                            var _checked_radio = $('input[name=' + input_list[i] + ']:checked');
+                            if (_checked_radio && _checked_radio.is(':visible')) {
+                                console.log("[save_repeat_entry] Saving " + input_list[i]);
+                                var _i_val = _checked_radio.val();
+                                _obj[input_list[i]] = _i_val;
+                            }
+                        }
+                    } else {
+                        if ($('#' + input_list[i]).is(':visible')) {
+                            console.log("[save_repeat_entry] Saving " + input_list[i]);
+                            var _i_val = $('#' + input_list[i]).val();
+                            if (_i_val) {
+                                _obj[input_list[i]] = _i_val.trim();
+                            }
+                        }
+                    }
+                }
+                var _val = JSON.stringify(_obj);
+                $('#' + id).append($('<option>', {
+                    value: _val,
+                    text: _name
+                }));
+                console.log("[save_repeat_entry] Saving to dropdown");
+                // $("#"+id+" option[value='new_entry']").remove();
+                $('#' + id).val("summary").change();
+                postDoneMessage("Entry Added");
+            }
+        }
+    }
+
+    function getPageData() {
+        var _form_data = {};
+
+        var _parent = $('#settings_page')
+
+        var _repeat_questions_arr = [];
+        for (var id in repeat_question_list) {
+            _repeat_questions_arr.push.apply(_repeat_questions_arr, repeat_question_list[id]);
+        }
+        _parent.find("input[id^=i_],textarea[id^=i_],select[id^=i_]").each(function (i, obj) {
+            var _id = $(this).attr('id');
+            var _name = $(this).attr('name');
+            if (!_repeat_questions_arr.includes(_id)) {
+                if ($(this).attr('form-entry-type') && $(this).attr('form-entry-type') == 'repeater') {
+                    _form_data[_id] = []
+                    $(this).find('option').each(function (i, obj) {
+                        var _val = this.getValue();
+                        if (_val != 'summary' && _val != 'new_entry') {
+                            try {
+                                var _form_entry = JSON.parse(_val);
+                                _form_data[_id].push(_form_entry);
+                            } catch (e) {
+                                console.log("[ERROR] [getPageData] unable to parse " + _val);
+                            }
+                        }
+                    });
+                } else {
+                    var _input_type = $(this).attr('type');
+                    if (_input_type && _input_type.toLowerCase() == 'radio') {
+                        _form_data[_name] = document.getElementById(_id).getValue();
+                    } else {
+                        if (_input_type && _input_type.toLowerCase() == 'checkbox') {
+                            if (!_form_data.hasOwnProperty(_name)) {
+                                _form_data[_name] = [];
+                            }
+                            if (document.getElementById(_id).checked) {
+                                _form_data[_name].push(document.getElementById(_id).text_label.textContent);
+                            }
+                        }
+
+                        _form_data[_id] = document.getElementById(_id).getValue();
+                    }
+                }
+            }
+        });
+        return _form_data;
+    }
+
+    function savePage(is_form_submitted) {
+        var _form_data = getPageData();
+
+        console.log("[savePage] data = \n" + JSON.stringify(_form_data));
+
+        var jqxhr = $.post("admin/set-config",
+            {
+                config_params: JSON.stringify(_form_data)
+            })
+            .done(function (data) {
+                // alert(data);
+                try {
+                    var params = JSON.parse(data);
+                    var _msg = params.message;
+                    if (_msg) {
+                        $('#step_post_submit_message').html(_msg);
+                    }
+                } catch (err) {
+                    console.log("[loadSettings] could not parse return data");
+                }
+                postDoneMessage("Your data has been saved");
+            })
+            .fail(function () {
+                // alert("failed1");
+                postErrorMessage("There was an error saving your data");
+                $('#step_post_submit_message').html("There was an error saving your data. Sorry for the inconvenience.");
+            })
+            .always(function () {
+                hideLoadingIndicator("btn_submit");
+            });
+    }
+
+    function loadSettings(form_instance) {
+        disableInputs(true);
+
+        var jqxhr = $.get("admin/get-config",
+            {
+            })
+            .done(function (data) {
+                // alert(data);
+                var _form_data = JSON.parse(data);
+
+                console.log('[loadSettings] data = \n' + data);
+
+                var _repeat_questions_arr = [];
+                for (var id in repeat_question_list) {
+                    _repeat_questions_arr.push.apply(_repeat_questions_arr, repeat_question_list[id]);
+                }
+
+                $("input[id^=i_],textarea[id^=i_],select[id^=i_]").each(function (i, obj) {
+                    var _id = $(this).attr('id');
+                    var _name = $(this).attr('name');
+                    if (!_repeat_questions_arr.includes(_id)) {
+                        if (_id in _form_data) {
+                            console.log('[loadPage] ' + _id + ' = ' + JSON.stringify(_form_data[_id]));
+                        } else if (_name in _form_data) {
+                            console.log('[loadPage] ' + _name + ' = ' + JSON.stringify(_form_data[_name]));
+                        }
+                        if ($(this).attr('form-entry-type') && $(this).attr('form-entry-type') == 'repeater') {
+                            if (_id in _form_data) {
+                                var _repeat_questions = repeat_question_list[_id];
+                                var _repeat_data_arr = _form_data[_id];
+                                for (var i = 0; i < _repeat_data_arr.length; i++) {
+                                    // [START] display name
+                                    let _name = "";
+                                    for (let j = 0; j < Math.min(_repeat_questions.length, REPEATER_DISPLAY_INPUT_CNT); j++) {
+                                        const _rqid = _repeat_questions[j];
+                                        if (_repeat_data_arr[i].hasOwnProperty(_rqid)) {
+                                            let _n = _repeat_data_arr[i][_rqid];
+                                            if (_n && _n != "") {
+                                                if (_name != "") {
+                                                    _name += " • ";
+                                                }
+                                                _name += _n;
+                                            }
+                                        }
+                                    }
+                                    if (_name == "") {
+                                        _name = "Entry";
+                                    }
+                                    // [END] display name
+                                    $('#' + _id).append($('<option>', {
+                                        value: JSON.stringify(_repeat_data_arr[i]),
+                                        text: _name
+                                    }));
+                                }
+                                $('#' + _id).val('summary').change();
+                            } else {
+                                console.log('[loadPage] clearing ' + _id);
+                                $('#' + _id).find('option[value!="summary"]').remove();
+                                $('#' + _id).val('summary').change();
+                            }
+                        } else {
+                            var _input_type = $(this).attr('type');
+                            if (_input_type && _input_type != 'hidden') {
+                                if (_input_type == 'radio') {
+                                    if (_name in _form_data) {
+                                        if ($('#' + _id).val() == _form_data[_name]) {
+                                            $('#' + _id).prop('checked', true);
+                                        }
+                                    } else {
+                                        console.log('[loadPage] clearing ' + _name);
+                                        $('input[name="' + _name + '"]').prop('checked', false);
+                                    }
+                                } else {
+                                    if (_id in _form_data) {
+                                        if (_input_type == 'checkbox') {
+                                            $('#' + _id).prop('checked', _form_data[_id]);
+                                        } else {
+                                            // all other inputs
+                                            console.log('[loadPage] setting ' + _id + ' = ' + JSON.stringify(_form_data[_id]));
+                                            $('#' + _id).val(_form_data[_id]);
+                                        }
+                                    } else {
+                                        console.log('[loadPage] clearing ' + _id);
+                                        if (_input_type == 'checkbox') {
+                                            $('#' + _id).prop('checked', false);
+                                        } else {
+                                            $('#' + _id).val("");
+                                        }
+                                    }
+                                }
+                            } else if ($('#' + _id).is("select")) {
+                                if (_id in _form_data) {
+                                    $('#' + _id).val(_form_data[_id]).change();
+                                } else {
+                                    console.log('[loadPage] clearing ' + _id);
+                                    $('#' + _id).val("").change();
+                                }
+                            }
+                        }
+                    }
+                });
+
+
+                enableInputs();
+
+                postDoneMessage("Your settings have been retrieved");
+            })
+            .fail(function () {
+                // alert("failed1");
+                postErrorMessage("There was an error retrieving your settings. Please refresh the page.");
+                $('#step_post_submit_message').html("There was an error retrieving your data Sorry for the inconvenience.");
+            })
+            .always(function () {
+                hideLoadingIndicator("btn_submit");
+            });
+    }
+
+    $(document).ready(function () {
+
+        loadSettings();
+
+        initializeRequiredFields();
+
+        for (var id in repeat_question_list) {
+
+            $('#' + id).on('change', function () {
+                // alert("test");
+                var _id = $(this).attr('id');
+                var _val = $(this).val();
+                console.log("[" + _id + " change]");
+                if (_val != "new_entry") {
+                    console.log("[" + _id + " change] Hiding inputs and clearing new_entry");
+                    $("#" + _id + " option[value='new_entry']").remove();
+                    var input_list = repeat_question_list[_id];
+                    for (var i = 0; i < input_list.length; i++) {
+                        $("label[for='" + input_list[i] + "']").hide();
+                        $('#' + input_list[i]).hide();
+                        $("label[for=" + input_list[i] + "_hidden]").hide();
+                        $('#' + input_list[i] + '_hidden').hide();
+                        $('input[name=' + input_list[i] + ']').hide();
+                        $('div[name=' + input_list[i] + ']').hide();
+                        $('label[name=' + input_list[i] + ']').hide();
+                    }
+                    $('#' + _id + '_save').hide();
+                }
+                if (_val == "summary") {
+                    console.log("[" + _id + " change] Updating summary");
+                    var _num_entries = $("#" + _id + " option[value!='summary']").length;
+                    $('#' + _id + '_count').html(_num_entries);
+                    $("#" + _id + " option[value='summary']").text(_num_entries.toString() + " added");
+                }
+            });
+            $('#' + id).change();
+        }        
+    }); // When the page first loads
+
+</script>
+    <div style="margin: 0 auto;" class="site-container">
+        <div class="site-inner-container" style="position: relative;">
+            <div id="form_header" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+    
+                <div class="tablebody">
+                    <div class="tablerow">
+                        <div class="tablecell">
+                            <div id="deepen" class="form-header-block" style="text-align: left;">
+                                <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;&nbsp;Admin Settings
+                                <div class="smallertext" style="margin-top:13px;">
+                                    Please enter settings for TTC portal
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div id="step_form" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+    
+                <div id="settings_page" class="tablebody" is-form-instance-identifier="false">
+                    <div class="tablerow">
+                        <div class="tablecell">
+                            <div class="colspanhack">
+                                <br>
+                                <!-- <div class="pagetitletext">
+                                    <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;&nbsp;TTC Portal Settings
+                                </div> -->
+                                <hr class="pagetitle-hr">
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div name="i_whitelisted_user" class="tablerow">
+                        <div class="tablecell">
+                            <div class="titletext colspanhack">
+                                Please enter users who you want to whitelist to allow application or evaluation submission
+                                even after the deadline
+                                (<span id="i_whitelisted_user_count">0</span> added)
+                            </div>
+                            <span class="smallertext">See the dropdown for the users already added</span>
+                        </div>
+                        <div class="tablecell">
+                        </div>
+                    </div>
+                    <div name="i_whitelisted_user" class="tablerow">
+                        <div class="tablecell">
+                            &nbsp;
+                        </div>
+                        <div class="tablecell">
+                            <select id="i_whitelisted_user" form-entry-type="repeater" required>
+                                <option value="summary">0 added</option>
+                            </select>
+                            <div style="text-align: left;display: inline-block;">
+                                &nbsp;&nbsp;
+                                <a class="an-simple-button"
+                                    onclick="javascript:new_repeat_entry('i_whitelisted_user');">&nbsp;<i
+                                        class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>&nbsp;</a>
+                                &nbsp;&nbsp;
+                                <a class="an-simple-button"
+                                    onclick="javascript:remove_repeat_entry('i_whitelisted_user');">&nbsp;<i
+                                        class="fa fa-minus-circle fa-lg" aria-hidden="true"></i>&nbsp;</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div name="i_whitelisted_user_name" class="tablerow">
+                        <div class="tablecell">
+                            <label name="i_whitelisted_user_name" for="i_whitelisted_user_name"
+                                class="label_required">Name</label>
+                            <span class="smallertext">The name here is only for identification purposes.</span>
+                        </div>
+                        <div class="tablecell">
+                            <input class="textbox" type="textbox" id="i_whitelisted_user_name">
+                        </div>
+                    </div>
+                    <div name="i_whitelisted_user_email" class="tablerow">
+                        <div class="tablecell">
+                            <label name="i_whitelisted_user_email" for="i_whitelisted_user_email"
+                                class="label_required">Email</label>
+                            <span class="smallertext">Ensure that this the email address they will login with</span>
+                        </div>
+                        <div class="tablecell">
+                            <input class="textbox" type="textbox" id="i_whitelisted_user_email">
+                        </div>
+                    </div>
+                    <div id="i_whitelisted_user_save" class="tablerow">
+                        <div class="tablecell">
+                            &nbsp;
+                        </div>
+                        <div class="tablecell maxwidth">
+                            <div style="display: table;">
+                                <div class="tablerow">
+                                    <div style="text-align: right;display: table-cell;">
+                                        <a class="an-simple-button"
+                                            onclick="javascript:save_repeat_entry('i_whitelisted_user');"><i
+                                                class="fa fa-check-square fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Add
+                                            User</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="smallertext" style="margin-top:7px;text-align: left;font-style: italic;">
+                                Remember to save your entry by clicking "Add User"
+                            </div>
+                        </div>
+                    </div>
+                    <div name="i_whitelisted_user" class="tablerow">
+                        <div class="tablecell">
+                            <div class="colspanhack">
+                                <hr class='silver-hr'>
+                            </div>
+                        </div>
+                        <div class="tablecell">
+                        </div>
+                    </div>
+    
+                </div>
+    
+    
+                <br>
+                <br>
+                <br>
+    
+            </div>
+    
+            <div id="step_submit" class="form-tab-content"
+                style="display:table;text-align:center;margin:0 auto;position:fixed;bottom:0px;background-color:white;z-index:13;">
+                <div class="tablebody">
+                    <div class="tablerow">
+                        <div class="tablecell" style="
+                            padding-bottom: 5px; 
+                            line-height: 40px; 
+                            border-top: 1px solid #eee;
+                          ">
+                            <a id="btn_save" name="btns_save_submit" class="an-c2a-button"
+                                onclick="javascript:savePage(false);">
+                                <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Save
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div id="step_post_submit" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+                <div class="tablebody">
+                    <div class="tablerow">
+                        <div id="step_post_submit_message" class="tablecell"></div>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+
+<script>
+  // Note: This example requires that you consent to location sharing when
+  // prompted by your browser. If you see the error "The Geolocation service
+  // failed.", it means you probably did not give permission for the browser to
+  // locate you.
+
+
+  function handleLocationError() {
+    // $('#img-ghcourses-search_in_progress').hide();
+    // $('#img-ghercourses-search_in_progress').hide();
+  }
+</script>

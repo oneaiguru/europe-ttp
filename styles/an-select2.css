@@ -1,0 +1,49 @@
+
+.select2-selection__rendered {
+    font-size:1.2em !important;
+}
+
+.select2-container--default {
+    border: 1px solid #CFCFCF !important;
+    border-bottom: 2px solid #CCC !important;
+    border-radius: 3px !important;
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 300 !important;        
+}
+
+.select2-selection, .select2-selection--multiple {
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 300 !important;        
+    border: none !important;
+}
+
+.select2-container--open {
+    border-bottom: 2px solid #000 !important;
+    transition: border-bottom 1s !important;
+}
+
+.select2-selection__choice {
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 300 !important;
+    border: none !important;
+}
+
+.select2-selection__choice__remove {
+    padding: 3px !important;
+}
+
+.select2-results__option {
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 300 !important;        
+    text-align: left !important;
+    border-bottom: 1px solid #eee !important;
+    padding: 5px 13px !important;
+}
+
+/* .select2-container--default.select2-container--focus {
+    border: none !important;
+} */

@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["https://artofliving-ttcdesk-dev.appspot.com", "https://artofliving-ttcdesk.appspot.com", "https://ttc-portal-service-dot-artofliving-design-center-dev.appspot.com/"],
+      "responseHeader": ["Content-Type"],
+      "method": ["GET", "HEAD", "DELETE", "PUT", "POST"],
+      "maxAgeSeconds": 3600
+    }
+]

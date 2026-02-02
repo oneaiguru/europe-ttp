@@ -1,0 +1,109 @@
+{
+	"form_name": "Sahaj TTC Graduate Self Evaluation",
+	"form_type": "post_sahaj_ttc_self_evaluation_form",
+	"form_description": "Note: This self evaluation form is for TTC graduates while fulfilling their co-teaching requirement",
+	"is_multi_instance_form": "true",
+
+	"from_email": "amit.nair@artofliving.org",
+	"user_confirmation_email": {
+		"message": "Dear {i_fname} {i_lname},<br><br>Your Self Evaluation has been submitted successfully.<br><br>Jai Gurudev!<br>TTC Desk<br>",
+		"subject": "Your Self Evaluation Form has been submitted"
+	},
+	"owner_confirmation_email": {
+		"message": "Dear TTC Desk,<br><br>{i_fname} {i_lname} has submitted the Self Evaluation form.<br><br>Jai Gurudev!<br>TTC Desk<br>",
+		"subject": "{i_fname} {i_lname} has submitted the Self Evaluation"
+	},
+	"pages": [
+		{
+			"page_name": "Your Personal Information",
+			"questions": [
+				{
+					"id": "i_fname",
+					"question": "First Name",
+					"type": "text"
+				},
+				{
+					"id": "i_lname",
+					"question": "Last Name",
+					"type": "text"
+				},
+				{
+					"id": "i_cellphone",
+					"question": "Cell Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_homephone",
+					"question": "Home Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_email_aol",
+					"question": "Email Address (artofliving.org)",
+					"type": "text",
+					"helper": "If you do not have an artofliving.org email ID yet, please get one by submitting a request <a target='_blank' href='http://support.us.artofliving.org'>HERE</a> before you submit this form",
+                    "is_form_instance_identifier": "true"
+                },
+				{
+					"id": "i_email_other",
+					"question": "Email Address (other)",
+					"type": "text"
+				},
+				{
+					"id": "i_ttc_dates",
+					"question": "Month and Year of Your TTC (mm/yyyy)",
+					"type": "text",
+					"date_format": "mm yyyy",
+					"mask_pattern": "99/9999"
+				},
+				{
+					"id": "i_ttc_location",
+					"question": "Location of Your TTC",
+					"type": "text"
+				}
+			],
+            "is_form_instance_identifier": "true"
+		},
+		{
+			"page_name": "Teaching Experience",
+			"questions": [
+				{
+					"id": "i_courses_cotaught_details",
+					"question": "How many courses have you organized and co-taught since your TTC? Please provide the dates and locations of these courses",
+					"type": "textarea"
+				},
+                {
+                    "id": "i_sahaj_teaching_help_needed",
+                    "question": "Is there any area of teaching Sahaj in which we can be of help to you? Please let us know of any questions we can answer.",
+                    "type": "textarea"
+                },
+                {
+                    "id": "i_mentors_helpfulness",
+                    "question": "Were your mentor teachers helpful?",
+                    "type": "textarea"
+                },
+                {
+                    "id": "i_coteaching_experience",
+                    "question": "Please share your experience of initiating and co-teaching.",
+                    "type": "textarea"
+                },
+                {
+                    "id": "i_introtalks_comfort",
+                    "question": "Are you comfortable giving intro talks?",
+                    "type": "textarea"
+                },
+                {
+                    "id": "i_teach_on_owm",
+                    "question": "Do you feel ready to teach on your own? Please elaborate.",
+                    "type": "textarea"
+                },
+                {
+					"id": "i_comments",
+					"question": "Any other comments / notes to TTC Desk",
+					"type": "textarea",
+                    "required": false
+				}
+			]
+		}
+	]	
+}

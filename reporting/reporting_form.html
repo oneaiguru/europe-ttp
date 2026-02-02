@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Art of Living TTC Portal</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="The Art of Living Foundation">
+    <meta name="description" content="Art of Living Teachers Training Portal">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link href='https://fonts.googleapis.com/css?family=Cabin+Condensed:600,400' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800,300italic,400italic,600italic,700italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'> -->
+    <link href='https://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
+    <!-- <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Vollkorn:400italic,400' rel='stylesheet' type='text/css'> -->
+    <link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic'
+        rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+
+    <link rel='shortcut icon' href='images/favicon.ico' type='image/x-icon' />
+
+    <link rel="stylesheet" href="https://artofliving-ttcdesk-dev.appspot.com/styles/styles.css" type="text/css" />
+    <link rel="stylesheet" href="https://artofliving-ttcdesk-dev.appspot.com/styles/left-menu.css" type="text/css" />
+    <link rel="stylesheet" href="https://artofliving-ttcdesk-dev.appspot.com/styles/an-buttons.css" type="text/css" />
+
+    <link rel="stylesheet" href="https://artofliving-ttcdesk-dev.appspot.com/styles/font-awesome/css/font-awesome.min.css" type="text/css" />
+
+</head>
+
+<body>
+
+    <div id="site-container" class="section-container" style="background-color:white;">
+
+      <div style="margin: 0 auto;" class="site-container">
+        <div class="site-inner-container" style="position: relative;">
+          <div id="form_header" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+
+              <div class="tablebody">
+                  <div class="tablerow">
+                      <div class="tablecell">
+                          <div id="deepen" class="form-header-block" style="text-align: left;">
+                              <table cellspacing="0" cellpadding="0" border="0">
+                                  <tr>
+                                      <td style="width: 1%;">
+                                          <i class="fa fa-file-text" aria-hidden="true"></i>
+                                      </td>
+                                      <td style="padding-left: 13px;">
+                                          {{form_name}}
+                                          <span style="display: none;">
+                                              [Pages: {{no_of_pages}}]
+                                          </span>
+                                      </td>
+                                  </tr>
+                              </table>
+                              <!-- <hr class="left-gradient-separator"> -->
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="step_form" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+
+              {{form_html|safe}}
+
+              <br>
+              <br>
+              <br>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+</body>
+</html>
