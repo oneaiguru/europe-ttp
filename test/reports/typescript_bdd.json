@@ -1,0 +1,63 @@
+[
+  {
+    "description": "  As a TTC applicant\n  I want to sign in with my Google account\n  So that access the TTC portal",
+    "elements": [
+      {
+        "description": "",
+        "id": "login;login-with-google-account",
+        "keyword": "Scenario",
+        "line": 7,
+        "name": "Login with Google account",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am on the TTC portal login page",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 9,
+            "name": "I sign in with a valid Google account",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 10,
+            "name": "I should be redirected to the TTC portal home",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@p1",
+            "line": 6
+          },
+          {
+            "name": "@needs-verification",
+            "line": 6
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "login",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Login",
+    "tags": [],
+    "uri": "specs/features/auth/login.feature"
+  }
+]
