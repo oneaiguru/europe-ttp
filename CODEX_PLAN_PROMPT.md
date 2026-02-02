@@ -1,11 +1,21 @@
 # CODEX PLAN PROMPT - Europe TTP Migration
 
 ## Context
-You are running in a Docker container as the Codex plan agent for the Europe TTP migration project.
 
 **Project Location:** `/Users/m/git/clients/aol/europe-ttp`
 
 **Your Mission:** Execute the PREP phase (Phase 0) to prepare for autonomous build loops.
+
+## Planning Mode - Code Changes PROHIBITED
+
+In planning mode, you ONLY:
+- Read and analyze legacy code
+- Write .feature files (Gherkin)
+- Update step registry
+- Generate task graphs and coverage matrices
+- Document implementation plans
+
+**DO NOT write any implementation code in plan mode.**
 
 ---
 
@@ -170,6 +180,21 @@ Also create skeleton step definition files:
 - `test/python/steps/*.py` - Empty step defs with TODO comments
 - `test/typescript/steps/*.ts` - Empty step defs with TODO comments
 
+### Alignment Verification Script
+
+Create `scripts/bdd/verify-alignment.ts` that checks:
+1. All feature steps have registry entries
+2. All registry entries have Python impl path
+3. All registry entries have TypeScript impl path (can be "TODO")
+4. No orphan steps (in registry but not in features)
+5. No dead steps (in features but not in registry)
+
+```bash
+# Run verification
+bun scripts/bdd/verify-alignment.ts
+# Expected output: ✓ 47 steps defined, 0 orphan, 0 dead
+```
+
 ---
 
 ## Phase 0D: Task Graph & Implementation Plan
@@ -236,6 +261,7 @@ Phase 0 is complete when:
 - [ ] `specs/extracted/` has 5 JSON files (routes, models, forms, emails, reports)
 - [ ] `specs/features/` has 20+ .feature files
 - [ ] `test/bdd/step-registry.ts` has 50+ step patterns
+- [ ] `bun scripts/bdd/verify-alignment.ts` passes (0 orphan, 0 dead)
 - [ ] `tasks/task_graph.json` has 30-60 tasks
 - [ ] `docs/coverage_matrix.md` lists all features with Python=✓, TypeScript=❌
 - [ ] `git status` shows new files (ready to commit)
@@ -273,6 +299,17 @@ Updated: docs/coverage_matrix.md
 [PREP PHASE COMPLETE]
 Ready to hand off to Weaver for build loop.
 ```
+
+---
+
+## BDD Migration Invariants (Non-Negotiable)
+
+1. **One Source of Truth**: `test/bdd/step-registry.ts` is the ONLY place step definitions are mapped
+2. **Dual Implementation**: Every step MUST have Python + TypeScript paths
+3. **No Orphan Steps**: Run `verify-alignment.ts` before any commit
+4. **Python First**: TypeScript impl only AFTER Python step passes
+5. **Feature Files Drive Implementation**: No code without a scenario
+6. **Legacy Behavior Preserved**: All scenarios must pass against Python first
 
 ---
 
