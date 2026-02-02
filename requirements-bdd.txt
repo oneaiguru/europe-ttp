@@ -1,0 +1,21 @@
+# Python 2.7 BDD Dependencies
+# Pin to versions that support Python 2.7
+# DO NOT upgrade without testing
+
+# BDD Framework
+behave==1.2.6
+
+# HTTP Testing (for webapp2 apps)
+WebTest==2.0.35
+
+# Step parameter parsing
+parse==1.19.0
+
+# Python 2/3 compatibility (may be needed)
+six==1.16.0
+
+# Notes:
+# - behave 1.2.6 is the last stable version with explicit Python 2.7 support
+# - WebTest 2.0.35 works with Python 2.7 for testing WSGI apps
+# - Install with: pip2.7 install -r requirements-bdd.txt
+# - Or: pip install -r requirements-bdd.txt (if pip2.7 is default)
