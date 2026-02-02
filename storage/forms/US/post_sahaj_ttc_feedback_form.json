@@ -1,0 +1,375 @@
+{
+	"form_name": "Sahaj TTC Graduate feedback from Co-Teacher",
+	"form_type": "post_sahaj_ttc_feedback_form",
+	"form_description": "Note: This co-teacher evaluation form is for teachers to evaluate Sahaj TTC graduates while fulfilling their co-teaching requirement",
+	"is_multi_instance_form": "true",
+
+	"from_email": "amit.nair@artofliving.org",
+	"user_confirmation_email": {
+		"message": "Dear {i_fname} {i_lname},<br><br>We appreciate you taking the time out to complete this Feedback Form. THANK YOU!<br><br>Jai Gurudev!<br>Sahaj TTC Desk<br>",
+		"subject": "Your feedback for {i_ttc_graduate_name} has been submitted"
+	},
+	"owner_confirmation_email": {
+		"message": "Dear Sahaj TTC Desk,<br><br>{i_fname} {i_lname} has submitted feedback for {i_ttc_graduate_name} for the course from the {i_course_start} - {i_course_end}<br><br> Jai Gurudev<br> Sahaj TTC Desk<br>",
+		"subject": "{i_fname} {i_lname} has submitted post Sahaj TTC feedback for {i_ttc_graduate_name}"
+	},
+	"pages": [
+		{
+			"page_name": "Course Information",
+			"questions": [
+				{
+					"id": "i_ttc_graduate_name",
+					"question": "TTC Graduate Name",
+					"type": "text",
+					"helper": "The Sahaj TTC graduate you co-taught the course with"
+				},
+				{
+					"id": "i_ttc_graduate_email",
+					"question": "TTC Graduate Email",
+					"type": "text",
+					"helper": "Their email address",
+					"is_form_instance_identifier": "true"
+				},
+				{
+					"id": "i_course_start",
+					"question": "Course Start Date (mm/dd/yyyy)",
+					"type": "text",
+					"date_format": "mm dd yyyy",
+					"mask_pattern": "99/99/9999",
+					"is_form_instance_identifier": "true",
+					"helper": "The start date of the course you co-taught"
+				},
+				{
+					"id": "i_course_end",
+					"question": "Course End Date (mm/dd/yyyy)",
+					"type": "text",
+					"date_format": "mm dd yyyy",
+					"mask_pattern": "99/99/9999",
+					"helper": "The end date of the course you co-taught"
+				},
+				{
+					"id": "i_course_city",
+					"question": "Course City",
+					"type": "text"
+				},
+				{
+					"id": "i_course_state",
+					"question": "Course State",
+					"type": "text"
+				},
+                {
+                    "id": "i_course_number",
+                    "question": "Was this course their 1st, 2nd or 3rd co-teaching?",
+                    "type": "select",
+                    "display_values": [
+                        {
+                            "value": "1",
+                            "display": "First",
+                            "dep_list": [
+                                "i_led_intro_talks",
+                                "i_led_intro_talks_count",
+                                "i_led_one_meditation",
+                                "i_followed_new_manual",
+                                "i_teaching_ability",
+                                "i_message_1"
+                            ]
+                        },
+                        {
+                            "value": "2",
+                            "display": "Second",
+                            "dep_list": [
+                                "i_led_intro_talks",
+                                "i_led_intro_talks_count",
+                                "i_initiated_atleast_half_people",
+                                "i_cotaught_by_manual",
+                                "i_led_atleast_one_meditation",
+                                "i_improvement_areas",
+                                "i_message_2"
+                            ]
+                        },
+                        {
+                            "value": "3",
+                            "display": "Third",
+                            "dep_list": [
+                                "i_initiated_atleast_half_people",
+                                "i_taught_by_manual",
+                                "i_led_atleast_two_meditations",
+                                "i_answered_questions",
+                                "i_ready_to_teach",
+                                "i_message_3"
+                            ]
+                        },
+                        {
+                            "value": "4",
+                            "display": "Fourth (or later)",
+                            "dep_list": [
+                                "i_initiated_atleast_half_people",
+                                "i_taught_by_manual",
+                                "i_led_atleast_two_meditations",
+                                "i_answered_questions",
+                                "i_ready_to_teach",
+                                "i_message_4"
+                            ]
+                        }
+                    ]
+                }
+			],
+			"is_form_instance_identifier": "true"
+        },
+        {
+            "page_name": "Message from Sahaj TTC Desk",
+            "questions": [
+                {
+                    "id": "i_message_1",
+                    "question": "Dear Mentor Teacher,<br><br>You are submitting feedback for the first course organized and co-taught by a new Sahaj Teacher. (If the course was not organized by them, it cannot be used to fulfil the requirements of the TTC). In this course they should have performed Guru Puja, initiated half the participants, and assisted teaching.<br><br>Your comments are vital in helping this new teacher to attain their confidence and comfort in teaching, and will assist us also in helping them.<br><br>Your feedback is entirely confidential.<br><br>Thank you for participating in mentoring this new teacher of Sahaj!<br><br>Jai Gurudev!<br>Sahaj TTC Desk",
+                    "type": "general",
+                    "dep_list": [
+                        "i_course_number:1"
+                    ]
+                },
+                {
+                    "id": "i_message_2",
+                    "question": "Dear Mentor Teacher,<br><br>You are submitting feedback for the second course organized and co-taught by a new Sahaj Teacher. (Please note that if the course was not organized by them, it cannot be used to fulfil the requirements of the TTC). In this course they should be capable of performing Guru Puja effortlessly and gracefully, initiating at least half of the participants, and stepping in at any point to easily deliver the knowledge.<br><br>Your comments are vital in helping this new teacher to attain their confidence and comfort in teaching, and will assist us also in helping them.<br><br>Your feedback is entirely confidential.<br><br>Thank you for participating in mentoring this new teacher of Sahaj!<br><br>Jai Gurudev!<br>Sahaj TTC Desk",
+                    "type": "general",
+                    "dep_list": [
+                        "i_course_number:2"
+                    ]
+                },
+                {
+                    "id": "i_message_3",
+                    "question": "Dear Mentor Teacher,<br><br>You are submitting feedback for the third course organized and co-taught by a new Sahaj Teacher. (Please note that if the course was not organized by them, it cannot be used to fulfil the requirements of the TTC). In this course, they should have done most of the teaching, performed Guru Puja, and initiated at least half of the participants. By this time they should be completely relaxed and steady in the knowledge. Guru Puja should be effortless and graceful, and they should be comfortable answering any question that may arise. This course should be primarily taught by them.<br><br>Your comments are vital in helping this new teacher to attain their confidence and comfort in teaching, and will assist us also in helping them.<br><br>Your feedback is entirely confidential.<br><br>Thank you for participating in mentoring this new teacher of Sahaj!<br><br>Jai Gurudev!<br>Sahaj TTC Desk",
+                    "type": "general",
+                    "dep_list": [
+                        "i_course_number:3"
+                    ]
+                },
+                {
+                    "id": "i_message_4",
+                    "question": "Dear Mentor Teacher,<br><br>You are submitting feedback for the fourth or later course organized and co-taught by a new Sahaj Teacher. (Please note that if the course was not organized by them, it cannot be used to fulfil the requirements of the TTC). In this course, they should have done most of the teaching, performed Guru Puja, and initiated at least half of the participants. By this time they should be completely relaxed and steady in the knowledge. Guru Puja should be effortless and graceful, and they should be comfortable answering any question that may arise. This course should be primarily taught by them.<br><br>Your comments are vital in helping this new teacher to attain their confidence and comfort in teaching, and will assist us also in helping them.<br><br>Your feedback is entirely confidential.<br><br>Thank you for participating in mentoring this new teacher of Sahaj!<br><br>Jai Gurudev!<br>Sahaj TTC Desk",
+                    "type": "general",
+                    "dep_list": [
+                        "i_course_number:4"
+                    ]
+                }
+            ]
+        },
+		{
+			"page_name": "Your Personal Information",
+			"questions": [
+				{
+					"id": "i_fname",
+					"question": "First Name",
+					"type": "text"
+				},
+				{
+					"id": "i_lname",
+					"question": "Last Name",
+					"type": "text"
+				},
+				{
+					"id": "i_cellphone",
+					"question": "Cell Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_homephone",
+					"question": "Home Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_email_aol",
+					"question": "Email Address (artofliving.org)",
+					"type": "text",
+					"helper": "If you do not have an artofliving.org email ID yet, please get one by submitting a request <a target='_blank' href='http://support.us.artofliving.org'>HERE</a> before you submit this form"
+				},
+				{
+					"id": "i_email_other",
+					"question": "Email Address (other)",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"page_name": "Co-Teaching Experience",
+			"questions": [
+                {
+                    "id": "i_course_participant_count_new",
+                    "question": "Number of new registrants",
+                    "type": "text"
+                },
+                {
+                    "id": "i_course_participant_count_repeater",
+                    "question": "Number of repeaters",
+                    "type": "text"
+                },
+                {
+					"id": "i_fully_organized_course",
+					"question": "Did this teacher fully organize the course?",
+                    "type": "radio",
+                    "display_values": [
+                        {
+                            "value": "yes",
+                            "display": "Yes"
+                        },
+                        {
+                            "value": "no",
+                            "display": "No"
+                        }
+                    ]
+                },
+                {
+                    "id": "i_led_intro_talks",
+                    "question": "Did they lead intro talk(s)?",
+                    "type": "radio",
+                    "display_values": [
+                        {
+                            "value": "yes",
+                            "display": "Yes"
+                        },
+                        {
+                            "value": "no",
+                            "display": "No"
+                        }
+                    ],
+                    "dep_list": [
+                        "i_course_number:1",
+                        "i_course_number:2"
+                    ]
+                },
+                {
+                    "id": "i_led_intro_talks_count",
+                    "question": "How many intro talks did they lead?",
+                    "type": "text",
+                    "dep_list": [
+                        "i_course_number:1",
+                        "i_course_number:2"
+                    ]
+                },
+                {
+                    "id": "i_guru_puja_performance",
+                    "question": "Did they perform Guru Puja? Please comment on their performance. Was it steady, without error, and focused?",
+                    "type": "textarea"
+                },
+                {
+                    "id": "i_initiated_atleast_half_people",
+                    "question": "Did they initiate at least half of the participants?",
+                    "type": "radio",
+                    "display_values": [
+                        {
+                            "value": "yes",
+                            "display": "Yes"
+                        },
+                        {
+                            "value": "no",
+                            "display": "No"
+                        }
+                    ],
+                    "dep_list": [
+                        "i_course_number:2",
+                        "i_course_number:3"
+                    ]
+                },
+                {
+                    "id": "i_initiated_people_count",
+                    "question": "How many people did they initiate?",
+                    "type": "text"
+                },
+                {
+                    "id": "i_cotaught_by_manual",
+                    "question": "Did they participate fully, co-teaching the entire course in accordance with the manual?",
+                    "type": "textarea",
+                    "dep_list": [
+                        "i_course_number:2"
+                    ]
+                },
+                {
+                    "id": "i_taught_by_manual",
+                    "question": "Did they participate fully, teaching the entire course in accordance with the manual?",
+                    "type": "textarea",
+                    "dep_list": [
+                        "i_course_number:3"
+                    ]
+                },
+                {
+                    "id": "i_led_one_meditation",
+                    "question": "Did they lead a meditation? Please comment.",
+                    "type": "textarea",
+                    "dep_list": [
+                        "i_course_number:1"
+                    ]
+                },
+                {
+                    "id": "i_led_atleast_one_meditation",
+                    "question": "Did they lead at least one meditation? Please comment.",
+                    "type": "textarea",
+                    "dep_list": [
+                        "i_course_number:2"
+                    ]
+                },
+                {
+                    "id": "i_led_atleast_two_meditations",
+                    "question": "Did they lead the meditation at least twice? Please comment.",
+                    "type": "textarea",
+                    "dep_list": [
+                        "i_course_number:3"
+                    ]
+                },
+                {
+                    "id": "i_followed_new_manual",
+                    "question": "Did you follow the new manual in teaching the course?",
+                    "type": "radio",
+                    "display_values": [
+                        {
+                            "value": "yes",
+                            "display": "Yes"
+                        },
+                        {
+                            "value": "no",
+                            "display": "No"
+                        }
+                    ],
+                    "dep_list": [
+                        "i_course_number:1"
+                    ]
+                },
+                {
+                    "id": "i_teaching_ability",
+                    "question": "Please comment on their ability to comfortably participate in teaching.",
+                    "type": "textarea",
+                    "dep_list": [
+                        "i_course_number:1"
+                    ]
+                },
+                {
+                    "id": "i_improvement_areas",
+                    "question": "Are there are any areas in which they need to improve in order to deliver the knowledge gracefully and easily?",
+                    "type": "textarea",
+                    "dep_list": [
+                        "i_course_number:2"
+                    ]
+                },
+                {
+                    "id": "i_answered_questions",
+                    "question": "Were they able to answer any questions that came?",
+                    "type": "textarea",
+                    "dep_list": [
+                        "i_course_number:3"
+                    ]
+                },
+                {
+                    "id": "i_ready_to_teach",
+                    "question": "Are they completely ready to teach on their own? Please comment.",
+                    "type": "textarea",
+                    "dep_list": [
+                        "i_course_number:3"
+                    ]
+                },
+                {
+                    "id": "i_misc_feedback",
+                    "question": "Please share the feedback that you gave them.",
+                    "type": "textarea"
+                }
+			]
+		}
+	]	
+}

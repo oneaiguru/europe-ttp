@@ -1,0 +1,1133 @@
+{
+	"form_name": "TTC Application",
+	"form_type": "ttc_application",
+	"dep_list": ["ttc_applicant_profile"],
+	"form_description": "Note: This TTC Application form should be filled by TTC applicants only. Please answer all questions truthfully and with detail and clarity. Your responses will remain confidential and will only be reviewed by the TTC Trainers and the TTC desk team.",
+	"form_agreement": [
+		"I have read through all the TTC pre-requisites thoroughly and am fully aware of what is required of me in order to qualify for the Teacher Training Course.",
+		"I have reviewed the TTC guidelines for the qualifications of my evaluating teachers and I will choose evaluating teachers according to the guidelines.",
+		"I understand that TTC has a rigorous application process and I will wait to book my transportation and register for the course until I have received an official letter of acceptance from the TTC Desk.",
+		"I understand that if my application and teacher evaluation forms are not submitted on or before the TTC application deadline, my application will not be considered."
+	],
+	"is_multi_instance_form": "false",
+
+	"from_email": "amit.nair@artofliving.org",
+	"user_confirmation_email": {
+		"message": "Dear {i_fname} {i_lname}, <br><br> Your Application has been submitted successfully for upcoming TTC <b>{dates}</b>. <br><br> Your evaluating teachers have also been notified about your application submission. Please follow up with them to make sure they submit a evaluation for you before the deadline. <br><br> Jai Gurudev<br> TTC Desk<br>",
+		"subject": "Your Application for TTC {dates} has been submitted"
+	},
+	"owner_confirmation_email": {
+		"message": "Dear TTC Desk,<br><br> {i_fname} {i_lname} has submitted their TTC application for the upcoming TTC <b>{dates}</b>.<br><br> Jai Gurudev<br> TTC Desk, USA<br>",
+		"subject": "{i_fname} {i_lname} has submitted their application for TTC {dates}"
+	},
+	"other_emails": {
+		"i_eval_teacher_email": {
+			"message": "Dear {i_eval_teacher_name},<br><br> {i_fname} {i_lname} has submitted their TTC Application for the upcoming TTC <b>{dates}</b>.<br><br> They have listed you as one of their evaluating teachers. If you have not already submitted a evaluation for this applicant, please go ahead and do so at this link:<br> <a href='https://{app_id}.appspot.com'>www.artofliving.org/ttcportal</a><br><br> Jai Gurudev<br> TTC Desk<br>;",
+			"subject": "{i_fname} {i_lname} has submitted their application for TTC {dates}"
+		}
+	},
+
+	"pages": [
+		{
+			"page_name": "TTC Details",
+			"questions": [
+				{
+					"id": "i_ttc_country_and_dates",
+					"order": "4",
+					"question": "Select TTC",
+					"type": "select",
+					"source": "ttc_country_and_dates.json",
+					"is_form_instance_identifier": "true"
+				}
+			],
+			"is_form_instance_identifier": "true"
+		},
+		{
+			"page_name": "Personal Information",
+			"questions": [
+				{
+					"id": "i_fname",
+					"order": "20",
+					"question": "First Name",
+					"type": "text"
+				},
+				{
+					"id": "i_lname",
+					"order": "21",
+					"question": "Last Name",
+					"type": "text"
+				},
+				{
+					"id": "i_gender",
+					"order": "22",
+					"question": "Gender",
+					"type": "radio",
+					"display_values": [
+						{"value": "male", "display": "Male"},
+						{"value": "female", "display": "Female"}
+					]
+				},
+				{
+					"id": "i_date_of_birth",
+					"order": "23",
+					"question": "Date of Birth (mm/dd/yyyy)",
+					"type": "text",
+					"date_format": "mm dd yyyy",
+					"mask_pattern": "99/99/9999"
+				},
+				{
+					"id": "i_cellphone",
+					"order": "24",
+					"question": "Cell Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_homephone",
+					"order": "25",
+					"question": "Home Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_email_other",
+					"order": "27",
+					"question": "Email Address (other)",
+					"type": "text"
+				},
+				{
+					"id": "i_address_question",
+					"order": "28",
+					"question": "<b>Current Mailing address</b>",
+					"type": "question"
+				},
+				{
+					"id": "i_address_street_1",
+					"order": "29",
+					"question": "Street address",
+					"type": "text"
+				},
+				{
+					"id": "i_address_street_2",
+					"order": "30",
+					"question": "",
+					"type": "text",
+					"required": false
+				},
+				{
+					"id": "i_address_city",
+					"order": "31",
+					"question": "City",
+					"type": "text"
+				},
+				{
+					"id": "i_address_state",
+					"order": "32",
+					"question": "State",
+					"type": "text"
+				},
+				{
+					"id": "i_address_zip",
+					"order": "33",
+					"question": "Postal Code",
+					"type": "text"
+				},
+				{
+					"id": "i_address_country",
+					"order": "34",
+					"question": "Country",
+					"type": "text"
+				},
+				{
+					"id": "i_ghangout_id",
+					"order": "35",
+					"question": "Google Hangout ID",
+					"type": "text",
+					"helper": "The email address you would use for Google Hangouts (if needed) with the TTC Desk"
+				},
+				{
+					"id": "i_education",
+					"order": "36",
+					"question": "Educational Qualifications",
+					"type": "textarea"
+				},
+				{
+					"id": "i_profession",
+					"order": "37",
+					"question": "Profession",
+					"type": "text"
+				},
+				{
+					"id": "i_jobtitle",
+					"order": "38",
+					"question": "Job Title",
+					"type": "text"
+				},
+				{
+					"id": "i_company",
+					"order": "39",
+					"question": "Name of Company",
+					"type": "text"
+				},
+				{
+					"id": "i_marital_status",
+					"order": "40",
+					"question": "Marital Status",
+					"type": "select",
+					"display_values": [
+						{"value": "single", "display": "Single"},
+						{"value": "married", "display": "Married"},
+						{"value": "divorced_separated", "display": "Divorced / Separated"},
+						{"value": "widowed", "display": "Widowed"}
+					]
+				},
+				{
+					"id": "i_photo_file",
+					"order": "41",
+					"question": "Upload Photo",
+					"type": "image",
+					"helper": "Allowed file formats [jpg|jpeg|png|gif]<br>Photos should be &lt; 5MB<br>You are required to submit a passport quality head shot profile photo. Failing to do so will delay your application review!",
+					"required": false
+				}
+			]
+		},
+		{
+			"page_name": "TTC Preferences",
+			"questions": [
+				{
+					"id": "i_youthteacher",
+					"order": "5",
+					"question": "Are you an active ART EXCEL / YES Course teacher applying to become an Art of Living Teacher?",
+					"type": "radio",
+					"display_values": [
+						{
+							"value": "yes", 
+							"display": "Yes",
+							"dep_list": [
+								"i_youthteacher_completed_2weekttc"
+							]
+						},
+						{
+							"value": "no", 
+							"display": "No"
+						}
+					],
+					"required": false
+				},
+				{
+					"id": "i_youthteacher_completed_2weekttc",
+					"order": "6",
+					"question": "Have you completed a 2 week TTC before?",
+					"type": "radio",
+					"display_values": [
+						{
+							"value": "yes", 
+							"display": "Yes",
+							"dep_list": [
+								"i_youthteacher_2weekttc", 
+								"i_youthteacher_2weekttc_date", 
+								"i_youthteacher_2weekttc_location", 
+								"i_youthteacher_2weekttc_teacher", 
+								"i_youth_courses"
+							]
+						},
+						{"value": "no", "display": "No"}
+					],
+					"required": false
+				},
+				{
+					"id": "i_youthteacher_2weekttc",
+					"order": "28",
+					"question": "Please give details of the two week TTC you have completed",
+					"type": "question",
+					"dep_list": ["i_youthteacher_2weekttc:yes"],
+					"required": false
+				},
+				{
+					"id": "i_youthteacher_2weekttc_date",
+					"order": "7",
+					"question": "Month and Year (mm/yyyy)",
+					"type": "text",
+					"date_format": "M yy",
+					"mask_pattern": "99/9999",
+					"dep_list": ["i_youthteacher_2weekttc:yes"],
+					"required": false
+				},
+				{
+					"id": "i_youthteacher_2weekttc_location",
+					"order": "8",
+					"question": "Location",
+					"type": "text",
+					"dep_list": ["i_youthteacher_2weekttc:yes"],
+					"required": false
+				},
+				{
+					"id": "i_youthteacher_2weekttc_teacher",
+					"order": "9",
+					"question": "TTC Teacher Name",
+					"type": "text",
+					"dep_list": ["i_youthteacher_2weekttc:yes"],
+					"required": false
+				},
+				{
+					"id": "i_youth_courses",
+					"order": "10",
+					"type": "repeater",
+					"min_count": "1",
+					"question": "Please list the Art Excel / YES courses that you have taught in the last 2 years",
+					"questions": [
+						{
+							"id": "i_youth_course_details_type",
+							"order": "1",
+							"question": "Course Type",
+							"type": "select",
+							"display_values": [
+								{"value": "ae", "display": "Art Excel"},
+								{"value": "y", "display": "YES"},
+								{"value": "ys", "display": "YES for Schools"}
+							],
+							"required": false
+						},
+						{
+							"id": "i_youth_course_details_date",
+							"order": "2",
+							"question": "Month and Year (mm/yyyy)",
+							"date_format": "M yy",
+							"mask_pattern": "99/9999",
+							"type": "text",
+							"required": false
+						},
+						{
+							"id": "i_youth_course_details_participant_count",
+							"order": "3",
+							"question": "Number of participants on the course",
+							"type": "text",
+							"required": false
+						},
+						{
+							"id": "i_youth_course_details_teacher",
+							"order": "4",
+							"question": "Co-Teacher Name (if applicable)",
+							"type": "text",
+							"required": false
+						}
+					],
+					"dep_list": ["i_youthteacher_2weekttc:yes"]
+				},
+				{
+					"id": "i_course_wishlist",
+					"order": "13",
+					"question": "Which course(s) would you like to teach?",
+					"type": "checkbox_group",
+					"display_values": [
+						{"value": "hp", "display": "Happiness Program"},
+						{"value": "yp", "display": "<b>yes</b>plus"},
+						{"value": "yes", "display": "YES"},
+						{"value": "artexcel", "display": "Art Excel"}
+					]
+				},
+				{
+					"id": "i_eval_teachers",
+					"order": "10",
+					"type": "repeater",
+					"min_count": "3",
+					"question": "Please list your evaluating Teachers (at least 3 required)",
+					"helper": "Out of your evaluating teachers, you need to have at least 2 teachers who have known you for atleast 6 months, AND you have organized for and/or assisted with, who will write evaluations on your behalf. See the TTC requirements document for more details",
+					"questions": [
+						{
+							"id": "i_eval_teacher_name",
+							"order": "20",
+							"question": "Name",
+							"type": "text"
+						},
+						{
+							"id": "i_eval_teacher_email",
+							"order": "20",
+							"question": "Email",
+							"type": "text"
+						},
+						{
+							"id": "i_eval_teacher_type",
+							"order": "20",
+							"question": "Teacher Type",
+							"type": "select",
+							"display_values": [
+								{"value": "local_teacher", "display": "Local teacher"},
+								{"value": "visiting_teacher", "display": "Visiting Teacher"},
+								{"value": "other", "display": "Other"}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"page_name": "Courses Attended",
+			"questions": [
+				{
+					"id": "i_part1_question",
+					"order": "19",
+					"display_value": "Happiness Program details",
+					"type": "header",
+					"helper": "Please list details of the first Art of Living Happiness Program/Part-1/Yesplus course that you attended"
+				},
+				{
+					"id": "i_part1_date",
+					"order": "55",
+					"question": "Month and Year of course (mm/yyyy)",
+					"date_format": "M yy",
+					"mask_pattern": "99/9999",
+					"type": "text"
+				},
+				{
+					"id": "i_part1_location",
+					"order": "56",
+					"question": "Location",
+					"type": "text"
+				},
+				{
+					"id": "i_part1_teacher",
+					"order": "57",
+					"question": "Teacher",
+					"type": "text"
+				},
+				{
+					"id": "i_aom_question",
+					"order": "58",
+					"display_value": "Sahaj Samadhi (Art of Meditation) details",
+					"type": "header",
+					"helper": "Please list details of the Art of Meditation (Sahaj Samadhi) course you attended"
+				},
+				{
+					"id": "i_aom_date",
+					"order": "59",
+					"question": "Month and Year of course (mm/yyyy)",
+					"date_format": "M yy",
+					"mask_pattern": "99/9999",
+					"type": "text"
+				},
+				{
+					"id": "i_aom_location",
+					"order": "60",
+					"question": "Location",
+					"type": "text"
+				},
+				{
+					"id": "i_aom_teacher",
+					"order": "61",
+					"question": "Teacher",
+					"type": "text"
+				},
+				{
+					"id": "i_prettc_question",
+					"order": "62",
+					"display_value": "Pre-TTC / VTP details",
+					"type": "header",
+					"helper": "Please list details of the Pre-TTC you attended"
+				},
+				{
+					"id": "i_prettc_date",
+					"order": "63",
+					"question": "Month and Year of course (mm/yyyy)",
+					"date_format": "M yy",
+					"mask_pattern": "99/9999",
+					"type": "text"
+				},
+				{
+					"id": "i_prettc_location",
+					"order": "64",
+					"question": "Location",
+					"type": "text"
+				},
+				{
+					"id": "i_prettc_teacher",
+					"order": "65",
+					"question": "Teacher",
+					"type": "text"
+				},
+
+				{
+					"id": "i_courses_attended",
+					"order": "13",
+					"question": "Please select any other courses you have attended",
+					"type": "checkbox_group",
+					"display_values": [
+						{"value": "dsn", "display": "DSN"},
+						{"value": "blessings", "display": "Blessings"},
+						{"value": "ssy", "display": "SSY"},
+						{"value": "yltp", "display": "YLTP"},
+						{"value": "gp1", "display": "Guru Puja 1"},
+						{"value": "gp2", "display": "Guru Puja 2"}
+					]
+				}
+			]
+		},
+		{
+			"page_name": "Health Information",
+			"questions": [
+				{
+					"id": "i_health_physician",
+					"order": "77",
+					"question": "If you are presently under the care of a physician, or have been recently hospitalized, please describe",
+					"type": "textarea"
+				},
+				{
+					"id": "i_health_psychiatrist",
+					"order": "78",
+					"question": "If you have a history of mental illness or are currently under the care of a psychiatrist, please describe",
+					"type": "textarea"
+				},
+				{
+					"id": "i_health_medications",
+					"order": "79",
+					"question": "Please list in detail any medications you are taking and their purpose",
+					"type": "textarea"
+				},
+				{
+					"id": "i_physicallyfit",
+					"order": "13",
+					"question": "Physically fit for",
+					"type": "checkbox_group",
+					"display_values": [
+						{"value": "walking", "display": "Walking"},
+						{"value": "yoga", "display": "Yoga"},
+						{"value": "climbing", "display": "Climbing"},
+						{"value": "games", "display": "Games"},
+						{"value": "breathing_meditation", "display": "Breathing/Meditation Practices"},
+						{"value": "none", "display": "None of the above"}
+					]
+				},
+				{
+					"id": "i_emergency_contact",
+					"order": "87",
+					"question": "<b>In case of emergency, whom should we contact?</b>",
+					"type": "question"
+				},
+				{
+					"id": "i_emergency_contact_name",
+					"order": "88",
+					"question": "Name",
+					"type": "text"
+				},
+				{
+					"id": "i_emergency_contact_email",
+					"order": "89",
+					"question": "Email",
+					"type": "text"
+				},
+				{
+					"id": "i_emergency_contact_cell_ph",
+					"order": "90",
+					"question": "Cell Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_emergency_contact_work_ph",
+					"order": "91",
+					"question": "Work Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_emergency_contact_relationship",
+					"order": "92",
+					"question": "Your relationship to this person",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"page_name": "Basic TTC Pre-Requisites",
+			"questions": [
+				{
+					"id": "i_prereq1",
+					"order": "95",
+					"question": "Has it been atleast 1 year since completing your first Art of Living Happiness Program (Part 1) or Yesplus course?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq2",
+					"order": "96",
+					"question": "Are you atleast 20 years of age?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq3",
+					"order": "97",
+					"question": "Has it been atleast 1 month between your Volunteer Training / Pre-TTC and the published TTC application deadline?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq4",
+					"order": "98",
+					"question": "Are you doing your home practice of Sudarshan Kriya EVERYDAY for atleast for the last 1 year?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq5",
+					"order": "99",
+					"question": "Do you attend the local long Sudarshan Kriya follow ups every week for atleast for the last 1 year?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq6",
+					"order": "100",
+					"question": "Have you completed the Sahaj Samadhi Meditation course and are you regular with your daily practice?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq7",
+					"order": "101",
+					"question": "Have you attended at least 3 Silence Retreats (Art of Silence) courses before the published TTC application deadline?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq8",
+					"order": "102",
+					"question": "Have you viewed Ashtavakra Gita, all 33 tapes by the time you apply?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq9",
+					"order": "103",
+					"question": "Have you viewed all the Bhakti Sutras by the time you apply?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq10",
+					"order": "104",
+					"question": "Have you have watched all of the Patanjali Yoga Sutras by the time you apply?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq11",
+					"order": "105",
+					"question": "Are you fluent in English? Have you practiced speaking in front of large groups and your accent is clearly audible",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq13",
+					"order": "107",
+					"question": "Are you free from use of alcohol at least the last six months, by the time you apply?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq14",
+					"order": "108",
+					"question": "Are you free from use of tobacco for at least the last six months, by the time you apply?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq15",
+					"order": "109",
+					"question": "Are you free from use of recreational drugs for at least the last six months, by the time you apply?",
+					"type": "radio",
+					"display_values": [
+						{"value": "yes", "display": "Yes"},
+						{"value": "no", "display": "No"}
+					]
+				},
+				{
+					"id": "i_prereq_no_reason",
+					"order": "110",
+					"question": "If you have answered <b>no</b> for any of the mandatory pre-requisites above, please elaborate here for each such case",
+					"type": "textarea"
+				},
+				{
+					"id": "i_prereq_diet_type_explanation",
+					"order": "106",
+					"question": "What kind of a diet do you usually follow (Vegan/Vegetarian/Non-Vegetarian)? Please explain.",
+					"type": "textarea"
+				}
+			]
+		},
+		{
+			"page_name": "Organizing Pre-Requisites",
+			"questions": [
+				{
+					"id": "i_last1year_introtalks",
+					"order": "132",
+					"question": "How many intro workshops/info sessions have you organized and led in the past 1 year?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_avg_introtalk_attendee_count",
+					"order": "133",
+					"question": "How many participants attended the intro workshops/info sessions on an average?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_enrollment",
+					"order": "134",
+					"question": "How many NEW participants have you enrolled to an Art of Living/Yesplus/Happiness Program in the last 3 years?",
+					"type": "text"
+				},
+				{
+					"id": "i_enrolled_people",
+					"order": "136",
+					"question": "Please provide their names, email, city &amp; state where they took the course:",
+					"type": "repeater",
+					"min_count": "1",
+					"print_count": "true",
+					"print_count_label": "<b>Total no of enrollments listed by candidate below (auto calculated)</b>",
+					"questions": [
+						{
+							"id": "i_enrollment_name",
+							"order": "1",
+							"type": "text",
+							"question": "Name"
+						},
+						{
+							"id": "i_enrollment_email",
+							"order": "2",
+							"type": "text",
+							"question": "Email"
+						},
+						{
+							"id": "i_enrollment_city",
+							"order": "3",
+							"type": "text",
+							"question": "City"
+						},
+						{
+							"id": "i_enrollment_state",
+							"order": "4",
+							"type": "text",
+							"question": "State"
+						}
+					]
+				},
+				{
+					"id": "i_course_organized_count",
+					"order": "137",
+					"question": "How many Happiness Programs/Yesplus courses have you lead organized in the last 2 years?",
+					"type": "text"
+				},
+				{
+					"id": "i_course_assisted_count",
+					"order": "139",
+					"question": "How many Happiness Programs/Yesplus courses have you assisted in the last 2 years? (This can be the same course as the one you organized)",
+					"type": "text"
+				},
+				{
+					"id": "i_org_courses",
+					"order": "141",
+					"question": "Please list all the courses that you have lead organized and/or assisted within the last two years",
+					"type": "repeater",
+					"min_count": "1",
+					"print_count": "true",
+					"print_count_label": "<b>Total no of courses listed by candidate (auto calculated)</b>",
+					"questions": [
+						{
+							"id": "i_org_course_type",
+							"order": "8",
+							"question": "Format of the course",
+							"type": "select",
+							"display_values": [
+								{"value": "hp", "display": "Happiness Program"},
+								{"value": "yp", "display": "yesplus"},
+								{"value": "yes", "display": "YES"},
+								{"value": "artexcel", "display": "Art Excel"}
+							]
+						},
+						{
+							"id": "i_org_course_from_date",
+							"order": "3",
+							"question": "Course Start Date (mm/dd/yyyy)",
+							"type": "text",
+							"date_format": "mm dd yyyy",
+							"mask_pattern": "99/99/9999"
+						},
+						{
+							"id": "i_org_course_to_date",
+							"order": "4",
+							"question": "Course End Date (mm/dd/yyyy)",
+							"type": "text",
+							"date_format": "mm dd yyyy",
+							"mask_pattern": "99/99/9999"
+						},
+						{
+							"id": "i_org_course_involvement",
+							"order": "2",
+							"question": "Your involvement in the course",
+							"type": "select",
+							"display_values": [
+								{
+									"value": "o", 
+									"display": "Organized",
+									"dep_list": [
+										"i_org_course_from_date",
+										"i_org_course_to_date",
+										"i_org_course_city",
+										"i_org_course_state",
+										"i_org_course_leadteacher",
+										"i_org_course_format",
+										"i_org_course_activity",
+										"i_org_course_team_member_names",
+										"i_org_course_team_member_inspiration",
+										"i_org_course_outreach",
+										"i_org_course_introtalks",
+										"i_org_course_enrollment_count",
+										"i_org_course_participant_count",
+										"i_org_course_graduates_retention"
+									]
+								},
+								{
+									"value": "a", 
+									"display": "Assisted",
+									"dep_list": [
+										"i_org_course_from_date",
+										"i_org_course_to_date",
+										"i_org_course_city",
+										"i_org_course_state",
+										"i_org_course_leadteacher",
+										"i_org_course_format",
+										"i_org_course_processes",
+										"i_org_course_graduates_retention"
+									]
+								},
+								{
+									"value": "oa", 
+									"display": "Organized &amp; Assisted",
+									"dep_list": [
+										"i_org_course_from_date",
+										"i_org_course_to_date",
+										"i_org_course_city",
+										"i_org_course_state",
+										"i_org_course_leadteacher",
+										"i_org_course_format",
+										"i_org_course_activity",
+										"i_org_course_team_member_names",
+										"i_org_course_team_member_inspiration",
+										"i_org_course_outreach",
+										"i_org_course_introtalks",
+										"i_org_course_enrollment_count",
+										"i_org_course_participant_count",
+										"i_org_course_processes",
+										"i_org_course_graduates_retention"
+									]
+								}
+							]
+						},
+						{
+							"id": "i_org_course_city",
+							"order": "5",
+							"question": "Course City",
+							"type": "text"
+						},
+						{
+							"id": "i_org_course_state",
+							"order": "6",
+							"question": "Course State",
+							"type": "text"
+						},
+						{
+							"id": "i_org_course_leadteacher",
+							"order": "7",
+							"question": "Lead Teacher Name and Contact info (email &amp; ph. no.)",
+							"type": "textarea"
+						},
+						{
+							"id": "i_org_course_activity",
+							"order": "13",
+							"question": "Please check everything that you did for this course",
+							"type": "checkbox_group",
+							"display_values": [
+								{"value": "sao", "display": "Posting the course on SAO"},
+								{"value": "venue", "display": "Finding the venue"},
+								{"value": "lead", "display": "Leading the volunteer team"},
+								{"value": "enroll", "display": "Driving outreach &amp; Enrollment"},
+								{"value": "logistics", "display": "Ensuring that the room and the day-to-day logistics of the course are taken care of for all 5 days"},
+								{"value": "attend", "display": "Sitting through the 5 days of the course"},
+								{"value": "accounting", "display": "Completed the accounting withing 2 weeks of the course"},
+								{"value": "reunion", "display": "Organizing the Reunion"}
+							],
+							"dep_list": ["i_org_course_type:o,oa"]
+						},
+						{
+							"id": "i_org_course_team_member_names",
+							"order": "19",
+							"question": "Write down the names of your team members",
+							"type": "textarea",
+							"dep_list": ["i_org_course_type:o,oa"]
+						},
+						{
+							"id": "i_org_course_team_member_inspiration",
+							"order": "20",
+							"question": "Explain in detail, how you inspired them to be part of your organizing team and how did you assist them in their ongoing development as a volunteer",
+							"type": "textarea",
+							"dep_list": ["i_org_course_type:o,oa"]
+						},
+						{
+							"id": "i_org_course_outreach",
+							"order": "18",
+							"question": "Please explain in detail different modes of outreach you used for this course",
+							"type": "textarea",
+							"dep_list": ["i_org_course_type:o,oa"]
+						},
+						{
+							"id": "i_org_course_introtalks",
+							"order": "21",
+							"question": "List the number of intro workshops/info sessions that you led for this course and how many people attended each of your introductory talks",
+							"type": "textarea",
+							"dep_list": ["i_org_course_type:o,oa"]
+						},
+						{
+							"id": "i_org_course_enrollment_count",
+							"order": "22",
+							"question": "How many NEW participants did you register for this course? This means that either through your connections, intro workshop / info sessions and other outreach efforts, you directly inspired them and therefore they registered for the course on the Harmony/SAO",
+							"type": "text",
+							"dep_list": ["i_org_course_type:o,oa"]
+						},
+						{
+							"id": "i_org_course_participant_count",
+							"order": "23",
+							"question": "How many total participants on the course?",
+							"type": "text",
+							"dep_list": ["i_org_course_type:o,oa"]
+						},
+						{
+							"id": "i_org_course_processes",
+							"order": "24",
+							"question": "Please explain which processes you led? (e.g. Pranayamas, Yoga, Knowledge Points, Games, Other)",
+							"type": "textarea",
+							"dep_list": ["i_org_course_type:a,oa"]
+						},
+						{
+							"id": "i_org_course_graduates_retention",
+							"order": "24",
+							"question": "What have you done to help in the retention of course graduates?",
+							"type": "textarea"
+						}
+					]
+				}
+			]
+		},
+		{
+			"page_name": "Miscellaneous",
+			"questions": [
+				{
+					"id": "i_other_teaching",
+					"order": "153",
+					"question": "If you are involved in or practise or teach any other forms of self-development or spiritual practices outside of Art of Living please describe",
+					"type": "textarea"
+				},
+				{
+					"id": "i_habits",
+					"order": "154",
+					"question": "Do you have any habits of chewing tobacco/smoking/consuming alcohol/recreational drugs?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_service_project",
+					"order": "155",
+					"question": "Please write about any Art of Living/IAHV/any other NGO service projects that you may have participated in or have affliations with",
+					"type": "textarea"
+				},
+				{
+					"id": "i_special_interest_groups",
+					"order": "13",
+					"question": "Are there special interest groups you would like to work with",
+					"type": "checkbox_group",
+					"display_values": [
+						{"value": "college_students", "display": "College Students"},
+						{"value": "prison_program", "display": "Prison Program"},
+						{"value": "hispanic_community", "display": "Hispanic Community"},
+						{"value": "african_american_community", "display": "African American Community"},
+						{"value": "asian_community", "display": "Asian Community"},
+						{"value": "native_american_community", "display": "Native American Community"},
+						{"value": "corporations", "display": "Corporations"},
+						{"value": "special_education_students", "display": "Special Education students"},
+						{"value": "at_risk_youth", "display": "At-Risk Youth"},
+						{"value": "veterans", "display": "Veterans"},
+						{"value": "children", "display": "Children"},
+						{"value": "parents", "display": "Parents"},
+						{"value": "other", "display": "Other"}
+					]
+				},
+				{
+					"id": "i_languages",
+					"order": "172",
+					"type": "repeater",
+					"min_count": "1",
+					"question": "List all the languages you can read, write and speak fluently in, including English. (Speak well enough to teach in)",
+					"questions": [
+						{
+							"id": "i_language_name",
+							"order": "1",
+							"question": "Name",
+							"type": "text"
+						},
+						{
+							"id": "i_language_name_abilities",
+							"order": "13",
+							"question": "Please check all applicable",
+							"type": "checkbox_group",
+							"display_values": [
+								{"value": "read", "display": "Read"},
+								{"value": "write", "display": "Write"},
+								{"value": "speak", "display": "Speak Fluently"}
+							]
+						}
+					]
+				},
+				{
+					"id": "i_skills",
+					"order": "175",
+					"question": "Briefly describe your skills and what you like to do. (For example: phone skills, taking care of people, organizing, IT, writing, singing)",
+					"type": "textarea"
+				},
+				{
+					"id": "i_post_teacher_volunteers",
+					"order": "176",
+					"question": "Write the names of the volunteers who will help you organize your courses after you have become a teacher",
+					"type": "textarea"
+				}
+			]
+		},
+		{
+			"page_name": "Answer the following questions sincerely and honestly",
+			"questions": [
+				{
+					"id": "i_why",
+					"order": "198",
+					"question": "Why do you want to become an Art of Living teacher?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_moment",
+					"order": "199",
+					"question": "Describe that defining moment in your life when you made a conscious and purposeful decision to become an Art of Living Teacher. Describe the events that prompted that moment.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_gurustory",
+					"order": "200",
+					"question": "Tell us your personal  story/experience of Grace/Guru that made your faith stronger.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_guruvalue2new",
+					"order": "201",
+					"question": "How would you explain the value of having a Guru in one's life to someone new to Art of Living?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_descyourself",
+					"order": "202",
+					"question": "Briefly describe yourself and what you are doing (working/studying) at present.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_othersdescyou",
+					"order": "203",
+					"question": "How do your close friends and family describe your personality?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_family",
+					"order": "204",
+					"question": "Share about your family (father and mother, siblings, partner / spouse, and children). Are they supportive of your journey in Art of Living?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_5positive",
+					"order": "205",
+					"question": "List 5 positive qualities you have.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_5negative",
+					"order": "206",
+					"question": "List 5 negative qualities you have.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_2aolfchanges",
+					"order": "207",
+					"question": "If there were two things you could change in AOLF what would they be? How would you go about changing them?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_favteacher",
+					"order": "208",
+					"question": "Who is your favorite Art of Living teacher? Why?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_responsibilities",
+					"order": "209",
+					"question": "Describe your responsibilities both at home and work. Also, explain how you balance them to accomodate Art of Living service activities.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_favkp",
+					"order": "210",
+					"question": "Which is your favorite Art of Living Knowledge point, something that you apply the most in your life? Using your personal examples, please establish that point in less than 200 words.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_personal_changes_from_aol",
+					"order": "211",
+					"question": "Share specific personal benefits and positive changes you have observed in yourself since your first Art of Living Course.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_anythingelse",
+					"order": "212",
+					"question": "Use this space for anything else you want to share with the TTC desk.",
+					"type": "textarea"
+				}
+			]
+		}
+	]	
+}

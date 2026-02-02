@@ -1,0 +1,22 @@
+{
+	"form_name": "Settings",
+	"form_type": "ttc_portal_settings",
+	"form_description": "Please enter settings for the TTC portal",
+	"pages": [
+		{
+			"page_name": "TTC Portal Settings",
+			"questions": [
+				{
+					"id": "home_country",
+					"order": "40",
+					"question": "Your home country",
+					"type": "select",
+					"display_values": [
+						{"value": "US", "display": "United States"},
+						{"value": "CA", "display": "Canada"}
+					]
+				}
+			]
+		}
+	]
+}

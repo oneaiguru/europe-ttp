@@ -1,0 +1,247 @@
+{
+	"form_name": "TTC Graduate Self Evaluation",
+	"form_type": "post_ttc_self_evaluation_form",
+	"form_description": "Note: This self evaluation form is for TTC graduates while fulfilling their co-teaching requirement",
+	"is_multi_instance_form": "true",
+
+	"from_email": "amit.nair@artofliving.org",
+	"user_confirmation_email": {
+		"message": "Dear {i_fname} {i_lname},<br><br>Your Self Evaluation Application has been submitted successfully for the course from {i_course_start} - {i_course_end}.<br><br>Jai Gurudev!<br>TTC Desk<br>",
+		"subject": "Your Self Evaluation Form has been submitted"
+	},
+	"owner_confirmation_email": {
+		"message": "Dear TTC Desk,<br><br>{i_fname} {i_lname} has submitted the Self Evaluation form for the course from the {i_course_start} - {i_course_end}.<br><br>Jai Gurudev!<br>TTC Desk<br>",
+		"subject": "{i_fname} {i_lname} has submitted the Self Evaluation for the course from {i_course_start} - {i_course_end}"
+	},
+	"other_emails": {
+		"i_co_teacher_email": {
+			"message": "Dear {i_co_teacher_fname} {i_co_teacher_lname},<br><br>{i_fname} {i_lname} has submitted their Self Evaluation Form for their course with you  - {i_course_start} - {i_course_end}.<br><br> If you have not completed the feedback for this applicant, please go ahead and do so at this link:<br> <a href='https://www.artofliving.org/ttcportal'>artofliving.org/ttcportal</a>.<br><br>Jai Gurudev!<br>TTC Desk<br>",
+			"subject": "{i_fname} {i_lname} has submitted the Self Evaluation for the course from {i_course_start} - {i_course_end}"
+		}
+	},
+	"pages": [
+		{
+			"page_name": "Course Information",
+			"questions": [
+				{
+					"id": "i_course_start",
+					"order": "9",
+					"question": "Course Start Date (mm/dd/yyyy)",
+					"type": "text",
+					"date_format": "mm dd yyyy",
+					"mask_pattern": "99/99/9999",
+					"is_form_instance_identifier": "true",
+					"helper": "The start date of the course you co-taught"
+				},
+				{
+					"id": "i_course_end",
+					"order": "10",
+					"question": "Course End Date (mm/dd/yyyy)",
+					"type": "text",
+					"date_format": "mm dd yyyy",
+					"mask_pattern": "99/99/9999",
+					"helper": "The end date of the course you co-taught"
+				},
+				{
+					"id": "i_course_city",
+					"order": "11",
+					"question": "Course City",
+					"type": "text"
+				},
+				{
+					"id": "i_course_state",
+					"order": "12",
+					"question": "Course State",
+					"type": "text"
+				},
+				{
+					"id": "i_course_format",
+					"order": "22",
+					"question": "What was the format of the course that you co-taught?",
+					"type": "radio",
+					"display_values": [
+						{"value": "hp_3_day_format", "display": "New 3-Day Happiness Program format"},
+						{"value": "yesplus", "display": "Yesplus"},
+						{"value": "other", "display": "Other (please specify)"}
+					]
+				}
+			],
+			"is_form_instance_identifier": "true"
+		},
+		{
+			"page_name": "Your Personal Information",
+			"questions": [
+				{
+					"id": "i_fname",
+					"order": "1",
+					"question": "First Name",
+					"type": "text"
+				},
+				{
+					"id": "i_lname",
+					"order": "2",
+					"question": "Last Name",
+					"type": "text"
+				},
+				{
+					"id": "i_cellphone",
+					"order": "24",
+					"question": "Cell Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_homephone",
+					"order": "25",
+					"question": "Home Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_email_aol",
+					"order": "26",
+					"question": "Email Address (artofliving.org)",
+					"type": "text",
+					"helper": "If you do not have an artofliving.org email ID yet, please get one by submitting a request <a target='_blank' href='http://support.us.artofliving.org'>HERE</a> before you submit this form"
+				},
+				{
+					"id": "i_email_other",
+					"order": "27",
+					"question": "Email Address (other)",
+					"type": "text"
+				},
+				{
+					"id": "i_ttc_dates",
+					"order": "6",
+					"question": "Month and Year of Your TTC (mm/yyyy)",
+					"type": "text",
+					"date_format": "mm yyyy",
+					"mask_pattern": "99/9999"
+				},
+				{
+					"id": "i_ttc_location",
+					"order": "7",
+					"question": "Location of Your TTC",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"page_name": "Co-Teacher Information",
+			"questions": [
+				{
+					"id": "i_co_teacher_fname",
+					"order": "14",
+					"question": "First Name",
+					"type": "text"
+				},
+				{
+					"id": "i_co_teacher_lname",
+					"order": "15",
+					"question": "Last Name",
+					"type": "text"
+				},
+				{
+					"id": "i_co_teacher_email_aol",
+					"order": "16",
+					"question": "Email Address (artofliving.org)",
+					"type": "text"
+				},
+				{
+					"id": "i_co_teacher_email_other",
+					"order": "17",
+					"question": "Email Address (other)",
+					"type": "text"
+				},
+				{
+					"id": "i_co_teacher_cellphone",
+					"order": "24",
+					"question": "Cell Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_co_teacher_homephone",
+					"order": "25",
+					"question": "Home Phone",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"page_name": "Co-Teaching Experience",
+			"questions": [
+				{
+					"id": "i_exp",
+					"order": "21",
+					"question": "Explain in detail how you went about organizing this course? Specifically write in the format specified below",
+					"helper": "1. List all the unique ways of outreach / marketing channels you used for this course. Example: home intro talks, intro taks to different clubs, Facebook ads etc.<br>2. Write the TOTAL number of introductory talks you gave for this course.<br>3. Calculate and write the TOTAL number of people who attended all your introductory talks:<br>4. Names of volunteers on the organizing team that you led for this course.<br>5. Was the course you co-taught in a NEW area (where there was no previous AOL activity)",
+					"type": "textarea"
+				},
+				{
+					"id": "i_new_participant_cnt",
+					"order": "22",
+					"question": "How many new participants on the course?",
+					"type": "text"
+				},
+				{
+					"id": "i_repeater_cnt",
+					"order": "23",
+					"question": "How many repeaters on the course?",
+					"type": "text"
+				},
+				{
+					"id": "i_total_cnt",
+					"order": "24",
+					"question": "Out of the total participants on this course, how many participants were registered by you? This means that through your intro workshops / info sessions, connections or other outreach activities, you inspired these people to register for the course.",
+					"type": "text"
+				},
+				{
+					"id": "i_processes",
+					"order": "25",
+					"question": "List the knowledge points, yoga and the processes you led. Please explain how you led it, how the participants responded to it and any improvements you plan to make in your delivery for the next course.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_games",
+					"order": "26",
+					"question": "Please list the games that you led and how you led them?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_challenging_question",
+					"order": "28",
+					"question": "Write about one challenging question that you were asked by a participant and how you handled it.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_areas_of_improvement",
+					"order": "29",
+					"question": "Based on your own observations and your co-teacher feedback, in which areas do you think you need to improve?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_co_teacher_feedback",
+					"order": "30",
+					"question": "What feedback do you have for your co-teacher?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_mentor_support",
+					"order": "31",
+					"question": "How did your mentor co-teacher support you in this course?",
+					"type": "textarea"
+				},
+				{
+					"id": "i_co_teacher_using_new_format",
+					"order": "32",
+					"question": "Is your co-teacher using the full new format course? Please explain.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_comments",
+					"order": "33",
+					"question": "Any other comments / notes to TTC Desk",
+					"type": "textarea"
+				}
+			]
+		}
+	]	
+}

@@ -1,0 +1,300 @@
+{
+	"form_name": "TTC Graduate feedback from Co-Teacher",
+	"form_type": "post_ttc_feedback_form",
+	"form_description": "Note: This co-teacher evaluation form is for teachers to evaluate TTC graduates while fulfilling their co-teaching requirement",
+	"is_multi_instance_form": "true",
+
+	"from_email": "amit.nair@artofliving.org",
+	"user_confirmation_email": {
+		"message": "Dear {i_fname} {i_lname},<br><br>We appreciate you taking the time out to complete this Feedback Form. THANK YOU!<br><br>Jai Gurudev!<br>TTC Desk<br>",
+		"subject": "Your feedback for {i_ttc_graduate_name} has been submitted"
+	},
+	"owner_confirmation_email": {
+		"message": "Dear TTC Desk,<br><br>{i_fname} {i_lname} has submitted feedback for {i_ttc_graduate_name} for the course from the {i_course_start} - {i_course_end}<br><br> Jai Gurudev<br> TTC Desk<br>",
+		"subject": "{i_fname} {i_lname} has submitted post TTC feedback for {i_ttc_graduate_name}"
+	},
+	"pages": [
+		{
+			"page_name": "Course Information",
+			"questions": [
+				{
+					"id": "i_ttc_graduate_name",
+					"order": "1",
+					"question": "TTC Graduate Name",
+					"type": "text",
+					"helper": "The TTC graduate you co-taught the course with"
+				},
+				{
+					"id": "i_ttc_graduate_email",
+					"order": "2",
+					"question": "TTC Graduate Email",
+					"type": "text",
+					"helper": "Their email address",
+					"is_form_instance_identifier": "true"
+				},
+				{
+					"id": "i_course_start",
+					"order": "9",
+					"question": "Course Start Date (mm/dd/yyyy)",
+					"type": "text",
+					"date_format": "mm dd yyyy",
+					"mask_pattern": "99/99/9999",
+					"is_form_instance_identifier": "true",
+					"helper": "The start date of the course you co-taught"
+				},
+				{
+					"id": "i_course_end",
+					"order": "10",
+					"question": "Course End Date (mm/dd/yyyy)",
+					"type": "text",
+					"date_format": "mm dd yyyy",
+					"mask_pattern": "99/99/9999",
+					"helper": "The end date of the course you co-taught"
+				},
+				{
+					"id": "i_course_city",
+					"order": "11",
+					"question": "Course City",
+					"type": "text"
+				},
+				{
+					"id": "i_course_state",
+					"order": "12",
+					"question": "Course State",
+					"type": "text"
+				},
+				{
+					"id": "i_course_format",
+					"order": "22",
+					"question": "What was the format of the course that you co-taught?",
+					"type": "radio",
+					"display_values": [
+						{"value": "hp_3_day_format", "display": "New 3-Day Happiness Program format"},
+						{"value": "yesplus", "display": "Yesplus"},
+						{"value": "other", "display": "Other (please specify)"}
+					]
+				}
+			],
+			"is_form_instance_identifier": "true"
+		},
+		{
+			"page_name": "Your Personal Information",
+			"questions": [
+				{
+					"id": "i_fname",
+					"order": "1",
+					"question": "First Name",
+					"type": "text"
+				},
+				{
+					"id": "i_lname",
+					"order": "2",
+					"question": "Last Name",
+					"type": "text"
+				},
+				{
+					"id": "i_cellphone",
+					"order": "24",
+					"question": "Cell Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_homephone",
+					"order": "25",
+					"question": "Home Phone",
+					"type": "text"
+				},
+				{
+					"id": "i_email_aol",
+					"order": "26",
+					"question": "Email Address (artofliving.org)",
+					"type": "text",
+					"helper": "If you do not have an artofliving.org email ID yet, please get one by submitting a request <a target='_blank' href='http://support.us.artofliving.org'>HERE</a> before you submit this form"
+				},
+				{
+					"id": "i_email_other",
+					"order": "27",
+					"question": "Email Address (other)",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"page_name": "Co-Teaching Experience",
+			"questions": [
+				{
+					"id": "i_initiative",
+					"order": "13",
+					"question": "Did they show initiative, leadership in organizing this course from start to end? Please explain their strengths and weaknesses that you observed through the organizing process.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_rating_question",
+					"order": "85",
+					"question": "How would you rate this candidate on a scale of 5, 1 being the lowest and 5 being the highest rating, for their communication in the following categories",
+					"type": "question"
+				},
+				{
+					"id": "i_rating_spoken_english_fluency",
+					"order": "107",
+					"question": "Fluency in spoken English - grammar, accent, sentence formation",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_rating_written_english_fluency",
+					"order": "107",
+					"question": "Written English - grammar, spelling, sentence formation",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_rating_confidence",
+					"order": "107",
+					"question": "Ability to speak confidently in front of a group of 10+ people",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_rating_connection_with_group",
+					"order": "107",
+					"question": "Authentic connection with the group they are speaking to",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_rating_interactive_communication",
+					"order": "107",
+					"question": "Interactive Style of communication",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_rating_presence",
+					"order": "107",
+					"question": "Presence",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_rating_naturalness",
+					"order": "107",
+					"question": "Naturalness",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_rating_communication_awareness",
+					"order": "107",
+					"question": "General Awareness on what is appropriate to say in front of a group",
+					"type": "select",
+					"display_values": [
+						{"value": "1", "display": "1"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5"}
+					]
+				},
+				{
+					"id": "i_rating_explanation",
+					"order": "15",
+					"question": "If you gave them a score less than 2 for any of the categories, please give details on why you gave a low score?",
+					"type": "textarea",
+					"helper": "If not applicable, please put N/A in the box below"
+				},
+				{
+					"id": "i_feedback_kp",
+					"order": "16",
+					"question": "Do they have a good understanding of the knowledge of the 5 course points. Please comment.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_feedback_kp_interactive",
+					"order": "17",
+					"question": "Were they interactive with the delivery of the knowledge points? Did they listen to the participants and build the point around what was being said? Please comment.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_feedback_games",
+					"order": "18",
+					"question": "Did they lead any games? Please comment on their ability to give clear instruction and their playfulness in engaging people in the game.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_feedback_processes",
+					"order": "19",
+					"question": "What processes did they lead? Please comment on feedback leading yoga and other processes (example: eye gazing, life story, enthusiasm etc.).",
+					"type": "textarea"
+				},
+				{
+					"id": "i_attentiveness",
+					"order": "20",
+					"question": "Please comment on their attentiveness to the participants needs.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_other_improvements",
+					"order": "21",
+					"question": "Please share any other areas of improvement that you suggest for this candidate or anything else you would like to share with TTC Desk.",
+					"type": "textarea"
+				},
+				{
+					"id": "i_readiness_rating",
+					"order": "22",
+					"question": "On a scale of 5, 1 being the lowest and 5 being highest, rate this candidate on their readiness as of today, to lead (teach) a course on their own.",
+					"type": "radio",
+					"display_values": [
+						{"value": "1", "display": "1 (lowest)"},
+						{"value": "2", "display": "2"},
+						{"value": "3", "display": "3"},
+						{"value": "4", "display": "4"},
+						{"value": "5", "display": "5 (highest)"}
+					]
+				}
+			]
+		}
+	]	
+}
