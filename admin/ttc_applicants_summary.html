@@ -1,0 +1,487 @@
+<link rel="stylesheet" type="text/css" href="javascript/datatables/datatables.min.css" />
+<script type="text/javascript" src="javascript/datatables/datatables.min.js"></script>
+
+<link href="javascript/select2/css/select2.min.css" rel="stylesheet" />
+<script src="javascript/select2/js/select2.min.js"></script>
+<link href="styles/an-select2.css" rel="stylesheet" />
+
+<style>
+    td.details-control {
+        background: url('javascript/datatables/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('javascript/datatables/details_close.png') no-repeat center center;
+    }
+
+    table.dataTable thead th {
+        border-bottom: 2px solid #ccc;
+    }
+
+    table.dataTable tfoot th {
+        border-top: 2px solid #ccc;
+    }
+
+    /* Unsetting margin to fix misaligned body */
+    table.dataTable {
+        margin: unset;
+    }
+
+</style>
+
+<script type="text/javascript">
+    
+    var applicant_summary = undefined;
+    var table = undefined;
+    var forms = {}
+
+    function get_applicant_summary() {
+        if (applicant_summary) {
+            return;
+        }
+        console.log('[get_applicant_summary] Getting user summary');
+        var jqxhr = $.get("reporting/user-summary/get-by-form-type",
+            {
+            })
+            .done(function (data) {
+                // result = data.results;
+                // alert(JSON.stringify(data.results[0].formatted_address));
+                // alert(JSON.stringify(data.results));
+                applicant_summary = JSON.parse(data);
+
+                load_table_data();                
+            })
+            .fail(function () {
+                // return address;
+            })
+            .always(function () {
+                // 
+            });            
+    }
+
+    function get_table_data() {
+        var _selected_ttcs = $('#ttc_list').val();
+        if (_selected_ttcs.length > 1) {
+            document.getElementById('show_lifetime_yes').checked = true;
+        }
+
+        let applicant_data = [];
+        let _unmapped_evaluations = [];
+
+        _selected_ttcs.forEach(_selected_ttc => {
+            if (applicant_summary.hasOwnProperty('ttc_application')) {
+                console.log('[get_table_data] Data has applications');
+                if (applicant_summary['ttc_application'].hasOwnProperty(_selected_ttc)) {
+                    console.log('[get_table_data] Data has ' + _selected_ttc);
+
+                    const _applications = applicant_summary['ttc_application'][_selected_ttc];
+                    for (const _ae in _applications) {
+                        if (_applications.hasOwnProperty(_ae)) {
+                            const _application = _applications[_ae];
+                            if ('data' in _application) {
+                                if (!_application.hasOwnProperty('evaluations')) {
+                                    _application['evaluations'] = []
+                                }
+                                if (!_application.hasOwnProperty('lifetime_evaluations')) {
+                                    _application['lifetime_evaluations'] = []
+                                }
+                                let _name = _application['data']['i_fname'] + ' ' + _application['data']['i_lname'];
+                                console.log('[get_table_data] Adding application for ' + _name + ' [' + _ae + ']');
+                                applicant_data.push({
+                                    name: _name,
+                                    email: _ae,
+                                    cellphone: _application['data']['i_cellphone'],
+                                    homephone: _application['data']['i_homephone'],
+                                    city: _application['data']['i_address_city'],
+                                    state: _application['data']['i_address_state'],
+                                    status: _application['reporting_status'] || '',
+                                    evals_status: _application['evaluations_reporting_status'] || '',
+                                    evals: _application['evaluations'].length,
+                                    lifetime_evals: _application['lifetime_evaluations'].length,
+                                    last_update_datetime: _application['last_update_datetime_est'],
+                                    evaluations: _application['evaluations'],
+                                    lifetime_evaluations: _application['lifetime_evaluations'],
+                                    form_instance: _application['form_instance']
+                                });
+                            }
+                        }
+                    }
+
+                    const _evaluators = applicant_summary['ttc_evaluation'][_selected_ttc];
+                    for (const _te in _evaluators) {
+                        if (_evaluators.hasOwnProperty(_te)) {
+                            const _evaluations = _evaluators[_te];
+                            for (const _ve in _evaluations) {
+                                let _evaluation = _evaluations[_ve];
+                                if ('data' in _evaluation && 'is_reporting_matched' in _evaluation && _evaluation['is_reporting_matched'] == 'N') {
+                                    console.log('[get_table_data] Adding unmapped evaluation from ' + _te);
+                                    let _matched_ttc_list = _evaluation['lifetime_reporting_matched_ttc_list'];
+                                    if (_matched_ttc_list !== undefined) {
+                                        _matched_ttc_list = _matched_ttc_list.filter(function (n) {
+                                            return _selected_ttcs.indexOf(n) !== -1;
+                                        });
+                                    }
+                                    if(!_matched_ttc_list || _matched_ttc_list.length == 0) {
+                                        _unmapped_evaluations.push(_evaluation);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        });
+
+        if (_unmapped_evaluations.length > 0) {
+            applicant_data.push({
+                name: 'UNMAPPED EVALUATIONS',
+                email: '',
+                cellphone: '',
+                homephone: '',
+                city: '',
+                state: '',
+                status: '',
+                evals_status: '',
+                evals: _unmapped_evaluations.length,
+                lifetime_evals: '',
+                last_update_datetime: '',
+                evaluations: _unmapped_evaluations,
+                lifetime_evaluations: [],
+                form_instance: ''
+            });
+        }
+
+        return applicant_data;
+    }
+
+    function load_table_data() {
+        let applicant_data = get_table_data();
+        // console.log('[load_table_data] applicant_data = \n' + JSON.stringify(applicant_data));
+        console.log('[load_table_data] applicant_data row count = ' + applicant_data.length.toString());
+
+        if (table) {
+            table.clear();
+            table.rows.add(applicant_data);
+            table.draw();
+        } else {
+            table = $('#ttc_applicants_summary').DataTable({
+                data: applicant_data,
+                // responsive: true,
+                // fixedColumns: true,
+                scrollX: true,
+                colReorder: true,
+                iDisplayLength: 50,
+                dom: 'Bfrtlip',
+                buttons: [
+                    {'extend': 'copy', 'className': 'an-simple-button'},
+                    {'extend': 'excel', 'className': 'an-simple-button'}, 
+                    {'extend': 'pdf', 'className': 'an-simple-button'}, 
+                    {'extend': 'print', 'className': 'an-simple-button'}
+                ],     
+                columns: [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
+                    { data: "name" },
+                    { data: "status" },
+                    { data: "evals_status" },
+                    { data: "evals" },
+                    { data: "lifetime_evals" },
+                    { data: "email" },
+                    { data: "cellphone" },
+                    { data: "homephone" },
+                    { data: "city" },
+                    { data: "state" },
+                    { data: "last_update_datetime"}
+                ],
+                order: [[1, 'asc']],
+                rowCallback: function (row, data, index) {
+                    $(row).find('td:eq(2)').css('color', getStatusColor(data.status));
+                    $(row).find('td:eq(3)').css('color', getStatusColor(data.evals_status));
+                },
+                footerCallback: function (tfoot, data, start, end, display) {
+                    var api = this.api();
+                    var summary = api.column(2).data().reduce(function (a, b) {
+                            var _a = a;
+                            if (b.toLowerCase().startsWith('complete')) {
+                                _a.complete += 1;
+                            }
+                            if (b.toLowerCase() == 'submitted') {
+                                _a.submitted += 1;
+                            }
+                            return _a;
+                        }, 
+                        {
+                            complete: 0,
+                            submitted: 0
+                        }
+                    )
+             
+                    // Update footer
+                    $(tfoot).find('th:eq(1)').html(
+                        'Total Complete Applications: ' + summary.complete.toString() + 
+                        ', Total Submitted Applications: ' + summary.submitted.toString()
+                    );
+                }
+            });            
+
+            // Add event listener for opening and closing details
+            $('#ttc_applicants_summary tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                }
+            });
+        }
+    }
+
+    function view_form(form_type, email, form_instance) {
+        var jqxhr = $.get("reporting/user-report/get-user-application-html",
+            {
+                email: email,
+                form_type: form_type,
+                form_instance: form_instance
+            })
+            .done(function (data) {
+                // alert(data);
+                postFullscreenMessage(data);
+            })
+            .fail(function () {
+                // alert("failed1");
+                postErrorMessage("There was an error retrieving the application");
+                $('#step_post_submit_message').html("There was an error retrieving the data Sorry for the inconvenience.");
+            });
+    }
+
+    function view_form_standalone(form_type, email, form_instance) {
+        window.open("reporting/user-report/get-user-application?email=" + email + "&form_type=" + form_type + "&form_instance=" + form_instance);
+    }
+
+    function view_form_standalone_combined(email, print_on_load) {
+        _forms = JSON.stringify(forms[email]);
+        window.open("reporting/user-report/get-user-application-combined?forms=" + _forms + '&print_on_load=' + print_on_load);
+    }
+
+    function view_form_standalone_pdf(email, print_on_load) {
+        _forms = JSON.stringify(forms[email]);
+        window.open("reporting/user-report/get-user-application-combined?forms=" + _forms + '&print_on_load=' + print_on_load);
+        var jqxhr = $.get("reporting/user-report/get-user-application-html",
+            {
+                forms: _forms,
+                form_type: form_type,
+                form_instance: form_instance
+            })
+            .done(function (data) {
+                // alert(data);
+                postFullscreenMessage(data);
+            })
+            .fail(function () {
+                // alert("failed1");
+                postErrorMessage("There was an error retrieving the application");
+                $('#step_post_submit_message').html("There was an error retrieving the data Sorry for the inconvenience.");
+            });
+    }
+
+    $(document).ready(function () {
+        console.log('[ttc_applicants_summary][ready] called');
+        $('#ttc_list').attr('multiple', 'multiple');
+        $('#ttc_list').select2();
+        get_applicant_summary();
+    }); // When the page first loads
+    
+    // function init() {
+    //     console.log('[ttc_applicants_summary][init] called');
+    //     get_applicant_summary();
+    // }
+
+    /* Formatting function for row details - modify as you need */
+    function format(d) {
+        // `d` is the original data object for the row
+        let _rows = '';
+        let _forms = [];
+        _forms.push(
+            {
+                'form_type': 'ttc_application',
+                'email': d.email,
+                'form_instance': d.form_instance
+            }
+        );
+
+        // Unmapped evaluations
+        if (d.email == '') {
+            for (let i = 0; i < d.evaluations.length; i++) {
+                const _e = d.evaluations[i];
+                // Unmapped evaluations
+                _rows +=
+                    '<tr>' +
+                        '<td style="background-color: white;">Evaluator:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_name + '</td>' +
+                        '<td style="background-color: white;">Email:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_email_aol + '</td>' +
+                        '<td style="background-color: white;">Status:</td>' +
+                        '<td style="background-color: white; color: ' + getStatusColor(_e.reporting_status) + ';">' + _e.reporting_status + '</td>' +
+                        '<td style="background-color: white;"><a class="an-simple-button" onclick="javascript:view_form_standalone(\'ttc_evaluation\', \'' + _e.email + '\',\'' + _e.form_instance + '\');">View</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                        '<td style="background-color: white;">Volunteer:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_volunteer_name + '</td>' +
+                        '<td style="background-color: white;">Email:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_volunteer_email + '</td>' +
+                        '<td style="background-color: white;"></td>' +
+                        '<td style="background-color: white;"></td>' +
+                        '<td style="background-color: white;"></td>' +
+                    '</tr>';
+                if (i == d.evaluations.length-1) {
+                    _rows +=
+                        '<tr>' +
+                            '<td style="background-color: #fafafa; line-height: 5px; " colspan="6"></td>' +
+                        '</tr>';                    
+                }
+            }
+        } else {
+            let _show_lifetime = $('input[name=show_lifetime]:checked');
+            let _evaluations;
+            if (_show_lifetime.val() == 'no') {
+                _evaluations = d.evaluations;
+            } else {
+                _evaluations = d.lifetime_evaluations;
+            }
+            for (let i = 0; i < _evaluations.length; i++) {
+                const _e = _evaluations[i];
+
+                let _ttc_dates = '';
+                if (_show_lifetime.val() == 'yes') {
+                    if (_e.ttc_metadata) {
+                        _ttc_dates = _e.ttc_metadata.display;
+                    } else {
+                        _ttc_dates = _e.data.dates || _e.data.Dates || _e.data.i_ttc_country_and_dates.toUpperCase();
+                    }
+                    _ttc_dates = '<td style="background-color: white;">TTC:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _ttc_dates + '</td>';
+                }
+
+                _rows +=
+                    '<tr>' +
+                        _ttc_dates +
+                        '<td style="background-color: white;">Evaluator:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_name + '</td>' +
+                        '<td style="background-color: white;">Email:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + (_e.data.i_email_aol ? _e.data.i_email_aol : _e.email) + '</td>' +
+                        '<td style="background-color: white;">Status:</td>' +
+                        '<td style="background-color: white; color: ' + getStatusColor(_e.reporting_status) + ';">' + _e.reporting_status + '</td>' +
+                        '<td style="background-color: white;"><a class="an-simple-button" onclick="javascript:view_form_standalone(\'ttc_evaluation\', \'' + _e.email + '\',\'' + _e.form_instance + '\');">View</td>' +
+                    '</tr>';
+                _forms.push(
+                    {
+                        'form_type': 'ttc_evaluation',
+                        'email': _e.email,
+                        'form_instance': _e.form_instance
+                    }
+                );
+            }
+        }
+
+        forms[d.email] = _forms;
+
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border: 1px solid #eee; background-color: white;">' +
+                _rows +
+            '</table>' + 
+            '<div style="margin-top:13px; margin-bottom:7px;">' + 
+                '<a class="an-simple-button" onclick="javascript:view_form_standalone_combined(\'' + d.email + '\', \'Y\');">Print</a>&nbsp;' + 
+                '<a class="an-simple-button" onclick="javascript:view_form_standalone_combined(\'' + d.email + '\', \'N\');">View with evaluations (new window)</a>&nbsp;' + 
+                '<a class="an-simple-button" onclick="javascript:view_form(\'ttc_application\', \'' + d.email + '\',\'' + d.form_instance + '\');">View Application</a>&nbsp;' +
+                '<a class="an-simple-button" onclick="javascript:view_form_standalone(\'ttc_application\', \'' + d.email + '\',\'' + d.form_instance + '\');">View Application (new window)</a>' + 
+            '</div>';
+    }
+
+</script>
+
+<div style="margin: 0 auto;" class="site-container">
+    <div class="site-inner-container site-inner-container-reporting-override">
+        <div id="form_header" class="form-tab-content form-tab-content-reporting-override">
+            <div class="tablebody">
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <div id="deepen" class="form-header-block" style="text-align: left;">
+                            Admin
+                            <div class="smallertext" style="margin-top:7px;">
+                                Please see below TTC applications for country 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ ttc_list_html | safe }}
+        
+        <div class="form-tab-content form-tab-content-reporting-override" style="margin-top:35px;margin-bottom:23px;">
+            <div class="tablebody">
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <label for="show_lifetime_yes">Show lifetime evaluations?</label>
+                        <span class="smallertext">Show evaluations from other TTCs as well. This is helpful if the teacher submitted evaluations using another TTC</span>
+                    </div>
+                    <div class="tablecell">
+                        <div class="form-rightcol-inner-container form-rightcol-centered">
+                            <form autocomplete="off">
+                                <input type="radio" onchange="load_table_data()" id="show_lifetime_yes" name="show_lifetime" value="yes" required>&nbsp;<label class="label_input" name="show_lifetime" for="show_lifetime_yes">Yes</label>
+                                <input type="radio" onchange="load_table_data()" id="show_lifetime_no" name="show_lifetime" value="no" required checked>&nbsp;<label class="label_input" name="show_lifetime" for="show_lifetime_no">No</label>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="step_form" class="form-tab-content form-tab-content-reporting-override">
+            <div class="tablebody">
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <table id="ttc_applicants_summary" class="display nowrap">
+                            <thead style="
+                                font-family: Ubuntu;
+                                font-weight: 300;
+                                text-transform: uppercase;
+                            ">
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Evals Status</th>
+                                    <th>Evals</th>
+                                    <th>Evals (Lifetime)</th>
+                                    <th>Email</th>
+                                    <th>Cell Phone</th>
+                                    <th>Home Phone</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>Last Updated (EST)</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th colspan="6" style="text-align:left">Total Completed Applications: <i style="font-weight: normal;">loading</i>, Total Submitted Applications: <i style="font-weight: normal;">loading</i></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
