@@ -1,0 +1,42 @@
+
+      <div style="margin: 0 auto;" class="site-container">
+        <div class="site-inner-container" style="position: relative;">
+          <div id="form_header" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+
+              <div class="tablebody">
+                  <div class="tablerow">
+                      <div class="tablecell">
+                          <div id="deepen" class="form-header-block" style="text-align: left;">
+                              <table cellspacing="0" cellpadding="0" border="0">
+                                  <tr>
+                                      <td style="width: 1%;">
+                                          <i class="fa fa-file-text" aria-hidden="true"></i>
+                                      </td>
+                                      <td style="padding-left: 13px;">
+                                          {{form_name}}
+                                          <span style="display: none;">
+                                              [Pages: {{no_of_pages}}]
+                                          </span>
+                                      </td>
+                                  </tr>
+                              </table>
+                              <!-- <hr class="left-gradient-separator"> -->
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="step_form" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+
+              {{form_html|safe}}
+
+              <br>
+              <br>
+              <br>
+
+          </div>
+
+        </div>
+      </div>
+
