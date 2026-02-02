@@ -1,0 +1,456 @@
+{
+  "generated_at": "2026-02-02T17:10:43.199711+00:00",
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "name": "Login: Login with Google account",
+      "feature_file": "specs/features/auth/login.feature",
+      "priority": "p1",
+      "scenarios": [
+        "Login with Google account"
+      ],
+      "depends_on": [],
+      "estimated_hours": 4
+    },
+    {
+      "id": "TASK-002",
+      "name": "Logout: Logout from portal",
+      "feature_file": "specs/features/auth/logout.feature",
+      "priority": "p1",
+      "scenarios": [
+        "Logout from portal"
+      ],
+      "depends_on": [],
+      "estimated_hours": 4
+    },
+    {
+      "id": "TASK-003",
+      "name": "Password Reset: Password reset via identity provider",
+      "feature_file": "specs/features/auth/password_reset.feature",
+      "priority": "p3",
+      "scenarios": [
+        "Password reset via identity provider"
+      ],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "TASK-004",
+      "name": "Portal Home: View portal home",
+      "feature_file": "specs/features/portal/home.feature",
+      "priority": "p1",
+      "scenarios": [
+        "View portal home"
+      ],
+      "depends_on": [],
+      "estimated_hours": 4
+    },
+    {
+      "id": "TASK-005",
+      "name": "Disabled Page: View disabled page",
+      "feature_file": "specs/features/portal/disabled.feature",
+      "priority": "p2",
+      "scenarios": [
+        "View disabled page"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-006",
+      "name": "Tabs Rendering: Render tabbed HTML",
+      "feature_file": "specs/features/portal/tabs.feature",
+      "priority": "p3",
+      "scenarios": [
+        "Render tabbed HTML"
+      ],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "TASK-007",
+      "name": "Admin Access: Admin accesses admin dashboard",
+      "feature_file": "specs/features/admin/access.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Admin accesses admin dashboard"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-008",
+      "name": "Admin Permissions: Non-admin blocked",
+      "feature_file": "specs/features/admin/permissions.feature",
+      "priority": "p1",
+      "scenarios": [
+        "Non-admin blocked"
+      ],
+      "depends_on": [],
+      "estimated_hours": 4
+    },
+    {
+      "id": "TASK-009",
+      "name": "Admin Reports Pages: Admin opens report pages",
+      "feature_file": "specs/features/admin/reports_pages.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Admin opens report pages"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-010",
+      "name": "Admin Settings: Admin opens settings page",
+      "feature_file": "specs/features/admin/settings.feature",
+      "priority": "p3",
+      "scenarios": [
+        "Admin opens settings page"
+      ],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "TASK-011",
+      "name": "TTC Application (US): Open TTC application (US)",
+      "feature_file": "specs/features/forms/ttc_application_us.feature",
+      "priority": "p1",
+      "scenarios": [
+        "Open TTC application (US)"
+      ],
+      "depends_on": [],
+      "estimated_hours": 4
+    },
+    {
+      "id": "TASK-012",
+      "name": "TTC Application (Non-US): Open TTC application (non-US)",
+      "feature_file": "specs/features/forms/ttc_application_non_us.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Open TTC application (non-US)"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-013",
+      "name": "TTC Evaluation: Open TTC evaluation",
+      "feature_file": "specs/features/forms/ttc_evaluation.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Open TTC evaluation"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-014",
+      "name": "TTC Applicant Profile: Open TTC applicant profile",
+      "feature_file": "specs/features/forms/ttc_applicant_profile.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Open TTC applicant profile"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-015",
+      "name": "TTC Evaluator Profile: Open TTC evaluator profile",
+      "feature_file": "specs/features/forms/ttc_evaluator_profile.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Open TTC evaluator profile"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-016",
+      "name": "Post-TTC Self Evaluation: Open post-TTC self evaluation",
+      "feature_file": "specs/features/forms/post_ttc_self_eval.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Open post-TTC self evaluation"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-017",
+      "name": "Post-TTC Feedback: Open post-TTC feedback",
+      "feature_file": "specs/features/forms/post_ttc_feedback.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Open post-TTC feedback"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-018",
+      "name": "Post-Sahaj TTC Self Evaluation: Open post-Sahaj self evaluation",
+      "feature_file": "specs/features/forms/post_sahaj_ttc_self_eval.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Open post-Sahaj self evaluation"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-019",
+      "name": "Post-Sahaj TTC Feedback: Open post-Sahaj feedback",
+      "feature_file": "specs/features/forms/post_sahaj_ttc_feedback.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Open post-Sahaj feedback"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-020",
+      "name": "TTC Portal Settings: Open TTC portal settings",
+      "feature_file": "specs/features/forms/ttc_portal_settings.feature",
+      "priority": "p3",
+      "scenarios": [
+        "Open TTC portal settings"
+      ],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "TASK-021",
+      "name": "DSN Application: Open DSN application",
+      "feature_file": "specs/features/forms/dsn_application.feature",
+      "priority": "p3",
+      "scenarios": [
+        "Open DSN application"
+      ],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "TASK-022",
+      "name": "Photo Upload: Request signed URL for photo",
+      "feature_file": "specs/features/uploads/photo_upload.feature",
+      "priority": "p1",
+      "scenarios": [
+        "Request signed URL for photo"
+      ],
+      "depends_on": [],
+      "estimated_hours": 4
+    },
+    {
+      "id": "TASK-023",
+      "name": "Document Upload: Request signed URL for document",
+      "feature_file": "specs/features/uploads/document_upload.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Request signed URL for document"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-024",
+      "name": "Upload Form API: Submit form data via API",
+      "feature_file": "specs/features/api/upload_form.feature",
+      "priority": "p1",
+      "scenarios": [
+        "Submit form data via API"
+      ],
+      "depends_on": [],
+      "estimated_hours": 4
+    },
+    {
+      "id": "TASK-025",
+      "name": "User Form Data Upload: Upload form data",
+      "feature_file": "specs/features/user/form_data_upload.feature",
+      "priority": "p1",
+      "scenarios": [
+        "Upload form data"
+      ],
+      "depends_on": [],
+      "estimated_hours": 4
+    },
+    {
+      "id": "TASK-026",
+      "name": "User Get Form Data: Retrieve form data",
+      "feature_file": "specs/features/user/get_form_data.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Retrieve form data"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-027",
+      "name": "User Get Form Instances: List form instances",
+      "feature_file": "specs/features/user/get_form_instances.feature",
+      "priority": "p2",
+      "scenarios": [
+        "List form instances"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-028",
+      "name": "User Config Management: Get user configuration",
+      "feature_file": "specs/features/user/config_management.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Get user configuration"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-029",
+      "name": "User Config Management: Update user configuration",
+      "feature_file": "specs/features/user/config_management.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Update user configuration"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-030",
+      "name": "Reporting Get Form Data: Admin gets form data for user",
+      "feature_file": "specs/features/user/reporting_get_form_data.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Admin gets form data for user"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-031",
+      "name": "User Summary Report: Load user summary",
+      "feature_file": "specs/features/reports/user_summary.feature",
+      "priority": "p1",
+      "scenarios": [
+        "Load user summary"
+      ],
+      "depends_on": [],
+      "estimated_hours": 4
+    },
+    {
+      "id": "TASK-032",
+      "name": "User Summary Report: Get user summary by user",
+      "feature_file": "specs/features/reports/user_summary.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Get user summary by user"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-033",
+      "name": "User Integrity Report: Load user integrity",
+      "feature_file": "specs/features/reports/user_integrity.feature",
+      "priority": "p1",
+      "scenarios": [
+        "Load user integrity"
+      ],
+      "depends_on": [],
+      "estimated_hours": 4
+    },
+    {
+      "id": "TASK-034",
+      "name": "User Integrity Report: Get user integrity by user",
+      "feature_file": "specs/features/reports/user_integrity.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Get user integrity by user"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-035",
+      "name": "User Integrity Report: Run user integrity postload",
+      "feature_file": "specs/features/reports/user_integrity.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Run user integrity postload"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-036",
+      "name": "User Application Report: Get user application HTML",
+      "feature_file": "specs/features/reports/user_report.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Get user application HTML"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-037",
+      "name": "User Application Report: Get combined user application report",
+      "feature_file": "specs/features/reports/user_report.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Get combined user application report"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-038",
+      "name": "User Application Report: Get user application forms",
+      "feature_file": "specs/features/reports/user_report.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Get user application forms"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-039",
+      "name": "Print Form: Print a form",
+      "feature_file": "specs/features/reports/print_form.feature",
+      "priority": "p3",
+      "scenarios": [
+        "Print a form"
+      ],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "TASK-040",
+      "name": "Participant List: Generate participant list",
+      "feature_file": "specs/features/reports/participant_list.feature",
+      "priority": "p2",
+      "scenarios": [
+        "Generate participant list"
+      ],
+      "depends_on": [],
+      "estimated_hours": 3
+    },
+    {
+      "id": "TASK-041",
+      "name": "Certificate Generation: Generate certificate PDF",
+      "feature_file": "specs/features/reports/certificate.feature",
+      "priority": "p3",
+      "scenarios": [
+        "Generate certificate PDF"
+      ],
+      "depends_on": [],
+      "estimated_hours": 2
+    }
+  ]
+}
