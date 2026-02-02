@@ -1,0 +1,230 @@
+
+:root {
+    --left-menu-max-width: 210px; 
+}
+
+/* -- START: LEFT SIDE MENU --------------------------- */
+
+div.left_menu-container {
+  width: 33%;
+  max-width: var(--left-menu-max-width);
+  height: 100%;
+  margin: 0 auto;
+  text-align: center;
+  float:left;
+  overflow-y: scroll;
+
+  -webkit-box-shadow: 0 4px 4px rgba(0,0,0,.3);
+  -moz-box-shadow: 0 4px 4px rgba(0,0,0,.3);
+  box-shadow: 0 4px 4px rgba(0,0,0,.3);
+
+/*  -webkit-transition: opacity .4s linear .15s;
+  -moz-transition: opacity .4s linear .15s;
+  -o-transition: opacity .4s linear .15s;
+  -ms-transition: opacity .4s linear .15s;
+  transition: opacity .4s linear .15s;*/
+}
+
+div.left_menu-table {
+  display:table;
+  width: 100%;
+
+  font-size: 15px;
+  font-weight: normal;
+}
+
+div.left_menu-table .tablecell {
+/*  padding-top: 10px;
+  padding-bottom: 10px;*/
+  line-height: 43px;
+
+  color: #777;
+
+  cursor: pointer;
+
+  /* Make text not selectable */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+div.left_menu-table .tablecell a {
+  display: block;
+
+  text-decoration: none;
+  color: #999;
+
+  text-align: left;
+  padding-left: 13px;
+}
+
+div.left_menu-table .tablecell i.fa {
+  color: #000;
+}
+
+div.left_menu-table .tablerow .section-header {
+  background-color: #f1f1f1;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-family: Ubuntu;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1px;
+  border-bottom: 2px rgba(0,0,0,.05) solid;
+  color: #000;
+
+  /* Make text not selectable */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+div.left_menu-table .tablerow .separator {
+  background-color: rgba(241,214,111,1);
+  font-weight: 600;
+  min-height: 3px;
+  text-transform: uppercase;
+  font-family: Ubuntu;
+  font-weight: 600;
+  font-size: 3px;
+  line-height: 3px;
+  padding: 0px;
+  margin: 0;
+}
+
+div.left_menu-table .tablerow .whitespace {
+  line-height: 13px;
+}
+
+div.left_menu-table .tablecell a:hover {
+  background-color: #F5F5F5;
+  /*color: #555;*/
+  color:#b04e21; 
+}
+
+div.left_menu-table .tablebody {
+  display: table-row-group;
+}
+
+div.left_menu-table .header a {
+  background-color:rgba(242, 142, 59, 1);
+  text-align: center;
+  padding: 0;
+}
+
+div.left_menu-table .header a:hover {
+  background-color:rgba(242, 142, 59, 1);
+}
+
+div.left_menu-table a.login-logout, div.left_menu-table a.login-logout i.fa {
+  color:#f5721a;
+}
+
+div.left_menu-table a.login-logout:hover, div.left_menu-table a.login-logout:hover i.fa {
+  color:#d86417;
+}
+
+div.left_menu-table .tablecell .smallertext {
+  font-size: 13px;
+  font-weight: 300;
+  margin-top: -23px;
+  display: block;
+}
+
+input.left_menu-mobile_menu_button {
+  display: none;
+  z-index: 102;
+
+  -webkit-transition: opacity .4s linear .15s;
+  -moz-transition: opacity .4s linear .15s;
+  -o-transition: opacity .4s linear .15s;
+  -ms-transition: opacity .4s linear .15s;
+  transition: opacity .4s linear .15s;
+}
+
+label[for=left_menu-mobile_menu_button] {
+  display: none;
+  z-index: 102;
+  cursor: pointer;
+  color: white;
+}
+
+#artofliving-logo {
+  margin-top:5px;
+  margin-bottom:0px;
+  display:inline-block;
+  vertical-align: middle;
+  max-height:60px;
+}
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 736px) {
+
+  #artofliving-logo {
+    display: none;
+  }
+
+  label[for=left_menu-mobile_menu_button] {
+    display: inline-block;
+    background-color:rgba(242, 142, 59, 1);
+
+    width: 100%;
+/*    width: 40px;
+    height: 40px;*/
+    line-height:15px;
+    border-radius: 3px;
+
+    padding: 5px;
+    padding-left: 13px;
+    /*padding-right: 20px;*/
+/*    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+*/
+    font-family: 'Ubuntu', sans-serif;
+    /*font-size: 60px;*/
+    font-weight: 300;
+    text-transform: uppercase;
+    text-align: left;
+    vertical-align: middle;
+
+    color: white;
+  }
+
+  div.left_menu-container {
+    width: 70%;
+    max-width: 100%;
+/*    position: absolute;
+    left: 0;
+    top: 0;*/
+
+    background-color: white;
+  }
+
+  input.left_menu-mobile_menu_button:checked ~ div.left_menu-container {
+    display: block;
+    opacity: 1;
+    text-align: center;
+
+    z-index: 1008;
+  }
+/*
+  input.left_menu-mobile_menu_button:checked ~ div.left_menu-container .tablerow {
+    width: 100%;
+  }
+
+  input.left_menu-mobile_menu_button:checked ~ div.left_menu-container .tablecell {
+    width: 100%;
+  }
+*/
+  input.left_menu-mobile_menu_button:not(:checked) ~ div.left_menu-container {
+    display: none;
+    opacity: 0;
+  }
+}
+
+/* -- END: LEFT SIDE MENU ----------------------------- */

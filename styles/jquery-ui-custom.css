@@ -1,0 +1,29 @@
+
+.ui-datepicker {
+    border: 1px solid #eee;
+    background-color: #eee;
+	font-size: 14px;
+	font-family: 'Roboto';
+	font-weight: normal;
+	display: none;
+}
+
+.ui-datepicker th {
+	background-color: white;
+}
+
+.ui-datepicker-title {
+	background-color: 
+}
+
+/*.ui-datepicker-header  {
+	background-color: red;
+}*/
+
+#ui-datepicker-div {
+	background: #eee;
+}
+
+.ui-datepicker-calendar td, .ui-state-default {
+	background: #eee;
+}
