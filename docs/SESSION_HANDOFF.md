@@ -90,6 +90,25 @@ Track progress across Claude Code sessions.
 
 ---
 
+### Session 5 - 2026-02-03
+**Agent:** Codex (Local)
+**Phase:** Build - TASK-009
+
+**Completed:**
+- [x] Implemented admin reports list steps for `specs/features/admin/reports_pages.feature` in Python + TypeScript
+- [x] Added `app/admin/reports_list/render.ts` render helper
+- [x] Updated step registry line numbers for admin reports list steps
+- [x] Verified: Python + TypeScript reports list scenario passes, alignment/typecheck/lint all green
+- [x] Updated `docs/coverage_matrix.md` and `IMPLEMENTATION_PLAN.md`
+
+**Pending:**
+- [ ] TASK-002 (Logout)
+
+**Notes:**
+- Python Behave logs warnings about missing legacy imports/fixtures; scenario still passes using static HTML.
+
+---
+
 ## Notes
 
 ### Handoff Checklist

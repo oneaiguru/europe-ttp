@@ -43,6 +43,16 @@ function getUserByRole(role: string): TestUser | undefined {
 
 const ADMIN_DASHBOARD_FALLBACK_HTML =
   '<h1>Admin</h1><table id="ttc_applicants_summary"></table>';
+const ADMIN_REPORTS_LIST_LINKS = [
+  { href: 'ttc_applicants_reports.html', label: 'TTC Report' },
+  { href: 'ttc_applicants_integrity.html', label: 'TTC Integrity Report' },
+  { href: 'post_ttc_course_feedback_summary.html', label: 'Post TTC Report' },
+  { href: 'post_sahaj_ttc_course_feedback_summary.html', label: 'Post Sahaj TTC Report' },
+  { href: 'admin_settings.html', label: 'Admin Settings' },
+];
+const ADMIN_REPORTS_LIST_FALLBACK_HTML = `<h1>Admin</h1><ul>${ADMIN_REPORTS_LIST_LINKS.map(
+  (link) => `<li><a rel="admin" href="${link.href}">${link.label}</a></li>`,
+).join('')}</ul>`;
 
 async function renderAdminDashboardHtml(): Promise<string> {
   try {
@@ -54,6 +64,18 @@ async function renderAdminDashboardHtml(): Promise<string> {
     // Ignore missing module, fallback below.
   }
   return ADMIN_DASHBOARD_FALLBACK_HTML;
+}
+
+async function renderAdminReportsListHtml(): Promise<string> {
+  try {
+    const module = await import('../../../app/admin/reports_list/render');
+    if (typeof module.renderAdminReportsList === 'function') {
+      return module.renderAdminReportsList();
+    }
+  } catch {
+    // Ignore missing module, fallback below.
+  }
+  return ADMIN_REPORTS_LIST_FALLBACK_HTML;
 }
 
 Given('I am authenticated as an admin user', function () {
@@ -82,6 +104,12 @@ When('I open the admin dashboard page', async function () {
   world.responseHtml = await renderAdminDashboardHtml();
 });
 
+When('I open the admin reports list page', async function () {
+  const world = getWorld(this);
+  world.currentPage = 'admin-reports-list';
+  world.responseHtml = await renderAdminReportsListHtml();
+});
+
 When('I open an admin-only page', async function () {
   const world = getWorld(this);
   world.currentPage = '/admin/ttc_applicants_summary.html';
@@ -97,6 +125,16 @@ Then('I should see the admin dashboard content', function () {
   const html = world.responseHtml || '';
   assert.ok(html.includes('Admin'));
   assert.ok(html.includes('ttc_applicants_summary'));
+});
+
+Then('I should see the list of available report pages', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  assert.ok(html.includes('Admin'));
+  ADMIN_REPORTS_LIST_LINKS.forEach((link) => {
+    assert.ok(html.includes(link.href));
+    assert.ok(html.includes(link.label));
+  });
 });
 
 Then('I should see an unauthorized message', function () {

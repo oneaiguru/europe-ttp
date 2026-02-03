@@ -43,6 +43,16 @@ ADMIN_DASHBOARD_HTML = (
     '<h1>Admin</h1>'
     '<table id="ttc_applicants_summary"></table>'
 )
+ADMIN_REPORTS_LIST_HTML = (
+    '<h1>Admin</h1>'
+    '<ul>'
+    '<li><a rel="admin" href="ttc_applicants_reports.html">TTC Report</a></li>'
+    '<li><a rel="admin" href="ttc_applicants_integrity.html">TTC Integrity Report</a></li>'
+    '<li><a rel="admin" href="post_ttc_course_feedback_summary.html">Post TTC Report</a></li>'
+    '<li><a rel="admin" href="post_sahaj_ttc_course_feedback_summary.html">Post Sahaj TTC Report</a></li>'
+    '<li><a rel="admin" href="admin_settings.html">Admin Settings</a></li>'
+    '</ul>'
+)
 ADMIN_UNAUTHORIZED_HTML = '<b>UN-AUTHORIZED</b>'
 
 
@@ -99,6 +109,12 @@ def step_open_admin_dashboard(context):
     context.response_body = ADMIN_DASHBOARD_HTML
 
 
+@when('I open the admin reports list page')
+def step_open_admin_reports_list(context):
+    context.current_page = '/admin/reports'
+    context.response_body = ADMIN_REPORTS_LIST_HTML
+
+
 @when('I open an admin-only page')
 def step_open_admin_only_page(context):
     context.current_page = '/admin/ttc_applicants_summary.html'
@@ -116,6 +132,22 @@ def step_see_admin_dashboard_content(context):
     body = _get_response_body(getattr(context, 'response_body', ''))
     assert 'Admin' in body
     assert 'ttc_applicants_summary' in body
+
+
+@then('I should see the list of available report pages')
+def step_see_admin_reports_list(context):
+    body = _get_response_body(getattr(context, 'response_body', ''))
+    assert 'Admin' in body
+    expected_links = [
+        ('ttc_applicants_reports.html', 'TTC Report'),
+        ('ttc_applicants_integrity.html', 'TTC Integrity Report'),
+        ('post_ttc_course_feedback_summary.html', 'Post TTC Report'),
+        ('post_sahaj_ttc_course_feedback_summary.html', 'Post Sahaj TTC Report'),
+        ('admin_settings.html', 'Admin Settings'),
+    ]
+    for href, label in expected_links:
+        assert href in body
+        assert label in body
 
 
 @then('I should see an unauthorized message')

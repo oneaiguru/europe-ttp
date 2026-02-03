@@ -133,8 +133,8 @@ export const STEPS = {
   },
   'I open the admin reports list page': {
     pattern: /^I\ open\ the\ admin\ reports\ list\ page$/,
-    python: 'test/python/steps/admin_steps.py:1',
-    typescript: 'test/typescript/steps/admin_steps.ts:1',
+    python: 'test/python/steps/admin_steps.py:112',
+    typescript: 'test/typescript/steps/admin_steps.ts:107',
     features: ['specs/features/admin/reports_pages.feature:9'],
   },
   'I open the admin settings page': {
@@ -445,8 +445,8 @@ export const STEPS = {
   },
   'I should see the list of available report pages': {
     pattern: /^I\ should\ see\ the\ list\ of\ available\ report\ pages$/,
-    python: 'test/python/steps/admin_steps.py:1',
-    typescript: 'test/typescript/steps/admin_steps.ts:1',
+    python: 'test/python/steps/admin_steps.py:137',
+    typescript: 'test/typescript/steps/admin_steps.ts:130',
     features: ['specs/features/admin/reports_pages.feature:10'],
   },
   'I should see the post-Sahaj TTC feedback questions': {
