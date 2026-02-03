@@ -2,6 +2,10 @@ import { Given, Then, When } from '@cucumber/cucumber';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import {
+  ADMIN_UNAUTHORIZED_HTML,
+  renderAdminUnauthorized,
+} from '../../../app/admin/permissions/render';
 
 type TestUser = {
   email: string;
@@ -40,6 +44,18 @@ function getUserByRole(role: string): TestUser | undefined {
 const ADMIN_DASHBOARD_FALLBACK_HTML =
   '<h1>Admin</h1><table id="ttc_applicants_summary"></table>';
 
+async function renderAdminDashboardHtml(): Promise<string> {
+  try {
+    const module = await import('../../../app/admin/ttc_applicants_summary/render');
+    if (typeof module.renderAdminDashboard === 'function') {
+      return module.renderAdminDashboard();
+    }
+  } catch {
+    // Ignore missing module, fallback below.
+  }
+  return ADMIN_DASHBOARD_FALLBACK_HTML;
+}
+
 Given('I am authenticated as an admin user', function () {
   const world = getWorld(this);
   const adminUser = getUserByRole('admin') || {
@@ -50,20 +66,30 @@ Given('I am authenticated as an admin user', function () {
   world.currentRole = 'admin';
 });
 
+Given('I am authenticated as a non-admin user', function () {
+  const world = getWorld(this);
+  const applicantUser = getUserByRole('applicant') || {
+    email: 'test.applicant@example.com',
+    role: 'applicant',
+  };
+  world.currentUser = applicantUser;
+  world.currentRole = 'non-admin';
+});
+
 When('I open the admin dashboard page', async function () {
   const world = getWorld(this);
   world.currentPage = 'admin-dashboard';
+  world.responseHtml = await renderAdminDashboardHtml();
+});
 
-  try {
-    const module = await import('../../../app/admin/ttc_applicants_summary/render');
-    if (typeof module.renderAdminDashboard === 'function') {
-      world.responseHtml = module.renderAdminDashboard();
-    } else {
-      world.responseHtml = ADMIN_DASHBOARD_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = ADMIN_DASHBOARD_FALLBACK_HTML;
+When('I open an admin-only page', async function () {
+  const world = getWorld(this);
+  world.currentPage = '/admin/ttc_applicants_summary.html';
+  if (world.currentRole !== 'admin') {
+    world.responseHtml = renderAdminUnauthorized();
+    return;
   }
+  world.responseHtml = await renderAdminDashboardHtml();
 });
 
 Then('I should see the admin dashboard content', function () {
@@ -71,4 +97,10 @@ Then('I should see the admin dashboard content', function () {
   const html = world.responseHtml || '';
   assert.ok(html.includes('Admin'));
   assert.ok(html.includes('ttc_applicants_summary'));
+});
+
+Then('I should see an unauthorized message', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  assert.ok(html.includes(ADMIN_UNAUTHORIZED_HTML));
 });

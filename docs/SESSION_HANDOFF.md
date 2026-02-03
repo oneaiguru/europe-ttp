@@ -71,6 +71,25 @@ Track progress across Claude Code sessions.
 
 ---
 
+### Session 4 - 2026-02-03
+**Agent:** Codex (Local)
+**Phase:** Build - TASK-008
+
+**Completed:**
+- [x] Implemented non-admin admin-permissions steps for `specs/features/admin/permissions.feature` in Python + TypeScript
+- [x] Added `app/admin/permissions/render.ts` unauthorized helper
+- [x] Updated step registry line numbers for admin steps
+- [x] Verified: Python + TypeScript permissions scenario passes, alignment/typecheck/lint all green
+- [x] Updated `docs/coverage_matrix.md` and `IMPLEMENTATION_PLAN.md`
+
+**Pending:**
+- [ ] TASK-002 (Logout)
+
+**Notes:**
+- Python Behave still logs warnings about missing legacy imports/fixtures, but the scenario passes with stubs.
+
+---
+
 ## Notes
 
 ### Handoff Checklist

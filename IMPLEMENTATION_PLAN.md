@@ -51,7 +51,7 @@
 | TASK-005 | p2 | specs/features/portal/disabled.feature | 🔴 TODO | |
 | TASK-006 | p3 | specs/features/portal/tabs.feature | 🔴 TODO | |
 | TASK-007 | p2 | specs/features/admin/access.feature | ✅ DONE | |
-| TASK-008 | p1 | specs/features/admin/permissions.feature | 🔴 TODO | |
+| TASK-008 | p1 | specs/features/admin/permissions.feature | ✅ DONE | |
 | TASK-009 | p2 | specs/features/admin/reports_pages.feature | 🔴 TODO | |
 | TASK-010 | p3 | specs/features/admin/settings.feature | 🔴 TODO | |
 | TASK-011 | p1 | specs/features/forms/ttc_application_us.feature | 🔴 TODO | |

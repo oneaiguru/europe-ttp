@@ -25,14 +25,14 @@ export const STEPS = {
   },
   'I am authenticated as a non-admin user': {
     pattern: /^I\ am\ authenticated\ as\ a\ non\-admin\ user$/,
-    python: 'test/python/steps/admin_steps.py:1',
-    typescript: 'test/typescript/steps/admin_steps.ts:1',
+    python: 'test/python/steps/admin_steps.py:85',
+    typescript: 'test/typescript/steps/admin_steps.ts:69',
     features: ['specs/features/admin/permissions.feature:8'],
   },
   'I am authenticated as an admin user': {
     pattern: /^I\ am\ authenticated\ as\ an\ admin\ user$/,
-    python: 'test/python/steps/admin_steps.py:48',
-    typescript: 'test/typescript/steps/admin_steps.ts:43',
+    python: 'test/python/steps/admin_steps.py:77',
+    typescript: 'test/typescript/steps/admin_steps.ts:59',
     features: ['specs/features/admin/access.feature:8', 'specs/features/admin/reports_pages.feature:8', 'specs/features/admin/settings.feature:8', 'specs/features/user/reporting_get_form_data.feature:8', 'specs/features/reports/user_summary.feature:8', 'specs/features/reports/user_summary.feature:14', 'specs/features/reports/user_integrity.feature:8', 'specs/features/reports/user_integrity.feature:14', 'specs/features/reports/user_integrity.feature:20', 'specs/features/reports/user_report.feature:8', 'specs/features/reports/user_report.feature:14', 'specs/features/reports/user_report.feature:20', 'specs/features/reports/print_form.feature:8', 'specs/features/reports/participant_list.feature:8'],
   },
   'I am authenticated as an evaluator': {
@@ -73,8 +73,8 @@ export const STEPS = {
   },
   'I open an admin-only page': {
     pattern: /^I\ open\ an\ admin\-only\ page$/,
-    python: 'test/python/steps/admin_steps.py:1',
-    typescript: 'test/typescript/steps/admin_steps.ts:1',
+    python: 'test/python/steps/admin_steps.py:102',
+    typescript: 'test/typescript/steps/admin_steps.ts:85',
     features: ['specs/features/admin/permissions.feature:9'],
   },
   'I open the DSN application form': {
@@ -127,8 +127,8 @@ export const STEPS = {
   },
   'I open the admin dashboard page': {
     pattern: /^I\ open\ the\ admin\ dashboard\ page$/,
-    python: 'test/python/steps/admin_steps.py:56',
-    typescript: 'test/typescript/steps/admin_steps.ts:53',
+    python: 'test/python/steps/admin_steps.py:97',
+    typescript: 'test/typescript/steps/admin_steps.ts:79',
     features: ['specs/features/admin/access.feature:9'],
   },
   'I open the admin reports list page': {
@@ -373,8 +373,8 @@ export const STEPS = {
   },
   'I should see an unauthorized message': {
     pattern: /^I\ should\ see\ an\ unauthorized\ message$/,
-    python: 'test/python/steps/admin_steps.py:1',
-    typescript: 'test/typescript/steps/admin_steps.ts:1',
+    python: 'test/python/steps/admin_steps.py:121',
+    typescript: 'test/typescript/steps/admin_steps.ts:102',
     features: ['specs/features/admin/permissions.feature:10'],
   },
   'I should see my profile details and available reports': {
@@ -427,8 +427,8 @@ export const STEPS = {
   },
   'I should see the admin dashboard content': {
     pattern: /^I\ should\ see\ the\ admin\ dashboard\ content$/,
-    python: 'test/python/steps/admin_steps.py:61',
-    typescript: 'test/typescript/steps/admin_steps.ts:69',
+    python: 'test/python/steps/admin_steps.py:114',
+    typescript: 'test/typescript/steps/admin_steps.ts:95',
     features: ['specs/features/admin/access.feature:10'],
   },
   'I should see the admin settings content': {

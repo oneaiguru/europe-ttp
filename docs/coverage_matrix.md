@@ -29,7 +29,7 @@
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
 | Admin Access | specs/features/admin/access.feature | ✓ | ✓ |
-| Admin Permissions | specs/features/admin/permissions.feature | ❌ | ❌ |
+| Admin Permissions | specs/features/admin/permissions.feature | ✓ | ✓ |
 | Admin Reports Pages | specs/features/admin/reports_pages.feature | ❌ | ❌ |
 | Admin Settings | specs/features/admin/settings.feature | ❌ | ❌ |
 
@@ -87,6 +87,6 @@
 
 ## Summary
 - **Total Features:** 35
-- **Python Verified:** 2/35
-- **TypeScript Complete:** 2/35
-- **Parity:** 6%
+- **Python Verified:** 3/35
+- **TypeScript Complete:** 3/35
+- **Parity:** 9%
