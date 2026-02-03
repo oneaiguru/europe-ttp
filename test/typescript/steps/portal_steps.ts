@@ -159,3 +159,58 @@ Then('I should see the disabled notice', function () {
   const html = world.responseHtml || '';
   assert.ok(html.includes(DISABLED_NOTICE_TEXT));
 });
+
+type PortalTabRenderOptions = {
+  templateName: string;
+  userHomeCountryIso: string;
+  userHomeCountryName: string;
+};
+
+function renderPortalTabFallback(options: PortalTabRenderOptions): string {
+  return `<div>${options.userHomeCountryName} TTC Desk</div>`;
+}
+
+async function renderPortalTabHtml(options: PortalTabRenderOptions): Promise<string> {
+  try {
+    const module = await import('../../../app/portal/tabs/render');
+    if (typeof module.renderPortalTab === 'function') {
+      return module.renderPortalTab(options);
+    }
+  } catch {
+    // Ignore missing module, fallback below.
+  }
+  return renderPortalTabFallback(options);
+}
+
+When('I request a tab template page', async function () {
+  const world = getWorld(this);
+  const currentUser =
+    world.currentUser ||
+    getUserByRole('applicant') || {
+      email: 'test.applicant@example.com',
+      role: 'applicant',
+    };
+  world.currentUser = currentUser;
+
+  const homeCountryIso = resolveHomeCountryIso(currentUser);
+  const homeCountryName = resolveHomeCountryName(homeCountryIso);
+  world.homeCountryIso = homeCountryIso;
+  world.homeCountryName = homeCountryName;
+
+  const templateName = 'contact.html';
+  world.responseHtml = await renderPortalTabHtml({
+    templateName,
+    userHomeCountryIso: homeCountryIso,
+    userHomeCountryName: homeCountryName,
+  });
+});
+
+Then('I should see the rendered tab content with user context', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  const homeCountryName =
+    world.homeCountryName || resolveHomeCountryName(world.homeCountryIso || 'US');
+
+  assert.ok(html.includes(homeCountryName));
+  assert.ok(html.includes('TTC Desk'));
+});

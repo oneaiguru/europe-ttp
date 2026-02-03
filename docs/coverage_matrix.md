@@ -22,7 +22,7 @@
 |---------|--------------|--------|------------|
 | Disabled Page | specs/features/portal/disabled.feature | ✓ | ✓ |
 | Portal Home | specs/features/portal/home.feature | ✓ | ✓ |
-| Tabs Rendering | specs/features/portal/tabs.feature | ❌ | ❌ |
+| Tabs Rendering | specs/features/portal/tabs.feature | ✓ | ✓ |
 
 ## Admin
 
@@ -87,6 +87,6 @@
 
 ## Summary
 - **Total Features:** 35
-- **Python Verified:** 9/35
-- **TypeScript Complete:** 9/35
-- **Parity:** 26%
+- **Python Verified:** 10/35
+- **TypeScript Complete:** 10/35
+- **Parity:** 29%

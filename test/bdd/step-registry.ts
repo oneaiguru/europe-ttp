@@ -193,8 +193,8 @@ export const STEPS = {
   },
   'I request a tab template page': {
     pattern: /^I\ request\ a\ tab\ template\ page$/,
-    python: 'test/python/steps/portal_steps.py:1',
-    typescript: 'test/typescript/steps/portal_steps.ts:1',
+    python: 'test/python/steps/portal_steps.py:261',
+    typescript: 'test/typescript/steps/portal_steps.ts:185',
     features: ['specs/features/portal/tabs.feature:9'],
   },
   'I request form data for a specific user via reporting': {
@@ -475,8 +475,8 @@ export const STEPS = {
   },
   'I should see the rendered tab content with user context': {
     pattern: /^I\ should\ see\ the\ rendered\ tab\ content\ with\ user\ context$/,
-    python: 'test/python/steps/portal_steps.py:1',
-    typescript: 'test/typescript/steps/portal_steps.ts:1',
+    python: 'test/python/steps/portal_steps.py:290',
+    typescript: 'test/typescript/steps/portal_steps.ts:208',
     features: ['specs/features/portal/tabs.feature:10'],
   },
   'I sign in with a valid Google account': {

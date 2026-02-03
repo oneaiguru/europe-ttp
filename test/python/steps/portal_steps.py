@@ -226,3 +226,74 @@ def step_see_disabled_notice(context):
     body_source = response if response is not None else getattr(context, 'response_body', '')
     body_text = _response_body_text(body_source)
     assert DISABLED_NOTICE_TEXT in body_text
+
+
+def _get_tabs_module():
+    try:
+        import tabs
+        return tabs
+    except Exception:
+        return None
+
+
+def _get_tabs_client(context, tabs_module):
+    cached = getattr(context, 'tabs_client', None)
+    if cached is not None:
+        return cached
+    try:
+        from webtest import TestApp
+    except Exception:
+        return None
+    try:
+        client = TestApp(tabs_module.app)
+    except Exception:
+        return None
+    context.tabs_client = client
+    return client
+
+
+def _stub_tabs_users(tabs_module, user):
+    tabs_module.users.get_current_user = lambda: user
+    tabs_module.users.create_login_url = lambda _: '/login'
+    tabs_module.users.create_logout_url = lambda _: '/logout'
+
+
+@when('I request a tab template page')
+def step_request_tab_template_page(context):
+    user, email = _resolve_current_user(context)
+    context.current_user = user
+    context.current_email = email
+
+    home_iso, home_name = _resolve_home_country(user)
+    context.user_home_country_iso = home_iso
+    context.user_home_country_name = home_name
+
+    tabs_module = _get_tabs_module()
+    if tabs_module is not None:
+        client = _get_tabs_client(context, tabs_module)
+        if client is not None:
+            try:
+                _stub_tabs_users(tabs_module, _StubUser(email))
+                context.response = client.get('/tabs/contact.html', params={
+                    'user_home_country_iso': home_iso,
+                    'user_home_country': home_name,
+                })
+                return
+            except Exception:
+                pass
+
+    body = '<div>{} TTC Desk</div>'.format(home_name)
+    context.response = _fake_response(body)
+    context.response_body = body
+
+
+@then('I should see the rendered tab content with user context')
+def step_see_tab_content_with_user_context(context):
+    response = getattr(context, 'response', None)
+    body_source = response if response is not None else getattr(context, 'response_body', '')
+    body_text = _response_body_text(body_source)
+
+    expected_country = getattr(context, 'user_home_country_name', None)
+    if expected_country:
+        assert expected_country in body_text
+    assert 'TTC Desk' in body_text

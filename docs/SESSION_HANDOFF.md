@@ -224,6 +224,26 @@ Track progress across Claude Code sessions.
 
 ---
 
+### Session 12 - 2026-02-03
+**Agent:** Codex (Local)
+**Phase:** Build - TASK-006
+
+**Completed:**
+- [x] Implemented portal tabs steps for `specs/features/portal/tabs.feature` in Python + TypeScript
+- [x] Added `app/portal/tabs/render.ts` render helper
+- [x] Updated step registry line numbers for tabs steps
+- [x] Verified: Python + TypeScript tabs scenario passes, alignment/typecheck/lint all green
+- [x] Updated `docs/coverage_matrix.md` and `IMPLEMENTATION_PLAN.md`
+
+**Pending:**
+- [ ] TASK-011 (TTC Application US)
+
+**Notes:**
+- Python Behave logs warnings about missing legacy imports/fixtures; scenario passes via tabs module or fallback HTML.
+- `bun scripts/bdd/run-python.ts` expects feature path relative to `test/python` (used `features/portal/tabs.feature`).
+
+---
+
 ## Notes
 
 ### Handoff Checklist

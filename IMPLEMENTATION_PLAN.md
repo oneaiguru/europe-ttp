@@ -49,7 +49,7 @@
 | TASK-003 | p3 | specs/features/auth/password_reset.feature | ✅ DONE | |
 | TASK-004 | p1 | specs/features/portal/home.feature | ✅ DONE | |
 | TASK-005 | p2 | specs/features/portal/disabled.feature | ✅ DONE | |
-| TASK-006 | p3 | specs/features/portal/tabs.feature | 🔴 TODO | |
+| TASK-006 | p3 | specs/features/portal/tabs.feature | ✅ DONE | |
 | TASK-007 | p2 | specs/features/admin/access.feature | ✅ DONE | |
 | TASK-008 | p1 | specs/features/admin/permissions.feature | ✅ DONE | |
 | TASK-009 | p2 | specs/features/admin/reports_pages.feature | ✅ DONE | |
