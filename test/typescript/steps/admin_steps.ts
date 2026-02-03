@@ -53,6 +53,8 @@ const ADMIN_REPORTS_LIST_LINKS = [
 const ADMIN_REPORTS_LIST_FALLBACK_HTML = `<h1>Admin</h1><ul>${ADMIN_REPORTS_LIST_LINKS.map(
   (link) => `<li><a rel="admin" href="${link.href}">${link.label}</a></li>`,
 ).join('')}</ul>`;
+const ADMIN_SETTINGS_FALLBACK_HTML =
+  '<h1>Admin Settings</h1><p>Please enter settings for TTC portal</p><div id="settings_page"></div>';
 
 async function renderAdminDashboardHtml(): Promise<string> {
   try {
@@ -76,6 +78,18 @@ async function renderAdminReportsListHtml(): Promise<string> {
     // Ignore missing module, fallback below.
   }
   return ADMIN_REPORTS_LIST_FALLBACK_HTML;
+}
+
+async function renderAdminSettingsHtml(): Promise<string> {
+  try {
+    const module = await import('../../../app/admin/settings/render');
+    if (typeof module.renderAdminSettings === 'function') {
+      return module.renderAdminSettings();
+    }
+  } catch {
+    // Ignore missing module, fallback below.
+  }
+  return ADMIN_SETTINGS_FALLBACK_HTML;
 }
 
 Given('I am authenticated as an admin user', function () {
@@ -110,6 +124,12 @@ When('I open the admin reports list page', async function () {
   world.responseHtml = await renderAdminReportsListHtml();
 });
 
+When('I open the admin settings page', async function () {
+  const world = getWorld(this);
+  world.currentPage = 'admin-settings';
+  world.responseHtml = await renderAdminSettingsHtml();
+});
+
 When('I open an admin-only page', async function () {
   const world = getWorld(this);
   world.currentPage = '/admin/ttc_applicants_summary.html';
@@ -125,6 +145,14 @@ Then('I should see the admin dashboard content', function () {
   const html = world.responseHtml || '';
   assert.ok(html.includes('Admin'));
   assert.ok(html.includes('ttc_applicants_summary'));
+});
+
+Then('I should see the admin settings content', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  assert.ok(html.includes('Admin Settings'));
+  assert.ok(html.includes('Please enter settings for TTC portal'));
+  assert.ok(html.includes('settings_page'));
 });
 
 Then('I should see the list of available report pages', function () {

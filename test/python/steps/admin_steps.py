@@ -53,6 +53,11 @@ ADMIN_REPORTS_LIST_HTML = (
     '<li><a rel="admin" href="admin_settings.html">Admin Settings</a></li>'
     '</ul>'
 )
+ADMIN_SETTINGS_HTML = (
+    '<h1>Admin Settings</h1>'
+    '<p>Please enter settings for TTC portal</p>'
+    '<div id="settings_page"></div>'
+)
 ADMIN_UNAUTHORIZED_HTML = '<b>UN-AUTHORIZED</b>'
 
 
@@ -115,6 +120,12 @@ def step_open_admin_reports_list(context):
     context.response_body = ADMIN_REPORTS_LIST_HTML
 
 
+@when('I open the admin settings page')
+def step_open_admin_settings(context):
+    context.current_page = '/admin/settings'
+    context.response_body = ADMIN_SETTINGS_HTML
+
+
 @when('I open an admin-only page')
 def step_open_admin_only_page(context):
     context.current_page = '/admin/ttc_applicants_summary.html'
@@ -132,6 +143,14 @@ def step_see_admin_dashboard_content(context):
     body = _get_response_body(getattr(context, 'response_body', ''))
     assert 'Admin' in body
     assert 'ttc_applicants_summary' in body
+
+
+@then('I should see the admin settings content')
+def step_see_admin_settings_content(context):
+    body = _get_response_body(getattr(context, 'response_body', ''))
+    assert 'Admin Settings' in body
+    assert 'Please enter settings for TTC portal' in body
+    assert 'settings_page' in body
 
 
 @then('I should see the list of available report pages')

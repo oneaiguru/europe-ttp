@@ -31,7 +31,7 @@
 | Admin Access | specs/features/admin/access.feature | ✓ | ✓ |
 | Admin Permissions | specs/features/admin/permissions.feature | ✓ | ✓ |
 | Admin Reports Pages | specs/features/admin/reports_pages.feature | ✓ | ✓ |
-| Admin Settings | specs/features/admin/settings.feature | ❌ | ❌ |
+| Admin Settings | specs/features/admin/settings.feature | ✓ | ✓ |
 
 ## Forms
 
@@ -87,6 +87,6 @@
 
 ## Summary
 - **Total Features:** 35
-- **Python Verified:** 5/35
-- **TypeScript Complete:** 5/35
-- **Parity:** 14%
+- **Python Verified:** 6/35
+- **TypeScript Complete:** 6/35
+- **Parity:** 17%

@@ -139,8 +139,8 @@ export const STEPS = {
   },
   'I open the admin settings page': {
     pattern: /^I\ open\ the\ admin\ settings\ page$/,
-    python: 'test/python/steps/admin_steps.py:1',
-    typescript: 'test/typescript/steps/admin_steps.ts:1',
+    python: 'test/python/steps/admin_steps.py:123',
+    typescript: 'test/typescript/steps/admin_steps.ts:127',
     features: ['specs/features/admin/settings.feature:9'],
   },
   'I open the post-Sahaj TTC feedback form': {
@@ -433,8 +433,8 @@ export const STEPS = {
   },
   'I should see the admin settings content': {
     pattern: /^I\ should\ see\ the\ admin\ settings\ content$/,
-    python: 'test/python/steps/admin_steps.py:1',
-    typescript: 'test/typescript/steps/admin_steps.ts:1',
+    python: 'test/python/steps/admin_steps.py:148',
+    typescript: 'test/typescript/steps/admin_steps.ts:150',
     features: ['specs/features/admin/settings.feature:10'],
   },
   'I should see the disabled notice': {
