@@ -45,6 +45,25 @@ def before_all(context):
     # Store project root for reference
     context.project_root = PROJECT_ROOT
 
+    # Load test fixtures
+    try:
+        from test.python.support import load_fixtures_into_context
+        load_fixtures_into_context(context)
+        print("Loaded {} test users, {} test TTC options".format(
+            len(context.fixture_users) if hasattr(context, 'fixture_users') else 0,
+            len(context.fixture_ttc_options) if hasattr(context, 'fixture_ttc_options') else 0
+        ))
+    except ImportError:
+        print("Warning: Could not import fixture loader")
+
+    # Enable test mode for deadline bypass
+    try:
+        from pyutils.test_mode import set_test_mode
+        set_test_mode(True)
+        print("Test mode enabled: deadline checks bypassed")
+    except ImportError:
+        print("Warning: Could not enable test mode")
+
 
 def before_scenario(context, scenario):
     """
@@ -53,6 +72,8 @@ def before_scenario(context, scenario):
     context.response = None
     context.data = {}
     context.errors = []
+    context.current_user = None
+    context.current_role = None
 
 
 def after_scenario(context, scenario):

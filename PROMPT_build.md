@@ -9,6 +9,18 @@ Migrate legacy functionality by ensuring all BDD scenarios have implementations 
 
 ---
 
+## Bootstrapping (Every Loop)
+
+Before any role, ensure dependencies are present:
+
+```bash
+bun install
+```
+
+If `node_modules/` already exists, this is fast and safe.
+
+---
+
 ## Role Selection (File-Gated)
 
 Determine role by checking file state, then follow ONLY that section:

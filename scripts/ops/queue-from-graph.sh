@@ -18,6 +18,8 @@ COORDINATOR_URL="${COORDINATOR_URL:-http://192.168.1.80:8787}"
 WEAVER_REPO_PATH="${WEAVER_REPO_PATH:-$(pwd)}"
 TASK_GRAPH="tasks/task_graph.json"
 LIMIT="${1:-}"  # Empty = all tasks
+MODEL="${MODEL:-gpt-5.2-codex}"
+PROMPT_PATH="${PROMPT_PATH:-PROMPT_build.md}"
 
 # Colors
 GREEN='\033[0;32m'
@@ -57,7 +59,17 @@ for ((i=0; i<COUNT; i++)); do
 
     RESPONSE=$(curl -s -X POST "$COORDINATOR_URL/tasks" \
         -H 'Content-Type: application/json' \
-        -d "{\"provider\":\"codex\",\"mode\":\"build\",\"task_id\":\"$TASK_ID\"}")
+        -d "$(jq -n \
+          --arg model \"$MODEL\" \
+          --arg prompt \"$PROMPT_PATH\" \
+          '{
+            provider: \"codex\",
+            mode: \"build\",
+            continue_session: false,
+            export_teleport_bundle: false,
+            model: $model,
+            prompt_path: $prompt
+          }')") 
 
     if echo "$RESPONSE" | jq -e '.task_id' >/dev/null 2>&1; then
         ((QUEUED++))

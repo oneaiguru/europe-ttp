@@ -1,0 +1,67 @@
+[
+	{
+		"value": "test_us_future",
+		"display": "Test TTC (Future) - United States",
+		"display_until": "2027-12-31 23:59:59",
+		"display_countries": ["US"],
+		"display_data": {
+			"country": "United States",
+			"venue": "Test Venue, US",
+			"dates": "Jun 1 to Jun 15, 2027",
+			"application_deadline": "May 1, 2027",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "test_ca_future",
+		"display": "Test TTC (Future) - Canada",
+		"display_until": "2027-12-31 23:59:59",
+		"display_countries": ["CA"],
+		"display_data": {
+			"country": "Canada",
+			"venue": "Test Venue, Canada",
+			"dates": "Sep 1 to Sep 15, 2027",
+			"application_deadline": "Aug 1, 2027",
+			"fees": "$4500 CAD"
+		}
+	},
+	{
+		"value": "test_in_future",
+		"display": "Test TTC (Future) - India",
+		"display_until": "2027-12-31 23:59:59",
+		"display_countries": ["IN"],
+		"display_data": {
+			"country": "India",
+			"venue": "Test Bangalore Ashram, India",
+			"dates": "Jan 1 to Jan 15, 2027",
+			"application_deadline": "Nov 1, 2026",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "test_expired",
+		"display": "Test TTC (Expired) - For deadline testing",
+		"display_until": "2020-01-01 00:00:00",
+		"display_countries": ["US"],
+		"display_data": {
+			"country": "United States",
+			"venue": "Test Expired Venue",
+			"dates": "Jan 1 to Jan 15, 2020",
+			"application_deadline": "Dec 1, 2019",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "test_multi_country",
+		"display": "Test TTC (Multi-Country) - US and CA",
+		"display_until": "2027-12-31 23:59:59",
+		"display_countries": ["US", "CA"],
+		"display_data": {
+			"country": "Multi-Country",
+			"venue": "Test International Venue",
+			"dates": "Mar 1 to Mar 15, 2027",
+			"application_deadline": "Feb 1, 2027",
+			"fees": "$4500 USD"
+		}
+	}
+]

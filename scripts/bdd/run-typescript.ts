@@ -7,39 +7,50 @@
  */
 
 import { spawn } from 'child_process';
+import { mkdir } from 'fs/promises';
 import path from 'path';
 
 const PROJECT_ROOT = path.resolve();
 const SPEC_FEATURES = path.join(PROJECT_ROOT, 'specs/features');
 const OUTPUT_DIR = path.join(PROJECT_ROOT, 'test/reports');
 
-// Get feature path from args or use default
 const featurePath = process.argv[2] || SPEC_FEATURES;
+
+await mkdir(OUTPUT_DIR, { recursive: true }).catch(() => {});
 
 console.log(`[run-typescript] Running Cucumber on: ${featurePath}`);
 
-// Run cucumber-js command
-const proc = spawn('bun', [
-  'test/typescript/node_modules/.bin/cucumber-js',
-  featurePath,
-  '-f', 'json:tests/reports/typescript_bdd.json',
-  '--require', 'test/typescript/steps',
-], {
-  cwd: PROJECT_ROOT,
-  stdio: 'inherit',
-});
+const proc = spawn(
+  'bun',
+  [
+    'node_modules/.bin/cucumber-js',
+    featurePath,
+    '-f',
+    `json:${path.join(OUTPUT_DIR, 'typescript_bdd.json')}`,
+    '--require',
+    'test/typescript/steps',
+    '--require-module',
+    'ts-node/register',
+  ],
+  {
+    cwd: PROJECT_ROOT,
+    stdio: 'inherit',
+    env: { ...process.env, TS_NODE_PROJECT: 'tsconfig.json' },
+  },
+);
 
 proc.on('exit', (code) => {
   if (code !== 0) {
     console.error(`[run-typescript] Cucumber exited with code ${code}`);
-    process.exit(code || 1);
+    console.error('[run-typescript] Hint: Run "bun install" at repo root');
+  } else {
+    console.log('[run-typescript] Cucumber completed successfully');
   }
-  console.log('[run-typescript] Cucumber completed successfully');
-  process.exit(0);
+  process.exit(code || 0);
 });
 
 proc.on('error', (err) => {
   console.error('[run-typescript] Failed to start cucumber:', err);
-  console.error('[run-typescript] Hint: Run "bun install" in test/typescript/');
+  console.error('[run-typescript] Hint: Run "bun install" at repo root');
   process.exit(1);
 });
