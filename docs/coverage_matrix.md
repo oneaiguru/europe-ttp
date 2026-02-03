@@ -85,8 +85,16 @@
 
 ---
 
+## E2E
+
+| Feature | .feature File | Python | TypeScript |
+|---------|--------------|--------|------------|
+| Deadline and Whitelist Override | specs/features/e2e/deadline_and_whitelist_override.feature | ⏳ | ⏳ |
+
+---
+
 ## Summary
-- **Total Features:** 35
-- **Python Verified:** 10/35
-- **TypeScript Complete:** 10/35
+- **Total Features:** 36
+- **Python Verified:** 10/36
+- **TypeScript Complete:** 10/36
 - **Parity:** 29%

@@ -596,9 +596,9 @@ export const STEPS = {
   },
   'I navigate to the TTC application form': {
     pattern: /^I\ navigate\ to\ the\ TTC\ application\ form$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:17', 'specs/features/e2e/dependent_fields_do_not_break_completeness.feature:10'],
+    python: 'test/python/steps/e2e_api_steps.py:526',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:565',
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:11', 'specs/features/e2e/dependent_fields_do_not_break_completeness.feature:10'],
   },
   'test mode is disabled': {
     pattern: /^test\ mode\ is\ disabled$/,
@@ -614,8 +614,8 @@ export const STEPS = {
   },
   'test mode is disabled (real deadline enforcement)': {
     pattern: /^test\ mode\ is\ disabled\ \(real\ deadline\ enforcement\)$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
+    python: 'test/python/steps/e2e_api_steps.py:560',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:585',
     features: ['specs/features/e2e/deadline_and_whitelist_override.feature:8'],
   },
   'the TTC application should be marked as submitted': {
@@ -650,15 +650,15 @@ export const STEPS = {
   },
   'the submission should be rejected with deadline error': {
     pattern: /^the\ submission\ should\ be\ rejected\ with\ deadline\ error$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:19'],
+    python: 'test/python/steps/e2e_api_steps.py:403',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:465',
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:14'],
   },
   'the form should not be marked as submitted': {
     pattern: /^the\ form\ should\ not\ be\ marked\ as\ submitted$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:20'],
+    python: 'test/python/steps/e2e_api_steps.py:414',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:475',
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:15'],
   },
   'the evaluation should be matched to the applicant': {
     pattern: /^the\ evaluation\ should\ be\ matched\ to\ the\ applicant$/,
@@ -748,9 +748,9 @@ export const STEPS = {
   // The actual step implementations will handle the parameter values
   'I am authenticated as applicant with email {string}': {
     pattern: /^I\ am\ authenticated\ as\ applicant\ with\ email\ "([^"]*)"$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/ttc_application_to_admin_review.feature:9'],
+    python: 'test/python/steps/e2e_api_steps.py:17',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:145',
+    features: ['specs/features/e2e/ttc_application_to_admin_review.feature:9', 'specs/features/e2e/deadline_and_whitelist_override.feature:10'],
   },
   'I am authenticated as evaluator with email {string}': {
     pattern: /^I\ am\ authenticated\ as\ evaluator\ with\ email\ "([^"]*)"$/,
@@ -772,8 +772,8 @@ export const STEPS = {
   },
   'TTC option {string} has display_until in the past': {
     pattern: /^TTC\ option\ "([^"]*)"\ has\ display_until\ in\ the\ past$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
+    python: 'test/python/steps/e2e_api_steps.py:64',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:182',
     features: ['specs/features/e2e/deadline_and_whitelist_override.feature:9'],
   },
   'I submit TTC application for {string} with:': {
@@ -790,9 +790,9 @@ export const STEPS = {
   },
   'I attempt to submit TTC application via API for {string}': {
     pattern: /^I\ attempt\ to\ submit\ TTC\ application\ via\ API\ for\ "([^"]*)"$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:18'],
+    python: 'test/python/steps/e2e_api_steps.py:138',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:253',
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:13'],
   },
   '{string} has completed TTC {string}': {
     pattern: /^"([^"]*)"\ has\ completed\ TTC\ "([^"]*)"$/,

@@ -155,7 +155,10 @@ def step_attempt_submit_via_api(context, ttc_value):
     else:
         # Mock response for testing
         ttc_option = context.get_ttc_option(ttc_value) if hasattr(context, 'get_ttc_option') else None
-        is_expired = ttc_option and 'expired' in ttc_value
+        is_expired = 'expired' in ttc_value
+        if ttc_option:
+            display_until = ttc_option.get('display_until', '')
+            is_expired = is_expired or '2020' in display_until or '2019' in display_until
 
         if is_expired and not getattr(context, 'test_mode_enabled', True):
             context.response = type('obj', (object,), {

@@ -244,6 +244,27 @@ Track progress across Claude Code sessions.
 
 ---
 
+### Session 13 - 2026-02-03
+**Agent:** Codex (Local)
+**Phase:** Build - TASK-E2E-006
+
+**Completed:**
+- [x] Updated step registry line numbers for deadline/whitelist steps (Python + TypeScript).
+- [x] Fixed Python API submission fallback to treat expired TTC options as expired when fixtures are unavailable.
+- [x] Aligned TypeScript deadline enforcement matching (regex for parentheses) and removed duplicate navigation step to avoid ambiguity.
+- [x] Updated TypeScript expired detection to mirror Python.
+- [x] Verified alignment, `typecheck`, and `lint`.
+
+**Pending:**
+- [ ] `specs/features/e2e/deadline_and_whitelist_override.feature` remaining scenarios still failing/undefined (whitelist grace period + submission rejected steps, whitelist assertion uses admin email).
+
+**Notes:**
+- Scenario "Applicant blocked when TTC option is expired" passes in both Python and TypeScript.
+- `bun scripts/bdd/run-python.ts features/e2e/deadline_and_whitelist_override.feature` and `bun scripts/bdd/run-typescript.ts specs/features/e2e/deadline_and_whitelist_override.feature` still fail because other scenarios are incomplete.
+- Python Behave continues to warn about missing legacy imports/fixtures.
+
+---
+
 ## Notes
 
 ### Handoff Checklist

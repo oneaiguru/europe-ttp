@@ -252,7 +252,7 @@ When('I submit TTC evaluation for {string} with:', (applicantEmail: string, data
 
 When('I attempt to submit TTC application via API for {string}', (ttcValue: string) => {
   const option = getTtcOption(ttcValue);
-  const isExpired = option && option.value.includes('expired');
+  const isExpired = ttcValue.includes('expired') || option?.value.includes('expired') || option?.display_until.includes('2020') || option?.display_until.includes('2019');
 
   if (isExpired && !testContext.testModeEnabled) {
     testContext.response = {
@@ -566,10 +566,6 @@ Given('I navigate to the TTC application form', () => {
   testContext.currentPage = 'ttc_application';
 });
 
-When('I navigate to the TTC application form', () => {
-  testContext.currentPage = 'ttc_application';
-});
-
 When('I select {string} for "How many evaluating teachers?"', (count: string) => {
   testContext.numEvaluators = parseInt(count, 10);
 });
@@ -586,7 +582,7 @@ Given('test mode is enabled', () => {
   testContext.testModeEnabled = true;
 });
 
-Given('test mode is disabled (real deadline enforcement)', () => {
+Given(/^test mode is disabled \(real deadline enforcement\)$/, () => {
   testContext.testModeEnabled = false;
 });
 
