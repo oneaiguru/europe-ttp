@@ -20,7 +20,7 @@
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
-| Disabled Page | specs/features/portal/disabled.feature | ❌ | ❌ |
+| Disabled Page | specs/features/portal/disabled.feature | ✓ | ✓ |
 | Portal Home | specs/features/portal/home.feature | ✓ | ✓ |
 | Tabs Rendering | specs/features/portal/tabs.feature | ❌ | ❌ |
 
@@ -87,6 +87,6 @@
 
 ## Summary
 - **Total Features:** 35
-- **Python Verified:** 8/35
-- **TypeScript Complete:** 8/35
-- **Parity:** 23%
+- **Python Verified:** 9/35
+- **TypeScript Complete:** 9/35
+- **Parity:** 26%

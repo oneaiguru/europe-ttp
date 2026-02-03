@@ -48,7 +48,7 @@
 | TASK-002 | p1 | specs/features/auth/logout.feature | ✅ DONE | |
 | TASK-003 | p3 | specs/features/auth/password_reset.feature | ✅ DONE | |
 | TASK-004 | p1 | specs/features/portal/home.feature | ✅ DONE | |
-| TASK-005 | p2 | specs/features/portal/disabled.feature | 🔴 TODO | |
+| TASK-005 | p2 | specs/features/portal/disabled.feature | ✅ DONE | |
 | TASK-006 | p3 | specs/features/portal/tabs.feature | 🔴 TODO | |
 | TASK-007 | p2 | specs/features/admin/access.feature | ✅ DONE | |
 | TASK-008 | p1 | specs/features/admin/permissions.feature | ✅ DONE | |

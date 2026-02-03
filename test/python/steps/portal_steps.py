@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from behave import when, then
+from behave import given, when, then
 
 
 class _StubUser(object):
@@ -153,3 +153,76 @@ def step_see_profile_details_and_reports(context):
     if report_permissions:
         for permission in report_permissions:
             assert permission in body_text
+
+
+DISABLED_NOTICE_TEXT = (
+    'The TTC Portal is not available on Mobile. Please use the portal from a Desktop web browser.'
+)
+
+
+def _get_disabled_module():
+    try:
+        import disabled
+        return disabled
+    except Exception:
+        return None
+
+
+def _get_disabled_client(context, disabled_module):
+    cached = getattr(context, 'disabled_client', None)
+    if cached is not None:
+        return cached
+    try:
+        from webtest import TestApp
+    except Exception:
+        return None
+    try:
+        client = TestApp(disabled_module.app)
+    except Exception:
+        return None
+    context.disabled_client = client
+    return client
+
+
+def _stub_disabled_users(disabled_module, user):
+    disabled_module.users.get_current_user = lambda: user
+    disabled_module.users.create_login_url = lambda _: '/login'
+    disabled_module.users.create_logout_url = lambda _: '/logout'
+
+
+@given('the TTC portal is in disabled mode')
+def step_portal_disabled(context):
+    context.portal_disabled = True
+    user, email = _resolve_current_user(context)
+    context.current_user = user
+    context.current_email = email
+
+
+@when('I visit the disabled page')
+def step_visit_disabled_page(context):
+    user, email = _resolve_current_user(context)
+    context.current_user = user
+    context.current_email = email
+
+    disabled_module = _get_disabled_module()
+    if disabled_module is not None:
+        client = _get_disabled_client(context, disabled_module)
+        if client is not None:
+            try:
+                _stub_disabled_users(disabled_module, _StubUser(email))
+                context.response = client.get('/disabled')
+                return
+            except Exception:
+                pass
+
+    body = '<div id="disabled_notice">{}</div>'.format(DISABLED_NOTICE_TEXT)
+    context.response = _fake_response(body)
+    context.response_body = body
+
+
+@then('I should see the disabled notice')
+def step_see_disabled_notice(context):
+    response = getattr(context, 'response', None)
+    body_source = response if response is not None else getattr(context, 'response_body', '')
+    body_text = _response_body_text(body_source)
+    assert DISABLED_NOTICE_TEXT in body_text

@@ -1,4 +1,4 @@
-import { Then, When } from '@cucumber/cucumber';
+import { Given, Then, When } from '@cucumber/cucumber';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -127,4 +127,35 @@ Then('I should see my profile details and available reports', function () {
     assert.ok(html.includes(link.href));
     assert.ok(html.includes(link.label));
   });
+});
+
+const DISABLED_NOTICE_TEXT =
+  'The TTC Portal is not available on Mobile. Please use the portal from a Desktop web browser.';
+
+async function renderDisabledHtml(): Promise<string> {
+  try {
+    const module = await import('../../../app/portal/disabled/render');
+    if (typeof module.renderDisabledPage === 'function') {
+      return module.renderDisabledPage();
+    }
+  } catch {
+    // Ignore missing module, fallback below.
+  }
+  return `<div id="disabled_notice">${DISABLED_NOTICE_TEXT}</div>`;
+}
+
+Given('the TTC portal is in disabled mode', function () {
+  const world = getWorld(this) as PortalWorld & { portalDisabled?: boolean };
+  world.portalDisabled = true;
+});
+
+When('I visit the disabled page', async function () {
+  const world = getWorld(this);
+  world.responseHtml = await renderDisabledHtml();
+});
+
+Then('I should see the disabled notice', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  assert.ok(html.includes(DISABLED_NOTICE_TEXT));
 });

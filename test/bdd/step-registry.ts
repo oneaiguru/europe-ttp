@@ -439,8 +439,8 @@ export const STEPS = {
   },
   'I should see the disabled notice': {
     pattern: /^I\ should\ see\ the\ disabled\ notice$/,
-    python: 'test/python/steps/portal_steps.py:1',
-    typescript: 'test/typescript/steps/portal_steps.ts:1',
+    python: 'test/python/steps/portal_steps.py:223',
+    typescript: 'test/typescript/steps/portal_steps.ts:157',
     features: ['specs/features/portal/disabled.feature:10'],
   },
   'I should see the list of available report pages': {
@@ -511,8 +511,8 @@ export const STEPS = {
   },
   'I visit the disabled page': {
     pattern: /^I\ visit\ the\ disabled\ page$/,
-    python: 'test/python/steps/portal_steps.py:1',
-    typescript: 'test/typescript/steps/portal_steps.ts:1',
+    python: 'test/python/steps/portal_steps.py:201',
+    typescript: 'test/typescript/steps/portal_steps.ts:152',
     features: ['specs/features/portal/disabled.feature:9'],
   },
   'a certificate PDF should be generated': {
@@ -559,8 +559,8 @@ export const STEPS = {
   },
   'the TTC portal is in disabled mode': {
     pattern: /^the\ TTC\ portal\ is\ in\ disabled\ mode$/,
-    python: 'test/python/steps/portal_steps.py:1',
-    typescript: 'test/typescript/steps/portal_steps.ts:1',
+    python: 'test/python/steps/portal_steps.py:193',
+    typescript: 'test/typescript/steps/portal_steps.ts:147',
     features: ['specs/features/portal/disabled.feature:8'],
   },
   // E2E API Steps - keys match literal step text from features

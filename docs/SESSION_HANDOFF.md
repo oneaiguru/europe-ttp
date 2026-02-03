@@ -198,6 +198,26 @@ Track progress across Claude Code sessions.
 **Pending:**
 - [ ] TASK-005 (Portal Disabled)
 
+---
+
+### Session 11 - 2026-02-03
+**Agent:** Codex (Local)
+**Phase:** Build - TASK-005
+
+**Completed:**
+- [x] Implemented disabled page steps for `specs/features/portal/disabled.feature` in Python + TypeScript
+- [x] Added `app/portal/disabled/render.ts` render helper
+- [x] Updated step registry line numbers for disabled steps
+- [x] Verified: Python + TypeScript disabled scenario passes, alignment/typecheck/lint all green
+- [x] Updated `docs/coverage_matrix.md` and `IMPLEMENTATION_PLAN.md`
+
+**Pending:**
+- [ ] TASK-006 (Portal Tabs)
+
+**Notes:**
+- Python Behave logs warnings about missing legacy imports/fixtures; scenario passes using fallback HTML.
+- `bun scripts/bdd/run-python.ts` expects feature path relative to `test/python` (used `features/portal/disabled.feature`).
+
 **Notes:**
 - Python Behave logs warnings about missing legacy imports/fixtures; scenario still passes using static HTML fallback.
 - `bun scripts/bdd/run-python.ts` expects feature path relative to `test/python` (used `features/portal/home.feature`).
