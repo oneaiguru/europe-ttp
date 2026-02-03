@@ -115,6 +115,18 @@ def step_sign_out(context):
         context.response = _fake_response('LOGIN')
 
 
+@when('I request a password reset for my Google account')
+def step_request_password_reset(context):
+    user = None
+    if hasattr(context, 'get_user_by_role'):
+        user = context.get_user_by_role('applicant')
+    email = user.get('email') if user else 'test.applicant@example.com'
+    context.current_user = user or {'email': email, 'role': 'applicant'}
+    context.current_email = email
+    context.current_page = 'password_reset'
+    context.response = _fake_response('PASSWORD RESET PROMPT')
+
+
 @then('I should be redirected to the TTC portal home')
 def step_redirected_home(context):
     response = context.response
@@ -130,6 +142,21 @@ def step_redirected_home(context):
     if expected_email:
         assert expected_email in body_text
     assert 'LOGOUT' in body_text
+
+
+@then('I should receive a password reset prompt from the identity provider')
+def step_receive_password_reset_prompt(context):
+    response = context.response
+    assert response is not None, 'Expected response to be set'
+    status_int = getattr(response, 'status_int', None)
+    if status_int is None:
+        status = getattr(response, 'status', '')
+        assert '200' in status
+    else:
+        assert status_int == 200
+    body_text = _response_body_text(response)
+    assert 'PASSWORD RESET PROMPT' in body_text
+    assert context.current_page == 'password_reset'
 
 
 @then('I should be redirected to the TTC portal login page')

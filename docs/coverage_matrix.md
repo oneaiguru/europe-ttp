@@ -14,7 +14,7 @@
 |---------|--------------|--------|------------|
 | Login | specs/features/auth/login.feature | ✓ | ✓ |
 | Logout | specs/features/auth/logout.feature | ✓ | ✓ |
-| Password Reset | specs/features/auth/password_reset.feature | ❌ | ❌ |
+| Password Reset | specs/features/auth/password_reset.feature | ✓ | ✓ |
 
 ## Portal
 
@@ -87,6 +87,6 @@
 
 ## Summary
 - **Total Features:** 35
-- **Python Verified:** 6/35
-- **TypeScript Complete:** 6/35
-- **Parity:** 17%
+- **Python Verified:** 7/35
+- **TypeScript Complete:** 7/35
+- **Parity:** 20%

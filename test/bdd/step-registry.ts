@@ -175,8 +175,8 @@ export const STEPS = {
   },
   'I request a password reset for my Google account': {
     pattern: /^I\ request\ a\ password\ reset\ for\ my\ Google\ account$/,
-    python: 'test/python/steps/auth_steps.py:1',
-    typescript: 'test/typescript/steps/auth_steps.ts:1',
+    python: 'test/python/steps/auth_steps.py:118',
+    typescript: 'test/typescript/steps/auth_steps.ts:68',
     features: ['specs/features/auth/password_reset.feature:9'],
   },
   'I request a signed upload URL for a document': {
@@ -289,8 +289,8 @@ export const STEPS = {
   },
   'I should receive a password reset prompt from the identity provider': {
     pattern: /^I\ should\ receive\ a\ password\ reset\ prompt\ from\ the\ identity\ provider$/,
-    python: 'test/python/steps/auth_steps.py:1',
-    typescript: 'test/typescript/steps/auth_steps.ts:1',
+    python: 'test/python/steps/auth_steps.py:147',
+    typescript: 'test/typescript/steps/auth_steps.ts:96',
     features: ['specs/features/auth/password_reset.feature:10'],
   },
   'I should receive a signed URL and upload key for the document': {
