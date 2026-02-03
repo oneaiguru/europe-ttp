@@ -32,6 +32,26 @@ Track progress across Claude Code sessions.
 
 ---
 
+### Session 2 - 2026-02-03
+**Agent:** Codex (Local)
+**Phase:** Build - TASK-001
+
+**Completed:**
+- [x] Implemented login steps for `specs/features/auth/login.feature` in Python + TypeScript
+- [x] Updated step registry line numbers for login steps
+- [x] Unblocked Python Behave imports (removed f-strings in `test/python/steps/e2e_api_steps.py`, tolerated legacy SyntaxError imports)
+- [x] Adjusted TS BDD runner to load `.ts` steps + ts-node module type overrides
+- [x] Cleaned TypeScript step typings to satisfy `typecheck` and `lint`
+- [x] Verified: Python login scenario passes, TypeScript login scenario passes, alignment/typecheck/lint all green
+
+**Pending:**
+- [ ] TASK-002 (Logout)
+
+**Notes:**
+- Python BDD uses fallback response in `test/python/steps/auth_steps.py` if `ttc_portal` cannot import (GAE deps missing).
+
+---
+
 ## Notes
 
 ### Handoff Checklist

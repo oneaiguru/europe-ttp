@@ -28,7 +28,7 @@ const proc = spawn(
     '-f',
     `json:${path.join(OUTPUT_DIR, 'typescript_bdd.json')}`,
     '--require',
-    'test/typescript/steps',
+    'test/typescript/steps/**/*.ts',
     '--require-module',
     'ts-node/register',
   ],

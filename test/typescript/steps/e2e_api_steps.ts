@@ -5,7 +5,7 @@
  * API calls instead of browser automation for reliability and speed.
  */
 
-import { Given, When, Then } from '@cucumber/cucumber';
+import { DataTable, Given, When, Then } from '@cucumber/cucumber';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -16,6 +16,8 @@ interface TestUser {
   role: string;
   home_country: string;
   name: string;
+  profile_complete?: boolean;
+  photo_uploaded?: boolean;
 }
 
 interface TTCOption {
@@ -31,8 +33,11 @@ interface FormSubmission {
   email?: string;
   ttc_option?: string;
   applicant_email?: string;
+  evaluator_email?: string;
+  candidate_email?: string;
+  candidate_name?: string;
   graduate_email?: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   status: string;
 }
 
@@ -56,14 +61,15 @@ const testContext: {
   whitelist: string[];
   evaluations: FormSubmission[];
   evaluationsCount: number;
-  applicantSubmissions: Record<string, any>;
+  applicantSubmissions: Record<string, unknown>;
   applicants: Record<string, TestUser>;
-  graduates: Record<string, any>;
+  graduates: Record<string, unknown>;
   testModeEnabled: boolean;
   currentPage?: string;
   numEvaluators?: number;
-  userSummary: Record<string, any>;
-  evaluationsList: any[];
+  requestedReportEmail?: string;
+  userSummary: Record<string, unknown>;
+  evaluationsList: unknown[];
   lastNotification?: { to: string; type: string };
 } = {
   whitelist: [],
@@ -73,6 +79,7 @@ const testContext: {
   applicants: {},
   graduates: {},
   testModeEnabled: true,
+  userSummary: {},
   evaluationsList: [],
 };
 
@@ -190,17 +197,17 @@ Given('TTC option {string} has display_until in the past', (ttcValue: string) =>
 
 Given('I have completed my applicant profile', () => {
   // Mark profile as complete
-  testContext.currentUser = { ...testContext.currentUser!, profile_complete: true } as any;
+  testContext.currentUser = { ...testContext.currentUser!, profile_complete: true };
 });
 
 Given('I have uploaded my photo', () => {
   // Mark photo as uploaded
-  testContext.currentUser = { ...testContext.currentUser!, photo_uploaded: true } as any;
+  testContext.currentUser = { ...testContext.currentUser!, photo_uploaded: true };
 });
 
-When('I submit TTC application for {string} with:', (ttcValue: string, dataTable: any) => {
+When('I submit TTC application for {string} with:', (ttcValue: string, dataTable: DataTable) => {
   const formData: Record<string, string> = {};
-  dataTable.rows().forEach((row: string[]) => {
+  dataTable.rows().forEach((row) => {
     formData[row[0]] = row[1];
   });
 
@@ -218,9 +225,9 @@ When('I submit TTC application for {string} with:', (ttcValue: string, dataTable
   };
 });
 
-When('I submit TTC evaluation for {string} with:', (applicantEmail: string, dataTable: any) => {
+When('I submit TTC evaluation for {string} with:', (applicantEmail: string, dataTable: DataTable) => {
   const formData: Record<string, string> = {};
-  dataTable.rows().forEach((row: string[]) => {
+  dataTable.rows().forEach((row) => {
     formData[row[0]] = row[1];
   });
 
@@ -232,7 +239,9 @@ When('I submit TTC evaluation for {string} with:', (applicantEmail: string, data
     status: 'submitted',
   };
 
-  testContext.evaluations.push(testContext.lastSubmission);
+  if (testContext.lastSubmission) {
+    testContext.evaluations.push(testContext.lastSubmission);
+  }
   testContext.evaluationsCount++;
 
   testContext.response = {
@@ -271,9 +280,9 @@ Given('{string} has completed TTC {string}', (email: string, ttcValue: string) =
   };
 });
 
-When('I submit post-TTC self-evaluation for course starting {string} with:', (startDate: string, dataTable: any) => {
+When('I submit post-TTC self-evaluation for course starting {string} with:', (startDate: string, dataTable: DataTable) => {
   const formData: Record<string, string> = { i_course_start_date: startDate };
-  dataTable.rows().forEach((row: string[]) => {
+  dataTable.rows().forEach((row) => {
     formData[row[0]] = row[1];
   });
 
@@ -290,9 +299,9 @@ When('I submit post-TTC self-evaluation for course starting {string} with:', (st
   };
 });
 
-When('I submit post-TTC feedback for {string} with:', (graduateEmail: string, dataTable: any) => {
+When('I submit post-TTC feedback for {string} with:', (graduateEmail: string, dataTable: DataTable) => {
   const formData: Record<string, string> = { i_graduate_email: graduateEmail };
-  dataTable.rows().forEach((row: string[]) => {
+  dataTable.rows().forEach((row) => {
     formData[row[0]] = row[1];
   });
 
@@ -512,7 +521,7 @@ Then('the feedback should be linked to the graduate', () => {
   }
 });
 
-Then('{string} should not be flagged for missing co-teacher feedback', (email: string) => {
+Then('{string} should not be flagged for missing co-teacher feedback', (_email: string) => {
   // Assert not flagged for missing feedback
 });
 
@@ -520,9 +529,9 @@ Then('the summary should show both self-eval and co-teacher feedback', () => {
   // Assert both types present
 });
 
-Then('the user summary should show:', (dataTable: any) => {
+Then('the user summary should show:', (dataTable: DataTable) => {
   const expected: Record<string, string> = {};
-  dataTable.rows().forEach((row: string[]) => {
+  dataTable.rows().forEach((row) => {
     expected[row[0]] = row[1];
   });
 

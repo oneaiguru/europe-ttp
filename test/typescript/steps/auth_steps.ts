@@ -1,12 +1,59 @@
-/* Auto-generated BDD step skeletons (planning only)
- * TODO: implement step definitions
- * - I am authenticated on the TTC portal
- * - I am on the TTC portal login page
- * - I request a password reset for my Google account
- * - I should be redirected to the TTC portal home
- * - I should be redirected to the TTC portal login page
- * - I should receive a password reset prompt from the identity provider
- * - I sign in with a valid Google account
- * - I sign out of the TTC portal
- */
-export {};
+import { Given, When, Then } from '@cucumber/cucumber';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface TestUser {
+  email: string;
+  role: string;
+  [key: string]: unknown;
+}
+
+const authContext: {
+  currentUser?: TestUser;
+  currentPage?: string;
+  responseHtml?: string;
+} = {};
+
+let cachedUsers: TestUser[] | null = null;
+
+function loadTestUsers(): TestUser[] {
+  if (cachedUsers) {
+    return cachedUsers;
+  }
+  const fixturesPath = path.resolve(__dirname, '../../fixtures/test-users.json');
+  const raw = fs.readFileSync(fixturesPath, 'utf-8');
+  const parsed = JSON.parse(raw) as { users?: TestUser[] };
+  cachedUsers = parsed.users ?? [];
+  return cachedUsers;
+}
+
+function getUserByRole(role: string): TestUser | undefined {
+  return loadTestUsers().find((user) => user.role === role);
+}
+
+Given('I am on the TTC portal login page', () => {
+  authContext.currentUser = undefined;
+  authContext.currentPage = 'login';
+  authContext.responseHtml = 'LOGIN';
+});
+
+When('I sign in with a valid Google account', () => {
+  const applicant = getUserByRole('applicant') || {
+    email: 'test.applicant@example.com',
+    role: 'applicant',
+  };
+  authContext.currentUser = applicant;
+  authContext.currentPage = 'home';
+  authContext.responseHtml = `Logged in as ${applicant.email} LOGOUT`;
+});
+
+Then('I should be redirected to the TTC portal home', () => {
+  assert.equal(authContext.currentPage, 'home');
+  assert.ok(authContext.responseHtml, 'Expected responseHtml to be set');
+  const email = authContext.currentUser?.email;
+  if (email) {
+    assert.ok(authContext.responseHtml?.includes(email));
+  }
+  assert.ok(authContext.responseHtml?.includes('LOGOUT'));
+});

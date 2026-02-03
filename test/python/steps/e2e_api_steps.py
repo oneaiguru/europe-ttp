@@ -57,7 +57,7 @@ def step_ttc_option_available(context, ttc_value):
     """Verify a test TTC option exists and is available."""
     if hasattr(context, 'get_ttc_option'):
         option = context.get_ttc_option(ttc_value)
-        assert option is not None, f"TTC option {ttc_value} not found in fixtures"
+        assert option is not None, "TTC option {} not found in fixtures".format(ttc_value)
         context.current_ttc_option = option
 
 
@@ -66,11 +66,11 @@ def step_ttc_option_expired(context, ttc_value):
     """Verify a test TTC option exists with an expired deadline."""
     if hasattr(context, 'get_ttc_option'):
         option = context.get_ttc_option(ttc_value)
-        assert option is not None, f"TTC option {ttc_value} not found in fixtures"
+        assert option is not None, "TTC option {} not found in fixtures".format(ttc_value)
         display_until = option.get('display_until', '')
         # Verify it's in the past (2020 dates)
         assert '2020' in display_until or '2019' in display_until, \
-            f"Expected expired date, got {display_until}"
+            "Expected expired date, got {}".format(display_until)
         context.current_ttc_option = option
 
 
@@ -364,7 +364,7 @@ def step_assert_app_submitted(context):
     """Assert the TTC application was submitted successfully."""
     assert hasattr(context, 'last_submission'), "No submission was made"
     assert context.last_submission.get('status') == 'submitted', \
-        f"Expected submitted, got {context.last_submission.get('status')}"
+        "Expected submitted, got {}".format(context.last_submission.get('status'))
 
 
 @then('the form should be marked as complete')
@@ -386,7 +386,7 @@ def step_assert_user_whitelisted(context):
     """Assert the user is in the whitelist."""
     assert hasattr(context, 'whitelist'), "No whitelist exists"
     assert context.current_email.lower() in [e.lower() for e in context.whitelist], \
-        f"User {context.current_email} not in whitelist"
+        "User {} not in whitelist".format(context.current_email)
 
 
 @then('the applicant should be able to submit within grace period')
@@ -394,7 +394,7 @@ def step_assert_can_submit_grace(context):
     """Assert submission is allowed within grace period."""
     assert hasattr(context, 'response'), "No response exists"
     assert '200' in context.response.status or context.response.status == '200 OK', \
-        f"Expected success, got {context.response.status}"
+        "Expected success, got {}".format(context.response.status)
 
 
 @then('the submission should be rejected with deadline error')
@@ -405,7 +405,7 @@ def step_assert_submission_rejected_deadline(context):
     status = getattr(context.response, 'status', '')
     assert '403' in status or 'Forbidden' in status or \
            (hasattr(context, 'last_submission') and context.last_submission.get('status') == 'rejected'), \
-           f"Expected rejection, got {status}"
+           "Expected rejection, got {}".format(status)
 
 
 @then('the form should not be marked as submitted')
@@ -473,7 +473,7 @@ def step_assert_feedback_linked(context):
 @then('"{email}" should not be flagged for missing co-teacher feedback')
 def step_assert_not_flagged_missing_feedback(context, email):
     """Assert the graduate is not flagged for missing feedback."""
-    assert True, f"{email} has complete co-teacher feedback"
+    assert True, "{} has complete co-teacher feedback".format(email)
 
 
 @then('the summary should show both self-eval and co-teacher feedback')
@@ -489,7 +489,7 @@ def step_assert_user_summary(context, doc):
     context.user_summary = getattr(context, 'user_summary', {})
     for key, value in expected.items():
         assert str(context.user_summary.get(key)) == str(value), \
-            f"Expected {key}={value}, got {context.user_summary.get(key)}"
+            "Expected {}={}, got {}".format(key, value, context.user_summary.get(key))
 
 
 @then('the combined report should include both evaluations')
@@ -499,7 +499,7 @@ def step_assert_combined_report_includes_evals(context):
     body = getattr(context.response, 'body', '')
     data = json.loads(body) if isinstance(body, str) else body
     assert data.get('evaluations_count', 0) >= 2, \
-        f"Expected at least 2 evaluations, got {data.get('evaluations_count', 0)}"
+        "Expected at least 2 evaluations, got {}".format(data.get('evaluations_count', 0))
     context.evaluations = data.get('evaluations', [])
 
 
@@ -507,13 +507,13 @@ def step_assert_combined_report_includes_evals(context):
 def step_assert_only_teacher_n(context, n):
     """Assert only the specified teacher's email is in the list."""
     # This would verify the conditional field logic worked correctly
-    assert True, f"Only teacher {n} email in list"
+    assert True, "Only teacher {} email in list".format(n)
 
 
 @then('teacher 1 and {n} emails should be in the evaluator list')
 def step_assert_teacher_1_and_n(context, n):
     """Assert teacher 1 and specified teacher emails are in the list."""
-    assert True, f"Teacher 1 and {n} emails in list"
+    assert True, "Teacher 1 and {} emails in list".format(n)
 
 
 # ============================================================================

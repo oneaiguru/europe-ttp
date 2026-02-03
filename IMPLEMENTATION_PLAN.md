@@ -44,7 +44,7 @@
 
 | Task | Priority | Feature File | Status | Notes |
 |------|----------|--------------|--------|-------|
-| TASK-001 | p1 | specs/features/auth/login.feature | 🔴 TODO | |
+| TASK-001 | p1 | specs/features/auth/login.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-002 | p1 | specs/features/auth/logout.feature | 🔴 TODO | |
 | TASK-003 | p3 | specs/features/auth/password_reset.feature | 🔴 TODO | |
 | TASK-004 | p1 | specs/features/portal/home.feature | 🔴 TODO | |

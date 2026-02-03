@@ -19,6 +19,7 @@ WEAVER_REPO_PATH="${WEAVER_REPO_PATH:-$(pwd)}"
 TASK_GRAPH="tasks/task_graph.json"
 LIMIT="${1:-}"  # Empty = all tasks
 MODEL="${MODEL:-gpt-5.2-codex}"
+PROVIDER="${PROVIDER:-codex}"
 PROMPT_PATH="${PROMPT_PATH:-PROMPT_build.md}"
 
 # Colors
@@ -60,11 +61,12 @@ for ((i=0; i<COUNT; i++)); do
     RESPONSE=$(curl -s -X POST "$COORDINATOR_URL/tasks" \
         -H 'Content-Type: application/json' \
         -d "$(jq -n \
-          --arg model \"$MODEL\" \
-          --arg prompt \"$PROMPT_PATH\" \
+          --arg model "$MODEL" \
+          --arg prompt "$PROMPT_PATH" \
+          --arg provider "$PROVIDER" \
           '{
-            provider: \"codex\",
-            mode: \"build\",
+            provider: $provider,
+            mode: "build",
             continue_session: false,
             export_teleport_bundle: false,
             model: $model,

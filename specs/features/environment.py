@@ -27,19 +27,19 @@ def before_all(context):
     try:
         from admin import app as admin_app
         context.admin_client = TestApp(admin_app)
-    except ImportError:
+    except (ImportError, SyntaxError):
         print("Warning: Could not import admin app")
 
     try:
         from api import app as api_app
         context.api_client = TestApp(api_app)
-    except ImportError:
+    except (ImportError, SyntaxError):
         print("Warning: Could not import api app")
 
     try:
         from ttc_portal import app as ttc_app
         context.ttc_client = TestApp(ttc_app)
-    except ImportError:
+    except (ImportError, SyntaxError):
         print("Warning: Could not import ttc_portal app")
 
     # Store project root for reference

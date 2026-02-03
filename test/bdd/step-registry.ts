@@ -1,8 +1,8 @@
 export const STEPS = {
   'I am authenticated as a Sahaj TTC graduate': {
     pattern: /^I\ am\ authenticated\ as\ a\ Sahaj\ TTC\ graduate$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:67',
+    typescript: 'test/typescript/steps/forms_steps.ts:73',
     features: ['specs/features/forms/post_sahaj_ttc_self_eval.feature:8', 'specs/features/forms/post_sahaj_ttc_feedback.feature:8'],
   },
   'I am authenticated as a TTC admin': {
@@ -13,8 +13,8 @@ export const STEPS = {
   },
   'I am authenticated as a TTC applicant': {
     pattern: /^I\ am\ authenticated\ as\ a\ TTC\ applicant$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:29',
+    typescript: 'test/typescript/steps/forms_steps.ts:17',
     features: ['specs/features/forms/ttc_application_us.feature:8', 'specs/features/forms/ttc_application_non_us.feature:8', 'specs/features/forms/ttc_applicant_profile.feature:8', 'specs/features/forms/dsn_application.feature:8'],
   },
   'I am authenticated as a TTC graduate': {
@@ -49,8 +49,8 @@ export const STEPS = {
   },
   'I am on the TTC portal login page': {
     pattern: /^I\ am\ on\ the\ TTC\ portal\ login\ page$/,
-    python: 'test/python/steps/auth_steps.py:1',
-    typescript: 'test/typescript/steps/auth_steps.ts:1',
+    python: 'test/python/steps/auth_steps.py:55',
+    typescript: 'test/typescript/steps/auth_steps.ts:35',
     features: ['specs/features/auth/login.feature:8', 'specs/features/auth/password_reset.feature:8'],
   },
   'I have multiple form instances for a form type': {
@@ -79,8 +79,8 @@ export const STEPS = {
   },
   'I open the DSN application form': {
     pattern: /^I\ open\ the\ DSN\ application\ form$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:35',
+    typescript: 'test/typescript/steps/forms_steps.ts:23',
     features: ['specs/features/forms/dsn_application.feature:9'],
   },
   'I open the TTC applicant profile form': {
@@ -97,8 +97,8 @@ export const STEPS = {
   },
   'I open the TTC application form for the United States': {
     pattern: /^I\ open\ the\ TTC\ application\ form\ for\ the\ United\ States$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:51',
+    typescript: 'test/typescript/steps/forms_steps.ts:48',
     features: ['specs/features/forms/ttc_application_us.feature:9'],
   },
   'I open the TTC evaluation form': {
@@ -145,14 +145,14 @@ export const STEPS = {
   },
   'I open the post-Sahaj TTC feedback form': {
     pattern: /^I\ open\ the\ post\-Sahaj\ TTC\ feedback\ form$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:73',
+    typescript: 'test/typescript/steps/forms_steps.ts:79',
     features: ['specs/features/forms/post_sahaj_ttc_feedback.feature:9'],
   },
   'I open the post-Sahaj TTC self evaluation form': {
     pattern: /^I\ open\ the\ post\-Sahaj\ TTC\ self\ evaluation\ form$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:89',
+    typescript: 'test/typescript/steps/forms_steps.ts:104',
     features: ['specs/features/forms/post_sahaj_ttc_self_eval.feature:9'],
   },
   'I open the post-TTC feedback form': {
@@ -277,8 +277,8 @@ export const STEPS = {
   },
   'I should be redirected to the TTC portal home': {
     pattern: /^I\ should\ be\ redirected\ to\ the\ TTC\ portal\ home$/,
-    python: 'test/python/steps/auth_steps.py:1',
-    typescript: 'test/typescript/steps/auth_steps.ts:1',
+    python: 'test/python/steps/auth_steps.py:86',
+    typescript: 'test/typescript/steps/auth_steps.ts:51',
     features: ['specs/features/auth/login.feature:10'],
   },
   'I should be redirected to the TTC portal login page': {
@@ -385,8 +385,8 @@ export const STEPS = {
   },
   'I should see the DSN application questions': {
     pattern: /^I\ should\ see\ the\ DSN\ application\ questions$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:44',
+    typescript: 'test/typescript/steps/forms_steps.ts:38',
     features: ['specs/features/forms/dsn_application.feature:10'],
   },
   'I should see the TTC applicant profile questions': {
@@ -403,8 +403,8 @@ export const STEPS = {
   },
   'I should see the TTC application questions for the United States': {
     pattern: /^I\ should\ see\ the\ TTC\ application\ questions\ for\ the\ United\ States$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:60',
+    typescript: 'test/typescript/steps/forms_steps.ts:63',
     features: ['specs/features/forms/ttc_application_us.feature:10'],
   },
   'I should see the TTC evaluation questions': {
@@ -451,14 +451,14 @@ export const STEPS = {
   },
   'I should see the post-Sahaj TTC feedback questions': {
     pattern: /^I\ should\ see\ the\ post\-Sahaj\ TTC\ feedback\ questions$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:82',
+    typescript: 'test/typescript/steps/forms_steps.ts:94',
     features: ['specs/features/forms/post_sahaj_ttc_feedback.feature:10'],
   },
   'I should see the post-Sahaj TTC self evaluation questions': {
     pattern: /^I\ should\ see\ the\ post\-Sahaj\ TTC\ self\ evaluation\ questions$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:98',
+    typescript: 'test/typescript/steps/forms_steps.ts:119',
     features: ['specs/features/forms/post_sahaj_ttc_self_eval.feature:10'],
   },
   'I should see the post-TTC feedback questions': {
@@ -481,8 +481,8 @@ export const STEPS = {
   },
   'I sign in with a valid Google account': {
     pattern: /^I\ sign\ in\ with\ a\ valid\ Google\ account$/,
-    python: 'test/python/steps/auth_steps.py:1',
-    typescript: 'test/typescript/steps/auth_steps.ts:1',
+    python: 'test/python/steps/auth_steps.py:69',
+    typescript: 'test/typescript/steps/auth_steps.ts:41',
     features: ['specs/features/auth/login.feature:9'],
   },
   'I sign out of the TTC portal': {
