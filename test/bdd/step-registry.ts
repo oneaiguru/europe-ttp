@@ -115,8 +115,8 @@ export const STEPS = {
   },
   'I open the TTC portal home': {
     pattern: /^I\ open\ the\ TTC\ portal\ home$/,
-    python: 'test/python/steps/portal_steps.py:1',
-    typescript: 'test/typescript/steps/portal_steps.ts:1',
+    python: 'test/python/steps/portal_steps.py:93',
+    typescript: 'test/typescript/steps/portal_steps.ts:88',
     features: ['specs/features/portal/home.feature:9'],
   },
   'I open the TTC portal settings form': {
@@ -379,8 +379,8 @@ export const STEPS = {
   },
   'I should see my profile details and available reports': {
     pattern: /^I\ should\ see\ my\ profile\ details\ and\ available\ reports$/,
-    python: 'test/python/steps/portal_steps.py:1',
-    typescript: 'test/typescript/steps/portal_steps.ts:1',
+    python: 'test/python/steps/portal_steps.py:138',
+    typescript: 'test/typescript/steps/portal_steps.ts:115',
     features: ['specs/features/portal/home.feature:10'],
   },
   'I should see the DSN application questions': {

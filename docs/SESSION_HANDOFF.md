@@ -184,6 +184,26 @@ Track progress across Claude Code sessions.
 
 ---
 
+### Session 10 - 2026-02-03
+**Agent:** Codex (Local)
+**Phase:** Build - TASK-004
+
+**Completed:**
+- [x] Implemented portal home steps for `specs/features/portal/home.feature` in Python + TypeScript
+- [x] Added `app/portal/home/render.ts` render helper
+- [x] Updated step registry line numbers for portal home steps
+- [x] Verified: Python + TypeScript portal home scenario passes, alignment/typecheck/lint all green
+- [x] Updated `docs/coverage_matrix.md` and `IMPLEMENTATION_PLAN.md`
+
+**Pending:**
+- [ ] TASK-005 (Portal Disabled)
+
+**Notes:**
+- Python Behave logs warnings about missing legacy imports/fixtures; scenario still passes using static HTML fallback.
+- `bun scripts/bdd/run-python.ts` expects feature path relative to `test/python` (used `features/portal/home.feature`).
+
+---
+
 ## Notes
 
 ### Handoff Checklist
