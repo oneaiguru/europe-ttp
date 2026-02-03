@@ -60,7 +60,7 @@
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
-| Upload Form API | specs/features/api/upload_form.feature | ❌ | ❌ |
+| Upload Form API | specs/features/api/upload_form.feature | ✅ | ✅ |
 
 ## User Services
 

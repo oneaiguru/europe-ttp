@@ -67,7 +67,7 @@
 | TASK-021 | p3 | specs/features/forms/dsn_application.feature | 🔴 TODO | |
 | TASK-022 | p1 | specs/features/uploads/photo_upload.feature | 🔴 TODO | |
 | TASK-023 | p2 | specs/features/uploads/document_upload.feature | 🔴 TODO | |
-| TASK-024 | p1 | specs/features/api/upload_form.feature | 🔴 TODO | |
+| TASK-024 | p1 | specs/features/api/upload_form.feature | ✅ DONE | |
 | TASK-025 | p1 | specs/features/user/form_data_upload.feature | 🔴 TODO | |
 | TASK-026 | p2 | specs/features/user/get_form_data.feature | 🔴 TODO | |
 | TASK-027 | p2 | specs/features/user/get_form_instances.feature | 🔴 TODO | |

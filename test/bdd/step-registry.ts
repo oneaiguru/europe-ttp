@@ -493,8 +493,8 @@ export const STEPS = {
   },
   'I submit form data to the upload form API': {
     pattern: /^I\ submit\ form\ data\ to\ the\ upload\ form\ API$/,
-    python: 'test/python/steps/api_steps.py:1',
-    typescript: 'test/typescript/steps/api_steps.ts:1',
+    python: 'test/python/steps/api_steps.py:121',
+    typescript: 'test/typescript/steps/api_steps.ts:69',
     features: ['specs/features/api/upload_form.feature:9'],
   },
   'I update my user configuration': {
@@ -553,8 +553,8 @@ export const STEPS = {
   },
   'the API should accept the form submission': {
     pattern: /^the\ API\ should\ accept\ the\ form\ submission$/,
-    python: 'test/python/steps/api_steps.py:1',
-    typescript: 'test/typescript/steps/api_steps.ts:1',
+    python: 'test/python/steps/api_steps.py:166',
+    typescript: 'test/typescript/steps/api_steps.ts:95',
     features: ['specs/features/api/upload_form.feature:10'],
   },
   'the TTC portal is in disabled mode': {
