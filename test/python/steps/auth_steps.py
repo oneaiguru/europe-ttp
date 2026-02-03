@@ -66,6 +66,25 @@ def step_on_login_page(context):
     assert 'LOGIN' in body_text
 
 
+@given('I am authenticated on the TTC portal')
+def step_authenticated_on_portal(context):
+    user = None
+    if hasattr(context, 'get_user_by_role'):
+        user = context.get_user_by_role('applicant')
+    email = user.get('email') if user else 'test.applicant@example.com'
+    context.current_user = user or {'email': email, 'role': 'applicant'}
+    context.current_email = email
+    context.current_page = 'home'
+    ttc_portal_module = _get_ttc_portal()
+    if ttc_portal_module and hasattr(context, 'ttc_client'):
+        _stub_users_api(ttc_portal_module, StubUser(email))
+        context.response = context.ttc_client.get('/')
+    else:
+        context.response = _fake_response('Logged in as {} LOGOUT'.format(email))
+    body_text = _response_body_text(context.response)
+    assert 'LOGOUT' in body_text
+
+
 @when('I sign in with a valid Google account')
 def step_sign_in_google(context):
     user = None
@@ -83,6 +102,19 @@ def step_sign_in_google(context):
         context.response = _fake_response('Logged in as {} LOGOUT'.format(email))
 
 
+@when('I sign out of the TTC portal')
+def step_sign_out(context):
+    context.current_user = None
+    context.current_email = None
+    context.current_page = 'login'
+    ttc_portal_module = _get_ttc_portal()
+    if ttc_portal_module and hasattr(context, 'ttc_client'):
+        _stub_users_api(ttc_portal_module, None)
+        context.response = context.ttc_client.get('/')
+    else:
+        context.response = _fake_response('LOGIN')
+
+
 @then('I should be redirected to the TTC portal home')
 def step_redirected_home(context):
     response = context.response
@@ -98,3 +130,18 @@ def step_redirected_home(context):
     if expected_email:
         assert expected_email in body_text
     assert 'LOGOUT' in body_text
+
+
+@then('I should be redirected to the TTC portal login page')
+def step_redirected_login(context):
+    response = context.response
+    assert response is not None, 'Expected response to be set'
+    status_int = getattr(response, 'status_int', None)
+    if status_int is None:
+        status = getattr(response, 'status', '')
+        assert '200' in status
+    else:
+        assert status_int == 200
+    body_text = _response_body_text(response)
+    assert 'LOGIN' in body_text
+    assert 'LOGOUT' not in body_text

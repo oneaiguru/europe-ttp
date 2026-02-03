@@ -43,8 +43,8 @@ export const STEPS = {
   },
   'I am authenticated on the TTC portal': {
     pattern: /^I\ am\ authenticated\ on\ the\ TTC\ portal$/,
-    python: 'test/python/steps/auth_steps.py:1',
-    typescript: 'test/typescript/steps/auth_steps.ts:1',
+    python: 'test/python/steps/auth_steps.py:69',
+    typescript: 'test/typescript/steps/auth_steps.ts:41',
     features: ['specs/features/auth/logout.feature:8', 'specs/features/portal/home.feature:8', 'specs/features/portal/tabs.feature:8', 'specs/features/uploads/photo_upload.feature:8', 'specs/features/uploads/document_upload.feature:8', 'specs/features/api/upload_form.feature:8', 'specs/features/user/form_data_upload.feature:8', 'specs/features/user/config_management.feature:8', 'specs/features/user/config_management.feature:14', 'specs/features/reports/certificate.feature:8'],
   },
   'I am on the TTC portal login page': {
@@ -283,8 +283,8 @@ export const STEPS = {
   },
   'I should be redirected to the TTC portal login page': {
     pattern: /^I\ should\ be\ redirected\ to\ the\ TTC\ portal\ login\ page$/,
-    python: 'test/python/steps/auth_steps.py:1',
-    typescript: 'test/typescript/steps/auth_steps.ts:1',
+    python: 'test/python/steps/auth_steps.py:135',
+    typescript: 'test/typescript/steps/auth_steps.ts:77',
     features: ['specs/features/auth/logout.feature:10'],
   },
   'I should receive a password reset prompt from the identity provider': {
@@ -487,8 +487,8 @@ export const STEPS = {
   },
   'I sign out of the TTC portal': {
     pattern: /^I\ sign\ out\ of\ the\ TTC\ portal$/,
-    python: 'test/python/steps/auth_steps.py:1',
-    typescript: 'test/typescript/steps/auth_steps.ts:1',
+    python: 'test/python/steps/auth_steps.py:105',
+    typescript: 'test/typescript/steps/auth_steps.ts:61',
     features: ['specs/features/auth/logout.feature:9'],
   },
   'I submit form data to the upload form API': {

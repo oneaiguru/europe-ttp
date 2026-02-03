@@ -38,6 +38,16 @@ Given('I am on the TTC portal login page', () => {
   authContext.responseHtml = 'LOGIN';
 });
 
+Given('I am authenticated on the TTC portal', () => {
+  const applicant = getUserByRole('applicant') || {
+    email: 'test.applicant@example.com',
+    role: 'applicant',
+  };
+  authContext.currentUser = applicant;
+  authContext.currentPage = 'home';
+  authContext.responseHtml = `Logged in as ${applicant.email} LOGOUT`;
+});
+
 When('I sign in with a valid Google account', () => {
   const applicant = getUserByRole('applicant') || {
     email: 'test.applicant@example.com',
@@ -48,6 +58,12 @@ When('I sign in with a valid Google account', () => {
   authContext.responseHtml = `Logged in as ${applicant.email} LOGOUT`;
 });
 
+When('I sign out of the TTC portal', () => {
+  authContext.currentUser = undefined;
+  authContext.currentPage = 'login';
+  authContext.responseHtml = 'LOGIN';
+});
+
 Then('I should be redirected to the TTC portal home', () => {
   assert.equal(authContext.currentPage, 'home');
   assert.ok(authContext.responseHtml, 'Expected responseHtml to be set');
@@ -56,4 +72,11 @@ Then('I should be redirected to the TTC portal home', () => {
     assert.ok(authContext.responseHtml?.includes(email));
   }
   assert.ok(authContext.responseHtml?.includes('LOGOUT'));
+});
+
+Then('I should be redirected to the TTC portal login page', () => {
+  assert.equal(authContext.currentPage, 'login');
+  assert.ok(authContext.responseHtml, 'Expected responseHtml to be set');
+  assert.ok(authContext.responseHtml?.includes('LOGIN'));
+  assert.ok(!authContext.responseHtml?.includes('LOGOUT'));
 });

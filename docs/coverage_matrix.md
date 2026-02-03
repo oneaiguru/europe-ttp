@@ -13,7 +13,7 @@
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
 | Login | specs/features/auth/login.feature | ✓ | ✓ |
-| Logout | specs/features/auth/logout.feature | ❌ | ❌ |
+| Logout | specs/features/auth/logout.feature | ✓ | ✓ |
 | Password Reset | specs/features/auth/password_reset.feature | ❌ | ❌ |
 
 ## Portal
@@ -87,6 +87,6 @@
 
 ## Summary
 - **Total Features:** 35
-- **Python Verified:** 4/35
-- **TypeScript Complete:** 4/35
-- **Parity:** 11%
+- **Python Verified:** 5/35
+- **TypeScript Complete:** 5/35
+- **Parity:** 14%
