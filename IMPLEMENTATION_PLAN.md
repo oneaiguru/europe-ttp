@@ -50,7 +50,7 @@
 | TASK-004 | p1 | specs/features/portal/home.feature | 🔴 TODO | |
 | TASK-005 | p2 | specs/features/portal/disabled.feature | 🔴 TODO | |
 | TASK-006 | p3 | specs/features/portal/tabs.feature | 🔴 TODO | |
-| TASK-007 | p2 | specs/features/admin/access.feature | 🔴 TODO | |
+| TASK-007 | p2 | specs/features/admin/access.feature | ✅ DONE | |
 | TASK-008 | p1 | specs/features/admin/permissions.feature | 🔴 TODO | |
 | TASK-009 | p2 | specs/features/admin/reports_pages.feature | 🔴 TODO | |
 | TASK-010 | p3 | specs/features/admin/settings.feature | 🔴 TODO | |

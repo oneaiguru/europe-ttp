@@ -31,8 +31,8 @@ export const STEPS = {
   },
   'I am authenticated as an admin user': {
     pattern: /^I\ am\ authenticated\ as\ an\ admin\ user$/,
-    python: 'test/python/steps/admin_steps.py:1',
-    typescript: 'test/typescript/steps/admin_steps.ts:1',
+    python: 'test/python/steps/admin_steps.py:48',
+    typescript: 'test/typescript/steps/admin_steps.ts:43',
     features: ['specs/features/admin/access.feature:8', 'specs/features/admin/reports_pages.feature:8', 'specs/features/admin/settings.feature:8', 'specs/features/user/reporting_get_form_data.feature:8', 'specs/features/reports/user_summary.feature:8', 'specs/features/reports/user_summary.feature:14', 'specs/features/reports/user_integrity.feature:8', 'specs/features/reports/user_integrity.feature:14', 'specs/features/reports/user_integrity.feature:20', 'specs/features/reports/user_report.feature:8', 'specs/features/reports/user_report.feature:14', 'specs/features/reports/user_report.feature:20', 'specs/features/reports/print_form.feature:8', 'specs/features/reports/participant_list.feature:8'],
   },
   'I am authenticated as an evaluator': {
@@ -127,8 +127,8 @@ export const STEPS = {
   },
   'I open the admin dashboard page': {
     pattern: /^I\ open\ the\ admin\ dashboard\ page$/,
-    python: 'test/python/steps/admin_steps.py:1',
-    typescript: 'test/typescript/steps/admin_steps.ts:1',
+    python: 'test/python/steps/admin_steps.py:56',
+    typescript: 'test/typescript/steps/admin_steps.ts:53',
     features: ['specs/features/admin/access.feature:9'],
   },
   'I open the admin reports list page': {
@@ -427,8 +427,8 @@ export const STEPS = {
   },
   'I should see the admin dashboard content': {
     pattern: /^I\ should\ see\ the\ admin\ dashboard\ content$/,
-    python: 'test/python/steps/admin_steps.py:1',
-    typescript: 'test/typescript/steps/admin_steps.ts:1',
+    python: 'test/python/steps/admin_steps.py:61',
+    typescript: 'test/typescript/steps/admin_steps.ts:69',
     features: ['specs/features/admin/access.feature:10'],
   },
   'I should see the admin settings content': {
