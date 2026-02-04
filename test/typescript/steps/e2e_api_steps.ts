@@ -94,6 +94,8 @@ function loadTestUsers(): TestUser[] {
   // In a real implementation, load from test/fixtures/test-users.json
   return [
     { email: 'test.applicant@example.com', role: 'applicant', home_country: 'US', name: 'Test Applicant' },
+    { email: 'test.applicant.ca@example.com', role: 'applicant', home_country: 'CA', name: 'Test Applicant Canada' },
+    { email: 'test.applicant.in@example.com', role: 'applicant', home_country: 'IN', name: 'Test Applicant India' },
     { email: 'test.evaluator1@example.com', role: 'evaluator', home_country: 'US', name: 'Test Evaluator One' },
     { email: 'test.evaluator2@example.com', role: 'evaluator', home_country: 'US', name: 'Test Evaluator Two' },
     { email: 'test.admin@example.com', role: 'admin', home_country: 'US', name: 'Test Admin' },
@@ -118,6 +120,20 @@ function loadTestTTCOptions(): TTCOption[] {
       display_until: '2027-12-31 23:59:59',
       display_countries: ['CA'],
       display_data: { country: 'Canada', venue: 'Test Venue, Canada', fees: '$4500 CAD' },
+    },
+    {
+      value: 'test_in_future',
+      display: 'Test TTC (Future) - India',
+      display_until: '2027-12-31 23:59:59',
+      display_countries: ['IN'],
+      display_data: { country: 'India', venue: 'Test Venue, India', fees: '₹150000 INR' },
+    },
+    {
+      value: 'test_multi_country',
+      display: 'Test TTC (Multi-Country)',
+      display_until: '2027-12-31 23:59:59',
+      display_countries: ['US', 'CA'],
+      display_data: { country: 'Multi', venue: 'Test Venue, Multi', fees: 'Varies' },
     },
     {
       value: 'test_expired',
@@ -168,6 +184,20 @@ Given('I am authenticated as {string} with email {string}', (role: string, email
   testContext.currentUser = getUserByEmail(email);
   testContext.currentEmail = email;
   testContext.currentRole = role;
+});
+
+Given('I am authenticated as {string}', (email: string) => {
+  const user = getUserByEmail(email);
+  if (user) {
+    testContext.currentUser = user;
+    testContext.currentEmail = email;
+    testContext.currentRole = user.role;
+  } else {
+    // Fallback if no user found
+    testContext.currentEmail = email;
+    testContext.currentRole = 'applicant';
+    testContext.currentUser = undefined;
+  }
 });
 
 // ============================================================================

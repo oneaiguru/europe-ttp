@@ -754,9 +754,9 @@ export const STEPS = {
   },
   'I am authenticated as {string}': {
     pattern: /^I\ am\ authenticated\ as\ "([^"]*)"$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/post_ttc_coteaching_cycle.feature:12', 'specs/features/e2e/post_ttc_coteaching_cycle.feature:27', 'specs/features/e2e/post_ttc_coteaching_cycle.feature:46', 'specs/features/e2e/home_country_changes_available_ttcs.feature:9'],
+    python: 'test/python/steps/e2e_api_steps.py:51',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:174',
+    features: ['specs/features/e2e/post_ttc_coteaching_cycle.feature:12', 'specs/features/e2e/post_ttc_coteaching_cycle.feature:27', 'specs/features/e2e/post_ttc_coteaching_cycle.feature:46', 'specs/features/e2e/home_country_changes_available_ttcs.feature:35', 'specs/features/e2e/home_country_changes_available_ttcs.feature:42', 'specs/features/e2e/home_country_changes_available_ttcs.feature:43', 'specs/features/e2e/home_country_changes_available_ttcs.feature:44'],
   },
   'test TTC option {string} is available': {
     pattern: /^test\ TTC\ option\ "([^"]*)"\ is\ available$/,

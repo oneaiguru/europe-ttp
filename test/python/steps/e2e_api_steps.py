@@ -48,6 +48,21 @@ def step_auth_as_role(context, role, email):
     context.current_role = role
 
 
+@given('I am authenticated as "{email}"')
+def step_auth_by_email(context, email):
+    """Set the current user context by email, inferring role from user data."""
+    user = context.get_user(email) if hasattr(context, 'get_user') else None
+    if user:
+        context.current_user = user
+        context.current_email = email
+        context.current_role = user.get('role', 'applicant')
+    else:
+        # Fallback if no user found
+        context.current_email = email
+        context.current_role = 'applicant'
+        context.current_user = None
+
+
 # ============================================================================
 # TTC OPTION & CONFIGURATION STEPS
 # ============================================================================
