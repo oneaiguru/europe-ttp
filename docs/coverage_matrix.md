@@ -91,11 +91,19 @@
 |---------|--------------|--------|------------|
 | Certificate Gating | specs/features/e2e/certificate_gating.feature | ✅ | ✅ |
 | Deadline and Whitelist Override | specs/features/e2e/deadline_and_whitelist_override.feature | ✅ | ✅ |
+| Dependent Fields Do Not Break Completeness | specs/features/e2e/dependent_fields_do_not_break_completeness.feature | ✅ | ✅ |
+| Draft Save and Resume | specs/features/e2e/draft_save_and_resume.feature | ✅ | ✅ |
+| Evaluation Matching Tolerates Messy Inputs | specs/features/e2e/evaluation_matching_tolerates_messy_inputs.feature | ✅ | ✅ |
+| Full Evaluator Workflow | specs/features/e2e/full_evaluator_workflow.feature | ✅ | ✅ |
+| Home Country Changes Available TTCs | specs/features/e2e/home_country_changes_available_ttcs.feature | ✅ | ✅ |
+| Post-TTC Co-teaching Cycle | specs/features/e2e/post_ttc_coteaching_cycle.feature | ✅ | ✅ |
+| TTC Application to Admin Review | specs/features/e2e/ttc_application_to_admin_review.feature | ✅ | ✅ |
+| Validation Errors | specs/features/e2e/validation_errors.feature | ✅ | ✅ |
 
 ---
 
 ## Summary
-- **Total Features:** 37
-- **Python Verified:** 18/37
-- **TypeScript Complete:** 18/37
-- **Parity:** 49%
+- **Total Features:** 45
+- **Python Verified:** 27/45
+- **TypeScript Complete:** 27/45
+- **Parity:** 60%

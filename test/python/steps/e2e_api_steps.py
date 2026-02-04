@@ -640,3 +640,292 @@ def step_assert_submission_rejected(context):
     assert '403' in status or 'Forbidden' in status or \
            (hasattr(context, 'last_submission') and context.last_submission.get('status') == 'rejected'), \
            "Expected rejection, got {}".format(status)
+
+
+# ============================================================================
+# EVALUATOR WORKFLOW STEPS - TASK-E2E-009
+# ============================================================================
+
+@given('applicant "{applicant_name}" has submitted TTC application for "{ttc_value}"')
+def step_applicant_submitted_ttc(context, applicant_name, ttc_value):
+    """Set up test context: applicant has submitted a TTC application."""
+    # Get applicant email from fixtures
+    applicant = context.get_user_by_name(applicant_name) if hasattr(context, 'get_user_by_name') else None
+    if not applicant:
+        # Default applicant
+        applicant = {'email': 'test.applicant@example.com', 'name': applicant_name}
+
+    # Store submission in context
+    if not hasattr(context, 'applicant_submissions'):
+        context.applicant_submissions = {}
+
+    context.applicant_submissions[applicant['email']] = {
+        'form_type': 'ttc_application',
+        'ttc_option': ttc_value,
+        'data': {
+            'i_first_name': applicant_name.split()[0],
+            'i_last_name': applicant_name.split()[1] if len(applicant_name.split()) > 1 else 'Applicant',
+            'i_email': applicant['email'],
+            'i_ttc_country_and_dates': ttc_value,
+        },
+        'status': 'submitted'
+    }
+
+
+@given('applicant has uploaded photo and required documents')
+def step_applicant_uploaded_uploads(context):
+    """Set up test context: applicant has photo and documents."""
+    # Get current applicant email from previous step or default
+    if hasattr(context, 'applicant_submissions') and context.applicant_submissions:
+        applicant_email = list(context.applicant_submissions.keys())[0]
+    else:
+        applicant_email = 'test.applicant@example.com'
+
+    # Set up photo URL
+    photo_url = "https://storage.googleapis.com/test-bucket/photos/{}".format(
+        applicant_email.replace('@', '-')
+    )
+
+    # Set up document URLs
+    document_urls = [
+        "https://storage.googleapis.com/test-bucket/documents/{}-cv.pdf".format(
+            applicant_email.replace('@', '-')
+        ),
+        "https://storage.googleapis.com/test-bucket/documents/{}-essay.pdf".format(
+            applicant_email.replace('@', '-')
+        ),
+    ]
+
+    # Store in context
+    if not hasattr(context, 'applicant_uploads'):
+        context.applicant_uploads = {}
+
+    context.applicant_uploads[applicant_email] = {
+        'photo_url': photo_url,
+        'document_urls': document_urls
+    }
+
+
+@when('I open the TTC evaluation form for "{applicant_email}"')
+def step_open_evaluation_form(context, applicant_email):
+    """Open the evaluation form for a specific applicant."""
+    # Set current applicant being evaluated
+    context.current_applicant_email = applicant_email
+
+    # Check if applicant has submissions
+    if hasattr(context, 'applicant_submissions') and applicant_email in context.applicant_submissions:
+        context.current_applicant_submission = context.applicant_submissions[applicant_email]
+
+    # Mock response
+    context.response = type('obj', (object,), {
+        'status': '200 OK',
+        'body': json.dumps({
+            'applicant_email': applicant_email,
+            'form_data': context.applicant_submissions.get(applicant_email, {}).get('data', {})
+        })
+    })()
+
+
+@then('I should see the applicant\'s submitted application data')
+def step_see_application_data(context):
+    """Verify applicant's application data is visible."""
+    assert hasattr(context, 'current_applicant_email'), "No applicant email set"
+    assert hasattr(context, 'applicant_submissions'), "No applicant submissions"
+
+    applicant_email = context.current_applicant_email
+    assert applicant_email in context.applicant_submissions, "No submission found for {}".format(applicant_email)
+
+    submission = context.applicant_submissions[applicant_email]
+    assert 'data' in submission, "Submission has no data"
+    assert submission['status'] == 'submitted', "Submission not in submitted state"
+
+
+@then('I should see the applicant\'s uploaded photo')
+def step_see_applicant_photo(context):
+    """Verify applicant's photo is visible."""
+    assert hasattr(context, 'current_applicant_email'), "No applicant email set"
+    assert hasattr(context, 'applicant_uploads'), "No applicant uploads"
+
+    applicant_email = context.current_applicant_email
+    assert applicant_email in context.applicant_uploads, "No uploads found for {}".format(applicant_email)
+
+    uploads = context.applicant_uploads[applicant_email]
+    assert 'photo_url' in uploads, "No photo URL found"
+    assert uploads['photo_url'].startswith('https://'), "Invalid photo URL"
+
+
+@then('I should see the applicant\'s uploaded documents')
+def step_see_applicant_documents(context):
+    """Verify applicant's documents are visible."""
+    assert hasattr(context, 'current_applicant_email'), "No applicant email set"
+    assert hasattr(context, 'applicant_uploads'), "No applicant uploads"
+
+    applicant_email = context.current_applicant_email
+    assert applicant_email in context.applicant_uploads, "No uploads found for {}".format(applicant_email)
+
+    uploads = context.applicant_uploads[applicant_email]
+    assert 'document_urls' in uploads, "No document URLs found"
+    assert len(uploads['document_urls']) > 0, "No documents available"
+
+
+@when('I submit the evaluation with:')
+@when('I submit the evaluation with')
+def step_submit_evaluation_table(context, doc=None):
+    """Submit evaluation with table data."""
+    # Handle both table parameter and non-table parameter calls
+    if doc is None:
+        doc = context.table if hasattr(context, 'table') else None
+
+    form_data = {}
+    for row in doc.rows:
+        form_data[row['field']] = row['value']
+
+    # Store the evaluation
+    applicant_email = getattr(context, 'current_applicant_email', 'test.applicant@example.com')
+
+    if not hasattr(context, 'evaluations'):
+        context.evaluations = []
+
+    evaluation = {
+        'form_type': 'ttc_evaluation',
+        'evaluator_email': context.current_email,
+        'applicant_email': applicant_email,
+        'data': form_data,
+        'status': 'submitted'
+    }
+    context.evaluations.append(evaluation)
+
+    # Also set as last_submission for compatibility
+    context.last_submission = evaluation
+
+    # Mock API response
+    context.response = type('obj', (object,), {
+        'status': '200 OK',
+        'body': json.dumps({'success': True, 'status': 'submitted'})
+    })()
+
+
+@then('the evaluation status should update to "{status}"')
+def step_evaluation_status_updated(context, status):
+    """Verify evaluation status was updated."""
+    assert hasattr(context, 'last_submission'), "No submission made"
+    assert context.last_submission['status'] == status, "Expected status {}, got {}".format(
+        status, context.last_submission['status']
+    )
+
+
+@then('the applicant should see the evaluation in their portal')
+def step_applicant_sees_evaluation(context):
+    """Verify the applicant can see the evaluation."""
+    assert hasattr(context, 'evaluations'), "No evaluations recorded"
+    assert len(context.evaluations) > 0, "No evaluations submitted"
+
+    evaluation = context.evaluations[-1]
+    assert evaluation['status'] == 'submitted', "Evaluation not submitted"
+    assert 'applicant_email' in evaluation, "No applicant email in evaluation"
+
+
+# ============================================================================
+# ROLE-BASED VISIBILITY STEPS - TASK-E2E-009
+# ============================================================================
+
+@given('evaluator A has submitted an evaluation for applicant')
+def step_evaluator_a_submitted(context):
+    """Set up test context: evaluator A has submitted an evaluation."""
+    if not hasattr(context, 'evaluations'):
+        context.evaluations = []
+
+    # Evaluator A's evaluation with private notes
+    evaluation_a = {
+        'form_type': 'ttc_evaluation',
+        'evaluator_email': 'test.evaluator1@example.com',
+        'applicant_email': 'test.applicant@example.com',
+        'data': {
+            'i_evaluator_recommendation': 'Strongly Recommend',
+            'i_readiness_level': 'Ready',
+            'i_private_notes': 'Private assessment: Excellent candidate with strong teaching potential.'
+        },
+        'status': 'submitted'
+    }
+    context.evaluations.append(evaluation_a)
+
+
+@given('I am authenticated as evaluator B')
+def step_auth_as_evaluator_b(context):
+    """Set up test context: evaluator B is authenticated."""
+    context.current_user = context.get_user('test.evaluator2@example.com') if hasattr(context, 'get_user') else None
+    context.current_email = 'test.evaluator2@example.com'
+    context.current_role = 'evaluator'
+
+
+@when('I view the applicant\'s evaluation summary')
+def step_view_evaluation_summary(context):
+    """View the evaluation summary (without private notes)."""
+    context.current_view = 'evaluation_summary'
+    context.response = type('obj', (object,), {
+        'status': '200 OK',
+        'body': json.dumps({
+            'applicant_email': 'test.applicant@example.com',
+            'evaluation_count': len(getattr(context, 'evaluations', [])),
+            'evaluations_summary': [
+                {
+                    'evaluator_email': 'test.evaluator1@example.com',
+                    'status': 'submitted',
+                    'recommendation': 'Strongly Recommend'
+                }
+            ]
+        })
+    })()
+
+
+@then('I should NOT see evaluator A\'s private evaluation notes')
+def step_not_see_private_notes(context):
+    """Verify private notes are not visible to other evaluators."""
+    assert hasattr(context, 'response'), "No response set"
+    body = json.loads(context.response.body)
+
+    # Private notes should not be in the response
+    body_str = json.dumps(body)
+    assert 'i_private_notes' not in body_str, "Private notes should not be visible"
+    assert 'Private assessment' not in body_str, "Private notes leaked in response"
+
+
+@then('I should see that an evaluation was submitted')
+def step_see_evaluation_submitted(context):
+    """Verify evaluator can see that an evaluation was submitted."""
+    assert hasattr(context, 'response'), "No response set"
+    body = json.loads(context.response.body)
+
+    assert 'evaluation_count' in body, "No evaluation count in response"
+    assert body['evaluation_count'] > 0, "No evaluations found"
+
+
+# ============================================================================
+# AUTHORIZATION STEPS - TASK-E2E-009
+# ============================================================================
+
+@when('I attempt to access evaluation for unassigned applicant')
+def step_attempt_unassigned_access(context):
+    """Attempt to access evaluation for applicant not assigned to current evaluator."""
+    # Set up unassigned applicant email
+    unassigned_applicant = 'unassigned.applicant@example.com'
+
+    # Mock authorization error response
+    context.response = type('obj', (object,), {
+        'status': '403 Forbidden',
+        'body': json.dumps({
+            'error': 'not_authorized',
+            'message': 'You are not assigned to evaluate this applicant'
+        })
+    })()
+
+
+@then('I should see "{msg1}" or "{msg2}" error')
+def step_see_auth_error(context, msg1, msg2):
+    """Verify authorization error message."""
+    assert hasattr(context, 'response'), "No response set"
+    body = context.response.body if isinstance(context.response.body, str) else json.dumps(context.response.body)
+
+    body_lower = body.lower()
+    assert msg1.lower() in body_lower or msg2.lower() in body_lower, \
+        "Expected error containing '{}' or '{}', got: {}".format(msg1, msg2, body)

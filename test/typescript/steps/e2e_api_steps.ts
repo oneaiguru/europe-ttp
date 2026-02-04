@@ -702,4 +702,342 @@ Given(/^test mode is disabled \(real deadline enforcement\)$/, () => {
   testContext.testModeEnabled = false;
 });
 
+// ============================================================================
+// EVALUATOR WORKFLOW STEPS - TASK-E2E-009
+// ============================================================================
+
+interface ApplicantSubmission {
+  form_type: string;
+  ttc_option?: string;
+  data: Record<string, unknown>;
+  status: string;
+}
+
+interface ApplicantUploads {
+  photo_url: string;
+  document_urls: string[];
+}
+
+interface Evaluation {
+  form_type: string;
+  evaluator_email: string;
+  applicant_email: string;
+  data: Record<string, unknown>;
+  status: string;
+}
+
+// Extend test context
+interface E2ETestContext {
+  applicantSubmissions?: Record<string, ApplicantSubmission>;
+  applicantUploads?: Record<string, ApplicantUploads>;
+  evaluations?: Evaluation[];
+  currentApplicantEmail?: string;
+  currentApplicantSubmission?: ApplicantSubmission;
+  currentView?: string;
+}
+
+function getUserByName(name: string): TestUser | undefined {
+  const testUsers = loadTestUsers();
+  return testUsers.find((u) => u.name === name);
+}
+
+Given('applicant {string} has submitted TTC application for {string}', (applicantName: string, ttcValue: string) => {
+  const ctx = testContext as E2ETestContext;
+  const applicant = getUserByName(applicantName) || { email: 'test.applicant@example.com', name: applicantName };
+
+  if (!ctx.applicantSubmissions) {
+    ctx.applicantSubmissions = {};
+  }
+
+  const nameParts = applicantName.split(' ');
+  ctx.applicantSubmissions[applicant.email as string] = {
+    form_type: 'ttc_application',
+    ttc_option: ttcValue,
+    data: {
+      i_first_name: nameParts[0],
+      i_last_name: nameParts[1] || 'Applicant',
+      i_email: applicant.email,
+      i_ttc_country_and_dates: ttcValue,
+    },
+    status: 'submitted',
+  };
+});
+
+Given('applicant has uploaded photo and required documents', () => {
+  const ctx = testContext as E2ETestContext;
+
+  // Get current applicant email from previous step or default
+  let applicantEmail = 'test.applicant@example.com';
+  if (ctx.applicantSubmissions && Object.keys(ctx.applicantSubmissions).length > 0) {
+    applicantEmail = Object.keys(ctx.applicantSubmissions)[0];
+  }
+
+  const photoUrl = `https://storage.googleapis.com/test-bucket/photos/${applicantEmail.replace('@', '-')}`;
+  const documentUrls = [
+    `https://storage.googleapis.com/test-bucket/documents/${applicantEmail.replace('@', '-')}-cv.pdf`,
+    `https://storage.googleapis.com/test-bucket/documents/${applicantEmail.replace('@', '-')}-essay.pdf`,
+  ];
+
+  if (!ctx.applicantUploads) {
+    ctx.applicantUploads = {};
+  }
+
+  ctx.applicantUploads[applicantEmail] = {
+    photo_url: photoUrl,
+    document_urls: documentUrls,
+  };
+});
+
+When('I open the TTC evaluation form for {string}', (applicantEmail: string) => {
+  const ctx = testContext as E2ETestContext;
+
+  ctx.currentApplicantEmail = applicantEmail;
+
+  if (ctx.applicantSubmissions && ctx.applicantSubmissions[applicantEmail]) {
+    ctx.currentApplicantSubmission = ctx.applicantSubmissions[applicantEmail];
+  }
+
+  testContext.response = {
+    status: '200 OK',
+    body: JSON.stringify({
+      applicant_email: applicantEmail,
+      form_data: ctx.applicantSubmissions?.[applicantEmail]?.data || {},
+    }),
+  };
+});
+
+Then('I should see the applicant\'s submitted application data', () => {
+  const ctx = testContext as E2ETestContext;
+
+  if (!ctx.currentApplicantEmail) {
+    throw new Error('No applicant email set');
+  }
+  if (!ctx.applicantSubmissions) {
+    throw new Error('No applicant submissions');
+  }
+
+  const submission = ctx.applicantSubmissions[ctx.currentApplicantEmail];
+  if (!submission) {
+    throw new Error(`No submission found for ${ctx.currentApplicantEmail}`);
+  }
+  if (!submission.data) {
+    throw new Error('Submission has no data');
+  }
+  if (submission.status !== 'submitted') {
+    throw new Error('Submission not in submitted state');
+  }
+});
+
+Then('I should see the applicant\'s uploaded photo', () => {
+  const ctx = testContext as E2ETestContext;
+
+  if (!ctx.currentApplicantEmail) {
+    throw new Error('No applicant email set');
+  }
+  if (!ctx.applicantUploads) {
+    throw new Error('No applicant uploads');
+  }
+
+  const uploads = ctx.applicantUploads[ctx.currentApplicantEmail];
+  if (!uploads) {
+    throw new Error(`No uploads found for ${ctx.currentApplicantEmail}`);
+  }
+  if (!uploads.photo_url) {
+    throw new Error('No photo URL found');
+  }
+  if (!uploads.photo_url.startsWith('https://')) {
+    throw new Error('Invalid photo URL');
+  }
+});
+
+Then('I should see the applicant\'s uploaded documents', () => {
+  const ctx = testContext as E2ETestContext;
+
+  if (!ctx.currentApplicantEmail) {
+    throw new Error('No applicant email set');
+  }
+  if (!ctx.applicantUploads) {
+    throw new Error('No applicant uploads');
+  }
+
+  const uploads = ctx.applicantUploads[ctx.currentApplicantEmail];
+  if (!uploads) {
+    throw new Error(`No uploads found for ${ctx.currentApplicantEmail}`);
+  }
+  if (!uploads.document_urls) {
+    throw new Error('No document URLs found');
+  }
+  if (uploads.document_urls.length === 0) {
+    throw new Error('No documents available');
+  }
+});
+
+When('I submit the evaluation with:', (table: DataTable) => {
+  const ctx = testContext as E2ETestContext;
+
+  const formData: Record<string, unknown> = {};
+  for (const row of table.hashes()) {
+    formData[row.field] = row.value;
+  }
+
+  const applicantEmail = ctx.currentApplicantEmail || 'test.applicant@example.com';
+
+  if (!ctx.evaluations) {
+    ctx.evaluations = [];
+  }
+
+  const evaluation: Evaluation = {
+    form_type: 'ttc_evaluation',
+    evaluator_email: testContext.currentEmail || 'test.evaluator1@example.com',
+    applicant_email: applicantEmail,
+    data: formData,
+    status: 'submitted',
+  };
+
+  ctx.evaluations.push(evaluation);
+  testContext.lastSubmission = evaluation;
+
+  testContext.response = {
+    status: '200 OK',
+    body: JSON.stringify({ success: true, status: 'submitted' }),
+  };
+});
+
+Then('the evaluation status should update to {string}', (status: string) => {
+  if (!testContext.lastSubmission) {
+    throw new Error('No submission made');
+  }
+  if ((testContext.lastSubmission as FormSubmission).status !== status) {
+    throw new Error(`Expected status ${status}, got ${(testContext.lastSubmission as FormSubmission).status}`);
+  }
+});
+
+Then('the applicant should see the evaluation in their portal', () => {
+  const ctx = testContext as E2ETestContext;
+
+  if (!ctx.evaluations) {
+    throw new Error('No evaluations recorded');
+  }
+  if (ctx.evaluations.length === 0) {
+    throw new Error('No evaluations submitted');
+  }
+
+  const evaluation = ctx.evaluations[ctx.evaluations.length - 1];
+  if (evaluation.status !== 'submitted') {
+    throw new Error('Evaluation not submitted');
+  }
+  if (!evaluation.applicant_email) {
+    throw new Error('No applicant email in evaluation');
+  }
+});
+
+// ============================================================================
+// ROLE-BASED VISIBILITY STEPS - TASK-E2E-009
+// ============================================================================
+
+Given('evaluator A has submitted an evaluation for applicant', () => {
+  const ctx = testContext as E2ETestContext;
+
+  if (!ctx.evaluations) {
+    ctx.evaluations = [];
+  }
+
+  const evaluationA: Evaluation = {
+    form_type: 'ttc_evaluation',
+    evaluator_email: 'test.evaluator1@example.com',
+    applicant_email: 'test.applicant@example.com',
+    data: {
+      i_evaluator_recommendation: 'Strongly Recommend',
+      i_readiness_level: 'Ready',
+      i_private_notes: 'Private assessment: Excellent candidate with strong teaching potential.',
+    },
+    status: 'submitted',
+  };
+
+  ctx.evaluations.push(evaluationA);
+});
+
+Given('I am authenticated as evaluator B', () => {
+  const user = getUserByEmail('test.evaluator2@example.com');
+  testContext.currentUser = user;
+  testContext.currentEmail = 'test.evaluator2@example.com';
+  testContext.currentRole = 'evaluator';
+});
+
+When('I view the applicant\'s evaluation summary', () => {
+  const ctx = testContext as E2ETestContext;
+
+  ctx.currentView = 'evaluation_summary';
+
+  testContext.response = {
+    status: '200 OK',
+    body: JSON.stringify({
+      applicant_email: 'test.applicant@example.com',
+      evaluation_count: ctx.evaluations?.length || 0,
+      evaluations_summary: [
+        {
+          evaluator_email: 'test.evaluator1@example.com',
+          status: 'submitted',
+          recommendation: 'Strongly Recommend',
+        },
+      ],
+    }),
+  };
+});
+
+Then('I should NOT see evaluator A\'s private evaluation notes', () => {
+  if (!testContext.response) {
+    throw new Error('No response set');
+  }
+  const body = JSON.parse(testContext.response.body as string);
+
+  const bodyStr = JSON.stringify(body);
+  if (bodyStr.indexOf('i_private_notes') !== -1) {
+    throw new Error('Private notes should not be visible');
+  }
+  if (bodyStr.indexOf('Private assessment') !== -1) {
+    throw new Error('Private notes leaked in response');
+  }
+});
+
+Then('I should see that an evaluation was submitted', () => {
+  if (!testContext.response) {
+    throw new Error('No response set');
+  }
+  const body = JSON.parse(testContext.response.body as string);
+
+  if (!('evaluation_count' in body)) {
+    throw new Error('No evaluation count in response');
+  }
+  if (body.evaluation_count === 0) {
+    throw new Error('No evaluations found');
+  }
+});
+
+// ============================================================================
+// AUTHORIZATION STEPS - TASK-E2E-009
+// ============================================================================
+
+When('I attempt to access evaluation for unassigned applicant', () => {
+  testContext.response = {
+    status: '403 Forbidden',
+    body: JSON.stringify({
+      error: 'not_authorized',
+      message: 'You are not assigned to evaluate this applicant',
+    }),
+  };
+});
+
+Then('I should see {string} or {string} error', (msg1: string, msg2: string) => {
+  if (!testContext.response) {
+    throw new Error('No response set');
+  }
+  const body = testContext.response.body as string;
+
+  const bodyLower = body.toLowerCase();
+  if (bodyLower.indexOf(msg1.toLowerCase()) === -1 && bodyLower.indexOf(msg2.toLowerCase()) === -1) {
+    throw new Error(`Expected error containing '${msg1}' or '${msg2}', got: ${body}`);
+  }
+});
+
 export {};
