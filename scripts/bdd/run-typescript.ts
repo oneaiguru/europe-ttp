@@ -21,10 +21,9 @@ await mkdir(OUTPUT_DIR, { recursive: true }).catch(() => {});
 console.log(`[run-typescript] Running Cucumber on: ${featurePath}`);
 
 const proc = spawn(
-  'node',
+  'npx',
   [
-    '--loader',
-    'ts-node/esm',
+    'tsx',
     'node_modules/.bin/cucumber-js',
     featurePath,
     '-f',
@@ -35,7 +34,7 @@ const proc = spawn(
   {
     cwd: PROJECT_ROOT,
     stdio: 'inherit',
-    env: { ...process.env, TS_NODE_PROJECT: 'tsconfig.json' },
+    env: process.env,
   },
 );
 
