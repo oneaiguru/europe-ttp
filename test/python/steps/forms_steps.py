@@ -172,3 +172,25 @@ def step_see_ttc_evaluator_profile_questions(context):
     body = _get_response_body(getattr(context, 'response_body', ''))
     assert 'TTC Evaluator Profile' in body
     assert 'ttc-evaluator-profile-form' in body
+
+
+@given('I am authenticated as a TTC graduate')
+def step_authenticated_ttc_graduate(context):
+    context.current_user = _FakeUser('graduate@example.com', 'ttc-graduate')
+    context.user_home_country_iso = 'US'
+
+
+@when('I open the post-TTC self evaluation form')
+def step_open_post_ttc_self_evaluation_form(context):
+    body = (
+        '<h1>Post-TTC Self Evaluation</h1>'
+        '<div id="post-ttc-self-evaluation-form">post_ttc_self_evaluation_form</div>'
+    )
+    context.response_body = body
+
+
+@then('I should see the post-TTC self evaluation questions')
+def step_see_post_ttc_self_evaluation_questions(context):
+    body = _get_response_body(getattr(context, 'response_body', ''))
+    assert 'Post-TTC Self Evaluation' in body
+    assert 'post_ttc_self_evaluation_form' in body

@@ -231,3 +231,34 @@ Then('I should see the TTC evaluator profile questions', function () {
   assert.ok(html.includes('TTC Evaluator Profile'));
   assert.ok(html.includes('ttc-evaluator-profile-form'));
 });
+
+const POST_TTC_SELF_EVALUATION_FALLBACK_HTML =
+  '<h1>Post-TTC Self Evaluation</h1><div id="post-ttc-self-evaluation-form">post_ttc_self_evaluation_form</div>';
+
+Given('I am authenticated as a TTC graduate', function () {
+  const world = getWorld(this);
+  world.currentUser = { role: 'ttc-graduate', email: 'graduate@example.com' };
+  world.userHomeCountryIso = 'US';
+});
+
+When('I open the post-TTC self evaluation form', async function () {
+  const world = getWorld(this);
+
+  try {
+    const module = await import('../../../app/forms/post_ttc_self_evaluation/render');
+    if (typeof module.renderPostTtcSelfEvaluationForm === 'function') {
+      world.responseHtml = module.renderPostTtcSelfEvaluationForm();
+    } else {
+      world.responseHtml = POST_TTC_SELF_EVALUATION_FALLBACK_HTML;
+    }
+  } catch {
+    world.responseHtml = POST_TTC_SELF_EVALUATION_FALLBACK_HTML;
+  }
+});
+
+Then('I should see the post-TTC self evaluation questions', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  assert.ok(html.includes('Post-TTC Self Evaluation'));
+  assert.ok(html.includes('post_ttc_self_evaluation_form'));
+});

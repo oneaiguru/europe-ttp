@@ -19,8 +19,8 @@ export const STEPS = {
   },
   'I am authenticated as a TTC graduate': {
     pattern: /^I\ am\ authenticated\ as\ a\ TTC\ graduate$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:178',
+    typescript: 'test/typescript/steps/forms_steps.ts:238',
     features: ['specs/features/forms/post_ttc_self_eval.feature:8', 'specs/features/forms/post_ttc_feedback.feature:8'],
   },
   'I am authenticated as a non-admin user': {
@@ -163,8 +163,8 @@ export const STEPS = {
   },
   'I open the post-TTC self evaluation form': {
     pattern: /^I\ open\ the\ post\-TTC\ self\ evaluation\ form$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:184',
+    typescript: 'test/typescript/steps/forms_steps.ts:244',
     features: ['specs/features/forms/post_ttc_self_eval.feature:9'],
   },
   'I request a certificate PDF': {
@@ -469,8 +469,8 @@ export const STEPS = {
   },
   'I should see the post-TTC self evaluation questions': {
     pattern: /^I\ should\ see\ the\ post\-TTC\ self\ evaluation\ questions$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:193',
+    typescript: 'test/typescript/steps/forms_steps.ts:259',
     features: ['specs/features/forms/post_ttc_self_eval.feature:10'],
   },
   'I should see the rendered tab content with user context': {
