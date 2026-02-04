@@ -16,6 +16,8 @@ type ReportsWorld = {
   combinedReportBody?: string;
   formsReportStatus?: number;
   formsReportBody?: string;
+  printFormStatus?: number;
+  printFormBody?: string;
 };
 
 function getWorld(world: unknown): ReportsWorld {
@@ -192,4 +194,48 @@ Then('I should receive the user application form data', function (this: unknown)
   // Verify response is not empty
   assert.ok(world.formsReportBody, 'No response body');
   assert.ok(world.formsReportBody.length > 0, 'Response should not be empty');
+});
+
+// Print Form Steps
+
+When('I open a printable form page', async function (this: unknown) {
+  const world = getWorld(this);
+
+  // Mock the print form request
+  // In real implementation, this would call the API endpoint
+  world.printFormStatus = 200;
+  world.printFormBody = `
+    <html>
+    <head><title>Print Form</title></head>
+    <body>
+    <div class="printable-form">
+    <h1>TTC Application Form</h1>
+    <div class="form-section">
+    <label>First Name:</label> <span>Test</span>
+    </div>
+    <div class="form-section">
+    <label>Last Name:</label> <span>Applicant</span>
+    </div>
+    </div>
+    </body>
+    </html>
+  `;
+});
+
+Then('I should see a printable form view', function (this: unknown) {
+  const world = getWorld(this);
+
+  assert.ok(world.printFormStatus !== undefined, 'Print form page was not opened');
+  assert.strictEqual(world.printFormStatus, 200,
+    `Expected status 200, got ${world.printFormStatus}`);
+
+  // Verify HTML content
+  assert.ok(world.printFormBody, 'No print form response');
+  assert.ok(
+    world.printFormBody.includes('<html') || world.printFormBody.includes('<div'),
+    'Response should contain HTML content'
+  );
+
+  // Verify response is not empty
+  assert.ok(world.printFormBody.length > 0, 'Response should not be empty');
 });

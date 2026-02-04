@@ -67,8 +67,8 @@ export const STEPS = {
   },
   'I open a printable form page': {
     pattern: /^I\ open\ a\ printable\ form\ page$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:372',
+    typescript: 'test/typescript/steps/reports_steps.ts:201',
     features: ['specs/features/reports/print_form.feature:9'],
   },
   'I open an admin-only page': {
@@ -367,8 +367,8 @@ export const STEPS = {
   },
   'I should see a printable form view': {
     pattern: /^I\ should\ see\ a\ printable\ form\ view$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:421',
+    typescript: 'test/typescript/steps/reports_steps.ts:225',
     features: ['specs/features/reports/print_form.feature:10'],
   },
   'I should see an unauthorized message': {
