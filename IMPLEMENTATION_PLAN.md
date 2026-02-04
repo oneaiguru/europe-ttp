@@ -99,7 +99,7 @@
 | TASK-E2E-008 | p1 | specs/features/e2e/validation_errors.feature | 🟢 DONE | A3 - Field-level validation errors |
 | TASK-E2E-009 | p2 | specs/features/e2e/full_evaluator_workflow.feature | ✅ DONE | A4 - See uploads, role-based visibility |
 | TASK-E2E-010 | p1 | specs/features/e2e/certificate_gating.feature | 🟢 DONE | A6 - Certificate by completion |
-| TASK-E2E-011 | p2 | specs/features/e2e/reporting_integrity_checks.feature | 🔴 TODO | A8 - Missing uploads, incomplete forms |
+| TASK-E2E-011 | p2 | specs/features/e2e/reporting_integrity_checks.feature | ✅ DONE | A8 - Missing uploads, incomplete forms |
 | TASK-E2E-012 | p2 | specs/features/e2e/form_prerequisites_conditional.feature | 🔴 TODO | A7 - DSN/Silence/Happiness/Part1/Part2 availability |
 | TASK-E2E-013 | p2 | specs/features/e2e/course_eligibility_by_profile.feature | 🔴 TODO | A7 - Form availability based on profile |
 
@@ -328,6 +328,16 @@ Feature: Reporting Integrity Checks
     Then the CSV should contain columns: email, flags, missing_uploads, incomplete_forms, mismatches
     And the CSV should be downloadable via admin dashboard
 ```
+
+**Implementation Status:** ✅ DONE (TASK-E2E-011)
+- Python BDD steps: `test/python/steps/integrity_steps.py` (all steps passing)
+- TypeScript BDD steps: `test/typescript/steps/integrity_steps.ts` (all steps passing)
+- Step registry updated with all new integrity check steps
+- Tests verify:
+  - Missing photo upload detection
+  - Incomplete application flagging
+  - Mismatched evaluation email detection
+  - CSV download with proper columns
 
 ### TASK-E2E-012: Form Prerequisites Conditional (A7 - DSN/Silence/Happiness/Part1/Part2)
 **Feature:** `specs/features/e2e/form_prerequisites_conditional.feature`

@@ -97,13 +97,14 @@
 | Full Evaluator Workflow | specs/features/e2e/full_evaluator_workflow.feature | ✅ | ✅ |
 | Home Country Changes Available TTCs | specs/features/e2e/home_country_changes_available_ttcs.feature | ✅ | ✅ |
 | Post-TTC Co-teaching Cycle | specs/features/e2e/post_ttc_coteaching_cycle.feature | ✅ | ✅ |
+| Reporting Integrity Checks | specs/features/e2e/reporting_integrity_checks.feature | ✅ | ✅ |
 | TTC Application to Admin Review | specs/features/e2e/ttc_application_to_admin_review.feature | ✅ | ✅ |
 | Validation Errors | specs/features/e2e/validation_errors.feature | ✅ | ✅ |
 
 ---
 
 ## Summary
-- **Total Features:** 45
-- **Python Verified:** 27/45
+- **Total Features:** 46
+- **Python Verified:** 28/46
 - **TypeScript Complete:** 27/45
 - **Parity:** 60%
