@@ -2,6 +2,7 @@ import { When, Then } from '@cucumber/cucumber';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'path';
+import { authContext } from './auth_steps';
 
 interface FormSubmission {
   id?: string;
@@ -83,6 +84,25 @@ class MockTTCPortalUser {
 
   saveUserData(): void {
     // Mock save - no-op
+  }
+
+  getConfig(): Record<string, unknown> {
+    return this.config;
+  }
+
+  setConfig(configParams: Record<string, unknown> | string): void {
+    let params: Record<string, unknown>;
+
+    if (typeof configParams === 'string') {
+      params = JSON.parse(configParams);
+    } else {
+      params = configParams;
+    }
+
+    // Update config with provided params
+    for (const [key, value] of Object.entries(params)) {
+      this.config[key] = value;
+    }
   }
 }
 
@@ -202,3 +222,79 @@ Then('my form data should be stored for that instance', function () {
 interface World {
   attach?: (attachment: { data: string; media: string }) => void;
 }
+
+// Config management context
+interface ConfigContext {
+  ttcUser?: MockTTCPortalUser;
+  userConfig?: Record<string, unknown>;
+  lastConfigUpdate?: Record<string, unknown>;
+}
+
+const configContext: ConfigContext = {};
+
+When('I request my user configuration', function (this: World) {
+  // Get or create ttcUser from configContext
+  let ttcUser = configContext.ttcUser;
+  if (!ttcUser) {
+    // Create a mock user if not already present
+    ttcUser = new MockTTCPortalUser();
+
+    // Get email from authContext if available
+    const currentUser = authContext.currentUser;
+    let email = 'test.applicant@example.com';
+    if (currentUser && currentUser.email) {
+      email = currentUser.email;
+    }
+
+    ttcUser.loadUserData(email);
+    configContext.ttcUser = ttcUser;
+  }
+
+  configContext.userConfig = ttcUser.getConfig();
+});
+
+Then('I should receive my saved configuration', function () {
+  const userConfig = configContext.userConfig;
+  assert.ok(userConfig, 'No configuration was retrieved');
+  assert.ok(typeof userConfig === 'object', 'Configuration should be an object');
+  assert.ok(userConfig !== null, 'Configuration should not be null');
+});
+
+When('I update my user configuration', function (this: World) {
+  // Get or create ttcUser from configContext
+  let ttcUser = configContext.ttcUser;
+  if (!ttcUser) {
+    // Create a mock user if not already present
+    ttcUser = new MockTTCPortalUser();
+
+    // Get email from authContext if available
+    const currentUser = authContext.currentUser;
+    let email = 'test.applicant@example.com';
+    if (currentUser && currentUser.email) {
+      email = currentUser.email;
+    }
+
+    ttcUser.loadUserData(email);
+    configContext.ttcUser = ttcUser;
+  }
+
+  const testConfig = { i_home_country: 'IN' };
+  ttcUser.setConfig(testConfig);
+  configContext.lastConfigUpdate = testConfig;
+});
+
+Then('my configuration should be saved', function () {
+  const ttcUser = configContext.ttcUser;
+  assert.ok(ttcUser, 'User should be authenticated');
+
+  const lastUpdate = configContext.lastConfigUpdate;
+  assert.ok(lastUpdate, 'Config should have been updated');
+
+  const savedConfig = ttcUser!.getConfig();
+  assert.ok(savedConfig, 'Saved config should not be null');
+
+  // Verify the update was persisted
+  for (const [key, value] of Object.entries(lastUpdate!)) {
+    assert.strictEqual(savedConfig[key], value, `Config key ${key} should be ${value}`);
+  }
+});

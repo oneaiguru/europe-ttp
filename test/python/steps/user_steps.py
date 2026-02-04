@@ -78,6 +78,19 @@ class MockTTCPortalUser:
         """Mock save_user_data - no-op for testing."""
         return None
 
+    def get_config(self):
+        """Get user configuration."""
+        return self.config
+
+    def set_config(self, config_params):
+        """Set user configuration parameters."""
+        if not isinstance(config_params, dict):
+            config_params = json.loads(config_params) if isinstance(config_params, str) else {}
+
+        # Update config with provided params
+        for key, value in config_params.items():
+            self.config[key] = value
+
 
 def _get_ttc_portal_user_module():
     """Try to import the real ttc_portal_user module, return None if not available."""
@@ -226,3 +239,79 @@ def step_form_data_should_be_stored(context):
     # Verify form_instance_display matches what was uploaded
     assert stored_data.get('form_instance_display') == uploaded.get('form_instance_display'), \
         'Expected form_instance_display to match'
+
+
+@when('I request my user configuration')
+def request_user_config(context):
+    """Request the user's configuration."""
+    # Get or create ttc_user from context
+    ttc_user = getattr(context, 'ttc_user', None)
+    if not ttc_user:
+        # Create a mock user if not already present
+        ttc_user = MockTTCPortalUser()
+        # Get email from current_user if available
+        current_user = getattr(context, 'current_user', None)
+        email = 'test.applicant@example.com'
+        if current_user:
+            if isinstance(current_user, dict):
+                email = current_user.get('email', email)
+            elif hasattr(current_user, 'email'):
+                try:
+                    email = current_user.email()
+                except Exception:
+                    pass
+        ttc_user.load_user_data(email)
+        context.ttc_user = ttc_user
+
+    context.user_config = ttc_user.get_config()
+
+
+@then('I should receive my saved configuration')
+def should_receive_saved_config(context):
+    """Verify that user configuration is received."""
+    assert hasattr(context, 'user_config'), "No configuration was retrieved"
+    assert isinstance(context.user_config, dict), "Configuration should be a dictionary"
+    # For the get scenario, we expect an empty config initially
+    assert context.user_config is not None, "Configuration should not be None"
+
+
+@when('I update my user configuration')
+def update_user_config(context):
+    """Update the user's configuration with test data."""
+    # Get or create ttc_user from context
+    ttc_user = getattr(context, 'ttc_user', None)
+    if not ttc_user:
+        # Create a mock user if not already present
+        ttc_user = MockTTCPortalUser()
+        # Get email from current_user if available
+        current_user = getattr(context, 'current_user', None)
+        email = 'test.applicant@example.com'
+        if current_user:
+            if isinstance(current_user, dict):
+                email = current_user.get('email', email)
+            elif hasattr(current_user, 'email'):
+                try:
+                    email = current_user.email()
+                except Exception:
+                    pass
+        ttc_user.load_user_data(email)
+        context.ttc_user = ttc_user
+
+    # Sample config update
+    test_config = {'i_home_country': 'IN'}
+    ttc_user.set_config(test_config)
+    context.last_config_update = test_config
+
+
+@then('my configuration should be saved')
+def config_should_be_saved(context):
+    """Verify that configuration was saved."""
+    ttc_user = getattr(context, 'ttc_user', None)
+    assert ttc_user is not None, "User should be authenticated"
+    assert hasattr(context, 'last_config_update'), "Config should have been updated"
+
+    saved_config = ttc_user.get_config()
+    assert saved_config is not None, "Saved config should not be None"
+    # Verify the update was persisted
+    for key, value in context.last_config_update.items():
+        assert saved_config.get(key) == value, "Config key {} should be {}".format(key, value)

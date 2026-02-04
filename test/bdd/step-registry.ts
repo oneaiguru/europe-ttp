@@ -205,8 +205,8 @@ export const STEPS = {
   },
   'I request my user configuration': {
     pattern: /^I\ request\ my\ user\ configuration$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:232',
+    typescript: 'test/typescript/steps/user_steps.ts:212',
     features: ['specs/features/user/config_management.feature:9'],
   },
   'I request that form data': {
@@ -307,8 +307,8 @@ export const STEPS = {
   },
   'I should receive my saved configuration': {
     pattern: /^I\ should\ receive\ my\ saved\ configuration$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:241',
+    typescript: 'test/typescript/steps/user_steps.ts:222',
     features: ['specs/features/user/config_management.feature:10'],
   },
   'I should receive that user\'s form data': {
@@ -499,8 +499,8 @@ export const STEPS = {
   },
   'I update my user configuration': {
     pattern: /^I\ update\ my\ user\ configuration$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:250',
+    typescript: 'test/typescript/steps/user_steps.ts:230',
     features: ['specs/features/user/config_management.feature:15'],
   },
   'I upload form data for a specific form instance': {
@@ -541,8 +541,8 @@ export const STEPS = {
   },
   'my configuration should be saved': {
     pattern: /^my\ configuration\ should\ be\ saved$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:261',
+    typescript: 'test/typescript/steps/user_steps.ts:242',
     features: ['specs/features/user/config_management.feature:16'],
   },
   'my form data should be stored for that instance': {

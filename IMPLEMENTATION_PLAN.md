@@ -71,7 +71,7 @@
 | TASK-025 | p1 | specs/features/user/form_data_upload.feature | ✅ DONE | |
 | TASK-026 | p2 | specs/features/user/get_form_data.feature | 🔴 TODO | |
 | TASK-027 | p2 | specs/features/user/get_form_instances.feature | 🔴 TODO | |
-| TASK-028 | p2 | specs/features/user/config_management.feature | 🔴 TODO | |
+| TASK-028 | p2 | specs/features/user/config_management.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-029 | p2 | specs/features/user/reporting_get_form_data.feature | 🔴 TODO | |
 | TASK-030 | p1 | specs/features/reports/user_summary.feature | 🔴 TODO | |
 | TASK-031 | p1 | specs/features/reports/user_integrity.feature | 🔴 TODO | |

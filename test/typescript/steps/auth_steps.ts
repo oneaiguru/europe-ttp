@@ -9,7 +9,7 @@ interface TestUser {
   [key: string]: unknown;
 }
 
-const authContext: {
+export const authContext: {
   currentUser?: TestUser;
   currentPage?: string;
   passwordResetEmail?: string;
