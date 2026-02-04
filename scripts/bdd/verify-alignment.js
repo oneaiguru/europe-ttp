@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync, statSync } from 'fs';
 import { join } from 'path';
-import { STEPS } from '../../test/bdd/step-registry';
+import { STEPS } from '../../test/bdd/step-registry.js';
 const stepLineRe = /^(Given|When|Then|And|But)\s+(.+)$/;
 function walk(dir) {
     const entries = readdirSync(dir);

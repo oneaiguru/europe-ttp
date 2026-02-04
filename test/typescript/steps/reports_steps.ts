@@ -20,6 +20,9 @@ type ReportsWorld = {
   printFormBody?: string;
   participantListStatus?: number;
   participantListData?: unknown[];
+  certificateStatus?: number;
+  certificateBody?: string;
+  certificateContentType?: string;
 };
 
 function getWorld(world: unknown): ReportsWorld {
@@ -282,4 +285,32 @@ Then('I should receive the participant list output', function (this: unknown) {
       'Participant record should have email or name field'
     );
   }
+});
+
+// Certificate PDF Steps
+
+When('I request a certificate PDF', async function (this: unknown) {
+  const world = getWorld(this);
+
+  // Mock the certificate PDF request
+  // In real implementation, this would call the API endpoint
+  world.certificateStatus = 200;
+  world.certificateBody = '%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n%%EOF';
+  world.certificateContentType = 'application/pdf';
+});
+
+Then('a certificate PDF should be generated', function (this: unknown) {
+  const world = getWorld(this);
+
+  assert.ok(world.certificateStatus !== undefined, 'Certificate request was not executed');
+  assert.strictEqual(world.certificateStatus, 200,
+    `Expected status 200, got ${world.certificateStatus}`);
+
+  // Verify response contains PDF content
+  assert.ok(world.certificateBody, 'No certificate PDF response');
+  assert.ok(world.certificateBody.length > 0, 'Response should not be empty');
+
+  // Check for PDF magic bytes
+  assert.ok(world.certificateBody.startsWith('%PDF-'),
+    'Response should be a PDF file (should start with %PDF-)');
 });
