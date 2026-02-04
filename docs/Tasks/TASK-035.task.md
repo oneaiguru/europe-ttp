@@ -1,78 +1,62 @@
-# TASK-035: Certificate PDF Generation
+# TASK-035: Certificate Generation Feature
 
-## Task ID
-TASK-035
+## Task Details
+- **Task ID**: TASK-035
+- **Priority**: p3
+- **Feature File**: `specs/features/reports/certificate.feature`
+- **Status**: 🔴 TODO
 
-## Feature File
-`specs/features/reports/certificate.feature`
+## Feature Scenario
 
-## Scenario
-**Scenario: Generate certificate PDF**
+```gherkin
+Feature: Certificate Generation
+  As a authenticated user
+  I want to generate a certificate PDF
+  So that download a certificate
 
-```
-Scenario: Generate certificate PDF
-  Given I am authenticated on the TTC portal
-  When I request a certificate PDF
-  Then a certificate PDF should be generated
+  @p3 @needs-verification
+  Scenario: Generate certificate PDF
+    Given I am authenticated on the TTC portal
+    When I request a certificate PDF
+    Then a certificate PDF should be generated
 ```
 
 ## Steps Needing Implementation
 
-### Python Steps (Undefined)
-1. **When** `I request a certificate PDF`
-   - File: `test/python/steps/reports_steps.py`
-   - Line: 1 (currently placeholder)
-   - Status: Undefined - needs implementation
+1. **Step: "I request a certificate PDF"**
+   - Type: When
+   - Pattern: `/^I request a certificate PDF$/`
+   - Registry Entry: Exists but points to line 1 (placeholder)
+   - Python Status: ❌ Not implemented
+   - TypeScript Status: ❌ Not implemented
 
-2. **Then** `a certificate PDF should be generated`
-   - File: `test/python/steps/reports_steps.py`
-   - Line: 1 (currently placeholder)
-   - Status: Undefined - needs implementation
+2. **Step: "a certificate PDF should be generated"**
+   - Type: Then
+   - Pattern: `/^a certificate PDF should be generated$/`
+   - Registry Entry: Exists but points to line 1 (placeholder)
+   - Python Status: ❌ Not implemented
+   - TypeScript Status: ❌ Not implemented
 
-### TypeScript Steps (Undefined)
-1. **When** `I request a certificate PDF`
-   - File: `test/typescript/steps/reports_steps.ts`
-   - Line: 1 (currently placeholder)
-   - Status: Undefined - needs implementation
+## Files to Create/Modify
 
-2. **Then** `a certificate PDF should be generated`
-   - File: `test/typescript/steps/reports_steps.ts`
-   - Line: 1 (currently placeholder)
-   - Status: Undefined - needs implementation
+### Python
+- `test/python/steps/reports_steps.py` - Add certificate step definitions
 
-## Current Step Registry Status
-```typescript
-'I request a certificate PDF': {
-  pattern: /^I\ request\ a\ certificate\ PDF$/,
-  python: 'test/python/steps/reports_steps.py:1',  // Placeholder
-  typescript: 'test/typescript/steps/reports_steps.ts:1',  // Placeholder
-  features: ['specs/features/reports/certificate.feature:9'],
-},
-'a certificate PDF should be generated': {
-  pattern: /^a\ certificate\ PDF\ should\ be\ generated$/,
-  python: 'test/python/steps/reports_steps.py:1',  // Placeholder
-  typescript: 'test/typescript/steps/reports_steps.ts:1',  // Placeholder
-  features: ['specs/features/reports/certificate.feature:10'],
-},
-```
+### TypeScript
+- `test/typescript/steps/reports_steps.ts` - Add certificate step definitions
 
 ## Acceptance Criteria
-- [ ] Python step `I request a certificate PDF` is implemented and passes
-- [ ] Python step `a certificate PDF should be generated` is implemented and passes
-- [ ] TypeScript step `I request a certificate PDF` is implemented and passes
-- [ ] TypeScript step `a certificate PDF should be generated` is implemented and passes
-- [ ] Scenario `Generate certificate PDF` passes in Python BDD
-- [ ] Scenario `Generate certificate PDF` passes in TypeScript BDD
+
+- [ ] Python step definitions created and pass in behave
+- [ ] TypeScript step definitions created and pass in cucumber
 - [ ] Step registry updated with correct line numbers
-- [ ] No orphan steps or dead steps (verify-alignment.ts passes)
-
-## Related Tasks
-- TASK-E2E-010: Certificate Gating (A6) - More comprehensive certificate scenarios with prerequisite checking
-
-## Priority
-p3 (Nice to have - can defer)
+- [ ] Both Python and TypeScript BDD tests pass for `specs/features/reports/certificate.feature`
+- [ ] `verify-alignment.ts` passes (0 orphan, 0 dead steps)
 
 ## Notes
-- This is a basic certificate generation scenario
-- The more complex certificate gating scenarios (with prerequisite checking) are in TASK-E2E-010
-- Both Python and TypeScript implementations are needed
+
+- This is a p3 (low priority) task
+- The feature file is already created
+- The steps are already in the registry but need actual implementation
+- Mock implementations are acceptable for BDD verification
+- Real PDF generation would be implemented in the application layer
