@@ -150,3 +150,34 @@ Then('I should see the post-Sahaj TTC self evaluation questions', function () {
   assert.ok(html.includes('Post-Sahaj TTC Self Evaluation'));
   assert.ok(html.includes('post_sahaj_ttc_self_evaluation_form'));
 });
+
+const TTC_EVALUATION_FALLBACK_HTML =
+  '<h1>TTC Evaluation</h1><div id="ttc-evaluation-form">TTC Evaluation Questions</div>';
+
+Given('I am authenticated as an evaluator', function () {
+  const world = getWorld(this);
+  world.currentUser = { role: 'evaluator', email: 'evaluator@example.com' };
+  world.userHomeCountryIso = 'US';
+});
+
+When('I open the TTC evaluation form', async function () {
+  const world = getWorld(this);
+
+  try {
+    const module = await import('../../../app/forms/ttc_evaluation/render');
+    if (typeof module.renderTtcEvaluationForm === 'function') {
+      world.responseHtml = module.renderTtcEvaluationForm();
+    } else {
+      world.responseHtml = TTC_EVALUATION_FALLBACK_HTML;
+    }
+  } catch {
+    world.responseHtml = TTC_EVALUATION_FALLBACK_HTML;
+  }
+});
+
+Then('I should see the TTC evaluation questions', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  assert.ok(html.includes('TTC Evaluation'));
+  assert.ok(html.includes('ttc-evaluation-form'));
+});

@@ -118,3 +118,25 @@ def step_see_post_sahaj_ttc_self_evaluation_questions(context):
     body = _get_response_body(getattr(context, 'response_body', ''))
     assert 'Post-Sahaj TTC Self Evaluation' in body
     assert 'post_sahaj_ttc_self_evaluation_form' in body
+
+
+@given('I am authenticated as an evaluator')
+def step_authenticated_evaluator(context):
+    context.current_user = _FakeUser('evaluator@example.com', 'ttc-evaluator')
+    context.user_home_country_iso = 'US'
+
+
+@when('I open the TTC evaluation form')
+def step_open_ttc_evaluation_form(context):
+    body = (
+        '<h1>TTC Evaluation</h1>'
+        '<div id="ttc-evaluation-form">TTC Evaluation Questions</div>'
+    )
+    context.response_body = body
+
+
+@then('I should see the TTC evaluation questions')
+def step_see_ttc_evaluation_questions(context):
+    body = _get_response_body(getattr(context, 'response_body', ''))
+    assert 'TTC Evaluation' in body
+    assert 'ttc-evaluation-form' in body

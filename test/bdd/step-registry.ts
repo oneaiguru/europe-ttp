@@ -37,8 +37,8 @@ export const STEPS = {
   },
   'I am authenticated as an evaluator': {
     pattern: /^I\ am\ authenticated\ as\ an\ evaluator$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:123',
+    typescript: 'test/typescript/steps/forms_steps.ts:157',
     features: ['specs/features/forms/ttc_evaluation.feature:8', 'specs/features/forms/ttc_evaluator_profile.feature:8'],
   },
   'I am authenticated on the TTC portal': {
@@ -103,8 +103,8 @@ export const STEPS = {
   },
   'I open the TTC evaluation form': {
     pattern: /^I\ open\ the\ TTC\ evaluation\ form$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:129',
+    typescript: 'test/typescript/steps/forms_steps.ts:163',
     features: ['specs/features/forms/ttc_evaluation.feature:9'],
   },
   'I open the TTC evaluator profile form': {
@@ -409,8 +409,8 @@ export const STEPS = {
   },
   'I should see the TTC evaluation questions': {
     pattern: /^I\ should\ see\ the\ TTC\ evaluation\ questions$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:138',
+    typescript: 'test/typescript/steps/forms_steps.ts:178',
     features: ['specs/features/forms/ttc_evaluation.feature:10'],
   },
   'I should see the TTC evaluator profile questions': {
