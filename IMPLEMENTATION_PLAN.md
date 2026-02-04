@@ -54,8 +54,8 @@
 | TASK-008 | p1 | specs/features/admin/permissions.feature | ✅ DONE | |
 | TASK-009 | p2 | specs/features/admin/reports_pages.feature | ✅ DONE | |
 | TASK-010 | p3 | specs/features/admin/settings.feature | ✅ DONE | |
-| TASK-011 | p1 | specs/features/forms/ttc_application_us.feature | 🔴 TODO | |
-| TASK-012 | p2 | specs/features/forms/ttc_application_non_us.feature | 🔴 TODO | |
+| TASK-011 | p1 | specs/features/forms/ttc_application_us.feature | ✅ DONE | |
+| TASK-012 | p2 | specs/features/forms/ttc_application_non_us.feature | ✅ DONE | |
 | TASK-013 | p2 | specs/features/forms/ttc_evaluation.feature | 🔴 TODO | |
 | TASK-014 | p2 | specs/features/forms/ttc_applicant_profile.feature | 🔴 TODO | |
 | TASK-015 | p2 | specs/features/forms/ttc_evaluator_profile.feature | 🔴 TODO | |

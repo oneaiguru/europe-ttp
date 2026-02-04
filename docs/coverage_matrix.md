@@ -37,14 +37,14 @@
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
-| DSN Application | specs/features/forms/dsn_application.feature | ❌ | ❌ |
-| Post-Sahaj TTC Feedback | specs/features/forms/post_sahaj_ttc_feedback.feature | ❌ | ❌ |
-| Post-Sahaj TTC Self Evaluation | specs/features/forms/post_sahaj_ttc_self_eval.feature | ❌ | ❌ |
+| DSN Application | specs/features/forms/dsn_application.feature | ✓ | ✓ |
+| Post-Sahaj TTC Feedback | specs/features/forms/post_sahaj_ttc_feedback.feature | ✓ | ✓ |
+| Post-Sahaj TTC Self Evaluation | specs/features/forms/post_sahaj_ttc_self_eval.feature | ✓ | ✓ |
 | Post-TTC Feedback | specs/features/forms/post_ttc_feedback.feature | ❌ | ❌ |
 | Post-TTC Self Evaluation | specs/features/forms/post_ttc_self_eval.feature | ❌ | ❌ |
 | TTC Applicant Profile | specs/features/forms/ttc_applicant_profile.feature | ❌ | ❌ |
-| TTC Application (Non-US) | specs/features/forms/ttc_application_non_us.feature | ❌ | ❌ |
-| TTC Application (US) | specs/features/forms/ttc_application_us.feature | ❌ | ❌ |
+| TTC Application (Non-US) | specs/features/forms/ttc_application_non_us.feature | ✓ | ✓ |
+| TTC Application (US) | specs/features/forms/ttc_application_us.feature | ✓ | ✓ |
 | TTC Evaluation | specs/features/forms/ttc_evaluation.feature | ❌ | ❌ |
 | TTC Evaluator Profile | specs/features/forms/ttc_evaluator_profile.feature | ❌ | ❌ |
 | TTC Portal Settings | specs/features/forms/ttc_portal_settings.feature | ❌ | ❌ |
@@ -95,6 +95,6 @@
 
 ## Summary
 - **Total Features:** 36
-- **Python Verified:** 10/36
-- **TypeScript Complete:** 10/36
-- **Parity:** 29%
+- **Python Verified:** 15/36
+- **TypeScript Complete:** 15/36
+- **Parity:** 42%

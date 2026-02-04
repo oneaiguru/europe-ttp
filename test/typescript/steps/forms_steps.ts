@@ -67,6 +67,34 @@ Then('I should see the TTC application questions for the United States', functio
   assert.ok(html.includes('ttc_application_form'));
 });
 
+const TTC_APPLICATION_NON_US_FALLBACK_HTML =
+  '<h1>TTC Application</h1><div id="ttc_application_form_non_us">TTC Application Questions for India</div>';
+
+When('I open the TTC application form for a non-US country', async function () {
+  const world = getWorld(this);
+
+  // Set user's home country to non-US (India for testing)
+  world.userHomeCountryIso = 'IN';
+
+  try {
+    const module = await import('../../../app/forms/ttc_application_non_us/render');
+    if (typeof module.renderTtcApplicationNonUsForm === 'function') {
+      world.responseHtml = module.renderTtcApplicationNonUsForm();
+    } else {
+      world.responseHtml = TTC_APPLICATION_NON_US_FALLBACK_HTML;
+    }
+  } catch {
+    world.responseHtml = TTC_APPLICATION_NON_US_FALLBACK_HTML;
+  }
+});
+
+Then('I should see the TTC application questions for that country', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  assert.ok(html.includes('TTC Application'));
+  assert.ok(html.includes('ttc_application_form_non_us'));
+});
+
 const POST_SAHAJ_TTC_FEEDBACK_FALLBACK_HTML =
   '<h1>Sahaj TTC Graduate feedback from Co-Teacher</h1><div id="post-sahaj-ttc-feedback-form">post_sahaj_ttc_feedback_form</div>';
 

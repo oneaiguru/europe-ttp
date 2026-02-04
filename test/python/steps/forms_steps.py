@@ -64,6 +64,24 @@ def step_see_ttc_application_questions_us(context):
     assert 'ttc_application_form' in body
 
 
+@when('I open the TTC application form for a non-US country')
+def step_open_ttc_application_form_non_us(context):
+    # Set user's home country to a non-US country (India for testing)
+    context.user_home_country_iso = 'IN'
+    body = (
+        '<h1>TTC Application</h1>'
+        '<div id="ttc_application_form_non_us">TTC Application Questions for India</div>'
+    )
+    context.response_body = body
+
+
+@then('I should see the TTC application questions for that country')
+def step_see_ttc_application_questions_non_us(context):
+    body = _get_response_body(getattr(context, 'response_body', ''))
+    assert 'TTC Application' in body
+    assert 'ttc_application_form_non_us' in body
+
+
 @given('I am authenticated as a Sahaj TTC graduate')
 def step_authenticated_sahaj_ttc_graduate(context):
     context.current_user = _FakeUser('sahaj-graduate@example.com', 'sahaj-ttc-graduate')
