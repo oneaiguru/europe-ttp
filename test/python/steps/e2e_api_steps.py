@@ -159,11 +159,19 @@ def step_attempt_submit_via_api(context, ttc_value):
         if ttc_option:
             display_until = ttc_option.get('display_until', '')
             is_expired = is_expired or '2020' in display_until or '2019' in display_until
+        whitelist = getattr(context, 'whitelist', [])
+        current_email = getattr(context, 'current_email', '') or ''
+        whitelist_target = getattr(context, 'whitelist_target_email', None) or ''
+        # Check if either current_email or whitelist_target is whitelisted
+        is_whitelisted = (current_email.lower() in [e.lower() for e in whitelist] or
+                         (whitelist_target and whitelist_target.lower() in [e.lower() for e in whitelist]))
+        grace_expired = getattr(context, 'whitelist_grace_expired', False)
+        allow_expired = is_whitelisted and not grace_expired
 
-        if is_expired and not getattr(context, 'test_mode_enabled', True):
+        if is_expired and not getattr(context, 'test_mode_enabled', True) and not allow_expired:
             context.response = type('obj', (object,), {
                 'status': '403 Forbidden',
-                'body': json.dumps({'error': 'deadline_expired'})
+                'body': json.dumps({'error': 'deadline_expired', 'grace_expired': grace_expired})
             })()
             context.last_submission = {'status': 'rejected'}
         else:
@@ -251,7 +259,9 @@ def step_set_home_country(context, country):
 def step_add_to_whitelist(context, email):
     """Add a user to the deadline whitelist."""
     context.whitelist = getattr(context, 'whitelist', [])
-    context.whitelist.append(email.lower())
+    normalized_email = email.lower()
+    context.whitelist.append(normalized_email)
+    context.whitelist_target_email = normalized_email
 
     context.response = type('obj', (object,), {
         'status': '200 OK',
@@ -263,15 +273,19 @@ def step_add_to_whitelist(context, email):
 def step_user_not_whitelisted(context, email):
     """Ensure a user is not in the whitelist."""
     context.whitelist = getattr(context, 'whitelist', [])
-    context.whitelist = [e for e in context.whitelist if e != email.lower()]
+    normalized_email = email.lower()
+    context.whitelist = [e for e in context.whitelist if e != normalized_email]
+    context.whitelist_target_email = normalized_email
 
 
 @given('user "{email}" is whitelisted')
 def step_user_is_whitelisted(context, email):
     """Ensure a user is in the whitelist."""
     context.whitelist = getattr(context, 'whitelist', [])
-    if email.lower() not in [e.lower() for e in context.whitelist]:
-        context.whitelist.append(email.lower())
+    normalized_email = email.lower()
+    if normalized_email not in [e.lower() for e in context.whitelist]:
+        context.whitelist.append(normalized_email)
+    context.whitelist_target_email = normalized_email
 
 
 # ============================================================================
@@ -388,16 +402,35 @@ def step_assert_evaluation_recorded(context):
 def step_assert_user_whitelisted(context):
     """Assert the user is in the whitelist."""
     assert hasattr(context, 'whitelist'), "No whitelist exists"
-    assert context.current_email.lower() in [e.lower() for e in context.whitelist], \
-        "User {} not in whitelist".format(context.current_email)
+    target_email = getattr(context, 'whitelist_target_email', None) or context.current_email
+    assert target_email, "No user email available to validate whitelist"
+    assert target_email.lower() in [e.lower() for e in context.whitelist], \
+        "User {} not in whitelist".format(target_email)
 
 
 @then('the applicant should be able to submit within grace period')
 def step_assert_can_submit_grace(context):
     """Assert submission is allowed within grace period."""
+    target_email = getattr(context, 'whitelist_target_email', None)
+    assert target_email, "No whitelisted applicant email available"
+    prior_email = getattr(context, 'current_email', None)
+    prior_role = getattr(context, 'current_role', None)
+
+    context.current_email = target_email
+    context.current_role = 'applicant'
+
+    ttc_value = 'test_expired'
+    if hasattr(context, 'current_ttc_option'):
+        ttc_value = context.current_ttc_option.get('value', ttc_value)
+
+    step_attempt_submit_via_api(context, ttc_value)
+
     assert hasattr(context, 'response'), "No response exists"
     assert '200' in context.response.status or context.response.status == '200 OK', \
         "Expected success, got {}".format(context.response.status)
+
+    context.current_email = prior_email
+    context.current_role = prior_role
 
 
 @then('the submission should be rejected with deadline error')
@@ -561,3 +594,19 @@ def step_test_mode_enabled(context):
 def step_test_mode_disabled_real(context):
     """Disable test mode for real deadline enforcement."""
     context.test_mode_enabled = False
+
+
+@given('the whitelist grace period has expired')
+def step_whitelist_grace_expired(context):
+    """Set the whitelist grace period as expired."""
+    context.whitelist_grace_expired = True
+
+
+@then('the submission should be rejected')
+def step_assert_submission_rejected(context):
+    """Assert the submission was rejected."""
+    assert hasattr(context, 'response'), "No response exists"
+    status = getattr(context.response, 'status', '')
+    assert '403' in status or 'Forbidden' in status or \
+           (hasattr(context, 'last_submission') and context.last_submission.get('status') == 'rejected'), \
+           "Expected rejection, got {}".format(status)

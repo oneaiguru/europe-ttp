@@ -26,7 +26,8 @@ Feature: Deadline Enforcement and Whitelist Override
 
   @e2e @deadline @api
   Scenario: Whitelist expires after grace period
-    Given user "test.applicant@example.com" is whitelisted
+    Given test mode is disabled
+    And user "test.applicant@example.com" is whitelisted
     And the whitelist grace period has expired
     When I attempt to submit TTC application via API for "test_expired"
     Then the submission should be rejected

@@ -59,6 +59,8 @@ const testContext: {
   response?: ApiResponse;
   homeCountry?: string;
   whitelist: string[];
+  whitelistTargetEmail?: string;
+  whitelistGraceExpired: boolean;
   evaluations: FormSubmission[];
   evaluationsCount: number;
   applicantSubmissions: Record<string, unknown>;
@@ -73,6 +75,7 @@ const testContext: {
   lastNotification?: { to: string; type: string };
 } = {
   whitelist: [],
+  whitelistGraceExpired: false,
   evaluations: [],
   evaluationsCount: 0,
   applicantSubmissions: {},
@@ -254,10 +257,18 @@ When('I attempt to submit TTC application via API for {string}', (ttcValue: stri
   const option = getTtcOption(ttcValue);
   const isExpired = ttcValue.includes('expired') || option?.value.includes('expired') || option?.display_until.includes('2020') || option?.display_until.includes('2019');
 
-  if (isExpired && !testContext.testModeEnabled) {
+  // Check if current user or whitelist target is whitelisted
+  const currentEmail = testContext.currentEmail || '';
+  const whitelistTarget = testContext.whitelistTargetEmail || '';
+  const isWhitelisted = testContext.whitelist.map((e) => e.toLowerCase()).includes(currentEmail.toLowerCase()) ||
+                         (whitelistTarget && testContext.whitelist.map((e) => e.toLowerCase()).includes(whitelistTarget.toLowerCase()));
+  const graceExpired = testContext.whitelistGraceExpired;
+  const allowExpired = isWhitelisted && !graceExpired;
+
+  if (isExpired && !testContext.testModeEnabled && !allowExpired) {
     testContext.response = {
       status: '403 Forbidden',
-      body: JSON.stringify({ error: 'deadline_expired' }),
+      body: JSON.stringify({ error: 'deadline_expired', grace_expired: graceExpired }),
     };
     testContext.lastSubmission = { form_type: 'ttc_application', status: 'rejected', data: {} };
   } else {
@@ -336,7 +347,9 @@ When('I set my home country to {string} via API', (country: string) => {
 // ============================================================================
 
 When('I add {string} to the whitelist via API', (email: string) => {
-  testContext.whitelist.push(email.toLowerCase());
+  const normalized = email.toLowerCase();
+  testContext.whitelist.push(normalized);
+  testContext.whitelistTargetEmail = normalized;
 
   testContext.response = {
     status: '200 OK',
@@ -345,7 +358,9 @@ When('I add {string} to the whitelist via API', (email: string) => {
 });
 
 Given('user {string} is NOT whitelisted', (email: string) => {
-  testContext.whitelist = testContext.whitelist.filter((e) => e !== email.toLowerCase());
+  const normalized = email.toLowerCase();
+  testContext.whitelist = testContext.whitelist.filter((e) => e !== normalized);
+  testContext.whitelistTargetEmail = normalized;
 });
 
 Given('user {string} is whitelisted', (email: string) => {
@@ -353,6 +368,7 @@ Given('user {string} is whitelisted', (email: string) => {
   if (!testContext.whitelist.includes(normalized)) {
     testContext.whitelist.push(normalized);
   }
+  testContext.whitelistTargetEmail = normalized;
 });
 
 // ============================================================================
@@ -448,12 +464,64 @@ Then('the evaluation should be recorded for the applicant', () => {
 });
 
 Then('the user should be in the whitelist config', () => {
-  if (!testContext.whitelist.map((e) => e.toLowerCase()).includes(testContext.currentEmail!.toLowerCase())) {
-    throw new Error(`User ${testContext.currentEmail} not in whitelist`);
+  const targetEmail = testContext.whitelistTargetEmail || testContext.currentEmail;
+  if (!targetEmail) {
+    throw new Error('No user email available to validate whitelist');
+  }
+  if (!testContext.whitelist.map((e) => e.toLowerCase()).includes(targetEmail.toLowerCase())) {
+    throw new Error(`User ${targetEmail} not in whitelist`);
   }
 });
 
 Then('the applicant should be able to submit within grace period', () => {
+  const targetEmail = testContext.whitelistTargetEmail;
+  if (!targetEmail) {
+    throw new Error('No whitelisted applicant email available');
+  }
+
+  // Save current context
+  const priorEmail = testContext.currentEmail;
+  const priorRole = testContext.currentRole;
+
+  // Switch to whitelisted applicant
+  testContext.currentEmail = targetEmail;
+  testContext.currentRole = 'applicant';
+
+  // Determine TTC value to use
+  let ttcValue = 'test_expired';
+  if (testContext.currentTtcOption) {
+    ttcValue = testContext.currentTtcOption.value;
+  }
+
+  // Submit the application (reusing the submission logic from 'I attempt to submit')
+  const option = getTtcOption(ttcValue);
+  const isExpired = ttcValue.includes('expired') || option?.value.includes('expired') || option?.display_until.includes('2020') || option?.display_until.includes('2019');
+
+  // Check if current user is whitelisted
+  const currentEmail = testContext.currentEmail || '';
+  const isWhitelisted = testContext.whitelist.map((e) => e.toLowerCase()).includes(currentEmail.toLowerCase());
+  const graceExpired = testContext.whitelistGraceExpired;
+  const allowExpired = isWhitelisted && !graceExpired;
+
+  if (isExpired && !testContext.testModeEnabled && !allowExpired) {
+    testContext.response = {
+      status: '403 Forbidden',
+      body: JSON.stringify({ error: 'deadline_expired', grace_expired: graceExpired }),
+    };
+    testContext.lastSubmission = { form_type: 'ttc_application', status: 'rejected', data: {} };
+  } else {
+    testContext.response = {
+      status: '200 OK',
+      body: JSON.stringify({ success: true }),
+    };
+    testContext.lastSubmission = { form_type: 'ttc_application', status: 'submitted', data: {} };
+  }
+
+  // Restore prior context
+  testContext.currentEmail = priorEmail;
+  testContext.currentRole = priorRole;
+
+  // Assert success
   if (!testContext.response) {
     throw new Error('No response exists');
   }
@@ -580,6 +648,20 @@ Given('test mode is disabled', () => {
 
 Given('test mode is enabled', () => {
   testContext.testModeEnabled = true;
+});
+
+Given('the whitelist grace period has expired', () => {
+  testContext.whitelistGraceExpired = true;
+});
+
+Then('the submission should be rejected', () => {
+  if (!testContext.response) {
+    throw new Error('No response exists');
+  }
+  const status = testContext.response.status;
+  if (!status.includes('403') && !status.includes('Forbidden') && testContext.lastSubmission?.status !== 'rejected') {
+    throw new Error(`Expected rejection, got ${status}`);
+  }
 });
 
 Given(/^test mode is disabled \(real deadline enforcement\)$/, () => {

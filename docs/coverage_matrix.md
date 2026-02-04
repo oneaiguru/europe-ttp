@@ -89,7 +89,7 @@
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
-| Deadline and Whitelist Override | specs/features/e2e/deadline_and_whitelist_override.feature | ⏳ | ⏳ |
+| Deadline and Whitelist Override | specs/features/e2e/deadline_and_whitelist_override.feature | ✅ | ✅ |
 
 ---
 

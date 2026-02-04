@@ -104,7 +104,7 @@
 | TASK-E2E-013 | p2 | specs/features/e2e/course_eligibility_by_profile.feature | 🔴 TODO | A7 - Form availability based on profile |
 
 **Notes**
-- TASK-E2E-006: Scenario "Applicant blocked when TTC option is expired" passes in Python + TypeScript. Other scenarios in `specs/features/e2e/deadline_and_whitelist_override.feature` still have failing/undefined steps and need follow-up.
+- TASK-E2E-006B: All scenarios in `specs/features/e2e/deadline_and_whitelist_override.feature` now pass in Python (5 scenarios). TypeScript implementation complete but requires runtime environment with bun for testing.
 
 ### Phase 2E: Completed Work Summary
 

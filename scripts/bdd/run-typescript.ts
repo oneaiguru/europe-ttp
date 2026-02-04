@@ -21,16 +21,16 @@ await mkdir(OUTPUT_DIR, { recursive: true }).catch(() => {});
 console.log(`[run-typescript] Running Cucumber on: ${featurePath}`);
 
 const proc = spawn(
-  'bun',
+  'node',
   [
+    '--loader',
+    'ts-node/esm',
     'node_modules/.bin/cucumber-js',
     featurePath,
     '-f',
     `json:${path.join(OUTPUT_DIR, 'typescript_bdd.json')}`,
-    '--require',
+    '--import',
     'test/typescript/steps/**/*.ts',
-    '--require-module',
-    'ts-node/register',
   ],
   {
     cwd: PROJECT_ROOT,

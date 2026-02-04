@@ -566,9 +566,9 @@ export const STEPS = {
   // E2E API Steps - keys match literal step text from features
   'I am authenticated as admin': {
     pattern: /^I\ am\ authenticated\ as\ admin$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/ttc_application_to_admin_review.feature:41'],
+    python: 'test/python/steps/e2e_api_steps.py:33',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:157',
+    features: ['specs/features/e2e/ttc_application_to_admin_review.feature:41', 'specs/features/e2e/deadline_and_whitelist_override.feature:22', 'specs/features/e2e/deadline_and_whitelist_override.feature:47'],
   },
   'I have completed my applicant profile': {
     pattern: /^I\ have\ completed\ my\ applicant\ profile$/,
@@ -602,9 +602,9 @@ export const STEPS = {
   },
   'test mode is disabled': {
     pattern: /^test\ mode\ is\ disabled$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:56'],
+    python: 'test/python/steps/e2e_api_steps.py:548',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:577',
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:19'],
   },
   'test mode is enabled': {
     pattern: /^test\ mode\ is\ enabled$/,
@@ -638,15 +638,15 @@ export const STEPS = {
   },
   'the user should be in the whitelist config': {
     pattern: /^the\ user\ should\ be\ in\ the\ whitelist\ config$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:28'],
+    python: 'test/python/steps/e2e_api_steps.py:387',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:450',
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:24', 'specs/features/e2e/deadline_and_whitelist_override.feature:49'],
   },
   'the applicant should be able to submit within grace period': {
     pattern: /^the\ applicant\ should\ be\ able\ to\ submit\ within\ grace\ period$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:29'],
+    python: 'test/python/steps/e2e_api_steps.py:395',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:456',
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:25'],
   },
   'the submission should be rejected with deadline error': {
     pattern: /^the\ submission\ should\ be\ rejected\ with\ deadline\ error$/,
@@ -774,7 +774,7 @@ export const STEPS = {
     pattern: /^TTC\ option\ "([^"]*)"\ has\ display_until\ in\ the\ past$/,
     python: 'test/python/steps/e2e_api_steps.py:64',
     typescript: 'test/typescript/steps/e2e_api_steps.ts:182',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:9'],
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:10', 'specs/features/e2e/deadline_and_whitelist_override.feature:20', 'specs/features/e2e/deadline_and_whitelist_override.feature:38'],
   },
   'I submit TTC application for {string} with:': {
     pattern: /^I\ submit\ TTC\ application\ for\ "([^"]*)"\ with:$/,
@@ -820,15 +820,15 @@ export const STEPS = {
   },
   'I add {string} to the whitelist via API': {
     pattern: /^I\ add\ "([^"]*)"\ to\ the\ whitelist\ via\ API$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:26'],
+    python: 'test/python/steps/e2e_api_steps.py:250',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:338',
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:23', 'specs/features/e2e/deadline_and_whitelist_override.feature:48'],
   },
   'user {string} is NOT whitelisted': {
     pattern: /^user\ "([^"]*)"\ is\ NOT\ whitelisted$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:24'],
+    python: 'test/python/steps/e2e_api_steps.py:262',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:347',
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:21'],
   },
   'user {string} is whitelisted': {
     pattern: /^user\ "([^"]*)"\ is\ whitelisted$/,
