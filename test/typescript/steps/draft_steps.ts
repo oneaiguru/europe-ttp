@@ -9,6 +9,25 @@ import { DataTable, When, Then } from '@cucumber/cucumber';
 import assert from 'assert';
 
 // ============================================================================
+// SHARED TEST CONTEXT (matches e2e_api_steps.ts)
+// ============================================================================
+
+declare global {
+  var testContext: {
+    lastSubmission?: {
+      form_type: string;
+      status: string;
+      data?: Record<string, unknown>;
+    };
+  };
+}
+
+// Initialize testContext if not exists
+if (typeof globalThis.testContext === 'undefined') {
+  globalThis.testContext = {};
+}
+
+// ============================================================================
 // TYPE DEFINITIONS
 // ============================================================================
 
@@ -39,8 +58,37 @@ const draftContext: {
 // DRAFT SAVE AND RESUME STEPS
 // ============================================================================
 
-When('I fill in the TTC application form partially with:', (dataTable: DataTable) => {
-  const rows = dataTable.hashes();
+When('I fill in the TTC application form partially with:', (dataTable?: DataTable) => {
+  // Handle both colon and non-colon versions
+  const table = dataTable;
+  const rows = table ? table.hashes() : [];
+  const partialData: Record<string, string> = {};
+
+  for (const row of rows) {
+    partialData[row.field] = row.value;
+  }
+
+  // Store in context
+  draftContext.partialFormData = partialData;
+
+  // Initialize draft storage for user if not exists
+  if (!draftContext.drafts['ttc_application']) {
+    draftContext.drafts['ttc_application'] = {
+      form_type: 'ttc_application',
+      status: 'draft',
+      data: {},
+    };
+  }
+
+  // Store partial data in drafts
+  draftContext.drafts['ttc_application'].data = { ...partialData };
+});
+
+// Alias step without colon (behave 1.2.6 compatibility)
+When('I fill in the TTC application form partially with', (dataTable?: DataTable) => {
+  // Delegate to the main implementation
+  const table = dataTable;
+  const rows = table ? table.hashes() : [];
   const partialData: Record<string, string> = {};
 
   for (const row of rows) {
@@ -109,6 +157,13 @@ When('I complete the remaining required fields and submit', () => {
   // Mark as submitted
   draftContext.drafts['ttc_application'].status = 'submitted';
   draftContext.drafts['ttc_application'].submitted_at = new Date().toISOString();
+
+  // Set last_submission for compatibility with existing assertion steps
+  globalThis.testContext.lastSubmission = {
+    form_type: 'ttc_application',
+    status: 'submitted',
+    data: { ...draftContext.drafts['ttc_application'].data },
+  };
 });
 
 When('I save a partial TTC application as draft', () => {

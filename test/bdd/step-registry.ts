@@ -616,7 +616,7 @@ export const STEPS = {
     pattern: /^the\ TTC\ application\ should\ be\ marked\ as\ submitted$/,
     python: 'test/python/steps/e2e_api_steps.py:1',
     typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
-    features: ['specs/features/e2e/ttc_application_to_admin_review.feature:19', 'specs/features/e2e/deadline_and_whitelist_override.feature:54'],
+    features: ['specs/features/e2e/ttc_application_to_admin_review.feature:19', 'specs/features/e2e/deadline_and_whitelist_override.feature:54', 'specs/features/e2e/draft_save_and_resume.feature:19'],
   },
   'the form should be marked as complete': {
     pattern: /^the\ form\ should\ be\ marked\ as\ complete$/,
@@ -938,11 +938,5 @@ export const STEPS = {
     python: 'test/python/steps/draft_steps.py:96',
     typescript: 'test/typescript/steps/draft_steps.ts:145',
     features: ['specs/features/e2e/draft_save_and_resume.feature:16'],
-  },
-  'the application should be marked as submitted': {
-    pattern: /^the\ application\ should\ be\ marked\ as\ submitted$/,
-    python: 'test/python/steps/e2e_api_steps.py:379',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:479',
-    features: ['specs/features/e2e/draft_save_and_resume.feature:19'],
   },
 } as const;

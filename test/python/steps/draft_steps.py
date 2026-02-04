@@ -14,12 +14,18 @@ from behave import given, when, then
 # ============================================================================
 
 @when('I fill in the TTC application form partially with:')
-def step_fill_partial_form(context, doc):
+@when('I fill in the TTC application form partially with')
+def step_fill_partial_form(context, doc=None):
     """Store partial form data in context for later save."""
+    # Handle both table parameter and non-table parameter calls
+    if doc is None:
+        doc = context.table if hasattr(context, 'table') else None
+
     # Parse the table data into a dictionary
     context.partial_form_data = {}
-    for row in doc.rows:
-        context.partial_form_data[row['field']] = row['value']
+    if doc:
+        for row in doc.rows:
+            context.partial_form_data[row['field']] = row['value']
 
     # Initialize draft storage for user if not exists
     if not hasattr(context, 'drafts'):

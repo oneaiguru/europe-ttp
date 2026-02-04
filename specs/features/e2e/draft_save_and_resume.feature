@@ -16,7 +16,7 @@ Feature: Draft Save and Resume
     When I open the TTC application form
     Then I should see my draft data persisted
     When I complete the remaining required fields and submit
-    Then the application should be marked as submitted
+    Then the TTC application should be marked as submitted
 
   Scenario: Multiple drafts for different forms
     Given I am authenticated as a TTC applicant
