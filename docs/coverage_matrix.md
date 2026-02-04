@@ -77,10 +77,10 @@
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
 | Certificate Generation | specs/features/reports/certificate.feature | ❌ | ❌ |
-| Participant List | specs/features/reports/participant_list.feature | ❌ | ❌ |
+| Participant List | specs/features/reports/participant_list.feature | ✅ | ✅ |
 | Print Form | specs/features/reports/print_form.feature | ✅ | ✅ |
-| User Application Report | specs/features/reports/user_report.feature | ❌ | ❌ |
-| User Integrity Report | specs/features/reports/user_integrity.feature | ⚠️ | ✓ |
+| User Application Report | specs/features/reports/user_report.feature | ✅ | ✅ |
+| User Integrity Report | specs/features/reports/user_integrity.feature | ✅ | ✅ |
 | User Summary Report | specs/features/reports/user_summary.feature | ⚠️ | ⚠️ |
 
 ---

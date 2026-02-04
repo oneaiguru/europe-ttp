@@ -437,3 +437,47 @@ def step_should_see_printable_form_view(context):
 
     # Verify form structure exists
     assert len(body) > 0, "Response should not be empty"
+
+
+# Participant List Report Steps
+
+@when('I request the participant list report')
+def step_request_participant_list(context):
+    """Call the participant list report endpoint."""
+    client = _get_reporting_client(context)
+    admin_email = _get_admin_email(context)
+    client.extra_environ = {'USER_EMAIL': admin_email}
+
+    try:
+        response = client.get('/reporting/participant-list/get')
+        context.participant_list_response = response
+        context.participant_list_status = response.status
+        context.participant_list_body = _get_response_body(response)
+
+        if response.status == 200:
+            context.participant_list_data = json.loads(context.participant_list_body)
+    except Exception as e:
+        context.participant_list_error = str(e)
+        context.participant_list_status = 500
+
+
+@then('I should receive the participant list output')
+def step_should_receive_participant_list_output(context):
+    """Verify that participant list data was received."""
+    if hasattr(context, 'participant_list_error'):
+        raise AssertionError("Request failed with error: {}".format(context.participant_list_error))
+
+    assert context.participant_list_status == 200, "Expected status 200, got {}: {}".format(
+        context.participant_list_status, context.participant_list_body
+    )
+
+    # Verify response is valid JSON
+    assert hasattr(context, 'participant_list_data'), "No participant list data in context"
+    assert isinstance(context.participant_list_data, list), "Participant list data should be a list"
+
+    # Verify each participant record has expected fields
+    for participant in context.participant_list_data:
+        assert isinstance(participant, dict), "Each participant should be a dict"
+        # At minimum should have email and name
+        assert 'email' in participant or 'name' in participant, \
+            "Participant record should have email or name field"

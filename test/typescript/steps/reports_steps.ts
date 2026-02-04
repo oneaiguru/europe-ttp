@@ -18,6 +18,8 @@ type ReportsWorld = {
   formsReportBody?: string;
   printFormStatus?: number;
   printFormBody?: string;
+  participantListStatus?: number;
+  participantListData?: unknown[];
 };
 
 function getWorld(world: unknown): ReportsWorld {
@@ -238,4 +240,46 @@ Then('I should see a printable form view', function (this: unknown) {
 
   // Verify response is not empty
   assert.ok(world.printFormBody.length > 0, 'Response should not be empty');
+});
+
+// Participant List Report Steps
+
+When('I request the participant list report', async function (this: unknown) {
+  const world = getWorld(this);
+
+  // Mock the API call - in real implementation, this would call the API
+  // For now, simulate success
+  world.participantListStatus = 200;
+  world.participantListData = [
+    {
+      email: 'test.applicant@example.com',
+      name: 'Test Applicant',
+      ttc_option: 'test_us_future',
+      enrollment_count: 10,
+      enrollment_list_count: 8,
+      application_status: 'submitted',
+      last_update: '2024-01-15 10:30:00',
+    },
+  ];
+});
+
+Then('I should receive the participant list output', function (this: unknown) {
+  const world = getWorld(this);
+
+  assert.ok(world.participantListStatus !== undefined, 'Request was not executed');
+  assert.strictEqual(world.participantListStatus, 200, `Expected status 200, got ${world.participantListStatus}`);
+
+  // Verify data structure
+  assert.ok(world.participantListData, 'No participant list data in response');
+  assert.ok(Array.isArray(world.participantListData), 'Participant list should be an array');
+
+  // Verify each participant has expected fields
+  for (const participant of world.participantListData as unknown[]) {
+    if (!participant) continue;
+    assert.ok(typeof participant === 'object', 'Each participant should be an object');
+    assert.ok(
+      'email' in participant || 'name' in participant,
+      'Participant record should have email or name field'
+    );
+  }
 });

@@ -235,8 +235,8 @@ export const STEPS = {
   },
   'I request the participant list report': {
     pattern: /^I\ request\ the\ participant\ list\ report$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:444',
+    typescript: 'test/typescript/steps/reports_steps.ts:247',
     features: ['specs/features/reports/participant_list.feature:9'],
   },
   'I request the user application report as HTML': {
@@ -331,8 +331,8 @@ export const STEPS = {
   },
   'I should receive the participant list output': {
     pattern: /^I\ should\ receive\ the\ participant\ list\ output$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:464',
+    typescript: 'test/typescript/steps/reports_steps.ts:266',
     features: ['specs/features/reports/participant_list.feature:10'],
   },
   'I should receive the stored form data': {

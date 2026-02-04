@@ -108,6 +108,11 @@ handlers:
   login: admin
   secure: always
 
+- url: /reporting/participant-list/.*
+  script: reporting.participant_list.app
+  login: required
+  secure: always
+
 
   #- url: /.*
 #  script: not_found.app

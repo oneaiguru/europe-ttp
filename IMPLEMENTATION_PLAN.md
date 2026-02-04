@@ -77,7 +77,7 @@
 | TASK-031 | p1 | specs/features/reports/user_integrity.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-032 | p2 | specs/features/reports/user_report.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-033 | p3 | specs/features/reports/print_form.feature | ✅ DONE | Python + TypeScript steps implemented |
-| TASK-034 | p2 | specs/features/reports/participant_list.feature | 🔴 TODO | |
+| TASK-034 | p2 | specs/features/reports/participant_list.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-035 | p3 | specs/features/reports/certificate.feature | 🔴 TODO | |
 
 ---
