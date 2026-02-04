@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-04T14:15:55.774229+00:00",
+  "generated_at": "2026-02-04T16:36:36.237162+00:00",
   "source": "IMPLEMENTATION_PLAN.md",
   "tasks": [
     {
@@ -64,18 +64,6 @@
       "status": "\u26a0\ufe0f PARTIAL"
     },
     {
-      "id": "TASK-035",
-      "name": "Certificate Generation: Generate certificate PDF",
-      "feature_file": "specs/features/reports/certificate.feature",
-      "priority": "p3",
-      "scenarios": [
-        "Generate certificate PDF"
-      ],
-      "depends_on": [],
-      "estimated_hours": 3,
-      "status": "\u2705 DONE"
-    },
-    {
       "id": "TASK-E2E-007",
       "name": "Draft Save and Resume: Save partial application and resume after logout",
       "feature_file": "specs/features/e2e/draft_save_and_resume.feature",
@@ -87,34 +75,6 @@
       "depends_on": [],
       "estimated_hours": 3,
       "status": "\ud83d\udfe1 PARTIAL"
-    },
-    {
-      "id": "TASK-E2E-009",
-      "name": "Full Evaluator Workflow: Evaluator views and evaluates applicant",
-      "feature_file": "specs/features/e2e/full_evaluator_workflow.feature",
-      "priority": "p2",
-      "scenarios": [
-        "Evaluator views and evaluates applicant",
-        "Role-based visibility - evaluator cannot see other evaluators' submissions",
-        "Evaluator can only evaluate assigned applicants"
-      ],
-      "depends_on": [],
-      "estimated_hours": 3,
-      "status": "\ud83d\udd34 TODO"
-    },
-    {
-      "id": "TASK-E2E-010",
-      "name": "Certificate Generation Gated by Completion: Generate certificate when all requirements complete",
-      "feature_file": "specs/features/e2e/certificate_gating.feature",
-      "priority": "p1",
-      "scenarios": [
-        "Generate certificate when all requirements complete",
-        "Certificate blocked when evaluations missing",
-        "Certificate blocked when post-TTC feedback missing"
-      ],
-      "depends_on": [],
-      "estimated_hours": 4,
-      "status": "\ud83d\udd34 TODO"
     },
     {
       "id": "TASK-E2E-011",

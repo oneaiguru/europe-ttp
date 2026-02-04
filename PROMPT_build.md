@@ -54,10 +54,16 @@ Run exactly ONE role per loop, then STOP.
    ```bash
    bun scripts/bdd/run-typescript.ts specs/features/
    ```
-3. Identify the first scenario/step that is:
+3. Identify the most important **non-DONE** item from `IMPLEMENTATION_PLAN.md`
+   at this moment (scenario/step).
+   If multiple items seem equally important, use this tie-breaker order:
+   - Prefer **PARTIAL** over TODO.
+   - Prefer the item listed **earliest/highest** in the plan table.
+   If still unclear, then choose one that is:
    - Not implemented (step missing)
    - Failing in Python
    - Failing in TypeScript
+   **Do not create or switch to a task not listed in the plan/task graph.**
 4. Create `docs/Tasks/ACTIVE_TASK.md` with task ID
 5. Create `docs/Tasks/<slug>.task.md` with:
    - Task ID and name
