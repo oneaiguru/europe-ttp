@@ -42,6 +42,12 @@ def before_all(context):
     except (ImportError, SyntaxError):
         print("Warning: Could not import ttc_portal app")
 
+    try:
+        from reporting import user_summary as reporting_app
+        context.reporting_client = TestApp(reporting_app.app)
+    except (ImportError, SyntaxError) as e:
+        print("Warning: Could not import reporting app: {}".format(e))
+
     # Store project root for reference
     context.project_root = PROJECT_ROOT
 

@@ -73,7 +73,7 @@
 | TASK-027 | p2 | specs/features/user/get_form_instances.feature | 🔴 TODO | |
 | TASK-028 | p2 | specs/features/user/config_management.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-029 | p2 | specs/features/user/reporting_get_form_data.feature | 🔴 TODO | |
-| TASK-030 | p1 | specs/features/reports/user_summary.feature | 🔴 TODO | |
+| TASK-030 | p1 | specs/features/reports/user_summary.feature | ⚠️ PARTIAL | Python + TypeScript steps implemented (blocked by env issues) |
 | TASK-031 | p1 | specs/features/reports/user_integrity.feature | 🔴 TODO | |
 | TASK-032 | p2 | specs/features/reports/user_report.feature | 🔴 TODO | |
 | TASK-033 | p3 | specs/features/reports/print_form.feature | 🔴 TODO | |

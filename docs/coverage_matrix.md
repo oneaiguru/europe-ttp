@@ -81,7 +81,7 @@
 | Print Form | specs/features/reports/print_form.feature | ❌ | ❌ |
 | User Application Report | specs/features/reports/user_report.feature | ❌ | ❌ |
 | User Integrity Report | specs/features/reports/user_integrity.feature | ❌ | ❌ |
-| User Summary Report | specs/features/reports/user_summary.feature | ❌ | ❌ |
+| User Summary Report | specs/features/reports/user_summary.feature | ⚠️ | ⚠️ |
 
 ---
 

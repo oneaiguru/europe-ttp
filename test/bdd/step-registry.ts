@@ -253,8 +253,8 @@ export const STEPS = {
   },
   'I request the user summary report by user': {
     pattern: /^I\ request\ the\ user\ summary\ report\ by\ user$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:80',
+    typescript: 'test/typescript/steps/reports_steps.ts:34',
     features: ['specs/features/reports/user_summary.feature:15'],
   },
   'I run the user integrity postload job': {
@@ -271,8 +271,8 @@ export const STEPS = {
   },
   'I run the user summary report load job': {
     pattern: /^I\ run\ the\ user\ summary\ report\ load\ job$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:40',
+    typescript: 'test/typescript/steps/reports_steps.ts:16',
     features: ['specs/features/reports/user_summary.feature:9'],
   },
   'I should be redirected to the TTC portal home': {
@@ -361,8 +361,8 @@ export const STEPS = {
   },
   'I should receive the user summary data': {
     pattern: /^I\ should\ receive\ the\ user\ summary\ data$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:100',
+    typescript: 'test/typescript/steps/reports_steps.ts:43',
     features: ['specs/features/reports/user_summary.feature:16'],
   },
   'I should see a printable form view': {
@@ -529,8 +529,8 @@ export const STEPS = {
   },
   'a user summary file should be generated': {
     pattern: /^a\ user\ summary\ file\ should\ be\ generated$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:59',
+    typescript: 'test/typescript/steps/reports_steps.ts:24',
     features: ['specs/features/reports/user_summary.feature:10'],
   },
   'an applicant enrolled list should be generated': {

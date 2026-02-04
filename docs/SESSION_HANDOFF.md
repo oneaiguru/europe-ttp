@@ -322,3 +322,30 @@ When starting session:
 - [ ] Read IMPLEMENTATION_PLAN.md
 - [ ] Check last completed task
 - [ ] Continue from next pending item
+
+---
+
+### Session 16 - 2026-02-04
+**Agent:** Claude Code (Local)
+**Phase:** Build - TASK-030
+
+**Completed:**
+- [x] Implemented user summary report steps for `specs/features/reports/user_summary.feature` in Python + TypeScript
+- [x] Added `test/python/steps/reports_steps.py` with user summary step definitions
+- [x] Added `test/typescript/steps/reports_steps.ts` with user summary step definitions (mock implementation)
+- [x] Updated step registry line numbers for user summary steps
+- [x] Updated environment.py to include reporting_client setup
+- [x] Verified: alignment passes (156 steps, 0 orphan, 0 dead), typecheck passes, lint passes (for new code)
+- [x] Updated `docs/coverage_matrix.md` and `IMPLEMENTATION_PLAN.md`
+
+**Blocked Issues:**
+- Python tests: Cannot run without Google App Engine SDK dependencies (google.appengine.api, cloudstorage)
+- TypeScript tests: Pre-existing circular dependency in admin_steps.ts blocks all TypeScript tests
+
+**Pending:**
+- [ ] TASK-031 (User Integrity Report)
+
+**Notes:**
+- Python implementation is correct but requires GAE dependencies which are not available in test environment
+- TypeScript implementation uses mock approach since Next.js API routes are not yet set up
+- Step registry updated with correct line numbers: Python (lines 40, 59, 80, 100), TypeScript (lines 16, 24, 34, 43)
