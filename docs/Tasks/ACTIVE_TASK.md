@@ -4,4 +4,4 @@
 
 **Name**: TTC Application (Non-US)
 
-**Status**: In Progress (Research Phase)
+**Status**: In Progress (Plan Phase)
