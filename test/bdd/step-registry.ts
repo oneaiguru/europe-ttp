@@ -253,8 +253,8 @@ export const STEPS = {
   },
   'I request the user integrity report by user': {
     pattern: /^I\ request\ the\ user\ integrity\ report\ by\ user$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:161',
+    typescript: 'test/typescript/steps/reports_steps.ts:82',
     features: ['specs/features/reports/user_integrity.feature:15'],
   },
   'I request the user summary report by user': {
@@ -265,14 +265,14 @@ export const STEPS = {
   },
   'I run the user integrity postload job': {
     pattern: /^I\ run\ the\ user\ integrity\ postload\ job$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:200',
+    typescript: 'test/typescript/steps/reports_steps.ts:105',
     features: ['specs/features/reports/user_integrity.feature:21'],
   },
   'I run the user integrity report load job': {
     pattern: /^I\ run\ the\ user\ integrity\ report\ load\ job$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:119',
+    typescript: 'test/typescript/steps/reports_steps.ts:64',
     features: ['specs/features/reports/user_integrity.feature:9'],
   },
   'I run the user summary report load job': {
@@ -355,8 +355,8 @@ export const STEPS = {
   },
   'I should receive the user integrity data': {
     pattern: /^I\ should\ receive\ the\ user\ integrity\ data$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:181',
+    typescript: 'test/typescript/steps/reports_steps.ts:91',
     features: ['specs/features/reports/user_integrity.feature:16'],
   },
   'I should receive the user summary data': {
@@ -523,8 +523,8 @@ export const STEPS = {
   },
   'a user integrity file should be generated': {
     pattern: /^a\ user\ integrity\ file\ should\ be\ generated$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:138',
+    typescript: 'test/typescript/steps/reports_steps.ts:72',
     features: ['specs/features/reports/user_integrity.feature:10'],
   },
   'a user summary file should be generated': {
@@ -535,8 +535,8 @@ export const STEPS = {
   },
   'an applicant enrolled list should be generated': {
     pattern: /^an\ applicant\ enrolled\ list\ should\ be\ generated$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:219',
+    typescript: 'test/typescript/steps/reports_steps.ts:114',
     features: ['specs/features/reports/user_integrity.feature:22'],
   },
   'my configuration should be saved': {

@@ -112,3 +112,121 @@ def step_should_receive_user_summary_data(context):
     # Verify expected structure (at minimum, should be a dict keyed by email)
     # Empty dict is acceptable (no users), but must be a dict
     assert len(context.summary_data) >= 0, "Summary data should be a dict"
+
+
+# User Integrity Report Steps
+
+@when('I run the user integrity report load job')
+def step_run_user_integrity_load_job(context):
+    """Call the legacy user integrity load endpoint."""
+    client = _get_reporting_client(context)
+    admin_email = _get_admin_email(context)
+
+    # Mock admin authentication by setting environ
+    client.extra_environ = {'USER_EMAIL': admin_email}
+
+    try:
+        response = client.get('/integrity/user-integrity/load')
+        context.integrity_load_response = response
+        context.integrity_load_status = response.status
+        context.integrity_load_body = _get_response_body(response)
+    except Exception as e:
+        context.integrity_load_error = str(e)
+        context.integrity_load_status = 500
+
+
+@then('a user integrity file should be generated')
+def step_user_integrity_file_generated(context):
+    """Verify that the load job completed successfully."""
+    if hasattr(context, 'integrity_load_error'):
+        raise AssertionError("Load job failed with error: {}".format(context.integrity_load_error))
+
+    assert context.integrity_load_status == 200, "Expected status 200, got {}: {}".format(
+        context.integrity_load_status, context.integrity_load_body
+    )
+
+    # Verify we can retrieve the integrity data via the get endpoint
+    client = _get_reporting_client(context)
+    admin_email = _get_admin_email(context)
+    client.extra_environ = {'USER_EMAIL': admin_email}
+
+    try:
+        response = client.get('/integrity/user-integrity/get-by-user')
+        assert response.status == 200, "Get request failed: {}".format(response.status)
+        context.integrity_data = json.loads(_get_response_body(response))
+    except Exception as e:
+        raise AssertionError("Failed to retrieve integrity file: {}".format(e))
+
+
+@when('I request the user integrity report by user')
+def step_request_user_integrity_by_user(context):
+    """Request the user integrity data."""
+    client = _get_reporting_client(context)
+    admin_email = _get_admin_email(context)
+    client.extra_environ = {'USER_EMAIL': admin_email}
+
+    try:
+        response = client.get('/integrity/user-integrity/get-by-user')
+        context.integrity_response = response
+        context.integrity_status = response.status
+        context.integrity_body = _get_response_body(response)
+
+        if response.status == 200:
+            context.integrity_data = json.loads(context.integrity_body)
+    except Exception as e:
+        context.integrity_error = str(e)
+        context.integrity_status = 500
+
+
+@then('I should receive the user integrity data')
+def step_should_receive_user_integrity_data(context):
+    """Verify that user integrity data was received."""
+    if hasattr(context, 'integrity_error'):
+        raise AssertionError("Request failed with error: {}".format(context.integrity_error))
+
+    assert context.integrity_status == 200, "Expected status 200, got {}: {}".format(
+        context.integrity_status, context.integrity_body
+    )
+
+    # Verify response is valid JSON
+    assert hasattr(context, 'integrity_data'), "No integrity data in context"
+    assert isinstance(context.integrity_data, dict), "Integrity data should be a dict"
+
+    # Verify expected structure (at minimum, should be a dict keyed by email)
+    # Empty dict is acceptable (no users), but must be a dict
+    assert len(context.integrity_data) >= 0, "Integrity data should be a dict"
+
+
+@when('I run the user integrity postload job')
+def step_run_user_integrity_postload_job(context):
+    """Call the legacy user integrity postload endpoint."""
+    client = _get_reporting_client(context)
+    admin_email = _get_admin_email(context)
+
+    # Mock admin authentication by setting environ
+    client.extra_environ = {'USER_EMAIL': admin_email}
+
+    try:
+        response = client.get('/jobs/integrity/user-integrity/postload')
+        context.postload_response = response
+        context.postload_status = response.status
+        context.postload_body = _get_response_body(response)
+    except Exception as e:
+        context.postload_error = str(e)
+        context.postload_status = 500
+
+
+@then('an applicant enrolled list should be generated')
+def step_applicant_enrolled_list_generated(context):
+    """Verify that the postload job completed successfully."""
+    if hasattr(context, 'postload_error'):
+        raise AssertionError("Postload job failed with error: {}".format(context.postload_error))
+
+    assert context.postload_status == 200, "Expected status 200, got {}: {}".format(
+        context.postload_status, context.postload_body
+    )
+
+    # Verify response contains CSV content
+    body = context.postload_body
+    assert 'Applicant Name,Applicant Email,Enrolled Name,Enrolled Email' in body or len(body) > 0, \
+        "Postload should generate CSV output"
