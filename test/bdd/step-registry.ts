@@ -157,8 +157,8 @@ export const STEPS = {
   },
   'I open the post-TTC feedback form': {
     pattern: /^I\ open\ the\ post\-TTC\ feedback\ form$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:198',
+    typescript: 'test/typescript/steps/forms_steps.ts:266',
     features: ['specs/features/forms/post_ttc_feedback.feature:9'],
   },
   'I open the post-TTC self evaluation form': {
@@ -463,8 +463,8 @@ export const STEPS = {
   },
   'I should see the post-TTC feedback questions': {
     pattern: /^I\ should\ see\ the\ post\-TTC\ feedback\ questions$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:204',
+    typescript: 'test/typescript/steps/forms_steps.ts:280',
     features: ['specs/features/forms/post_ttc_feedback.feature:10'],
   },
   'I should see the post-TTC self evaluation questions': {

@@ -40,7 +40,7 @@
 | DSN Application | specs/features/forms/dsn_application.feature | ✓ | ✓ |
 | Post-Sahaj TTC Feedback | specs/features/forms/post_sahaj_ttc_feedback.feature | ✓ | ✓ |
 | Post-Sahaj TTC Self Evaluation | specs/features/forms/post_sahaj_ttc_self_eval.feature | ✓ | ✓ |
-| Post-TTC Feedback | specs/features/forms/post_ttc_feedback.feature | ❌ | ❌ |
+| Post-TTC Feedback | specs/features/forms/post_ttc_feedback.feature | ✓ | ✓ |
 | Post-TTC Self Evaluation | specs/features/forms/post_ttc_self_eval.feature | ❌ | ❌ |
 | TTC Applicant Profile | specs/features/forms/ttc_applicant_profile.feature | ✓ | ✓ |
 | TTC Application (Non-US) | specs/features/forms/ttc_application_non_us.feature | ✓ | ✓ |

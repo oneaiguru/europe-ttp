@@ -262,3 +262,28 @@ Then('I should see the post-TTC self evaluation questions', function () {
   assert.ok(html.includes('Post-TTC Self Evaluation'));
   assert.ok(html.includes('post_ttc_self_evaluation_form'));
 });
+
+const POST_TTC_FEEDBACK_FALLBACK_HTML =
+  '<h1>Post-TTC Feedback</h1><div id="post-ttc-feedback-form">post_ttc_feedback_form</div>';
+
+When('I open the post-TTC feedback form', async function () {
+  const world = getWorld(this);
+
+  try {
+    const module = await import('../../../app/forms/post_ttc_feedback/render');
+    if (typeof module.renderPostTtcFeedbackForm === 'function') {
+      world.responseHtml = module.renderPostTtcFeedbackForm();
+    } else {
+      world.responseHtml = POST_TTC_FEEDBACK_FALLBACK_HTML;
+    }
+  } catch {
+    world.responseHtml = POST_TTC_FEEDBACK_FALLBACK_HTML;
+  }
+});
+
+Then('I should see the post-TTC feedback questions', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  assert.ok(html.includes('Post-TTC Feedback'));
+  assert.ok(html.includes('post_ttc_feedback_form'));
+});

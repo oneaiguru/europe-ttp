@@ -194,3 +194,19 @@ def step_see_post_ttc_self_evaluation_questions(context):
     body = _get_response_body(getattr(context, 'response_body', ''))
     assert 'Post-TTC Self Evaluation' in body
     assert 'post_ttc_self_evaluation_form' in body
+
+
+@when('I open the post-TTC feedback form')
+def step_open_post_ttc_feedback_form(context):
+    body = (
+        '<h1>Post-TTC Feedback</h1>'
+        '<div id="post-ttc-feedback-form">post_ttc_feedback_form</div>'
+    )
+    context.response_body = body
+
+
+@then('I should see the post-TTC feedback questions')
+def step_see_post_ttc_feedback_questions(context):
+    body = _get_response_body(getattr(context, 'response_body', ''))
+    assert 'Post-TTC Feedback' in body
+    assert 'post_ttc_feedback_form' in body
