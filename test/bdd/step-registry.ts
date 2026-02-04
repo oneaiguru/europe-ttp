@@ -505,8 +505,8 @@ export const STEPS = {
   },
   'I upload form data for a specific form instance': {
     pattern: /^I\ upload\ form\ data\ for\ a\ specific\ form\ instance$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:120',
+    typescript: 'test/typescript/steps/user_steps.ts:147',
     features: ['specs/features/user/form_data_upload.feature:9'],
   },
   'I visit the disabled page': {
@@ -547,8 +547,8 @@ export const STEPS = {
   },
   'my form data should be stored for that instance': {
     pattern: /^my\ form\ data\ should\ be\ stored\ for\ that\ instance$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:191',
+    typescript: 'test/typescript/steps/user_steps.ts:174',
     features: ['specs/features/user/form_data_upload.feature:10'],
   },
   'the API should accept the form submission': {
