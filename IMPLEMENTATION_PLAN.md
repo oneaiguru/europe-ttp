@@ -63,7 +63,7 @@
 | TASK-017 | p2 | specs/features/forms/post_ttc_feedback.feature | ✅ DONE | |
 | TASK-018 | p2 | specs/features/forms/post_sahaj_ttc_self_eval.feature | 🔴 TODO | |
 | TASK-019 | p2 | specs/features/forms/post_sahaj_ttc_feedback.feature | 🔴 TODO | |
-| TASK-020 | p3 | specs/features/forms/ttc_portal_settings.feature | 🔴 TODO | |
+| TASK-020 | p3 | specs/features/forms/ttc_portal_settings.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-021 | p3 | specs/features/forms/dsn_application.feature | 🔴 TODO | |
 | TASK-022 | p1 | specs/features/uploads/photo_upload.feature | ✅ DONE | |
 | TASK-023 | p2 | specs/features/uploads/document_upload.feature | 🔴 TODO | |

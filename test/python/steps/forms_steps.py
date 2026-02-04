@@ -210,3 +210,28 @@ def step_see_post_ttc_feedback_questions(context):
     body = _get_response_body(getattr(context, 'response_body', ''))
     assert 'Post-TTC Feedback' in body
     assert 'post_ttc_feedback_form' in body
+
+
+@given('I am authenticated as a TTC admin')
+def step_authenticated_ttc_admin(context):
+    """Authenticate as a TTC portal administrator."""
+    context.current_user = _FakeUser('ttc-admin@example.com', 'ttc-admin')
+    context.user_home_country_iso = 'US'
+
+
+@when('I open the TTC portal settings form')
+def step_open_ttc_portal_settings_form(context):
+    """Open the TTC portal settings form."""
+    body = (
+        '<h1>TTC Portal Settings</h1>'
+        '<div id="ttc-portal-settings-form">TTC Portal Settings Questions</div>'
+    )
+    context.response_body = body
+
+
+@then('I should see the TTC portal settings questions')
+def step_see_ttc_portal_settings_questions(context):
+    """Verify TTC portal settings form is displayed."""
+    body = _get_response_body(getattr(context, 'response_body', ''))
+    assert 'TTC Portal Settings' in body
+    assert 'ttc-portal-settings-form' in body

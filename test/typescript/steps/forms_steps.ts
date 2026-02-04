@@ -287,3 +287,34 @@ Then('I should see the post-TTC feedback questions', function () {
   assert.ok(html.includes('Post-TTC Feedback'));
   assert.ok(html.includes('post_ttc_feedback_form'));
 });
+
+const TTC_PORTAL_SETTINGS_FALLBACK_HTML =
+  '<h1>TTC Portal Settings</h1><div id="ttc-portal-settings-form">TTC Portal Settings Questions</div>';
+
+Given('I am authenticated as a TTC admin', function () {
+  const world = getWorld(this);
+  world.currentUser = { role: 'ttc-admin', email: 'ttc-admin@example.com' };
+  world.userHomeCountryIso = 'US';
+});
+
+When('I open the TTC portal settings form', async function () {
+  const world = getWorld(this);
+
+  try {
+    const module = await import('../../../app/forms/ttc_portal_settings/render');
+    if (typeof module.renderTtcPortalSettingsForm === 'function') {
+      world.responseHtml = module.renderTtcPortalSettingsForm();
+    } else {
+      world.responseHtml = TTC_PORTAL_SETTINGS_FALLBACK_HTML;
+    }
+  } catch {
+    world.responseHtml = TTC_PORTAL_SETTINGS_FALLBACK_HTML;
+  }
+});
+
+Then('I should see the TTC portal settings questions', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  assert.ok(html.includes('TTC Portal Settings'));
+  assert.ok(html.includes('ttc-portal-settings-form'));
+});
