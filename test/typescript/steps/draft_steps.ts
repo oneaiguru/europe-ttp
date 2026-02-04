@@ -193,10 +193,6 @@ When('I save a partial evaluator profile as draft', () => {
   };
 });
 
-When('I navigate to the TTC application form', () => {
-  draftContext.currentForm = 'ttc_application';
-});
-
 When('I open the TTC application form', () => {
   draftContext.currentForm = 'ttc_application';
 });

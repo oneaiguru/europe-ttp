@@ -7,7 +7,7 @@ API calls instead of browser automation for reliability and speed.
 """
 from __future__ import absolute_import
 import json
-import behave
+from behave import given, when, then
 
 
 # ============================================================================
@@ -91,8 +91,13 @@ def step_photo_uploaded(context):
 
 
 @when('I submit TTC application for "{ttc_value}" with:')
-def step_submit_ttc_application(context, ttc_value, doc):
+@when('I submit TTC application for "{ttc_value}" with')
+def step_submit_ttc_application(context, ttc_value, doc=None):
     """Submit a TTC application with specified form data."""
+    # Handle both table parameter and non-table parameter calls
+    if doc is None:
+        doc = context.table if hasattr(context, 'table') else None
+
     # Parse the table data
     form_data = {}
     for row in doc.rows:
@@ -115,8 +120,13 @@ def step_submit_ttc_application(context, ttc_value, doc):
 
 
 @when('I submit TTC evaluation for "{applicant_email}" with:')
-def step_submit_evaluation(context, applicant_email, doc):
+@when('I submit TTC evaluation for "{applicant_email}" with')
+def step_submit_evaluation(context, applicant_email, doc=None):
     """Submit an evaluation for an applicant."""
+    # Handle both table parameter and non-table parameter calls
+    if doc is None:
+        doc = context.table if hasattr(context, 'table') else None
+
     form_data = {}
     for row in doc.rows:
         form_data[row['field']] = row['value']
@@ -519,9 +529,14 @@ def step_assert_summary_shows_both(context):
 
 
 @then('the user summary should show:')
-def step_assert_user_summary(context, doc):
+@then('the user summary should show')
+def step_assert_user_summary(context, doc=None):
     """Assert the user summary contains specified values."""
-    expected = {row['field']: row['value'] for row in doc.rows}
+    # Handle both table parameter and non-table parameter calls
+    if doc is None:
+        doc = context.table if hasattr(context, 'table') else None
+
+    expected = {row['field']: row['value'] for row in doc.rows} if doc else {}
     context.user_summary = getattr(context, 'user_summary', {})
     for key, value in expected.items():
         assert str(context.user_summary.get(key)) == str(value), \

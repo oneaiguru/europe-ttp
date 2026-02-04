@@ -710,8 +710,8 @@ export const STEPS = {
   },
   'the user summary should show:': {
     pattern: /^the\ user\ summary\ should\ show:$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
+    python: 'test/python/steps/e2e_api_steps.py:521',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:527',
     features: ['specs/features/e2e/ttc_application_to_admin_review.feature:45'],
   },
   'the combined report should include both evaluations': {
@@ -772,14 +772,14 @@ export const STEPS = {
   },
   'I submit TTC application for {string} with:': {
     pattern: /^I\ submit\ TTC\ application\ for\ "([^"]*)"\ with:$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
+    python: 'test/python/steps/e2e_api_steps.py:93',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:211',
     features: ['specs/features/e2e/ttc_application_to_admin_review.feature:12'],
   },
   'I submit TTC evaluation for {string} with:': {
     pattern: /^I\ submit\ TTC\ evaluation\ for\ "([^"]*)"\ with:$/,
-    python: 'test/python/steps/e2e_api_steps.py:1',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
+    python: 'test/python/steps/e2e_api_steps.py:117',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:280',
     features: ['specs/features/e2e/ttc_application_to_admin_review.feature:27'],
   },
   'I attempt to submit TTC application via API for {string}': {

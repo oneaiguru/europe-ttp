@@ -632,6 +632,10 @@ Then('teacher 1 and {int} emails should be in the evaluator list', (n: number) =
 
 Given('I navigate to the TTC application form', () => {
   testContext.currentPage = 'ttc_application';
+  // Also set for draft context compatibility
+  if (typeof (globalThis as any).draftContext !== 'undefined') {
+    (globalThis as any).draftContext.currentForm = 'ttc_application';
+  }
 });
 
 When('I select {string} for "How many evaluating teachers?"', (count: string) => {
