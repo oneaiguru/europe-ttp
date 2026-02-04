@@ -65,7 +65,7 @@
 | TASK-019 | p2 | specs/features/forms/post_sahaj_ttc_feedback.feature | 🔴 TODO | |
 | TASK-020 | p3 | specs/features/forms/ttc_portal_settings.feature | 🔴 TODO | |
 | TASK-021 | p3 | specs/features/forms/dsn_application.feature | 🔴 TODO | |
-| TASK-022 | p1 | specs/features/uploads/photo_upload.feature | 🔴 TODO | |
+| TASK-022 | p1 | specs/features/uploads/photo_upload.feature | ✅ DONE | |
 | TASK-023 | p2 | specs/features/uploads/document_upload.feature | 🔴 TODO | |
 | TASK-024 | p1 | specs/features/api/upload_form.feature | ✅ DONE | |
 | TASK-025 | p1 | specs/features/user/form_data_upload.feature | 🔴 TODO | |

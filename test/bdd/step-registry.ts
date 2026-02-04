@@ -181,14 +181,14 @@ export const STEPS = {
   },
   'I request a signed upload URL for a document': {
     pattern: /^I\ request\ a\ signed\ upload\ URL\ for\ a\ document$/,
-    python: 'test/python/steps/uploads_steps.py:1',
-    typescript: 'test/typescript/steps/uploads_steps.ts:1',
+    python: 'test/python/steps/uploads_steps.py:28',
+    typescript: 'test/typescript/steps/uploads_steps.ts:31',
     features: ['specs/features/uploads/document_upload.feature:9'],
   },
   'I request a signed upload URL for a profile photo': {
     pattern: /^I\ request\ a\ signed\ upload\ URL\ for\ a\ profile\ photo$/,
-    python: 'test/python/steps/uploads_steps.py:1',
-    typescript: 'test/typescript/steps/uploads_steps.ts:1',
+    python: 'test/python/steps/uploads_steps.py:6',
+    typescript: 'test/typescript/steps/uploads_steps.ts:4',
     features: ['specs/features/uploads/photo_upload.feature:9'],
   },
   'I request a tab template page': {
@@ -295,14 +295,14 @@ export const STEPS = {
   },
   'I should receive a signed URL and upload key for the document': {
     pattern: /^I\ should\ receive\ a\ signed\ URL\ and\ upload\ key\ for\ the\ document$/,
-    python: 'test/python/steps/uploads_steps.py:1',
-    typescript: 'test/typescript/steps/uploads_steps.ts:1',
+    python: 'test/python/steps/uploads_steps.py:41',
+    typescript: 'test/typescript/steps/uploads_steps.ts:41',
     features: ['specs/features/uploads/document_upload.feature:10'],
   },
   'I should receive a signed URL and upload key for the photo': {
     pattern: /^I\ should\ receive\ a\ signed\ URL\ and\ upload\ key\ for\ the\ photo$/,
-    python: 'test/python/steps/uploads_steps.py:1',
-    typescript: 'test/typescript/steps/uploads_steps.ts:1',
+    python: 'test/python/steps/uploads_steps.py:19',
+    typescript: 'test/typescript/steps/uploads_steps.ts:14',
     features: ['specs/features/uploads/photo_upload.feature:10'],
   },
   'I should receive my saved configuration': {
