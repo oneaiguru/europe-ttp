@@ -96,7 +96,7 @@
 | TASK-E2E-005 | p2 | specs/features/e2e/home_country_changes_available_ttcs.feature | 🟢 DONE | A7 - Country-based filtering |
 | TASK-E2E-006 | p2 | specs/features/e2e/deadline_and_whitelist_override.feature | 🟢 DONE | Deadline control, whitelist |
 | TASK-E2E-007 | p2 | specs/features/e2e/draft_save_and_resume.feature | 🟡 PARTIAL | A2 - Save draft + resume later |
-| TASK-E2E-008 | p1 | specs/features/e2e/validation_errors.feature | 🔴 TODO | A3 - Field-level validation errors |
+| TASK-E2E-008 | p1 | specs/features/e2e/validation_errors.feature | 🟢 DONE | A3 - Field-level validation errors |
 | TASK-E2E-009 | p2 | specs/features/e2e/full_evaluator_workflow.feature | 🔴 TODO | A4 - See uploads, role-based visibility |
 | TASK-E2E-010 | p1 | specs/features/e2e/certificate_gating.feature | 🔴 TODO | A6 - Certificate by completion |
 | TASK-E2E-011 | p2 | specs/features/e2e/reporting_integrity_checks.feature | 🔴 TODO | A8 - Missing uploads, incomplete forms |
@@ -495,8 +495,11 @@ This section contains the **full detailed scenario specifications** from the PRD
 * And submission is blocked
 * And draft remains intact
 
-**Implementation Status:** 🔴 TODO (TASK-E2E-008)
-- Feature: `specs/features/e2e/validation_errors.feature` (spec written in plan)
+**Implementation Status:** 🟢 DONE (TASK-E2E-008)
+- Feature: `specs/features/e2e/validation_errors.feature`
+- Python steps: `test/python/steps/validation_steps.py`
+- TypeScript steps: `test/typescript/steps/validation_steps.ts`
+- All 3 scenarios passing in both Python and TypeScript
 
 ---
 

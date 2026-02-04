@@ -939,4 +939,53 @@ export const STEPS = {
     typescript: 'test/typescript/steps/draft_steps.ts:145',
     features: ['specs/features/e2e/draft_save_and_resume.feature:16'],
   },
+  // Validation Error Steps
+  'I submit the TTC application form with missing required fields:': {
+    pattern: /^I\ submit\ the\ TTC\ application\ form\ with\ missing\ required\ fields:$/,
+    python: 'test/python/steps/validation_steps.py:20',
+    typescript: 'test/typescript/steps/validation_steps.ts:38',
+    features: ['specs/features/e2e/validation_errors.feature:11'],
+  },
+  'I should see field-level errors': {
+    pattern: /^I\ should\ see\ field\-level\ errors$/,
+    python: 'test/python/steps/validation_steps.py:54',
+    typescript: 'test/typescript/steps/validation_steps.ts:77',
+    features: ['specs/features/e2e/validation_errors.feature:17'],
+  },
+  'the submission should be blocked': {
+    pattern: /^the\ submission\ should\ be\ blocked$/,
+    python: 'test/python/steps/validation_steps.py:61',
+    typescript: 'test/typescript/steps/validation_steps.ts:88',
+    features: ['specs/features/e2e/validation_errors.feature:18', 'specs/features/e2e/validation_errors.feature:25'],
+  },
+  'my draft data should remain intact': {
+    pattern: /^my\ draft\ data\ should\ remain\ intact$/,
+    python: 'test/python/steps/validation_steps.py:72',
+    typescript: 'test/typescript/steps/validation_steps.ts:103',
+    features: ['specs/features/e2e/validation_errors.feature:19'],
+  },
+  'I submit the TTC application with an invalid email format': {
+    pattern: /^I\ submit\ the\ TTC\ application\ with\ an\ invalid\ email\ format$/,
+    python: 'test/python/steps/validation_steps.py:82',
+    typescript: 'test/typescript/steps/validation_steps.ts:123',
+    features: ['specs/features/e2e/validation_errors.feature:22'],
+  },
+  'I should see an email format validation error': {
+    pattern: /^I\ should\ see\ an\ email\ format\ validation\ error$/,
+    python: 'test/python/steps/validation_steps.py:99',
+    typescript: 'test/typescript/steps/validation_steps.ts:142',
+    features: ['specs/features/e2e/validation_errors.feature:24'],
+  },
+  'I should see {string} error message': {
+    pattern: /^I\ should\ see\ "([^"]*)"\ error\ message$/,
+    python: 'test/python/steps/validation_steps.py:111',
+    typescript: 'test/typescript/steps/validation_steps.ts:156',
+    features: ['specs/features/e2e/validation_errors.feature:33'],
+  },
+  'I attempt to submit the TTC application': {
+    pattern: /^I\ attempt\ to\ submit\ the\ TTC\ application$/,
+    python: 'test/python/steps/e2e_api_steps.py:138',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:253',
+    features: ['specs/features/e2e/validation_errors.feature:31'],
+  },
 } as const;
