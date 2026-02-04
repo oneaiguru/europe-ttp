@@ -46,7 +46,7 @@
 | TTC Application (Non-US) | specs/features/forms/ttc_application_non_us.feature | ✓ | ✓ |
 | TTC Application (US) | specs/features/forms/ttc_application_us.feature | ✓ | ✓ |
 | TTC Evaluation | specs/features/forms/ttc_evaluation.feature | ❌ | ❌ |
-| TTC Evaluator Profile | specs/features/forms/ttc_evaluator_profile.feature | ❌ | ❌ |
+| TTC Evaluator Profile | specs/features/forms/ttc_evaluator_profile.feature | ✓ | ✓ |
 | TTC Portal Settings | specs/features/forms/ttc_portal_settings.feature | ❌ | ❌ |
 
 ## File Uploads

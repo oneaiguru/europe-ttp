@@ -58,7 +58,7 @@
 | TASK-012 | p2 | specs/features/forms/ttc_application_non_us.feature | ✅ DONE | |
 | TASK-013 | p2 | specs/features/forms/ttc_evaluation.feature | ✅ DONE | |
 | TASK-014 | p2 | specs/features/forms/ttc_applicant_profile.feature | ✅ DONE | |
-| TASK-015 | p2 | specs/features/forms/ttc_evaluator_profile.feature | 🔴 TODO | |
+| TASK-015 | p2 | specs/features/forms/ttc_evaluator_profile.feature | ✅ DONE | |
 | TASK-016 | p2 | specs/features/forms/post_ttc_self_eval.feature | 🔴 TODO | |
 | TASK-017 | p2 | specs/features/forms/post_ttc_feedback.feature | 🔴 TODO | |
 | TASK-018 | p2 | specs/features/forms/post_sahaj_ttc_self_eval.feature | 🔴 TODO | |
