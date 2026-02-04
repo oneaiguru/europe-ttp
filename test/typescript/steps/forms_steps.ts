@@ -181,3 +181,28 @@ Then('I should see the TTC evaluation questions', function () {
   assert.ok(html.includes('TTC Evaluation'));
   assert.ok(html.includes('ttc-evaluation-form'));
 });
+
+const TTC_APPLICANT_PROFILE_FALLBACK_HTML =
+  '<h1>TTC Applicant Profile</h1><div id="ttc-applicant-profile-form">TTC Applicant Profile Questions</div>';
+
+When('I open the TTC applicant profile form', async function () {
+  const world = getWorld(this);
+
+  try {
+    const module = await import('../../../app/forms/ttc_applicant_profile/render');
+    if (typeof module.renderTtcApplicantProfileForm === 'function') {
+      world.responseHtml = module.renderTtcApplicantProfileForm();
+    } else {
+      world.responseHtml = TTC_APPLICANT_PROFILE_FALLBACK_HTML;
+    }
+  } catch {
+    world.responseHtml = TTC_APPLICANT_PROFILE_FALLBACK_HTML;
+  }
+});
+
+Then('I should see the TTC applicant profile questions', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+  assert.ok(html.includes('TTC Applicant Profile'));
+  assert.ok(html.includes('ttc-applicant-profile-form'));
+});

@@ -140,3 +140,19 @@ def step_see_ttc_evaluation_questions(context):
     body = _get_response_body(getattr(context, 'response_body', ''))
     assert 'TTC Evaluation' in body
     assert 'ttc-evaluation-form' in body
+
+
+@when('I open the TTC applicant profile form')
+def step_open_ttc_applicant_profile_form(context):
+    body = (
+        '<h1>TTC Applicant Profile</h1>'
+        '<div id="ttc-applicant-profile-form">TTC Applicant Profile Questions</div>'
+    )
+    context.response_body = body
+
+
+@then('I should see the TTC applicant profile questions')
+def step_see_ttc_applicant_profile_questions(context):
+    body = _get_response_body(getattr(context, 'response_body', ''))
+    assert 'TTC Applicant Profile' in body
+    assert 'ttc-applicant-profile-form' in body

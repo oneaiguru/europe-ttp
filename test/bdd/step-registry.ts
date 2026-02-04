@@ -85,8 +85,8 @@ export const STEPS = {
   },
   'I open the TTC applicant profile form': {
     pattern: /^I\ open\ the\ TTC\ applicant\ profile\ form$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:145',
+    typescript: 'test/typescript/steps/forms_steps.ts:188',
     features: ['specs/features/forms/ttc_applicant_profile.feature:9'],
   },
   'I open the TTC application form for a non-US country': {
@@ -391,8 +391,8 @@ export const STEPS = {
   },
   'I should see the TTC applicant profile questions': {
     pattern: /^I\ should\ see\ the\ TTC\ applicant\ profile\ questions$/,
-    python: 'test/python/steps/forms_steps.py:1',
-    typescript: 'test/typescript/steps/forms_steps.ts:1',
+    python: 'test/python/steps/forms_steps.py:154',
+    typescript: 'test/typescript/steps/forms_steps.ts:203',
     features: ['specs/features/forms/ttc_applicant_profile.feature:10'],
   },
   'I should see the TTC application questions for that country': {

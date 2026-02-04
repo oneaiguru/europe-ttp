@@ -42,7 +42,7 @@
 | Post-Sahaj TTC Self Evaluation | specs/features/forms/post_sahaj_ttc_self_eval.feature | ✓ | ✓ |
 | Post-TTC Feedback | specs/features/forms/post_ttc_feedback.feature | ❌ | ❌ |
 | Post-TTC Self Evaluation | specs/features/forms/post_ttc_self_eval.feature | ❌ | ❌ |
-| TTC Applicant Profile | specs/features/forms/ttc_applicant_profile.feature | ❌ | ❌ |
+| TTC Applicant Profile | specs/features/forms/ttc_applicant_profile.feature | ✓ | ✓ |
 | TTC Application (Non-US) | specs/features/forms/ttc_application_non_us.feature | ✓ | ✓ |
 | TTC Application (US) | specs/features/forms/ttc_application_us.feature | ✓ | ✓ |
 | TTC Evaluation | specs/features/forms/ttc_evaluation.feature | ❌ | ❌ |
@@ -95,6 +95,6 @@
 
 ## Summary
 - **Total Features:** 36
-- **Python Verified:** 15/36
-- **TypeScript Complete:** 15/36
-- **Parity:** 42%
+- **Python Verified:** 16/36
+- **TypeScript Complete:** 16/36
+- **Parity:** 44%

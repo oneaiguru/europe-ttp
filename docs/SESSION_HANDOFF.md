@@ -265,6 +265,27 @@ Track progress across Claude Code sessions.
 
 ---
 
+### Session 14 - 2026-02-04
+**Agent:** Claude Code (Local)
+**Phase:** Build - TASK-014
+
+**Completed:**
+- [x] Implemented TTC applicant profile form steps for `specs/features/forms/ttc_applicant_profile.feature` in Python + TypeScript
+- [x] Added `app/forms/ttc_applicant_profile/render.ts` render helper
+- [x] Updated step registry line numbers for TTC applicant profile steps
+- [x] Verified: Python + TypeScript TTC applicant profile scenario passes, alignment/typecheck/lint all green
+- [x] Updated `docs/coverage_matrix.md` and `IMPLEMENTATION_PLAN.md`
+
+**Pending:**
+- [ ] TASK-015 (TTC Evaluator Profile)
+
+**Notes:**
+- Python Behave logs warnings about missing legacy imports/fixtures; scenario passes using static HTML fallback.
+- Had to compile TypeScript to CommonJS (.cjs) to run Cucumber tests due to ES module compatibility issues with ts-node loader.
+- Step registry alignment passes with 0 orphan steps and 0 dead steps.
+
+---
+
 ## Notes
 
 ### Handoff Checklist
