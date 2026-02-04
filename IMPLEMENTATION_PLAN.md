@@ -98,7 +98,7 @@
 | TASK-E2E-007 | p2 | specs/features/e2e/draft_save_and_resume.feature | 🟡 PARTIAL | A2 - Save draft + resume later |
 | TASK-E2E-008 | p1 | specs/features/e2e/validation_errors.feature | 🟢 DONE | A3 - Field-level validation errors |
 | TASK-E2E-009 | p2 | specs/features/e2e/full_evaluator_workflow.feature | ✅ DONE | A4 - See uploads, role-based visibility |
-| TASK-E2E-010 | p1 | specs/features/e2e/certificate_gating.feature | 🔴 TODO | A6 - Certificate by completion |
+| TASK-E2E-010 | p1 | specs/features/e2e/certificate_gating.feature | 🟢 DONE | A6 - Certificate by completion |
 | TASK-E2E-011 | p2 | specs/features/e2e/reporting_integrity_checks.feature | 🔴 TODO | A8 - Missing uploads, incomplete forms |
 | TASK-E2E-012 | p2 | specs/features/e2e/form_prerequisites_conditional.feature | 🔴 TODO | A7 - DSN/Silence/Happiness/Part1/Part2 availability |
 | TASK-E2E-013 | p2 | specs/features/e2e/course_eligibility_by_profile.feature | 🔴 TODO | A7 - Form availability based on profile |
