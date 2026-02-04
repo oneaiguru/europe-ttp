@@ -1,0 +1,117 @@
+import { readdirSync, readFileSync, statSync } from 'fs';
+import { join } from 'path';
+import { STEPS } from '../../test/bdd/step-registry';
+const stepLineRe = /^(Given|When|Then|And|But)\s+(.+)$/;
+function walk(dir) {
+    const entries = readdirSync(dir);
+    const files = [];
+    for (const entry of entries) {
+        const full = join(dir, entry);
+        const stat = statSync(full);
+        if (stat.isDirectory()) {
+            files.push(...walk(full));
+        }
+        else if (stat.isFile() && entry.endsWith('.feature')) {
+            files.push(full);
+        }
+    }
+    return files;
+}
+function extractFeatureSteps(filePath) {
+    const lines = readFileSync(filePath, 'utf8').split(/\r?\n/);
+    const steps = [];
+    for (const line of lines) {
+        const trimmed = line.trim();
+        const match = stepLineRe.exec(trimmed);
+        if (match) {
+            steps.push(match[2]);
+        }
+    }
+    return steps;
+}
+/**
+ * Check if a feature step matches a registry pattern.
+ * Handles parameterized steps with {string}, {int}, etc.
+ */
+function stepMatchesPattern(featureStep, registryKey, stepEntry) {
+    // Exact match
+    if (featureStep === registryKey) {
+        return true;
+    }
+    // If the step entry has a pattern, use it
+    if (stepEntry.pattern) {
+        return stepEntry.pattern.test(featureStep);
+    }
+    // Pattern matching for {string} placeholders
+    // Convert registry key with {string} to a regex pattern
+    if (registryKey.includes('{string}')) {
+        const patternStr = registryKey
+            .replace(/\{string\}/g, '"[^"]*"')
+            .replace(/\{int\}/g, '\\d+')
+            .replace(/\{float\}/g, '\\d+\\.?\\d*')
+            .replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape special regex chars except our replacements
+        const pattern = new RegExp(`^${patternStr}$`);
+        return pattern.test(featureStep);
+    }
+    // Pattern matching for {int} placeholders
+    if (registryKey.includes('{int}')) {
+        const patternStr = registryKey
+            .replace(/\{int\}/g, '\\d+')
+            .replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const pattern = new RegExp(`^${patternStr}$`);
+        return pattern.test(featureStep);
+    }
+    return false;
+}
+const featureFiles = walk('specs/features');
+const featureSteps = new Set();
+for (const file of featureFiles) {
+    for (const step of extractFeatureSteps(file)) {
+        featureSteps.add(step);
+    }
+}
+// Check for dead steps (in features but not in registry)
+const deadSteps = [];
+const matchedSteps = new Set();
+for (const featureStep of featureSteps) {
+    let matched = false;
+    for (const [registryKey, stepEntry] of Object.entries(STEPS)) {
+        if (stepMatchesPattern(featureStep, registryKey, stepEntry)) {
+            matched = true;
+            matchedSteps.add(registryKey);
+            break;
+        }
+    }
+    if (!matched) {
+        deadSteps.push(featureStep);
+    }
+}
+// Check for orphan steps (in registry but not matched to any feature)
+const orphanSteps = Object.keys(STEPS).filter((key) => !matchedSteps.has(key));
+const missingPython = Object.entries(STEPS)
+    .filter(([, v]) => !v.python || !v.python.trim())
+    .map(([k]) => k);
+const missingTypescript = Object.entries(STEPS)
+    .filter(([, v]) => !v.typescript || !v.typescript.trim())
+    .map(([k]) => k);
+if (orphanSteps.length || deadSteps.length || missingPython.length || missingTypescript.length) {
+    console.error('BDD alignment failed');
+    if (orphanSteps.length) {
+        console.error(`Orphan steps (in registry, not matched in features): ${orphanSteps.length}`);
+        orphanSteps.forEach((s) => console.error(`  - ${s}`));
+    }
+    if (deadSteps.length) {
+        console.error(`Dead steps (in features, not matched in registry): ${deadSteps.length}`);
+        deadSteps.forEach((s) => console.error(`  - ${s}`));
+    }
+    if (missingPython.length) {
+        console.error(`Missing python step paths: ${missingPython.length}`);
+        missingPython.forEach((s) => console.error(`  - ${s}`));
+    }
+    if (missingTypescript.length) {
+        console.error(`Missing typescript step paths: ${missingTypescript.length}`);
+        missingTypescript.forEach((s) => console.error(`  - ${s}`));
+    }
+    process.exit(1);
+}
+console.log(`✓ ${Object.keys(STEPS).length} steps defined, ${orphanSteps.length} orphan, ${deadSteps.length} dead`);

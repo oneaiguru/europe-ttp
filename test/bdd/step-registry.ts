@@ -594,12 +594,6 @@ export const STEPS = {
     typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
     features: ['specs/features/e2e/post_ttc_coteaching_cycle.feature:40'],
   },
-  'I navigate to the TTC application form': {
-    pattern: /^I\ navigate\ to\ the\ TTC\ application\ form$/,
-    python: 'test/python/steps/e2e_api_steps.py:526',
-    typescript: 'test/typescript/steps/e2e_api_steps.ts:565',
-    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:11', 'specs/features/e2e/dependent_fields_do_not_break_completeness.feature:10'],
-  },
   'test mode is disabled': {
     pattern: /^test\ mode\ is\ disabled$/,
     python: 'test/python/steps/e2e_api_steps.py:548',
