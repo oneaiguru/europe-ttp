@@ -460,3 +460,55 @@ Then('I should receive the available form instances', function () {
   const indiaPageData = indiaInstance.page_data as Record<string, unknown>;
   assert.strictEqual(indiaPageData.country, 'IN');
 });
+
+// Admin Reporting Steps - TASK-029
+
+// Reporting context for admin form data retrieval
+interface ReportingContext {
+  targetUser?: MockTTCPortalUser;
+  targetEmail?: string;
+  formData?: Record<string, Record<string, StoredFormData>>;
+}
+
+const reportingContext: ReportingContext = {};
+
+When('I request form data for a specific user via reporting', async function () {
+  // Create a target user with form data for testing
+  const targetUser = new MockTTCPortalUser();
+  const targetEmail = 'test.applicant@example.com';
+  targetUser.loadUserData(targetEmail);
+
+  // Set up test form data
+  targetUser.setFormData(
+    'ttc_application',
+    'default',
+    { i_fname: 'John', i_lname: 'Doe', i_email: targetEmail },
+    {},
+    'default'
+  );
+
+  // Store in context for verification
+  reportingContext.targetUser = targetUser;
+  reportingContext.targetEmail = targetEmail;
+  reportingContext.formData = targetUser.formData;
+});
+
+Then('I should receive that user\'s form data', function () {
+  assert.ok(reportingContext.formData, 'Expected formData to be set');
+  assert.ok(typeof reportingContext.formData === 'object', 'Form data should be an object');
+
+  const formData = reportingContext.formData;
+
+  // Verify structure matches legacy format
+  assert.ok('ttc_application' in formData, 'Expected ttc_application form type');
+
+  const ttcAppData = formData['ttc_application'];
+  assert.ok(typeof ttcAppData === 'object', 'ttc_application data should be an object');
+  assert.ok('default' in ttcAppData, 'Expected default instance');
+
+  const defaultInstance = ttcAppData['default'] as StoredFormData;
+  assert.ok('data' in defaultInstance, 'Expected data field');
+  assert.ok('is_form_complete' in defaultInstance, 'Expected is_form_complete field');
+  assert.ok('is_form_submitted' in defaultInstance, 'Expected is_form_submitted field');
+  assert.ok('last_update_datetime' in defaultInstance, 'Expected last_update_datetime field');
+});

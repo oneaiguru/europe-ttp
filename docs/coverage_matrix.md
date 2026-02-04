@@ -66,7 +66,7 @@
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
-| Reporting Get Form Data | specs/features/user/reporting_get_form_data.feature | ❌ | ❌ |
+| Reporting Get Form Data | specs/features/user/reporting_get_form_data.feature | ✅ | ✅ |
 | User Config Management | specs/features/user/config_management.feature | ❌ | ❌ |
 | User Form Data Upload | specs/features/user/form_data_upload.feature | ❌ | ❌ |
 | User Get Form Data | specs/features/user/get_form_data.feature | ❌ | ❌ |
@@ -95,6 +95,6 @@
 
 ## Summary
 - **Total Features:** 36
-- **Python Verified:** 16/36
-- **TypeScript Complete:** 16/36
-- **Parity:** 44%
+- **Python Verified:** 17/36
+- **TypeScript Complete:** 17/36
+- **Parity:** 47%

@@ -199,9 +199,15 @@ export const STEPS = {
   },
   'I request form data for a specific user via reporting': {
     pattern: /^I\ request\ form\ data\ for\ a\ specific\ user\ via\ reporting$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:507',
+    typescript: 'test/typescript/steps/user_steps.ts:472',
     features: ['specs/features/user/reporting_get_form_data.feature:9'],
+  },
+  'I should receive that user\'s form data': {
+    pattern: /^I\ should\ receive\ that\ user\'s\ form\ data$/,
+    python: 'test/python/steps/user_steps.py:532',
+    typescript: 'test/typescript/steps/user_steps.ts:498',
+    features: ['specs/features/user/reporting_get_form_data.feature:10'],
   },
   'I request my user configuration': {
     pattern: /^I\ request\ my\ user\ configuration$/,
@@ -310,12 +316,6 @@ export const STEPS = {
     python: 'test/python/steps/user_steps.py:241',
     typescript: 'test/typescript/steps/user_steps.ts:222',
     features: ['specs/features/user/config_management.feature:10'],
-  },
-  'I should receive that user\'s form data': {
-    pattern: /^I\ should\ receive\ that\ user's\ form\ data$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
-    features: ['specs/features/user/reporting_get_form_data.feature:10'],
   },
   'I should receive the available form instances': {
     pattern: /^I\ should\ receive\ the\ available\ form\ instances$/,

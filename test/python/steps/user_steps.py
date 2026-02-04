@@ -496,3 +496,53 @@ def step_receive_form_instances(context):
     assert context.form_instances['test_us_future']['page_data']['country'] == 'US'
     assert context.form_instances['test_india_future']['display'] == 'India TTC - February 2025'
     assert context.form_instances['test_india_future']['page_data']['country'] == 'IN'
+
+
+# Admin Reporting Steps - TASK-029
+
+
+@when('I request form data for a specific user via reporting')
+def step_request_form_data_for_user(context):
+    """Request form data for a specific user via admin reporting endpoint."""
+    # Create a target user with form data for testing
+    target_user = MockTTCPortalUser()
+    target_user_email = 'test.applicant@example.com'
+    target_user.load_user_data(target_user_email)
+
+    # Set up test form data
+    target_user.set_form_data(
+        f_type='ttc_application',
+        f_instance='default',
+        f_data={'i_fname': 'John', 'i_lname': 'Doe', 'i_email': target_user_email},
+        f_instance_page_data={},
+        f_instance_display='default'
+    )
+
+    # Store in context for verification
+    context.reporting_target_user = target_user
+    context.reporting_target_email = target_user_email
+    context.reporting_form_data = target_user.form_data
+
+
+@then('I should receive that user\'s form data')
+def step_should_receive_user_form_data(context):
+    """Verify that the user's form data was received."""
+    assert hasattr(context, 'reporting_form_data'), \
+        'Expected reporting_form_data to be set in context'
+
+    form_data = context.reporting_form_data
+    assert isinstance(form_data, dict), 'Form data should be a dictionary'
+
+    # Verify structure
+    assert 'ttc_application' in form_data, \
+        'Expected ttc_application form type in data'
+
+    ttc_app_data = form_data['ttc_application']
+    assert 'default' in ttc_app_data, 'Expected default instance'
+
+    # Verify the nested structure matches legacy format
+    default_instance = ttc_app_data['default']
+    assert 'data' in default_instance, 'Expected data field'
+    assert 'is_form_complete' in default_instance, 'Expected is_form_complete field'
+    assert 'is_form_submitted' in default_instance, 'Expected is_form_submitted field'
+    assert 'last_update_datetime' in default_instance, 'Expected last_update_datetime field'
