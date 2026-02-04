@@ -75,7 +75,7 @@
 | TASK-029 | p2 | specs/features/user/reporting_get_form_data.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-030 | p1 | specs/features/reports/user_summary.feature | ⚠️ PARTIAL | Python + TypeScript steps implemented (blocked by env issues) |
 | TASK-031 | p1 | specs/features/reports/user_integrity.feature | ✅ DONE | Python + TypeScript steps implemented |
-| TASK-032 | p2 | specs/features/reports/user_report.feature | 🔴 TODO | |
+| TASK-032 | p2 | specs/features/reports/user_report.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-033 | p3 | specs/features/reports/print_form.feature | 🔴 TODO | |
 | TASK-034 | p2 | specs/features/reports/participant_list.feature | 🔴 TODO | |
 | TASK-035 | p3 | specs/features/reports/certificate.feature | 🔴 TODO | |

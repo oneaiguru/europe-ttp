@@ -223,8 +223,8 @@ export const STEPS = {
   },
   'I request the combined user application report': {
     pattern: /^I\ request\ the\ combined\ user\ application\ report$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:278',
+    typescript: 'test/typescript/steps/reports_steps.ts:157',
     features: ['specs/features/reports/user_report.feature:15'],
   },
   'I request the list of form instances': {
@@ -241,14 +241,14 @@ export const STEPS = {
   },
   'I request the user application report as HTML': {
     pattern: /^I\ request\ the\ user\ application\ report\ as\ HTML$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:238',
+    typescript: 'test/typescript/steps/reports_steps.ts:134',
     features: ['specs/features/reports/user_report.feature:9'],
   },
   'I request the user application report as forms': {
     pattern: /^I\ request\ the\ user\ application\ report\ as\ forms$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:318',
+    typescript: 'test/typescript/steps/reports_steps.ts:177',
     features: ['specs/features/reports/user_report.feature:21'],
   },
   'I request the user integrity report by user': {
@@ -325,8 +325,8 @@ export const STEPS = {
   },
   'I should receive the combined user application data': {
     pattern: /^I\ should\ receive\ the\ combined\ user\ application\ data$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:298',
+    typescript: 'test/typescript/steps/reports_steps.ts:166',
     features: ['specs/features/reports/user_report.feature:16'],
   },
   'I should receive the participant list output': {
@@ -343,14 +343,14 @@ export const STEPS = {
   },
   'I should receive the user application HTML': {
     pattern: /^I\ should\ receive\ the\ user\ application\ HTML$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:258',
+    typescript: 'test/typescript/steps/reports_steps.ts:143',
     features: ['specs/features/reports/user_report.feature:10'],
   },
   'I should receive the user application form data': {
     pattern: /^I\ should\ receive\ the\ user\ application\ form\ data$/,
-    python: 'test/python/steps/reports_steps.py:1',
-    typescript: 'test/typescript/steps/reports_steps.ts:1',
+    python: 'test/python/steps/reports_steps.py:338',
+    typescript: 'test/typescript/steps/reports_steps.ts:186',
     features: ['specs/features/reports/user_report.feature:22'],
   },
   'I should receive the user integrity data': {

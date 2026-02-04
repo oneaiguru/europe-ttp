@@ -5,6 +5,7 @@ from behave import given, when, then
 import json
 import sys
 import os
+import urllib
 
 # Add parent directory to path for legacy imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
@@ -230,3 +231,137 @@ def step_applicant_enrolled_list_generated(context):
     body = context.postload_body
     assert 'Applicant Name,Applicant Email,Enrolled Name,Enrolled Email' in body or len(body) > 0, \
         "Postload should generate CSV output"
+
+
+# User Application Report Steps
+
+@when('I request the user application report as HTML')
+def step_request_user_application_html(context):
+    """Call the legacy user application HTML endpoint."""
+    client = _get_reporting_client(context)
+    admin_email = _get_admin_email(context)
+    client.extra_environ = {'USER_EMAIL': admin_email}
+
+    try:
+        # Get test user email and form details from context or use defaults
+        email = getattr(context, 'test_user_email', 'test.applicant@example.com')
+        form_type = getattr(context, 'test_form_type', 'test_us_future')
+        form_instance = getattr(context, 'test_form_instance', '0')
+
+        # Build query parameters
+        params = urllib.urlencode({
+            'email': email,
+            'form_type': form_type,
+            'form_instance': form_instance
+        })
+
+        response = client.get('/reporting/user-report/get-user-application-html?' + params)
+        context.user_report_response = response
+        context.user_report_status = response.status
+        context.user_report_body = _get_response_body(response)
+    except Exception as e:
+        context.user_report_error = str(e)
+        context.user_report_status = 500
+
+
+@then('I should receive the user application HTML')
+def step_should_receive_user_application_html(context):
+    """Verify that user application HTML was received."""
+    if hasattr(context, 'user_report_error'):
+        raise AssertionError("Request failed with error: {}".format(context.user_report_error))
+
+    assert context.user_report_status == 200, "Expected status 200, got {}: {}".format(
+        context.user_report_status, context.user_report_body
+    )
+
+    # Verify response contains HTML
+    body = context.user_report_body
+    assert '<html' in body or '<div' in body or body.strip().startswith('<'), \
+        "Response should contain HTML content"
+
+
+@when('I request the combined user application report')
+def step_request_combined_user_application(context):
+    """Call the legacy combined user application endpoint."""
+    client = _get_reporting_client(context)
+    admin_email = _get_admin_email(context)
+    client.extra_environ = {'USER_EMAIL': admin_email}
+
+    try:
+        # Create a forms array with multiple forms
+        forms = json.dumps([
+            {
+                'email': 'test.applicant@example.com',
+                'form_type': 'test_us_future',
+                'form_instance': '0'
+            }
+        ])
+
+        params = urllib.urlencode({'forms': forms})
+
+        response = client.get('/reporting/user-report/get-user-application-combined?' + params)
+        context.combined_report_response = response
+        context.combined_report_status = response.status
+        context.combined_report_body = _get_response_body(response)
+    except Exception as e:
+        context.combined_report_error = str(e)
+        context.combined_report_status = 500
+
+
+@then('I should receive the combined user application data')
+def step_should_receive_combined_user_application(context):
+    """Verify that combined user application data was received."""
+    if hasattr(context, 'combined_report_error'):
+        raise AssertionError("Request failed with error: {}".format(context.combined_report_error))
+
+    assert context.combined_report_status == 200, "Expected status 200, got {}: {}".format(
+        context.combined_report_status, context.combined_report_body
+    )
+
+    # Verify response contains HTML or structured data
+    body = context.combined_report_body
+    assert len(body) > 0, "Response should not be empty"
+
+
+@when('I request the user application report as forms')
+def step_request_user_application_forms(context):
+    """Call the legacy user application forms endpoint."""
+    client = _get_reporting_client(context)
+    admin_email = _get_admin_email(context)
+    client.extra_environ = {'USER_EMAIL': admin_email}
+
+    try:
+        # Get test user email and form details from context or use defaults
+        email = getattr(context, 'test_user_email', 'test.applicant@example.com')
+        form_type = getattr(context, 'test_form_type', 'test_us_future')
+        form_instance = getattr(context, 'test_form_instance', '0')
+
+        # Build query parameters
+        params = urllib.urlencode({
+            'email': email,
+            'form_type': form_type,
+            'form_instance': form_instance
+        })
+
+        response = client.get('/reporting/user-report/get-user-application?' + params)
+        context.forms_report_response = response
+        context.forms_report_status = response.status
+        context.forms_report_body = _get_response_body(response)
+    except Exception as e:
+        context.forms_report_error = str(e)
+        context.forms_report_status = 500
+
+
+@then('I should receive the user application form data')
+def step_should_receive_user_application_form_data(context):
+    """Verify that user application form data was received."""
+    if hasattr(context, 'forms_report_error'):
+        raise AssertionError("Request failed with error: {}".format(context.forms_report_error))
+
+    assert context.forms_report_status == 200, "Expected status 200, got {}: {}".format(
+        context.forms_report_status, context.forms_report_body
+    )
+
+    # Verify response contains HTML or structured data
+    body = context.forms_report_body
+    assert len(body) > 0, "Response should not be empty"

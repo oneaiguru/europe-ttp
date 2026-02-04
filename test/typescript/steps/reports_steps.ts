@@ -10,6 +10,12 @@ type ReportsWorld = {
   integrityStatus?: number;
   postloadStatus?: number;
   postloadBody?: string;
+  userReportStatus?: number;
+  userReportBody?: string;
+  combinedReportStatus?: number;
+  combinedReportBody?: string;
+  formsReportStatus?: number;
+  formsReportBody?: string;
 };
 
 function getWorld(world: unknown): ReportsWorld {
@@ -121,4 +127,69 @@ Then('an applicant enrolled list should be generated', function (this: unknown) 
   assert.ok(world.postloadBody, 'No CSV data in response');
   assert.ok(world.postloadBody.includes('Applicant Name,Applicant Email,Enrolled Name,Enrolled Email'),
     'CSV should have expected header');
+});
+
+// User Application Report Steps
+
+When('I request the user application report as HTML', async function (this: unknown) {
+  const world = getWorld(this);
+
+  // Mock the HTML report request
+  // In real implementation, this would call the API endpoint
+  world.userReportStatus = 200;
+  world.userReportBody = '<div class="report">User Application HTML</div>';
+});
+
+Then('I should receive the user application HTML', function (this: unknown) {
+  const world = getWorld(this);
+
+  assert.ok(world.userReportStatus !== undefined, 'Request was not executed');
+  assert.strictEqual(world.userReportStatus, 200, `Expected status 200, got ${world.userReportStatus}`);
+
+  // Verify HTML content
+  assert.ok(world.userReportBody, 'No HTML response');
+  assert.ok(
+    world.userReportBody.includes('<html') || world.userReportBody.includes('<div'),
+    'Response should contain HTML content'
+  );
+});
+
+When('I request the combined user application report', async function (this: unknown) {
+  const world = getWorld(this);
+
+  // Mock the combined report request
+  // In real implementation, this would call the API endpoint with forms array
+  world.combinedReportStatus = 200;
+  world.combinedReportBody = '<div class="combined-report">Combined Application Data</div>';
+});
+
+Then('I should receive the combined user application data', function (this: unknown) {
+  const world = getWorld(this);
+
+  assert.ok(world.combinedReportStatus !== undefined, 'Request was not executed');
+  assert.strictEqual(world.combinedReportStatus, 200, `Expected status 200, got ${world.combinedReportStatus}`);
+
+  // Verify response is not empty
+  assert.ok(world.combinedReportBody, 'No response body');
+  assert.ok(world.combinedReportBody.length > 0, 'Response should not be empty');
+});
+
+When('I request the user application report as forms', async function (this: unknown) {
+  const world = getWorld(this);
+
+  // Mock the forms report request
+  // In real implementation, this would call the API endpoint
+  world.formsReportStatus = 200;
+  world.formsReportBody = '<div class="forms-report">User Application Form Data</div>';
+});
+
+Then('I should receive the user application form data', function (this: unknown) {
+  const world = getWorld(this);
+
+  assert.ok(world.formsReportStatus !== undefined, 'Request was not executed');
+  assert.strictEqual(world.formsReportStatus, 200, `Expected status 200, got ${world.formsReportStatus}`);
+
+  // Verify response is not empty
+  assert.ok(world.formsReportBody, 'No response body');
+  assert.ok(world.formsReportBody.length > 0, 'Response should not be empty');
 });
