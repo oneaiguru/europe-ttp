@@ -988,4 +988,65 @@ export const STEPS = {
     typescript: 'test/typescript/steps/e2e_api_steps.ts:253',
     features: ['specs/features/e2e/validation_errors.feature:31'],
   },
+  // Certificate Generation Gated by Completion Steps
+  'applicant has submitted TTC application': {
+    pattern: /^applicant\ has\ submitted\ TTC\ application$/,
+    python: 'test/python/steps/certificate_steps.py:93',
+    typescript: 'test/typescript/steps/certificate_steps.ts:176',
+    features: ['specs/features/e2e/certificate_gating.feature:20'],
+  },
+  'applicant has completed all TTC requirements:': {
+    pattern: /^applicant\ has\ completed\ all\ TTC\ requirements:$/,
+    python: 'test/python/steps/certificate_steps.py:140',
+    typescript: 'test/typescript/steps/certificate_steps.ts:426',
+    features: ['specs/features/e2e/certificate_gating.feature:7'],
+  },
+  'applicant has only 1 evaluation (requires 2)': {
+    pattern: /^applicant\ has\ only\ 1\ evaluation\ \(requires\ 2\)$/,
+    python: 'test/python/steps/certificate_steps.py:169',
+    typescript: 'test/typescript/steps/certificate_steps.ts:463',
+    features: ['specs/features/e2e/certificate_gating.feature:21'],
+  },
+  'applicant has completed TTC and evaluations': {
+    pattern: /^applicant\ has\ completed\ TTC\ and\ evaluations$/,
+    python: 'test/python/steps/certificate_steps.py:181',
+    typescript: 'test/typescript/steps/certificate_steps.ts:476',
+    features: ['specs/features/e2e/certificate_gating.feature:28'],
+  },
+  'post-TTC co-teacher feedback is missing': {
+    pattern: /^post\-TTC\ co\-teacher\ feedback\ is\ missing$/,
+    python: 'test/python/steps/certificate_steps.py:193',
+    typescript: 'test/typescript/steps/certificate_steps.ts:489',
+    features: ['specs/features/e2e/certificate_gating.feature:29'],
+  },
+  'I request a certificate PDF for {string}': {
+    pattern: /^I\ request\ a\ certificate\ PDF\ for\ "([^"]*)"$/,
+    python: 'test/python/steps/certificate_steps.py:204',
+    typescript: 'test/typescript/steps/certificate_steps.ts:501',
+    features: ['specs/features/e2e/certificate_gating.feature:14,23,30'],
+  },
+  'the certificate should include the applicant\'s name': {
+    pattern: /^the\ certificate\ should\ include\ the\ applicant's\ name$/,
+    python: 'test/python/steps/certificate_steps.py:275',
+    typescript: 'test/typescript/steps/certificate_steps.ts:571',
+    features: ['specs/features/e2e/certificate_gating.feature:16'],
+  },
+  'the certificate should include the TTC completion date': {
+    pattern: /^the\ certificate\ should\ include\ the\ TTC\ completion\ date$/,
+    python: 'test/python/steps/certificate_steps.py:288',
+    typescript: 'test/typescript/steps/certificate_steps.ts:590',
+    features: ['specs/features/e2e/certificate_gating.feature:17'],
+  },
+  'certificate generation should be blocked': {
+    pattern: /^certificate\ generation\ should\ be\ blocked$/,
+    python: 'test/python/steps/certificate_steps.py:301',
+    typescript: 'test/typescript/steps/certificate_steps.ts:609',
+    features: ['specs/features/e2e/certificate_gating.feature:24,31'],
+  },
+  'I should see the reason: {string}': {
+    pattern: /^I\ should\ see\ the\ reason:\ "([^"]*)"$/,
+    python: 'test/python/steps/certificate_steps.py:318',
+    typescript: 'test/typescript/steps/certificate_steps.ts:636',
+    features: ['specs/features/e2e/certificate_gating.feature:25,32'],
+  },
 } as const;

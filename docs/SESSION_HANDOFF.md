@@ -7,6 +7,42 @@ Track progress across Claude Code sessions.
 
 ## Recent Work (2026-02-04)
 
+### TASK-E2E-010: Certificate Generation Gated by Completion - COMPLETED ✅
+**Status:** DONE
+**Priority:** p1 (Critical path - blocks basic functionality)
+**Feature:** `specs/features/e2e/certificate_gating.feature`
+
+**Completed Steps:**
+1. Updated step registry with 10 new step patterns for certificate gating
+2. Implemented Python step definitions in `test/python/steps/certificate_steps.py`
+   - Table-driven step for completing all TTC requirements
+   - Steps for incomplete scenarios (1 evaluation, missing feedback)
+   - Certificate request with email parameter
+   - Certificate validation steps (name, date, blocking)
+3. Implemented TypeScript step definitions in `test/typescript/steps/certificate_steps.ts`
+   - Uses Cucumber World object pattern (getWorld)
+   - Matches Python implementation exactly
+   - Handles table data with proper DataTable type
+4. Python BDD tests pass: 3 scenarios, 17 steps passed
+5. TypeScript BDD tests pass: 3 scenarios, 17 steps passed
+6. Alignment check passes: 0 orphan steps, 57 dead steps (from other unimplemented features)
+
+**Files Created:**
+- `test/python/steps/certificate_steps.py` (270 lines)
+- `test/typescript/steps/certificate_steps.ts` (370 lines)
+
+**Files Modified:**
+- `test/bdd/step-registry.ts` (added 10 certificate steps)
+- `docs/coverage_matrix.md` (added E2E Certificate Gating feature)
+
+**Notes:**
+- Certificate generation implements gating logic based on completion status
+- Requires: TTC application submitted, 2 evaluations, post-TTC self-eval, post-TTC feedback
+- Returns specific blocking reasons when requirements are not met
+- Mock PDF content includes applicant name and completion date when successful
+
+---
+
 ### TASK-033: Print Form Feature - COMPLETED ✅
 **Status:** DONE
 **Priority:** p3 (Nice to have)

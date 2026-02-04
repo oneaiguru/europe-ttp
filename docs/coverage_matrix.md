@@ -89,12 +89,13 @@
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
+| Certificate Gating | specs/features/e2e/certificate_gating.feature | ✅ | ✅ |
 | Deadline and Whitelist Override | specs/features/e2e/deadline_and_whitelist_override.feature | ✅ | ✅ |
 
 ---
 
 ## Summary
-- **Total Features:** 36
-- **Python Verified:** 17/36
-- **TypeScript Complete:** 17/36
-- **Parity:** 47%
+- **Total Features:** 37
+- **Python Verified:** 18/37
+- **TypeScript Complete:** 18/37
+- **Parity:** 49%
