@@ -61,8 +61,8 @@ export const STEPS = {
   },
   'I have previously saved form data for a form instance': {
     pattern: /^I\ have\ previously\ saved\ form\ data\ for\ a\ form\ instance$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:323',
+    typescript: 'test/typescript/steps/user_steps.ts:313',
     features: ['specs/features/user/get_form_data.feature:8'],
   },
   'I open a printable form page': {
@@ -211,8 +211,8 @@ export const STEPS = {
   },
   'I request that form data': {
     pattern: /^I\ request\ that\ form\ data$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:377',
+    typescript: 'test/typescript/steps/user_steps.ts:335',
     features: ['specs/features/user/get_form_data.feature:9'],
   },
   'I request the combined user application report': {
@@ -337,8 +337,8 @@ export const STEPS = {
   },
   'I should receive the stored form data': {
     pattern: /^I\ should\ receive\ the\ stored\ form\ data$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:391',
+    typescript: 'test/typescript/steps/user_steps.ts:350',
     features: ['specs/features/user/get_form_data.feature:10'],
   },
   'I should receive the user application HTML': {

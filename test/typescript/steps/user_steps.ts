@@ -1,4 +1,4 @@
-import { When, Then } from '@cucumber/cucumber';
+import { Given, When, Then } from '@cucumber/cucumber';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'path';
@@ -296,5 +296,71 @@ Then('my configuration should be saved', function () {
   // Verify the update was persisted
   for (const [key, value] of Object.entries(lastUpdate!)) {
     assert.strictEqual(savedConfig[key], value, `Config key ${key} should be ${value}`);
+  }
+});
+
+// Get Form Data Context
+interface GetFormDataContext {
+  savedFormUser?: MockTTCPortalUser;
+  savedFormType?: string;
+  savedFormInstance?: string;
+  savedFormData?: Record<string, unknown>;
+  retrievedFormData?: Record<string, unknown>;
+}
+
+const getFormDataContext: GetFormDataContext = {};
+
+Given('I have previously saved form data for a form instance', async function () {
+  const submission = resolveSubmission();
+  const formType = submission.form_type ?? 'ttc_application';
+  const formInstance = submission.form_instance ?? 'default';
+  const formData = submission.data ?? { i_fname: 'John', i_lname: 'Doe' };
+  const formInstancePageData = submission.form_instance_page_data ?? {};
+  const formInstanceDisplay = submission.id ?? submission.ttc_option ?? 'default';
+
+  // Create mock user and save data
+  const user = new MockTTCPortalUser();
+  const userEmail = resolveEmail(this, submission);
+  user.loadUserData(userEmail);
+
+  user.setFormData(formType, formInstance, formData, formInstancePageData, formInstanceDisplay);
+
+  // Store in context for later steps
+  getFormDataContext.savedFormUser = user;
+  getFormDataContext.savedFormType = formType;
+  getFormDataContext.savedFormInstance = formInstance;
+  getFormDataContext.savedFormData = formData;
+});
+
+When('I request that form data', async function (this: World) {
+  const user = getFormDataContext.savedFormUser;
+  assert.ok(user, 'Expected savedFormUser to be set in context');
+
+  const formType = getFormDataContext.savedFormType ?? 'ttc_application';
+  const formInstance = getFormDataContext.savedFormInstance ?? 'default';
+
+  // Call getFormData to retrieve the stored data
+  const retrievedData = user.getFormData(formType, formInstance);
+  assert.ok(retrievedData, 'Expected getFormData to return data');
+
+  // Extract the 'data' field from the stored form structure
+  getFormDataContext.retrievedFormData = retrievedData.data ?? {};
+});
+
+Then('I should receive the stored form data', function () {
+  const retrieved = getFormDataContext.retrievedFormData;
+  const original = getFormDataContext.savedFormData;
+
+  assert.ok(retrieved, 'Expected retrievedFormData to be set');
+  assert.ok(original, 'Expected savedFormData to be set');
+
+  // Verify all fields from original data are in retrieved data
+  for (const [key, value] of Object.entries(original)) {
+    assert.ok(key in retrieved, `Expected key ${key} to be in retrieved data`);
+    assert.strictEqual(
+      retrieved[key],
+      value,
+      `Expected ${key} to be ${value}, got ${retrieved[key]}`
+    );
   }
 });

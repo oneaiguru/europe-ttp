@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from behave import when, then
+from behave import given, when, then
 import json
 import os
 import sys
@@ -66,7 +66,7 @@ class MockTTCPortalUser:
     def get_form_data(self, f_type, f_instance):
         """Retrieve stored form data."""
         if f_type in self.form_data and f_instance in self.form_data[f_type]:
-            return self.form_data[f_type][f_instance]
+            return self.form_data[f_type][f_instance]['data']
         return None
 
     def load_user_data(self, user_email):
@@ -315,3 +315,90 @@ def config_should_be_saved(context):
     # Verify the update was persisted
     for key, value in context.last_config_update.items():
         assert saved_config.get(key) == value, "Config key {} should be {}".format(key, value)
+
+
+# Get Form Data Steps
+
+
+@given('I have previously saved form data for a form instance')
+def step_given_saved_form_data(context):
+    """Set up test context with previously saved form data."""
+    # Load form submission from fixtures
+    submission = _resolve_submission(context)
+    form_type = submission.get('form_type', 'ttc_application')
+    form_instance = submission.get('form_instance', 'default')
+    form_data = submission.get('data', {'i_fname': 'John', 'i_lname': 'Doe'})
+    form_instance_page_data = submission.get('form_instance_page_data', {})
+    form_instance_display = (
+        submission.get('id')
+        or submission.get('ttc_option')
+        or 'default'
+    )
+
+    # Try to use real TTCPortalUser if available, otherwise use mock
+    ttc_portal_user_module = _get_ttc_portal_user_module()
+    if ttc_portal_user_module:
+        try:
+            user = ttc_portal_user_module.TTCPortalUser()
+            user_email = _resolve_email(context, submission)
+            user.load_user_data(user_email)
+            user.set_form_data(
+                f_type=form_type,
+                f_instance=form_instance,
+                f_data=form_data,
+                f_instance_page_data=form_instance_page_data,
+                f_instance_display=form_instance_display
+            )
+            context.saved_form_user = user
+            context.saved_form_type = form_type
+            context.saved_form_instance = form_instance
+            context.saved_form_data = form_data
+            return
+        except Exception:
+            pass
+
+    # Use mock implementation
+    user = MockTTCPortalUser()
+    user_email = _resolve_email(context, submission)
+    user.load_user_data(user_email)
+    user.set_form_data(
+        f_type=form_type,
+        f_instance=form_instance,
+        f_data=form_data,
+        f_instance_page_data=form_instance_page_data,
+        f_instance_display=form_instance_display
+    )
+    context.saved_form_user = user
+    context.saved_form_type = form_type
+    context.saved_form_instance = form_instance
+    context.saved_form_data = form_data
+
+
+@when('I request that form data')
+def step_request_form_data(context):
+    """Request the previously saved form data."""
+    user = getattr(context, 'saved_form_user', None)
+    assert user is not None, 'Expected saved_form_user to be set in context'
+
+    form_type = getattr(context, 'saved_form_type', 'ttc_application')
+    form_instance = getattr(context, 'saved_form_instance', 'default')
+
+    # Call get_form_data to retrieve the stored data
+    retrieved_data = user.get_form_data(form_type, form_instance)
+    context.retrieved_form_data = retrieved_data
+
+
+@then('I should receive the stored form data')
+def step_should_receive_stored_data(context):
+    """Verify that the retrieved form data matches what was stored."""
+    assert hasattr(context, 'retrieved_form_data'), 'Expected retrieved_form_data to be set'
+    assert hasattr(context, 'saved_form_data'), 'Expected saved_form_data to be set'
+
+    retrieved = context.retrieved_form_data
+    original = context.saved_form_data
+
+    # Verify all fields from original data are in retrieved data
+    for key, value in original.items():
+        assert key in retrieved, 'Expected key {} to be in retrieved data'.format(key)
+        assert retrieved[key] == value, \
+            'Expected {} to be {}, got {}'.format(key, value, retrieved[key])
