@@ -95,7 +95,7 @@
 | TASK-E2E-004 | p2 | specs/features/e2e/dependent_fields_do_not_break_completeness.feature | 🟢 DONE | A7 - Conditional fields logic |
 | TASK-E2E-005 | p2 | specs/features/e2e/home_country_changes_available_ttcs.feature | 🟢 DONE | A7 - Country-based filtering |
 | TASK-E2E-006 | p2 | specs/features/e2e/deadline_and_whitelist_override.feature | 🟢 DONE | Deadline control, whitelist |
-| TASK-E2E-007 | p2 | specs/features/e2e/draft_save_and_resume.feature | 🔴 TODO | A2 - Save draft + resume later |
+| TASK-E2E-007 | p2 | specs/features/e2e/draft_save_and_resume.feature | 🟡 PARTIAL | A2 - Save draft + resume later |
 | TASK-E2E-008 | p1 | specs/features/e2e/validation_errors.feature | 🔴 TODO | A3 - Field-level validation errors |
 | TASK-E2E-009 | p2 | specs/features/e2e/full_evaluator_workflow.feature | 🔴 TODO | A4 - See uploads, role-based visibility |
 | TASK-E2E-010 | p1 | specs/features/e2e/certificate_gating.feature | 🔴 TODO | A6 - Certificate by completion |
@@ -131,10 +131,28 @@
 
 ## Phase 2E: Remaining Work (from PRD Appendix A)
 
-### TASK-E2E-007: Draft Save and Resume (A2)
+### TASK-E2E-007: Draft Save and Resume (A2) - 🟡 PARTIAL
 **Feature:** `specs/features/e2e/draft_save_and_resume.feature`
 
-```gherkin
+**Implementation Status:**
+- ✅ Step definitions created: `test/python/steps/draft_steps.py` (11 steps)
+- ✅ Step definitions created: `test/typescript/steps/draft_steps.ts` (11 steps)
+- ✅ Step registry updated with all new steps
+- ✅ Scenario 2 ("Multiple drafts for different forms") passes in Python (7/7 steps)
+- ⚠️ Scenario 1 has table step issue with behave 1.2.6/Python 2.7 (steps ending with `:` for table parameters not matching)
+
+**Files Created:**
+- `test/python/steps/draft_steps.py` - Python draft step definitions
+- `test/typescript/steps/draft_steps.ts` - TypeScript draft step definitions
+
+**Known Issues:**
+- Behave 1.2.6 has issues matching steps ending with `:` for table parameters
+- This affects existing e2e_api_steps with similar patterns
+- Scenario 2 demonstrates the draft functionality works correctly
+- TypeScript implementation complete but requires build environment for testing
+
+**Notes:**
+The draft save and resume functionality is implemented and scenario 2 passes completely, validating the core draft storage, retrieval, and multi-form draft management. The table step matching issue in scenario 1 is a behave version limitation affecting multiple step files.
 Feature: Draft Save and Resume
   As a TTC applicant
   I want to save my application as a draft and resume later

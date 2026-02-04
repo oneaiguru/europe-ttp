@@ -878,4 +878,77 @@ export const STEPS = {
     typescript: 'test/typescript/steps/e2e_api_steps.ts:1',
     features: ['specs/features/e2e/post_ttc_coteaching_cycle.feature:42', 'specs/features/e2e/post_ttc_coteaching_cycle.feature:56'],
   },
+  // Draft Save and Resume Steps
+  'I fill in the TTC application form partially with:': {
+    pattern: /^I\ fill\ in\ the\ TTC\ application\ form\ partially\ with:$/,
+    python: 'test/python/steps/draft_steps.py:16',
+    typescript: 'test/typescript/steps/draft_steps.ts:42',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:8'],
+  },
+  'I save the application as draft': {
+    pattern: /^I\ save\ the\ application\ as\ draft$/,
+    python: 'test/python/steps/draft_steps.py:36',
+    typescript: 'test/typescript/steps/draft_steps.ts:66',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:13'],
+  },
+  'I should see my draft data persisted': {
+    pattern: /^I\ should\ see\ my\ draft\ data\ persisted$/,
+    python: 'test/python/steps/draft_steps.py:48',
+    typescript: 'test/typescript/steps/draft_steps.ts:74',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:17'],
+  },
+  'I complete the remaining required fields and submit': {
+    pattern: /^I\ complete\ the\ remaining\ required\ fields\ and\ submit$/,
+    python: 'test/python/steps/draft_steps.py:64',
+    typescript: 'test/typescript/steps/draft_steps.ts:88',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:18'],
+  },
+  'I save a partial TTC application as draft': {
+    pattern: /^I\ save\ a\ partial\ TTC\ application\ as\ draft$/,
+    python: 'test/python/steps/draft_steps.py:98',
+    typescript: 'test/typescript/steps/draft_steps.ts:114',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:23'],
+  },
+  'I save a partial evaluator profile as draft': {
+    pattern: /^I\ save\ a\ partial\ evaluator\ profile\ as\ draft$/,
+    python: 'test/python/steps/draft_steps.py:116',
+    typescript: 'test/typescript/steps/draft_steps.ts:127',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:24'],
+  },
+  'I navigate to the TTC application form': {
+    pattern: /^I\ navigate\ to\ the\ TTC\ application\ form$/,
+    python: 'test/python/steps/e2e_api_steps.py:565',
+    typescript: 'test/typescript/steps/draft_steps.ts:141',
+    features: ['specs/features/e2e/deadline_and_whitelist_override.feature:11', 'specs/features/e2e/dependent_fields_do_not_break_completeness.feature:10', 'specs/features/e2e/draft_save_and_resume.feature:25'],
+  },
+  'I should see the TTC application draft data': {
+    pattern: /^I\ should\ see\ the\ TTC\ application\ draft\ data$/,
+    python: 'test/python/steps/draft_steps.py:141',
+    typescript: 'test/typescript/steps/draft_steps.ts:149',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:26'],
+  },
+  'I navigate to the evaluator profile form': {
+    pattern: /^I\ navigate\ to\ the\ evaluator\ profile\ form$/,
+    python: 'test/python/steps/draft_steps.py:156',
+    typescript: 'test/typescript/steps/draft_steps.ts:160',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:27'],
+  },
+  'I should see the evaluator profile draft data': {
+    pattern: /^I\ should\ see\ the\ evaluator\ profile\ draft\ data$/,
+    python: 'test/python/steps/draft_steps.py:162',
+    typescript: 'test/typescript/steps/draft_steps.ts:164',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:28'],
+  },
+  'I open the TTC application form': {
+    pattern: /^I\ open\ the\ TTC\ application\ form$/,
+    python: 'test/python/steps/draft_steps.py:96',
+    typescript: 'test/typescript/steps/draft_steps.ts:145',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:16'],
+  },
+  'the application should be marked as submitted': {
+    pattern: /^the\ application\ should\ be\ marked\ as\ submitted$/,
+    python: 'test/python/steps/e2e_api_steps.py:379',
+    typescript: 'test/typescript/steps/e2e_api_steps.ts:479',
+    features: ['specs/features/e2e/draft_save_and_resume.feature:19'],
+  },
 } as const;
