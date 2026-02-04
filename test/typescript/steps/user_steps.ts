@@ -104,6 +104,28 @@ class MockTTCPortalUser {
       this.config[key] = value;
     }
   }
+
+  getFormInstances(
+    formType: string
+  ): Record<string, { page_data: Record<string, unknown>; display: string }> {
+    /** Get all form instances for a form type, excluding 'default'. */
+    const formInstances: Record<string, { page_data: Record<string, unknown>; display: string }> =
+      {};
+
+    if (this.formData[formType]) {
+      for (const instanceId in this.formData[formType]) {
+        if (instanceId !== 'default') {
+          const instance = this.formData[formType][instanceId];
+          formInstances[instanceId] = {
+            page_data: instance.form_instance_page_data,
+            display: instance.form_instance_display,
+          };
+        }
+      }
+    }
+
+    return formInstances;
+  }
 }
 
 interface UserFormContext {
@@ -115,6 +137,9 @@ interface UserFormContext {
     formInstancePageData: Record<string, unknown>;
     user: MockTTCPortalUser;
   };
+  user?: MockTTCPortalUser;
+  formType?: string;
+  formInstances?: Record<string, { page_data: Record<string, unknown>; display: string }>;
 }
 
 const userFormContext: UserFormContext = {};
@@ -363,4 +388,70 @@ Then('I should receive the stored form data', function () {
       `Expected ${key} to be ${value}, got ${retrieved[key]}`
     );
   }
+});
+
+Given('I have multiple form instances for a form type', function () {
+  const user = new MockTTCPortalUser();
+  user.loadUserData('test.applicant@example.com');
+
+  // Set up multiple form instances for ttc_application
+  user.setFormData(
+    'ttc_application',
+    'test_us_future',
+    { i_fname: 'John', i_lname: 'Doe', i_email: 'john@example.com' },
+    { dates: 'Jan 2025', country: 'US' },
+    'US TTC - January 2025'
+  );
+
+  user.setFormData(
+    'ttc_application',
+    'test_india_future',
+    { i_fname: 'Jane', i_lname: 'Smith', i_email: 'jane@example.com' },
+    { dates: 'Feb 2025', country: 'IN' },
+    'India TTC - February 2025'
+  );
+
+  userFormContext.user = user;
+  userFormContext.formType = 'ttc_application';
+});
+
+When('I request the list of form instances', function () {
+  if (!userFormContext.user) {
+    throw new Error('User not initialized');
+  }
+  userFormContext.formInstances = userFormContext.user.getFormInstances(
+    userFormContext.formType as string
+  );
+});
+
+Then('I should receive the available form instances', function () {
+  assert.ok(userFormContext.formInstances, 'Form instances should be defined');
+  assert.ok(typeof userFormContext.formInstances === 'object', 'Form instances should be an object');
+
+  const instances = userFormContext.formInstances as Record<string, unknown>;
+
+  // Verify 'default' is excluded
+  assert.ok(!('default' in instances), "'default' instance should not be in the results");
+
+  // Verify we have the expected instances
+  assert.ok('test_us_future' in instances, 'test_us_future instance should be present');
+  assert.ok('test_india_future' in instances, 'test_india_future instance should be present');
+
+  // Verify structure
+  const usInstance = instances.test_us_future as Record<string, unknown>;
+  const indiaInstance = instances.test_india_future as Record<string, unknown>;
+
+  assert.ok('page_data' in usInstance, 'US instance should have page_data');
+  assert.ok('display' in usInstance, 'US instance should have display');
+  assert.strictEqual(usInstance.display, 'US TTC - January 2025');
+
+  const usPageData = usInstance.page_data as Record<string, unknown>;
+  assert.strictEqual(usPageData.country, 'US');
+
+  assert.ok('page_data' in indiaInstance, 'India instance should have page_data');
+  assert.ok('display' in indiaInstance, 'India instance should have display');
+  assert.strictEqual(indiaInstance.display, 'India TTC - February 2025');
+
+  const indiaPageData = indiaInstance.page_data as Record<string, unknown>;
+  assert.strictEqual(indiaPageData.country, 'IN');
 });

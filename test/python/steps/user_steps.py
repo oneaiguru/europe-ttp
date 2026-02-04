@@ -91,6 +91,29 @@ class MockTTCPortalUser:
         for key, value in config_params.items():
             self.config[key] = value
 
+    def get_form_instances(self, f_type):
+        """Get all form instances for a form type, excluding 'default'.
+
+        Args:
+            f_type: The form type (e.g., 'ttc_application')
+
+        Returns:
+            Dictionary of instances with page_data and display info.
+        """
+        _form_instances = {}
+        if f_type in self.form_data:
+            for instance_id in self.form_data[f_type]:
+                if instance_id != 'default':
+                    _form_instances[instance_id] = {
+                        'page_data': self.form_data[f_type][instance_id].get(
+                            'form_instance_page_data', {}
+                        ),
+                        'display': self.form_data[f_type][instance_id].get(
+                            'form_instance_display', instance_id
+                        )
+                    }
+        return _form_instances
+
 
 def _get_ttc_portal_user_module():
     """Try to import the real ttc_portal_user module, return None if not available."""
@@ -402,3 +425,74 @@ def step_should_receive_stored_data(context):
         assert key in retrieved, 'Expected key {} to be in retrieved data'.format(key)
         assert retrieved[key] == value, \
             'Expected {} to be {}, got {}'.format(key, value, retrieved[key])
+
+
+# Get Form Instances Steps
+
+
+@given('I have multiple form instances for a form type')
+def step_multiple_form_instances(context):
+    """Set up a user with multiple form instances for testing."""
+    _ttc_user = _get_ttc_portal_user_module()
+    if _ttc_user:
+        user = _ttc_user.TTCPortalUser()
+    else:
+        user = MockTTCPortalUser()
+
+    user.load_user_data('test.applicant@example.com')
+
+    # Set up multiple form instances for ttc_application
+    user.set_form_data(
+        'ttc_application',
+        'test_us_future',
+        {'i_fname': 'John', 'i_lname': 'Doe', 'i_email': 'john@example.com'},
+        {'dates': 'Jan 2025', 'country': 'US'},
+        'US TTC - January 2025'
+    )
+
+    user.set_form_data(
+        'ttc_application',
+        'test_india_future',
+        {'i_fname': 'Jane', 'i_lname': 'Smith', 'i_email': 'jane@example.com'},
+        {'dates': 'Feb 2025', 'country': 'IN'},
+        'India TTC - February 2025'
+    )
+
+    context.user = user
+    context.form_type = 'ttc_application'
+
+
+@when('I request the list of form instances')
+def step_request_form_instances(context):
+    """Request the list of form instances for the stored form type."""
+    context.form_instances = context.user.get_form_instances(context.form_type)
+
+
+@then('I should receive the available form instances')
+def step_receive_form_instances(context):
+    """Verify that form instances are returned correctly."""
+    assert isinstance(context.form_instances, dict), \
+        "Form instances should be a dictionary"
+
+    # Verify 'default' is excluded
+    assert 'default' not in context.form_instances, \
+        "'default' instance should not be in the results"
+
+    # Verify we have the expected instances
+    assert 'test_us_future' in context.form_instances, \
+        "test_us_future instance should be present"
+    assert 'test_india_future' in context.form_instances, \
+        "test_india_future instance should be present"
+
+    # Verify structure of each instance
+    for instance_id, instance_data in context.form_instances.items():
+        assert 'page_data' in instance_data, \
+            "Instance {} should have 'page_data'".format(instance_id)
+        assert 'display' in instance_data, \
+            "Instance {} should have 'display'".format(instance_id)
+
+    # Verify specific values
+    assert context.form_instances['test_us_future']['display'] == 'US TTC - January 2025'
+    assert context.form_instances['test_us_future']['page_data']['country'] == 'US'
+    assert context.form_instances['test_india_future']['display'] == 'India TTC - February 2025'
+    assert context.form_instances['test_india_future']['page_data']['country'] == 'IN'

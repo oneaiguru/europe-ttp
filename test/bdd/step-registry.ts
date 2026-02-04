@@ -55,8 +55,8 @@ export const STEPS = {
   },
   'I have multiple form instances for a form type': {
     pattern: /^I\ have\ multiple\ form\ instances\ for\ a\ form\ type$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:433',
+    typescript: 'test/typescript/steps/user_steps.ts:393',
     features: ['specs/features/user/get_form_instances.feature:8'],
   },
   'I have previously saved form data for a form instance': {
@@ -223,8 +223,8 @@ export const STEPS = {
   },
   'I request the list of form instances': {
     pattern: /^I\ request\ the\ list\ of\ form\ instances$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:465',
+    typescript: 'test/typescript/steps/user_steps.ts:418',
     features: ['specs/features/user/get_form_instances.feature:9'],
   },
   'I request the participant list report': {
@@ -319,8 +319,8 @@ export const STEPS = {
   },
   'I should receive the available form instances': {
     pattern: /^I\ should\ receive\ the\ available\ form\ instances$/,
-    python: 'test/python/steps/user_steps.py:1',
-    typescript: 'test/typescript/steps/user_steps.ts:1',
+    python: 'test/python/steps/user_steps.py:471',
+    typescript: 'test/typescript/steps/user_steps.ts:427',
     features: ['specs/features/user/get_form_instances.feature:10'],
   },
   'I should receive the combined user application data': {
