@@ -19,7 +19,32 @@ const PYTHON_DIR = path.join(PROJECT_ROOT, 'test/python');
 const OUTPUT_DIR = path.join(PROJECT_ROOT, 'test/reports');
 
 // Feature path is relative to test/python/features (which symlinks to specs/features)
-const featureSubpath = process.argv[2] || 'features';
+function normalizeFeatureSubpath(input?: string): string {
+  if (!input) {
+    return 'features';
+  }
+
+  let subpath = input;
+  if (path.isAbsolute(subpath)) {
+    subpath = path.relative(PROJECT_ROOT, subpath);
+  }
+
+  subpath = subpath.replace(/\\/g, '/');
+  if (subpath.startsWith('./')) {
+    subpath = subpath.slice(2);
+  }
+
+  if (subpath === 'specs/features' || subpath === 'specs/features/') {
+    return 'features';
+  }
+  if (subpath.startsWith('specs/features/')) {
+    return `features/${subpath.slice('specs/features/'.length)}`;
+  }
+
+  return subpath;
+}
+
+const featureSubpath = normalizeFeatureSubpath(process.argv[2]);
 
 await mkdir(OUTPUT_DIR, { recursive: true }).catch(() => {});
 

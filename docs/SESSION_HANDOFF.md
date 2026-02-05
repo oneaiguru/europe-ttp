@@ -5,6 +5,32 @@ Track progress across Claude Code sessions.
 
 ---
 
+## Recent Work (2026-02-05)
+
+### TASK-E2E-009: Full Evaluator Workflow - COMPLETED ✅
+**Status:** DONE  
+**Priority:** p2  
+**Feature:** `specs/features/e2e/full_evaluator_workflow.feature`
+
+**Completed Steps:**
+1. Verified Python evaluator workflow scenarios pass (3 scenarios, 18 steps)
+2. Verified TypeScript evaluator workflow scenarios pass (3 scenarios, 18 steps)
+3. Alignment check passes: 231 steps defined, 0 orphan, 0 dead
+4. `typecheck` and `lint` pass
+5. Unblocked BDD runners:
+   - `run-python.ts` now accepts `specs/features/...` paths by normalizing to `test/python/features`
+   - `run-typescript.ts` now uses Node + `tsx` directly and creates a nested `node_modules` symlink for ESM resolution in this environment
+
+**Files Modified:**
+- `scripts/bdd/run-python.ts`
+- `scripts/bdd/run-typescript.ts`
+- `IMPLEMENTATION_PLAN.md`
+
+**Notes:**
+- Evaluator workflow step definitions were already present in `test/python/steps/e2e_api_steps.py` and `test/typescript/steps/e2e_api_steps.ts`; this loop focused on test runner fixes + verification.
+
+---
+
 ## Recent Work (2026-02-04)
 
 ### TASK-E2E-010: Certificate Generation Gated by Completion - COMPLETED ✅

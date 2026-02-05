@@ -485,9 +485,9 @@ This section contains the **full detailed scenario specifications** from the PRD
 * Then evaluation status updates
 * And applicant/admin sees evaluation recorded (role-based visibility)
 
-**Implementation Status:** 🟡 PARTIAL
+**Implementation Status:** 🟢 DONE
 - TASK-E2E-002: Fuzzy matching for messy emails ✅ DONE
-- TASK-E2E-009: Full evaluator workflow 🔴 TODO (spec written in plan)
+- TASK-E2E-009: Full evaluator workflow ✅ DONE
 
 ---
 

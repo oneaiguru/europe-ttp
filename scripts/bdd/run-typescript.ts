@@ -7,7 +7,7 @@
  */
 
 import { spawn } from 'child_process';
-import { mkdir } from 'fs/promises';
+import { lstat, mkdir, realpath, symlink } from 'fs/promises';
 import path from 'path';
 
 const PROJECT_ROOT = path.resolve();
@@ -18,13 +18,31 @@ const featurePath = process.argv[2] || SPEC_FEATURES;
 
 await mkdir(OUTPUT_DIR, { recursive: true }).catch(() => {});
 
+const nodeModulesReal = await realpath(path.join(PROJECT_ROOT, 'node_modules')).catch(() => '');
+if (nodeModulesReal) {
+  const nestedNodeModules = path.join(nodeModulesReal, 'node_modules');
+  try {
+    await lstat(nestedNodeModules);
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
+      await symlink(nodeModulesReal, nestedNodeModules, 'dir');
+    }
+  }
+}
+
 console.log(`[run-typescript] Running Cucumber on: ${featurePath}`);
 
+const NODE_BIN = 'node';
+const TSX_BIN = path.join(PROJECT_ROOT, 'node_modules/tsx/dist/cli.mjs');
+const CUCUMBER_BIN = path.join(PROJECT_ROOT, 'node_modules/.bin/cucumber-js');
+
 const proc = spawn(
-  'npx',
+  NODE_BIN,
   [
-    'tsx',
-    'node_modules/.bin/cucumber-js',
+    '--preserve-symlinks',
+    '--preserve-symlinks-main',
+    TSX_BIN,
+    CUCUMBER_BIN,
     featurePath,
     '-f',
     `json:${path.join(OUTPUT_DIR, 'typescript_bdd.json')}`,
@@ -34,7 +52,15 @@ const proc = spawn(
   {
     cwd: PROJECT_ROOT,
     stdio: 'inherit',
-    env: process.env,
+    env: {
+      ...process.env,
+      NODE_PATH: [
+        path.join(PROJECT_ROOT, 'node_modules'),
+        process.env.NODE_PATH,
+      ]
+        .filter(Boolean)
+        .join(path.delimiter),
+    },
   },
 );
 
