@@ -69,6 +69,12 @@ Run exactly ONE role per loop, then STOP.
    **Important:** If `IMPLEMENTATION_PLAN.md` claims "all tasks complete" but the task graph contains TODOs,
    treat the task graph as the source of pending work and proceed. Do NOT stop.
 
+   If you cannot find ANY pending task (task graph empty or all tasks already complete, and the plan has no TODO/PARTIAL),
+   then do NOT run full BDD. Instead:
+   - Run alignment + `typecheck` + `lint` (using the non-bun fallbacks below if needed).
+   - Log a one-line note in `docs/SESSION_HANDOFF.md` that there is no pending work.
+   - STOP without creating `ACTIVE_TASK.md`.
+
 2. If the selected task has a real feature file under `specs/features/`, run BDD tests to find failing scenarios.
    Otherwise (fix/hardening tasks with `feature_file: N/A`), skip full BDD and just run alignment + quality checks.
 
