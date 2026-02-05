@@ -3,12 +3,12 @@
 ## Status
 🟢 **Phase 0 Complete** - All planning artifacts generated, build tools ready
 🟢 **Phase 2E Complete** - Complex E2E scenarios added (6 feature files with API steps)
+🟢 **Phase 3 Complete** - All fix tasks completed (type errors, secrets, alignment)
 
 ---
 
 ## Missing Work
-- `TASK-FIX-002` `remove-committed-secrets`: Goal: Remove committed API keys and service account keys, and rotate any affected credentials. Acceptance: `constants.py` uses environment-based configuration with no real API keys; `ttc_portal_sendgrid_key.txt` is removed and secrets are provisioned outside git; `artofliving-ttcdesk-dev-b3dbc09298ee.json` is removed and replaced with secure secret provisioning. Refs: constants.py:12-16; ttc_portal_sendgrid_key.txt:1; artofliving-ttcdesk-dev-b3dbc09298ee.json:2-6.
-- `TASK-FIX-003` `fix-verify-alignment-placeholder-matching`: Goal: Ensure `verify-alignment.ts` correctly matches registry placeholders when patterns are absent. Acceptance: Placeholder handling converts `{string}`/`{int}`/`{float}` into regex without re-escaping inserted regex tokens; add a minimal test or fixture that fails under the current implementation and passes after the fix. Refs: scripts/bdd/verify-alignment.ts:52-69.
+None - All planned tasks are complete.
 
 ---
 
@@ -158,9 +158,9 @@ All 13 E2E tasks have been implemented and verified:
 
 | Task | Priority | Status | Notes |
 |------|----------|--------|-------|
-| TASK-FIX-001 | p1 | 🟡 IN PROGRESS | Fix TypeScript type errors (`bun run typecheck`) |
-| TASK-FIX-002 | p1 | 🔴 TODO | Remove committed secrets (constants/sendgrid/service account) |
-| TASK-FIX-003 | p2 | 🔴 TODO | Fix verify-alignment placeholder matching + add test |
+| TASK-FIX-001 | p1 | ✅ DONE | Fix TypeScript type errors (`bun run typecheck`) |
+| TASK-FIX-002 | p1 | ✅ DONE | Remove committed secrets (constants/sendgrid/service account) |
+| TASK-FIX-003 | p2 | ✅ DONE | Fix verify-alignment placeholder matching + add test |
 
 ### TASK-E2E-008: Validation Errors (A3)
 **Feature:** `specs/features/e2e/validation_errors.feature`
