@@ -34,6 +34,12 @@ bun.lockb
 .env*.local
 .env
 
+# Service account keys (NEVER commit these)
+*_service_account.json
+*service-account*.json
+*-gcp-*.json
+*-ttcdesk-*.json
+
 # Vercel
 .vercel
 

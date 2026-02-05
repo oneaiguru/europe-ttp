@@ -127,7 +127,9 @@ libraries:
   version: latest
 # [END libraries]
 
+# SECURITY NOTE: API keys removed from source control. Set these in your deployment environment.
 env_variables:
-  GOOGLE_MAPS_API_KEY: 'AIzaSyCRXv1cpuBAO5GFZhjR3VT96QOnbuGPvKY'
-  GOOGLE_PUBLIC_API_KEY: 'AIzaSyBQiCn_c9vD0BQWiXvSvK6JeJJ_KWDSpTM '
-  SERVICE_JSON_FILE: 'artofliving-ttcdesk-dev-b3dbc09298ee.json'
+  GOOGLE_MAPS_API_KEY: ''
+  GOOGLE_PUBLIC_API_KEY: ''
+  # SERVICE_JSON_FILE: Path to service account JSON (if needed)
+  # Use Application Default Credentials in production instead
