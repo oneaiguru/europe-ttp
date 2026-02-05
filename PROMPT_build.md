@@ -11,13 +11,24 @@ Migrate legacy functionality by ensuring all BDD scenarios have implementations 
 
 ## Bootstrapping (Every Loop)
 
-Before any role, ensure dependencies are present:
+Before any role, confirm you are in the repo root. In the Weaver container, the repo is mounted at `/workspace`.
+
+**Do not guess paths** (this avoids wasted tokens + wrong-file reads):
+- Plan: `/workspace/IMPLEMENTATION_PLAN.md` (NOT `/workspace/docs/IMPLEMENTATION_PLAN.md`)
+- Task graph: `/workspace/tasks/task_graph.json`
+- Active task: `/workspace/docs/Tasks/ACTIVE_TASK.md`
+
+Ensure JS dependencies are present (some images do not include `bun`):
 
 ```bash
-bun install
+if [ ! -d node_modules ]; then
+  if command -v bun >/dev/null 2>&1; then
+    bun install
+  else
+    npm ci
+  fi
+fi
 ```
-
-If `node_modules/` already exists, this is fast and safe.
 
 ---
 
@@ -41,31 +52,68 @@ Run exactly ONE role per loop, then STOP.
 **Purpose**: Find the next failing scenario or unimplemented step.
 
 ### Read
-- `IMPLEMENTATION_PLAN.md` (next incomplete task)
-- `tasks/task_graph.json` (all tasks)
+- `/workspace/IMPLEMENTATION_PLAN.md` (next incomplete task)
+- `/workspace/tasks/task_graph.json` (all tasks)
+- `/workspace/tasks/task_graph.todo.json` (preferred, if present)
 - `test/bdd/step-registry.ts` (step status)
 
 ### Do
-1. Run Python BDD tests to find failing scenarios:
+1. **Select the next task ID first** (this is what prevents the "test-only loop"):
+   - Prefer the first non-complete task in `tasks/task_graph.todo.json` (if it exists).
+   - Else, prefer the first task in `tasks/task_graph.json` whose `status` is not DONE (or has no `status`).
+   - Skip any task that is already marked complete in either place:
+     - `docs/Tasks/<id>.task.md` contains `✅ COMPLETE` / `✅ DONE`, or
+     - `IMPLEMENTATION_PLAN.md` row for that task shows DONE.
+       If the graph task id is an alias (not a `TASK-...` slug), also treat `TASK-... (<id>)` rows as a match.
+
+   **Important:** If `IMPLEMENTATION_PLAN.md` claims "all tasks complete" but the task graph contains TODOs,
+   treat the task graph as the source of pending work and proceed. Do NOT stop.
+
+2. If the selected task has a real feature file under `specs/features/`, run BDD tests to find failing scenarios.
+   Otherwise (fix/hardening tasks with `feature_file: N/A`), skip full BDD and just run alignment + quality checks.
+
+   Python BDD:
    ```bash
-   bun scripts/bdd/run-python.ts specs/features/
+   # Python
+   if command -v bun >/dev/null 2>&1; then
+     bun scripts/bdd/run-python.ts specs/features/
+   else
+     mkdir -p test/reports
+     python -m behave test/python/features/ -f json -o test/reports/python_bdd.json --no-capture
+   fi
    ```
-2. Run TypeScript BDD tests to find failing scenarios:
+3. TypeScript BDD:
    ```bash
-   bun scripts/bdd/run-typescript.ts specs/features/
+   if command -v bun >/dev/null 2>&1; then
+     bun scripts/bdd/run-typescript.ts specs/features/
+   else
+     mkdir -p test/reports
+     node --preserve-symlinks --preserve-symlinks-main node_modules/tsx/dist/cli.mjs \
+       node_modules/.bin/cucumber-js specs/features/ \
+       -f json:test/reports/typescript_bdd.json \
+       --import 'test/typescript/steps/**/*.ts'
+   fi
    ```
-3. Identify the most important **non-DONE** item from `IMPLEMENTATION_PLAN.md`
-   at this moment (scenario/step).
-   If multiple items seem equally important, use this tie-breaker order:
-   - Prefer **PARTIAL** over TODO.
-   - Prefer the item listed **earliest/highest** in the plan table.
-   If still unclear, then choose one that is:
-   - Not implemented (step missing)
-   - Failing in Python
-   - Failing in TypeScript
-   **Do not create or switch to a task not listed in the plan/task graph.**
-4. Create `docs/Tasks/ACTIVE_TASK.md` with task ID
-5. Create `docs/Tasks/<slug>.task.md` with:
+4. For non-feature fix tasks (no `specs/features/...`), run:
+   ```bash
+   # Alignment
+   if command -v bun >/dev/null 2>&1; then
+     bun scripts/bdd/verify-alignment.ts
+   else
+     npx tsx scripts/bdd/verify-alignment.ts
+   fi
+
+   # Quality
+   if command -v bun >/dev/null 2>&1; then
+     bun run typecheck
+     bun run lint
+   else
+     npm run typecheck
+     npm run lint
+   fi
+   ```
+5. Create `docs/Tasks/ACTIVE_TASK.md` with the selected task ID
+6. Create `docs/Tasks/<slug>.task.md` with:
    - Task ID and name
    - Feature file path
    - Scenario that's failing
