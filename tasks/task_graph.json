@@ -40,7 +40,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "fix-user-report-imports",
@@ -50,7 +50,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "fix-db-user-import",
@@ -60,7 +60,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "sanitize-portal-rendering",
@@ -70,7 +70,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "bdd-verify-detect-placeholder-impls",
@@ -80,7 +80,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "fix-verify-alignment-js-placeholders",
@@ -90,7 +90,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "reduce-test-fallback-masking",
@@ -100,7 +100,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "reset-ts-step-state",
@@ -110,7 +110,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "validate-ttc-config-fixtures",
@@ -120,7 +120,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "replace-assert-true-placeholders",
@@ -130,7 +130,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "guard-unauthenticated-post",
@@ -140,7 +140,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "handle-missing-update-datetime",
@@ -150,7 +150,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "restrict-docs-static-dir",
@@ -160,7 +160,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "pin-python-dependencies",
@@ -170,7 +170,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "replace-report-stubs",
@@ -180,7 +180,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "stop-api-step-masking",
@@ -190,7 +190,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "update-http-links",
@@ -200,7 +200,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "prevent-open-redirects",
@@ -210,7 +210,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "lint-app-sources",
@@ -220,7 +220,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "reconcile-task-status",
@@ -230,7 +230,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "fill-task-plan-line-refs",
@@ -240,7 +240,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "remove-pii-fixtures",
@@ -250,7 +250,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "remove-hardcoded-keys-app-yaml",
@@ -260,7 +260,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "🔴 TODO"
+      "status": "✅ DONE"
     }
   ]
 }

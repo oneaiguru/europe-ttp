@@ -1,1 +1,1 @@
-fix-user-report-imports
+restrict-docs-static-dir
