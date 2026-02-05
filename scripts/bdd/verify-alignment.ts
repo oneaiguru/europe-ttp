@@ -49,23 +49,13 @@ function stepMatchesPattern(featureStep: string, registryKey: string, stepEntry:
     return stepEntry.pattern.test(featureStep);
   }
 
-  // Pattern matching for {string} placeholders
-  // Convert registry key with {string} to a regex pattern
-  if (registryKey.includes('{string}')) {
-    const patternStr = registryKey
-      .replace(/\{string\}/g, '"[^"]*"')
-      .replace(/\{int\}/g, '\\d+')
-      .replace(/\{float\}/g, '\\d+\\.?\\d*')
-      .replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape special regex chars except our replacements
-    const pattern = new RegExp(`^${patternStr}$`);
-    return pattern.test(featureStep);
-  }
-
-  // Pattern matching for {int} placeholders
-  if (registryKey.includes('{int}')) {
-    const patternStr = registryKey
-      .replace(/\{int\}/g, '\\d+')
-      .replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const hasPlaceholders = registryKey.includes('{string}') || registryKey.includes('{int}') || registryKey.includes('{float}');
+  if (hasPlaceholders) {
+    const escaped = registryKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const patternStr = escaped
+      .replace(/\\\{string\\\}/g, '"[^"]*"')
+      .replace(/\\\{int\\\}/g, '\\d+')
+      .replace(/\\\{float\\\}/g, '\\d+\\.?\\d*');
     const pattern = new RegExp(`^${patternStr}$`);
     return pattern.test(featureStep);
   }

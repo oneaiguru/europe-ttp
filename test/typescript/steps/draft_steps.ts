@@ -12,20 +12,8 @@ import assert from 'assert';
 // SHARED TEST CONTEXT (matches e2e_api_steps.ts)
 // ============================================================================
 
-declare global {
-  var testContext: {
-    lastSubmission?: {
-      form_type: string;
-      status: string;
-      data?: Record<string, unknown>;
-    };
-  };
-}
-
-// Initialize testContext if not exists
-if (typeof globalThis.testContext === 'undefined') {
-  globalThis.testContext = {};
-}
+// The testContext is initialized in e2e_api_steps.ts with all required properties
+// No need to re-initialize here
 
 // ============================================================================
 // TYPE DEFINITIONS

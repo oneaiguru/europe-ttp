@@ -18,13 +18,9 @@ interface FieldErrors {
   [fieldName: string]: string;
 }
 
-// Helper type for accessing testContext safely
-// The actual testContext is declared in e2e_api_steps.ts
-// We use 'unknown' here because the type is declared elsewhere with 'declare global'
-type TestContext = unknown;
-
-// Helper to get testContext
-function getTestContext(): TestContext {
+// The testContext is declared in e2e_api_steps.ts
+// Helper to get testContext with proper typing
+function getTestContext() {
   return globalThis.testContext;
 }
 

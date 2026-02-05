@@ -5,7 +5,7 @@
  * API calls instead of browser automation for reliability and speed.
  */
 
-import { DataTable, Given, When, Then } from '@cucumber/cucumber';
+import { Before, DataTable, Given, When, Then } from '@cucumber/cucumber';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -50,41 +50,86 @@ interface ApiResponse {
 // TEST CONTEXT
 // ============================================================================
 
-const testContext: {
-  currentEmail?: string;
-  currentRole?: string;
-  currentUser?: TestUser;
-  currentTtcOption?: TTCOption;
-  lastSubmission?: FormSubmission;
-  response?: ApiResponse;
-  homeCountry?: string;
-  whitelist: string[];
-  whitelistTargetEmail?: string;
-  whitelistGraceExpired: boolean;
-  evaluations: FormSubmission[];
-  evaluationsCount: number;
-  applicantSubmissions: Record<string, unknown>;
-  applicants: Record<string, TestUser>;
-  graduates: Record<string, unknown>;
-  testModeEnabled: boolean;
-  currentPage?: string;
-  numEvaluators?: number;
-  requestedReportEmail?: string;
-  userSummary: Record<string, unknown>;
-  evaluationsList: unknown[];
-  lastNotification?: { to: string; type: string };
-} = {
-  whitelist: [],
-  whitelistGraceExpired: false,
-  evaluations: [],
-  evaluationsCount: 0,
-  applicantSubmissions: {},
-  applicants: {},
-  graduates: {},
-  testModeEnabled: true,
-  userSummary: {},
-  evaluationsList: [],
-};
+declare global {
+  var testContext: {
+    currentEmail?: string;
+    currentRole?: string;
+    currentUser?: TestUser;
+    currentTtcOption?: TTCOption;
+    lastSubmission?: FormSubmission;
+    response?: ApiResponse;
+    homeCountry?: string;
+    whitelist: string[];
+    whitelistTargetEmail?: string;
+    whitelistGraceExpired: boolean;
+    evaluations: FormSubmission[];
+    evaluationsCount: number;
+    applicantSubmissions: Record<string, unknown>;
+    applicants: Record<string, TestUser>;
+    graduates: Record<string, unknown>;
+    testModeEnabled: boolean;
+    currentPage?: string;
+    numEvaluators?: number;
+    requestedReportEmail?: string;
+    userSummary: Record<string, unknown>;
+    evaluationsList: unknown[];
+    lastNotification?: { to: string; type: string };
+    // Additional properties for validation and draft steps
+    field_errors?: Record<string, string>;
+    drafts?: Record<string, { form_type?: string; status?: string; data?: Record<string, unknown>; preserved?: boolean }>;
+  };
+}
+
+// Initialize testContext on globalThis if not exists
+if (typeof globalThis.testContext === 'undefined') {
+  globalThis.testContext = {
+    whitelist: [],
+    whitelistGraceExpired: false,
+    evaluations: [],
+    evaluationsCount: 0,
+    applicantSubmissions: {},
+    applicants: {},
+    graduates: {},
+    testModeEnabled: true,
+    userSummary: {},
+    evaluationsList: [],
+  };
+}
+
+// Use globalThis.testContext for consistency with other step files
+const testContext = globalThis.testContext;
+
+// ============================================================================
+// BEFORE EACH HOOK - Reset test context between scenarios
+// ============================================================================
+
+Before(() => {
+  // Reset the test context properties without replacing the object
+  // This ensures the const testContext reference remains valid
+  testContext.whitelist = [];
+  testContext.whitelistGraceExpired = false;
+  testContext.evaluations = [];
+  testContext.evaluationsCount = 0;
+  testContext.applicantSubmissions = {};
+  testContext.applicants = {};
+  testContext.graduates = {};
+  testContext.testModeEnabled = true;
+  testContext.userSummary = {};
+  testContext.evaluationsList = [];
+  // Clear optional properties
+  delete testContext.currentEmail;
+  delete testContext.currentRole;
+  delete testContext.currentUser;
+  delete testContext.currentTtcOption;
+  delete testContext.lastSubmission;
+  delete testContext.response;
+  delete testContext.homeCountry;
+  delete testContext.whitelistTargetEmail;
+  delete testContext.currentPage;
+  delete testContext.numEvaluators;
+  delete testContext.requestedReportEmail;
+  delete testContext.lastNotification;
+});
 
 // ============================================================================
 // FIXTURE LOADERS
@@ -663,7 +708,9 @@ Then('teacher 1 and {int} emails should be in the evaluator list', (n: number) =
 Given('I navigate to the TTC application form', () => {
   testContext.currentPage = 'ttc_application';
   // Also set for draft context compatibility
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (typeof (globalThis as any).draftContext !== 'undefined') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).draftContext.currentForm = 'ttc_application';
   }
 });

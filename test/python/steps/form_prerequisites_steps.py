@@ -50,6 +50,7 @@ def update_available_forms(context):
 
 
 # Step: I have NOT completed the Happiness Program
+@given('I have NOT completed the Happiness Program')
 @when('I have NOT completed the Happiness Program')
 def step_not_completed_happiness(context):
     """Set the Happiness Program completion to False."""
@@ -67,6 +68,7 @@ def step_dsn_not_available(context):
 
 
 # Step: I complete the Happiness Program
+@given('I complete the Happiness Program')
 @when('I complete the Happiness Program')
 def step_complete_happiness(context):
     """Set the Happiness Program completion to True."""

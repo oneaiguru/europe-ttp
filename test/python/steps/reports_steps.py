@@ -5,7 +5,12 @@ from behave import given, when, then
 import json
 import sys
 import os
-import urllib
+try:
+    # Python 3
+    from urllib.parse import urlencode
+except ImportError:
+    # Python 2
+    from urllib import urlencode
 
 # Add parent directory to path for legacy imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
@@ -249,7 +254,7 @@ def step_request_user_application_html(context):
         form_instance = getattr(context, 'test_form_instance', '0')
 
         # Build query parameters
-        params = urllib.urlencode({
+        params = urlencode({
             'email': email,
             'form_type': form_type,
             'form_instance': form_instance
@@ -297,7 +302,7 @@ def step_request_combined_user_application(context):
             }
         ])
 
-        params = urllib.urlencode({'forms': forms})
+        params = urlencode({'forms': forms})
 
         response = client.get('/reporting/user-report/get-user-application-combined?' + params)
         context.combined_report_response = response
@@ -337,7 +342,7 @@ def step_request_user_application_forms(context):
         form_instance = getattr(context, 'test_form_instance', '0')
 
         # Build query parameters
-        params = urllib.urlencode({
+        params = urlencode({
             'email': email,
             'form_type': form_type,
             'form_instance': form_instance
@@ -385,7 +390,7 @@ def step_open_printable_form_page(context):
         form_instance = getattr(context, 'test_form_instance', '0')
 
         # Build query parameters
-        params = urllib.urlencode({
+        params = urlencode({
             'email': email,
             'form_type': form_type,
             'form_instance': form_instance

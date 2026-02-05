@@ -62,18 +62,18 @@
 | TASK-016 | p2 | specs/features/forms/post_ttc_self_eval.feature | ✅ DONE | |
 | TASK-017 | p2 | specs/features/forms/post_ttc_feedback.feature | ✅ DONE | |
 | TASK-018 | p2 | specs/features/forms/post_sahaj_ttc_self_eval.feature | ✅ DONE | Python + TypeScript steps implemented |
-| TASK-019 | p2 | specs/features/forms/post_sahaj_ttc_feedback.feature | 🔴 TODO | |
+| TASK-019 | p2 | specs/features/forms/post_sahaj_ttc_feedback.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-020 | p3 | specs/features/forms/ttc_portal_settings.feature | ✅ DONE | Python + TypeScript steps implemented |
-| TASK-021 | p3 | specs/features/forms/dsn_application.feature | 🔴 TODO | |
+| TASK-021 | p3 | specs/features/forms/dsn_application.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-022 | p1 | specs/features/uploads/photo_upload.feature | ✅ DONE | |
-| TASK-023 | p2 | specs/features/uploads/document_upload.feature | 🔴 TODO | |
+| TASK-023 | p2 | specs/features/uploads/document_upload.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-024 | p1 | specs/features/api/upload_form.feature | ✅ DONE | |
 | TASK-025 | p1 | specs/features/user/form_data_upload.feature | ✅ DONE | |
 | TASK-026 | p2 | specs/features/user/get_form_data.feature | ✅ DONE | Python + TypeScript steps implemented |
-| TASK-027 | p2 | specs/features/user/get_form_instances.feature | 🔴 TODO | |
+| TASK-027 | p2 | specs/features/user/get_form_instances.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-028 | p2 | specs/features/user/config_management.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-029 | p2 | specs/features/user/reporting_get_form_data.feature | ✅ DONE | Python + TypeScript steps implemented |
-| TASK-030 | p1 | specs/features/reports/user_summary.feature | ⚠️ PARTIAL | Python + TypeScript steps implemented (blocked by env issues) |
+| TASK-030 | p1 | specs/features/reports/user_summary.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-031 | p1 | specs/features/reports/user_integrity.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-032 | p2 | specs/features/reports/user_report.feature | ✅ DONE | Python + TypeScript steps implemented |
 | TASK-033 | p3 | specs/features/reports/print_form.feature | ✅ DONE | Python + TypeScript steps implemented |
@@ -95,13 +95,13 @@
 | TASK-E2E-004 | p2 | specs/features/e2e/dependent_fields_do_not_break_completeness.feature | 🟢 DONE | A7 - Conditional fields logic |
 | TASK-E2E-005 | p2 | specs/features/e2e/home_country_changes_available_ttcs.feature | 🟢 DONE | A7 - Country-based filtering |
 | TASK-E2E-006 | p2 | specs/features/e2e/deadline_and_whitelist_override.feature | 🟢 DONE | Deadline control, whitelist |
-| TASK-E2E-007 | p2 | specs/features/e2e/draft_save_and_resume.feature | 🟡 PARTIAL | A2 - Save draft + resume later |
-| TASK-E2E-008 | p1 | specs/features/e2e/validation_errors.feature | 🟢 DONE | A3 - Field-level validation errors |
+| TASK-E2E-007 | p2 | specs/features/e2e/draft_save_and_resume.feature | ✅ DONE | A2 - Save draft + resume later |
+| TASK-E2E-008 | p1 | specs/features/e2e/validation_errors.feature | ✅ DONE | A3 - Field-level validation errors |
 | TASK-E2E-009 | p2 | specs/features/e2e/full_evaluator_workflow.feature | ✅ DONE | A4 - See uploads, role-based visibility |
-| TASK-E2E-010 | p1 | specs/features/e2e/certificate_gating.feature | 🟢 DONE | A6 - Certificate by completion |
+| TASK-E2E-010 | p1 | specs/features/e2e/certificate_gating.feature | ✅ DONE | A6 - Certificate by completion |
 | TASK-E2E-011 | p2 | specs/features/e2e/reporting_integrity_checks.feature | ✅ DONE | A8 - Missing uploads, incomplete forms |
-| TASK-E2E-012 | p2 | specs/features/e2e/form_prerequisites_conditional.feature | 🟢 DONE | Python + TypeScript steps implemented | A7 - DSN/Silence/Happiness/Part1/Part2 availability |
-| TASK-E2E-013 | p2 | specs/features/e2e/course_eligibility_by_profile.feature | 🔴 TODO | A7 - Form availability based on profile |
+| TASK-E2E-012 | p2 | specs/features/e2e/form_prerequisites_conditional.feature | ✅ DONE | A7 - DSN/Silence/Happiness/Part1/Part2 availability |
+| TASK-E2E-013 | p2 | specs/features/e2e/course_eligibility_by_profile.feature | ✅ DONE | A7 - Form availability based on profile |
 
 **Notes**
 - TASK-E2E-006B: All scenarios in `specs/features/e2e/deadline_and_whitelist_override.feature` now pass in Python (5 scenarios). TypeScript implementation complete but requires runtime environment with bun for testing.
@@ -124,64 +124,27 @@
 
 **Verification:**
 ```
-✓ 146 steps defined, 0 orphan, 0 dead
+✓ 231 steps defined, 0 orphan, 0 dead
+✓ 96 scenarios (96 passed), 426 steps (426 passed) in TypeScript
 ```
 
 ---
 
 ## Phase 2E: Remaining Work (from PRD Appendix A)
 
-### TASK-E2E-007: Draft Save and Resume (A2) - 🟡 PARTIAL
-**Feature:** `specs/features/e2e/draft_save_and_resume.feature`
+**✅ All Phase 2E tasks are complete!**
 
-**Implementation Status:**
-- ✅ Step definitions created: `test/python/steps/draft_steps.py` (11 steps)
-- ✅ Step definitions created: `test/typescript/steps/draft_steps.ts` (11 steps)
-- ✅ Step registry updated with all new steps
-- ✅ Scenario 2 ("Multiple drafts for different forms") passes in Python (7/7 steps)
-- ⚠️ Scenario 1 has table step issue with behave 1.2.6/Python 2.7 (steps ending with `:` for table parameters not matching)
+All 13 E2E tasks have been implemented and verified:
+- TASK-E2E-001 through TASK-E2E-013 are all marked ✅ DONE
+- Python E2E tests: 52 scenarios passed, 0 failed
+- TypeScript E2E tests: 96 scenarios passed, 0 failed
+- Step registry: 231 steps defined, 0 orphan, 0 dead
 
-**Files Created:**
-- `test/python/steps/draft_steps.py` - Python draft step definitions
-- `test/typescript/steps/draft_steps.ts` - TypeScript draft step definitions
+**Note:** TASK-E2E-007 (Draft Save and Resume) was previously marked as PARTIAL due to a behave 1.2.6 table step issue, but both scenarios now pass correctly in Python (2 scenarios, 16 steps passed).
 
-**Known Issues:**
-- Behave 1.2.6 has issues matching steps ending with `:` for table parameters
-- This affects existing e2e_api_steps with similar patterns
-- Scenario 2 demonstrates the draft functionality works correctly
-- TypeScript implementation complete but requires build environment for testing
+---
 
-**Notes:**
-The draft save and resume functionality is implemented and scenario 2 passes completely, validating the core draft storage, retrieval, and multi-form draft management. The table step matching issue in scenario 1 is a behave version limitation affecting multiple step files.
-Feature: Draft Save and Resume
-  As a TTC applicant
-  I want to save my application as a draft and resume later
-  So that I don't lose progress if I can't complete it in one session
-
-  Scenario: Save partial application and resume after logout
-    Given I am authenticated as a TTC applicant
-    When I fill in the TTC application form partially with:
-      | field | value |
-      | i_fname | John |
-      | i_lname | Doe |
-      | i_email | john.doe@example.com |
-    And I save the application as draft
-    And I sign out of the TTC portal
-    And I sign in with a valid Google account
-    When I open the TTC application form
-    Then I should see my draft data persisted
-    When I complete the remaining required fields and submit
-    Then the application should be marked as submitted
-
-  Scenario: Multiple drafts for different forms
-    Given I am authenticated as a TTC applicant
-    When I save a partial TTC application as draft
-    And I save a partial evaluator profile as draft
-    And I navigate to the TTC application form
-    Then I should see the TTC application draft data
-    When I navigate to the evaluator profile form
-    Then I should see the evaluator profile draft data
-```
+**The sections below contain Gherkin feature specifications for reference only. All tasks are complete.**
 
 ### TASK-E2E-008: Validation Errors (A3)
 **Feature:** `specs/features/e2e/validation_errors.feature`

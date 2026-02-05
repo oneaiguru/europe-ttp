@@ -117,10 +117,12 @@ Given('applicant has NOT uploaded required photo', function () {
 });
 
 Given('applicant has started TTC application but not submitted', function () {
-  getIntegrityContext().currentEmail = 'test.applicant@example.com';
+  const email = 'test.applicant@example.com';
+  getIntegrityContext().currentEmail = email;
 
-  getIntegrityContext().integrityData[getIntegrityContext().currentEmail] = {
-    email: getIntegrityContext().currentEmail,
+  ensureIntegrityData();
+  getIntegrityContext().integrityData[email] = {
+    email: email,
     ttc_application: 'incomplete',
     application_status: 'incomplete',
     flags: ['incomplete_application'],
@@ -131,11 +133,12 @@ Given('applicant has started TTC application but not submitted', function () {
 Given('evaluation was submitted with email {string}', function (email: string) {
   getIntegrityContext().evaluationEmail = email;
 
-  if (!getIntegrityContext().evaluations) {
-    getIntegrityContext().evaluations = [];
+  const ctx = getIntegrityContext();
+  if (!ctx.evaluations) {
+    ctx.evaluations = [];
   }
 
-  getIntegrityContext().evaluations.push({
+  ctx.evaluations.push({
     submitted_email: email,
     status: 'unmatched',
   });
@@ -152,9 +155,10 @@ Given('applicant exists with email {string}', function (email: string) {
   };
 
   // Flag the mismatch
-  if (getIntegrityContext().evaluations) {
-    for (const evalEntry of getIntegrityContext().evaluations) {
-      if (evalEntry.submitted_email !== email) {
+  const ctx = getIntegrityContext();
+  if (ctx.evaluations) {
+    for (const evalEntry of ctx.evaluations) {
+      if (evalEntry && evalEntry.submitted_email !== email) {
         evalEntry.actual_applicant_email = email;
         evalEntry.status = 'mismatched';
       }
@@ -281,21 +285,22 @@ Then('the evaluation should be flagged as unmatched', function () {
 });
 
 Then('the report should show the mismatched email', function () {
-  assert.ok(getIntegrityContext().mismatchedEvaluation, 'No mismatched evaluation found');
-
   const evalEntry = getIntegrityContext().mismatchedEvaluation;
-  assert.ok(evalEntry.submitted_email, 'Missing submitted_email in evaluation');
-  assert.ok(evalEntry.actual_applicant_email, 'Missing actual_applicant_email in evaluation');
+  assert.ok(evalEntry, 'No mismatched evaluation found');
+
+  assert.ok(evalEntry?.submitted_email, 'Missing submitted_email in evaluation');
+  assert.ok(evalEntry?.actual_applicant_email, 'Missing actual_applicant_email in evaluation');
 
   assert.notStrictEqual(evalEntry.submitted_email, evalEntry.actual_applicant_email,
     'Expected different emails for mismatched evaluation');
 });
 
 Then('the CSV should contain columns: email, flags, missing_uploads, incomplete_forms, mismatches', function () {
-  assert.ok(getIntegrityContext().csvData, 'No CSV data available');
+  const csvData = getIntegrityContext().csvData;
+  assert.ok(csvData, 'No CSV data available');
 
   const expectedColumns = ['email', 'flags', 'missing_uploads', 'incomplete_forms', 'mismatches'];
-  const actualColumns = getIntegrityContext().csvData.columns;
+  const actualColumns = csvData.columns;
 
   assert.deepStrictEqual(
     new Set(expectedColumns),
@@ -305,11 +310,13 @@ Then('the CSV should contain columns: email, flags, missing_uploads, incomplete_
 });
 
 Then('the CSV should be downloadable via admin dashboard', function () {
-  assert.ok(getIntegrityContext().csvDownloadUrl, 'No CSV download URL available');
+  const csvUrl = getIntegrityContext().csvDownloadUrl;
+  assert.ok(csvUrl, 'No CSV download URL available');
 
-  assert.ok(getIntegrityContext().csvDownloadUrl.startsWith('/'),
-    `Expected download URL to start with /, got ${getIntegrityContext().csvDownloadUrl}`);
+  assert.ok(csvUrl?.startsWith('/'),
+    `Expected download URL to start with /, got ${csvUrl}`);
 
-  assert.ok(getIntegrityContext().csvData, 'No CSV data available');
-  assert.ok(getIntegrityContext().csvData.rows, 'CSV data missing rows');
+  const csvData = getIntegrityContext().csvData;
+  assert.ok(csvData, 'No CSV data available');
+  assert.ok(csvData?.rows, 'CSV data missing rows');
 });

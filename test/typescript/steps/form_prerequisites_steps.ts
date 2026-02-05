@@ -11,13 +11,14 @@
 
 import { Given, When, Then } from '@cucumber/cucumber';
 
-interface CourseCompletions {
+export interface CourseCompletions {
   happiness_program: boolean;
   part_1: boolean;
   part_2: boolean;
+  ttc_submitted?: boolean;
 }
 
-interface PrerequisitesContext {
+export interface PrerequisitesContext {
   course_completions: CourseCompletions;
   available_forms: string[];
   home_country: string;
@@ -90,7 +91,8 @@ function updateAvailableForms(): void {
 // implemented in e2e_api_steps.ts, so we don't duplicate it here.
 
 // Step: I have NOT completed the Happiness Program
-When('I have NOT completed the Happiness Program', function () {
+// Note: Using Given since it's primarily used as a precondition
+Given('I have NOT completed the Happiness Program', function () {
   initPrerequisitesContext();
   prerequisitesContext.course_completions.happiness_program = false;
   updateAvailableForms();
@@ -107,6 +109,7 @@ Then('the DSN application form should NOT be available', function () {
 });
 
 // Step: I complete the Happiness Program
+// Note: Using When since it's primarily used as an action
 When('I complete the Happiness Program', function () {
   initPrerequisitesContext();
   prerequisitesContext.course_completions.happiness_program = true;
@@ -231,7 +234,7 @@ Then('the Part 2 course application should become available', function () {
 });
 
 // Step: my home country is {string}
-When('my home country is "{country}"', function (country: string) {
+When('my home country is {string}', function (country: string) {
   initPrerequisitesContext();
   prerequisitesContext.home_country = country;
   // Ensure available forms is initialized
@@ -268,7 +271,7 @@ Then('India-specific TTC options should NOT be available', function () {
 });
 
 // Step: I update my home country to {string}
-When('I update my home country to "{country}"', function (country: string) {
+When('I update my home country to {string}', function (country: string) {
   initPrerequisitesContext();
   prerequisitesContext.home_country = country;
 });
@@ -281,3 +284,6 @@ Then('India-specific TTC options should become available', function () {
   // For this test, we just verify the country is set correctly
   // In a real implementation, this would check country-specific forms
 });
+
+// Export context and functions for use by other step files (e.g., eligibility_dashboard_steps)
+export { prerequisitesContext, initPrerequisitesContext, updateAvailableForms };
