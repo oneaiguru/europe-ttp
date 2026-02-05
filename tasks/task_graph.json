@@ -1,7 +1,17 @@
 {
-  "generated_at": "2026-02-05T07:57:03.952794+00:00",
+  "generated_at": "2026-02-05T22:12:32Z",
   "source": "IMPLEMENTATION_PLAN.md",
   "tasks": [
+    {
+      "id": "TASK-FIX-005",
+      "name": "fix cucumber scenario outline expansion",
+      "feature_file": "N/A",
+      "priority": "p1",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 3,
+      "status": "🔴 TODO"
+    },
     {
       "id": "TASK-FIX-003",
       "name": "fix verify alignment placeholder matching",
@@ -10,7 +20,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "harden-signed-upload-url",
@@ -20,7 +30,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "✅ DONE"
     },
     {
       "id": "fix-invalid-api-handler",
@@ -30,7 +40,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "fix-user-report-imports",
@@ -40,7 +50,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "fix-db-user-import",
@@ -50,7 +60,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "sanitize-portal-rendering",
@@ -60,7 +70,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "bdd-verify-detect-placeholder-impls",
@@ -70,7 +80,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "fix-verify-alignment-js-placeholders",
@@ -80,7 +90,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "reduce-test-fallback-masking",
@@ -90,7 +100,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "reset-ts-step-state",
@@ -100,7 +110,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "validate-ttc-config-fixtures",
@@ -110,7 +120,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "replace-assert-true-placeholders",
@@ -120,7 +130,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "guard-unauthenticated-post",
@@ -130,7 +140,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "handle-missing-update-datetime",
@@ -140,7 +150,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "restrict-docs-static-dir",
@@ -150,7 +160,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "pin-python-dependencies",
@@ -160,7 +170,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "replace-report-stubs",
@@ -170,7 +180,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "stop-api-step-masking",
@@ -180,7 +190,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "update-http-links",
@@ -190,7 +200,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "prevent-open-redirects",
@@ -200,7 +210,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "lint-app-sources",
@@ -210,7 +220,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "reconcile-task-status",
@@ -220,7 +230,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "fill-task-plan-line-refs",
@@ -230,7 +240,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "remove-pii-fixtures",
@@ -240,7 +250,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     },
     {
       "id": "remove-hardcoded-keys-app-yaml",
@@ -250,7 +260,7 @@
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
+      "status": "🔴 TODO"
     }
   ]
 }

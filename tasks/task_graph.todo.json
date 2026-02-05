@@ -1,24 +1,15 @@
 {
-  "generated_at": "2026-02-05T07:57:03.952794+00:00",
-  "source": "/Users/m/git/clients/aol/europe-ttp/tasks/task_graph.json",
+  "generated_at": "2026-02-05T22:12:32Z",
+  "source": "tasks/task_graph.json",
   "tasks": [
     {
-      "id": "TASK-FIX-003",
-      "name": "fix verify alignment placeholder matching",
+      "id": "TASK-FIX-005",
+      "name": "fix cucumber scenario outline expansion",
       "feature_file": "N/A",
-      "priority": "p2",
+      "priority": "p1",
       "scenarios": [],
       "depends_on": [],
-      "estimated_hours": 2
-    },
-    {
-      "id": "harden-signed-upload-url",
-      "name": "harden signed upload url",
-      "feature_file": "N/A",
-      "priority": "p2",
-      "scenarios": [],
-      "depends_on": [],
-      "estimated_hours": 2
+      "estimated_hours": 3
     },
     {
       "id": "fix-invalid-api-handler",

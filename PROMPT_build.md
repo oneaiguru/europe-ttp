@@ -56,24 +56,24 @@ Run exactly ONE role per loop, then STOP.
 - `/workspace/tasks/task_graph.json` (all tasks)
 - `/workspace/tasks/task_graph.todo.json` (preferred, if present)
 - `test/bdd/step-registry.ts` (step status)
+- Do NOT use `docs/SESSION_HANDOFF.md` to decide whether work remains (it is a log and may be stale).
 
 ### Do
 1. **Select the next task ID first** (this is what prevents the "test-only loop"):
-   - Prefer the first non-complete task in `tasks/task_graph.todo.json` (if it exists).
-   - Else, prefer the first task in `tasks/task_graph.json` whose `status` is not DONE (or has no `status`).
-   - Skip any task that is already marked complete in either place:
-     - `docs/Tasks/<id>.task.md` contains `✅ COMPLETE` / `✅ DONE`, or
-     - `IMPLEMENTATION_PLAN.md` row for that task shows DONE.
+   - Build an ordered candidate list:
+     - If `tasks/task_graph.todo.json` exists and `.tasks` is non-empty, treat it as the authoritative **pending** queue.
+     - Else, use the ordered `.tasks` list in `tasks/task_graph.json`.
+   - Scan candidates in order and pick the first task that is NOT already complete.
+     - If the task object has a `status` and it includes `DONE` or `COMPLETE`, skip it.
+     - If `docs/Tasks/<id>.task.md` exists and contains `✅ COMPLETE` / `✅ DONE`, skip it.
+     - If `IMPLEMENTATION_PLAN.md` contains a table row for the task marked `✅ DONE`, skip it.
        If the graph task id is an alias (not a `TASK-...` slug), also treat `TASK-... (<id>)` rows as a match.
 
-   **Important:** If `IMPLEMENTATION_PLAN.md` claims "all tasks complete" but the task graph contains TODOs,
-   treat the task graph as the source of pending work and proceed. Do NOT stop.
+   **Important:** If `IMPLEMENTATION_PLAN.md` claims "all tasks complete" but the task graph contains tasks,
+   treat the task graph as the source of pending work and proceed. Do NOT stop just because tests/quality checks pass.
 
-   If you cannot find ANY pending task (task graph empty or all tasks already complete, and the plan has no TODO/PARTIAL),
-   then do NOT run full BDD. Instead:
-   - Run alignment + `typecheck` + `lint` (using the non-bun fallbacks below if needed).
-   - Log a one-line note in `docs/SESSION_HANDOFF.md` that there is no pending work.
-   - STOP without creating `ACTIVE_TASK.md`.
+   If (and only if) the task graph is empty OR every graph task is explicitly complete (per the checks above),
+   then STOP without creating `ACTIVE_TASK.md`.
 
 2. If the selected task has a real feature file under `specs/features/`, run BDD tests to find failing scenarios.
    Otherwise (fix/hardening tasks with `feature_file: N/A`), skip full BDD and just run alignment + quality checks.
