@@ -5,6 +5,11 @@ This file defines how agents (Claude Code, Codex, Weaver) interact with this pro
 
 ---
 
+## Security And Publication Policy
+We are working in a completely private repo sourced from a zip snapshot. Keys will be rotated before any code is shared outside this repo. Before any upstream publishing or commits to the original repo, follow `docs/ops/SECRET_REMEDIATION_PLAN.md` to remove secrets, scrub working files, and verify no credentials remain.
+
+---
+
 ## Agent Roles
 
 ### Claude Code (Interactive - Prep Phase)
