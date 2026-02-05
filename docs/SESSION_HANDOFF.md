@@ -7,6 +7,36 @@ Track progress across Claude Code sessions.
 
 ## Recent Work (2026-02-05)
 
+### TASK-FIX-002: Placeholder Matching Logic Validation - COMPLETED ✅
+**Status:** DONE
+**Priority:** p1 (Critical - infrastructure)
+**Feature:** `specs/features/test/placeholder_matching.feature`
+
+**Completed Steps:**
+1. Created test feature file with scenarios that exercise placeholder matching without explicit `pattern` field
+2. Added test registry entry `'test placeholder step with value {string}'` with NO `pattern` field
+3. Implemented Python step definitions in `test/python/steps/test_steps.py`
+4. Implemented TypeScript step definitions in `test/typescript/steps/test_steps.ts`
+5. Python BDD tests pass: 2 scenarios, 6 steps passed
+6. TypeScript BDD tests pass: 2 scenarios, 6 steps passed
+7. Alignment check passes: 235 steps, 0 orphan, 0 dead
+8. `typecheck` and `lint` pass
+
+**Files Created:**
+- `specs/features/test/placeholder_matching.feature`
+- `test/python/steps/test_steps.py`
+- `test/typescript/steps/test_steps.ts`
+
+**Files Modified:**
+- `test/bdd/step-registry.ts` (added 4 test steps)
+
+**Notes:**
+- The placeholder matching logic in `verify-alignment.ts` (lines 52-61) is now validated by test
+- When a registry entry has `{string}`, `{int}`, or `{float}` placeholders but no explicit `pattern` field, the fallback logic correctly handles matching
+- This test ensures the defensive placeholder handling code works as intended
+
+---
+
 ### TASK-E2E-009: Full Evaluator Workflow - COMPLETED ✅
 **Status:** DONE  
 **Priority:** p2  
