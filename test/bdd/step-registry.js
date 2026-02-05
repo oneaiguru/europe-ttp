@@ -191,6 +191,54 @@ export const STEPS = {
         typescript: 'test/typescript/steps/uploads_steps.ts:4',
         features: ['specs/features/uploads/photo_upload.feature:9'],
     },
+    'I request a signed upload URL without authentication': {
+        pattern: /^I\ request\ a\ signed\ upload\ URL\ without\ authentication$/,
+        python: 'test/python/steps/uploads_steps.py:53',
+        typescript: 'test/typescript/steps/uploads_steps.ts:65',
+        features: ['specs/features/uploads/upload_security.feature:11'],
+    },
+    'I request a signed URL with filepath {string}': {
+        pattern: /^I\ request\ a\ signed\ URL\ with\ filepath\ "([^"]*)"$/,
+        python: 'test/python/steps/uploads_steps.py:84',
+        typescript: 'test/typescript/steps/uploads_steps.ts:100',
+        features: ['specs/features/uploads/upload_security.feature:13', 'specs/features/uploads/upload_security.feature:25'],
+    },
+    'I request a signed URL with content type {string}': {
+        pattern: /^I\ request\ a\ signed\ URL\ with\ content\ type\ "([^"]*)"$/,
+        python: 'test/python/steps/uploads_steps.py:115',
+        typescript: 'test/typescript/steps/uploads_steps.ts:129',
+        features: ['specs/features/uploads/upload_security.feature:19', 'specs/features/uploads/upload_security.feature:25'],
+    },
+    'I should receive a 401 error': {
+        pattern: /^I\ should\ receive\ a\ 401\ error$/,
+        python: 'test/python/steps/uploads_steps.py:64',
+        typescript: 'test/typescript/steps/uploads_steps.ts:76',
+        features: ['specs/features/uploads/upload_security.feature:12'],
+    },
+    'I should receive a 400 error': {
+        pattern: /^I\ should\ receive\ a\ 400\ error$/,
+        python: 'test/python/steps/uploads_steps.py:72',
+        typescript: 'test/typescript/steps/uploads_steps.ts:84',
+        features: ['specs/features/uploads/upload_security.feature:14', 'specs/features/uploads/upload_security.feature:20'],
+    },
+    'no signed URL should be generated': {
+        pattern: /^no\ signed\ URL\ should\ be\ generated$/,
+        python: 'test/python/steps/uploads_steps.py:78',
+        typescript: 'test/typescript/steps/uploads_steps.ts:94',
+        features: ['specs/features/uploads/upload_security.feature:13'],
+    },
+    'the error should mention {string}': {
+        pattern: /^the\ error\ should\ mention\ "([^"]*)"$/,
+        python: 'test/python/steps/uploads_steps.py:107',
+        typescript: 'test/typescript/steps/uploads_steps.ts:120',
+        features: ['specs/features/uploads/upload_security.feature:15', 'specs/features/uploads/upload_security.feature:21'],
+    },
+    'the signed URL should expire within {int} minutes': {
+        pattern: /^the\ signed\ URL\ should\ expire\ within\ (\d+)\ minutes$/,
+        python: 'test/python/steps/uploads_steps.py:145',
+        typescript: 'test/typescript/steps/uploads_steps.ts:156',
+        features: ['specs/features/uploads/upload_security.feature:27'],
+    },
     'I request a tab template page': {
         pattern: /^I\ request\ a\ tab\ template\ page$/,
         python: 'test/python/steps/portal_steps.py:261',
@@ -1394,5 +1442,30 @@ export const STEPS = {
         python: 'test/python/steps/eligibility_dashboard_steps.py:211',
         typescript: 'test/typescript/steps/eligibility_dashboard_steps.ts:251',
         features: ['specs/features/e2e/course_eligibility_by_profile.feature:29'],
+    },
+    // TEST ENTRY - validates placeholder matching when pattern field is absent
+    // This entry intentionally has NO pattern field to test the fallback placeholder logic
+    'test placeholder step with value {string}': {
+        python: 'test/python/steps/test_steps.py:21',
+        typescript: 'test/typescript/steps/test_steps.ts:18',
+        features: ['specs/features/test/placeholder_matching.feature:10'],
+    },
+    'I have a registry entry with placeholder but no pattern': {
+        pattern: /^I\ have\ a\ registry\ entry\ with\ placeholder\ but\ no\ pattern$/,
+        python: 'test/python/steps/test_steps.py:7',
+        typescript: 'test/typescript/steps/test_steps.ts:7',
+        features: ['specs/features/test/placeholder_matching.feature:5,10'],
+    },
+    'the alignment check runs': {
+        pattern: /^the\ alignment\ check\ runs$/,
+        python: 'test/python/steps/test_steps.py:13',
+        typescript: 'test/typescript/steps/test_steps.ts:10',
+        features: ['specs/features/test/placeholder_matching.feature:6,11'],
+    },
+    'the step should match correctly': {
+        pattern: /^the\ step\ should\ match\ correctly$/,
+        python: 'test/python/steps/test_steps.py:19',
+        typescript: 'test/typescript/steps/test_steps.ts:14',
+        features: ['specs/features/test/placeholder_matching.feature:7,12'],
     },
 };

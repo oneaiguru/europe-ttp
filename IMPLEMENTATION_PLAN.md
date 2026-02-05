@@ -162,6 +162,7 @@ All 13 E2E tasks have been implemented and verified:
 | TASK-FIX-002 | p1 | ✅ DONE | Remove committed secrets (constants/sendgrid/service account) |
 | TASK-FIX-003 | p2 | ✅ DONE | Fix verify-alignment placeholder matching + add test |
 | TASK-FIX-004 (harden-signed-upload-url) | p1 | ✅ DONE | Security hardening for signed upload URL endpoint |
+| TASK-FIX-005 (fix-step-registry-build-sync) | p1 | ✅ DONE | Fix step-registry.js sync + verify-alignment placeholder logic |
 
 ### TASK-E2E-008: Validation Errors (A3)
 **Feature:** `specs/features/e2e/validation_errors.feature`
