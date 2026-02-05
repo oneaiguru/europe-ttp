@@ -4,12 +4,10 @@
   "type": "module",
   "description": "Europe TTP Migration: Python 2.7 App Engine → Bun + Next.js 15",
   "scripts": {
-    "build:registry": "tsc test/bdd/step-registry.ts --outDir test/bdd --module ESNext --target ES2022 --moduleResolution bundler --esModuleInterop --skipLibCheck --allowSyntheticDefaultImports",
-    "bdd:verify": "npm run build:registry && node scripts/bdd/verify-alignment.js",
-    "bdd:verify:ts": "bun scripts/bdd/verify-alignment.ts",
+    "bdd:verify": "bun scripts/bdd/verify-alignment.ts",
     "bdd:python": "bun scripts/bdd/run-python.ts",
     "bdd:typescript": "bun scripts/bdd/run-typescript.ts",
-    "bdd:all": "bun run bdd:verify:ts && bun run bdd:python && bun run bdd:typescript",
+    "bdd:all": "bun run bdd:verify && bun run bdd:python && bun run bdd:typescript",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "bun run bdd:all"
