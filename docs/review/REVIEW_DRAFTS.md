@@ -1,7 +1,11 @@
 # REVIEW_DRAFTS
 
 ## Pending
+None.
 
+## Processed
+
+### 2026-02-05
 Task: remove-committed-secrets
 Slug: remove-committed-secrets
 Goal: Remove committed API keys and service account keys, and rotate any affected credentials.

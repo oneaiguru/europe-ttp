@@ -6,6 +6,12 @@
 
 ---
 
+## Missing Work
+- `remove-committed-secrets`: Goal: Remove committed API keys and service account keys, and rotate any affected credentials. Acceptance: `constants.py` uses environment-based configuration with no real API keys; `ttc_portal_sendgrid_key.txt` is removed and secrets are provisioned outside git; `artofliving-ttcdesk-dev-b3dbc09298ee.json` is removed and replaced with secure secret provisioning. Refs: constants.py:12-16; ttc_portal_sendgrid_key.txt:1; artofliving-ttcdesk-dev-b3dbc09298ee.json:2-6.
+- `fix-verify-alignment-placeholder-matching`: Goal: Ensure `verify-alignment.ts` correctly matches registry placeholders when patterns are absent. Acceptance: Placeholder handling converts `{string}`/`{int}`/`{float}` into regex without re-escaping inserted regex tokens; add a minimal test or fixture that fails under the current implementation and passes after the fix. Refs: scripts/bdd/verify-alignment.ts:52-69.
+
+---
+
 ## Phase 0: Planning ✅ DONE
 
 | Task | Status | Output |
