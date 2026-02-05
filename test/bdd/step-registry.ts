@@ -1395,4 +1395,29 @@ export const STEPS = {
     typescript: 'test/typescript/steps/eligibility_dashboard_steps.ts:251',
     features: ['specs/features/e2e/course_eligibility_by_profile.feature:29'],
   },
+  // TEST ENTRY - validates placeholder matching when pattern field is absent
+  // This entry intentionally has NO pattern field to test the fallback placeholder logic
+  'test placeholder step with value {string}': {
+    python: 'test/python/steps/test_steps.py:21',
+    typescript: 'test/typescript/steps/test_steps.ts:18',
+    features: ['specs/features/test/placeholder_matching.feature:10'],
+  },
+  'I have a registry entry with placeholder but no pattern': {
+    pattern: /^I\ have\ a\ registry\ entry\ with\ placeholder\ but\ no\ pattern$/,
+    python: 'test/python/steps/test_steps.py:7',
+    typescript: 'test/typescript/steps/test_steps.ts:7',
+    features: ['specs/features/test/placeholder_matching.feature:5,10'],
+  },
+  'the alignment check runs': {
+    pattern: /^the\ alignment\ check\ runs$/,
+    python: 'test/python/steps/test_steps.py:13',
+    typescript: 'test/typescript/steps/test_steps.ts:10',
+    features: ['specs/features/test/placeholder_matching.feature:6,11'],
+  },
+  'the step should match correctly': {
+    pattern: /^the\ step\ should\ match\ correctly$/,
+    python: 'test/python/steps/test_steps.py:19',
+    typescript: 'test/typescript/steps/test_steps.ts:14',
+    features: ['specs/features/test/placeholder_matching.feature:7,12'],
+  },
 } as const;

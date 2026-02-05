@@ -38,7 +38,7 @@ function extractFeatureSteps(filePath: string): string[] {
  * Check if a feature step matches a registry pattern.
  * Handles parameterized steps with {string}, {int}, etc.
  */
-function stepMatchesPattern(featureStep: string, registryKey: string, stepEntry: { pattern?: RegExp }): boolean {
+function stepMatchesPattern(featureStep: string, registryKey: string, stepEntry: StepMap[string]): boolean {
   // Exact match
   if (featureStep === registryKey) {
     return true;
