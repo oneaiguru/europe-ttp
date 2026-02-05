@@ -1,33 +1,29 @@
 # TASK-FIX-002: Remove Committed Secrets
 
-## Task Definition
+## Task ID
+TASK-FIX-002
 
-**ID**: TASK-FIX-002
-**Name**: Remove Committed Secrets
-**Priority**: p1 (Security)
-**Type**: Security Fix
-**Status**: TODO
+## Task Name
+remove-committed-secrets
 
-## Feature File
-N/A (security remediation task from IMPLEMENTATION_PLAN.md)
+## Priority
+p1 (Critical - security)
 
-## Scenario
-N/A
+## Goal
+Remove committed API keys and service account keys, and rotate any affected credentials.
 
-## Steps Needing Implementation
-- Remove committed secrets from the repo and replace with environment-based configuration.
-- Update `constants.py` to use environment-based configuration with no real API keys.
-- Remove `ttc_portal_sendgrid_key.txt` and ensure secrets are provisioned outside git.
-- Remove `artofliving-ttcdesk-dev-b3dbc09298ee.json` and replace with secure secret provisioning.
+## Files to Modify
+- `constants.py` (lines 12-16)
+- `ttc_portal_sendgrid_key.txt` (entire file)
+- `artofliving-ttcdesk-dev-b3dbc09298ee.json` (entire file)
 
 ## Acceptance Criteria
-- [ ] `constants.py` uses environment-based configuration with no real API keys.
-- [ ] `ttc_portal_sendgrid_key.txt` is removed and secrets are provisioned outside git.
-- [ ] `artofliving-ttcdesk-dev-b3dbc09298ee.json` is removed and replaced with secure secret provisioning.
-- [ ] No new secrets are committed.
+1. `constants.py` uses environment-based configuration with no real API keys
+2. `ttc_portal_sendgrid_key.txt` is removed and secrets are provisioned outside git
+3. `artofliving-ttcdesk-dev-b3dbc09298ee.json` is removed and replaced with secure secret provisioning
+4. All existing tests still pass after the changes
 
-## References
-- `IMPLEMENTATION_PLAN.md` missing work item `remove-committed-secrets`
-- `constants.py:12-16`
-- `ttc_portal_sendgrid_key.txt:1`
-- `artofliving-ttcdesk-dev-b3dbc09298ee.json:2-6`
+## Notes
+- This is a security fix to remove credentials that were accidentally committed to the repository
+- Need to ensure that any rotation of credentials is documented for the operations team
+- Consider adding `.env.example` file as template for required environment variables

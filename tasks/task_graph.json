@@ -1,94 +1,36 @@
 {
-  "generated_at": "2026-02-05T15:00:00.000000+00:00",
+  "generated_at": "2026-02-05T04:29:18.448080+00:00",
   "source": "IMPLEMENTATION_PLAN.md",
   "tasks": [
     {
-      "id": "TASK-019",
-      "name": "Post-Sahaj TTC Feedback: Open post-Sahaj feedback",
-      "feature_file": "specs/features/forms/post_sahaj_ttc_feedback.feature",
-      "priority": "p2",
-      "scenarios": [
-        "Open post-Sahaj feedback"
-      ],
+      "id": "TASK-FIX-001",
+      "name": "Fix TypeScript Type Errors",
+      "feature_file": "N/A",
+      "priority": "p1",
+      "scenarios": [],
       "depends_on": [],
       "estimated_hours": 3,
-      "status": "\u2705 DONE"
+      "status": "\ud83d\udfe1 IN PROGRESS"
     },
     {
-      "id": "TASK-021",
-      "name": "DSN Application: Open DSN application",
-      "feature_file": "specs/features/forms/dsn_application.feature",
-      "priority": "p3",
-      "scenarios": [
-        "Open DSN application"
-      ],
+      "id": "TASK-FIX-002",
+      "name": "Remove Committed Secrets",
+      "feature_file": "N/A",
+      "priority": "p1",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 3,
+      "status": "\ud83d\udd34 TODO"
+    },
+    {
+      "id": "TASK-FIX-003",
+      "name": "Fix verify-alignment placeholder matching",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,
-      "status": "\u2705 DONE"
-    },
-    {
-      "id": "TASK-023",
-      "name": "Document Upload: Request signed URL for document",
-      "feature_file": "specs/features/uploads/document_upload.feature",
-      "priority": "p2",
-      "scenarios": [
-        "Request signed URL for document"
-      ],
-      "depends_on": [],
-      "estimated_hours": 3,
-      "status": "\u2705 DONE"
-    },
-    {
-      "id": "TASK-027",
-      "name": "User Get Form Instances: List form instances",
-      "feature_file": "specs/features/user/get_form_instances.feature",
-      "priority": "p2",
-      "scenarios": [
-        "List form instances"
-      ],
-      "depends_on": [],
-      "estimated_hours": 3,
-      "status": "\u2705 DONE"
-    },
-    {
-      "id": "TASK-030",
-      "name": "User Summary Report: Load user summary",
-      "feature_file": "specs/features/reports/user_summary.feature",
-      "priority": "p1",
-      "scenarios": [
-        "Load user summary",
-        "Get user summary by user"
-      ],
-      "depends_on": [],
-      "estimated_hours": 3,
-      "status": "\u2705 DONE"
-    },
-    {
-      "id": "TASK-E2E-007",
-      "name": "Draft Save and Resume: Save partial application and resume after logout",
-      "feature_file": "specs/features/e2e/draft_save_and_resume.feature",
-      "priority": "p2",
-      "scenarios": [
-        "Save partial application and resume after logout",
-        "Multiple drafts for different forms"
-      ],
-      "depends_on": [],
-      "estimated_hours": 3,
-      "status": "\u2705 DONE"
-    },
-    {
-      "id": "TASK-E2E-013",
-      "name": "Course Eligibility by User Profile: Eligibility shows required prerequisites",
-      "feature_file": "specs/features/e2e/course_eligibility_by_profile.feature",
-      "priority": "p2",
-      "scenarios": [
-        "Eligibility shows required prerequisites",
-        "Ineligible user gets \"not available\" message",
-        "Eligibility updates after completing prerequisite"
-      ],
-      "depends_on": [],
-      "estimated_hours": 3,
-      "status": "\u2705 DONE"
+      "status": "\ud83d\udd34 TODO"
     }
   ]
 }

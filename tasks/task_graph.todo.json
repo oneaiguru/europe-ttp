@@ -1,61 +1,24 @@
 {
-  "generated_at": "filtered-from-implementation-plan",
+  "generated_at": "2026-02-05T04:29:29.288280+00:00",
   "source": "/Users/m/git/clients/aol/europe-ttp/tasks/task_graph.json",
   "tasks": [
     {
-      "id": "TASK-019",
-      "name": "Post-Sahaj TTC Feedback: Open post-Sahaj feedback",
-      "feature_file": "specs/features/forms/post_sahaj_ttc_feedback.feature",
-      "priority": "p2",
-      "scenarios": [
-        "Open post-Sahaj feedback"
-      ],
+      "id": "TASK-FIX-002",
+      "name": "Remove Committed Secrets",
+      "feature_file": "N/A",
+      "priority": "p1",
+      "scenarios": [],
       "depends_on": [],
       "estimated_hours": 3
     },
     {
-      "id": "TASK-021",
-      "name": "DSN Application: Open DSN application",
-      "feature_file": "specs/features/forms/dsn_application.feature",
-      "priority": "p3",
-      "scenarios": [
-        "Open DSN application"
-      ],
+      "id": "TASK-FIX-003",
+      "name": "Fix verify-alignment placeholder matching",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2
-    },
-    {
-      "id": "TASK-023",
-      "name": "Document Upload: Request signed URL for document",
-      "feature_file": "specs/features/uploads/document_upload.feature",
-      "priority": "p2",
-      "scenarios": [
-        "Request signed URL for document"
-      ],
-      "depends_on": [],
-      "estimated_hours": 3
-    },
-    {
-      "id": "TASK-027",
-      "name": "User Get Form Instances: List form instances",
-      "feature_file": "specs/features/user/get_form_instances.feature",
-      "priority": "p2",
-      "scenarios": [
-        "List form instances"
-      ],
-      "depends_on": [],
-      "estimated_hours": 3
-    },
-    {
-      "id": "TASK-035",
-      "name": "User Integrity Report: Run user integrity postload",
-      "feature_file": "specs/features/reports/user_integrity.feature",
-      "priority": "p2",
-      "scenarios": [
-        "Run user integrity postload"
-      ],
-      "depends_on": [],
-      "estimated_hours": 3
     }
   ]
 }
