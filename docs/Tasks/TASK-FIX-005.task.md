@@ -23,11 +23,16 @@ N/A - This is a test infrastructure issue, not a legacy code migration issue.
 The `@cucumber/cucumber` package (v11.1.0) may not be expanding Scenario Outline examples by default, or the JSON formatter may be grouping them differently than Behave.
 
 ## Acceptance Criteria
-- [ ] Cucumber.js runs all 99 scenarios (matching Python's 99)
-- [ ] Scenario Outline with Examples are expanded into individual scenarios
-- [ ] JSON report format matches Behave's structure (one result per example)
-- [ ] `bun run bdd:all` passes with equal scenario counts
-- [ ] Test reports show 99 scenarios for both Python and TypeScript
+- [x] Cucumber.js runs all 99 scenarios (matching Python's 99)
+- [x] Scenario Outline with Examples are expanded into individual scenarios
+- [x] JSON report format matches Behave's structure (one result per example)
+- [x] `bun run bdd:all` passes with equal scenario counts
+- [x] Test reports show 99 scenarios for both Python and TypeScript
+
+## Status: ✅ COMPLETE
+**Result:** No code changes needed. Cucumber.js v11.1.0 correctly expands Scenario Outline examples. The "gap" was due to incorrect verification script using `keyword=='Scenario'` instead of `type=='scenario'`.
+
+**Completed:** 2026-02-05
 
 ## Files to Modify
 - [ ] `scripts/bdd/run-typescript.ts` - Add Cucumber options for example expansion
@@ -36,9 +41,9 @@ The `@cucumber/cucumber` package (v11.1.0) may not be expanding Scenario Outline
 
 ## Test Commands
 ```bash
-# Verify scenario count match
+# Verify scenario count match (use type=='scenario' for both Python and TypeScript)
 python3 -c "import json; p=json.load(open('test/reports/python_bdd.json')); print(sum(1 for f in p for e in f.get('elements',[]) if e.get('type')=='scenario'))"
-python3 -c "import json; t=json.load(open('test/reports/typescript_bdd.json')); print(sum(1 for f in t for e in f.get('elements',[]) if e.get('keyword')=='Scenario'))"
+python3 -c "import json; t=json.load(open('test/reports/typescript_bdd.json')); print(sum(1 for f in t for e in f.get('elements',[]) if e.get('type')=='scenario'))"
 
 # Run tests
 bun run bdd:typescript specs/features/e2e/dependent_fields_do_not_break_completeness.feature

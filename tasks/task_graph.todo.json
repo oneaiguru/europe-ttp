@@ -3,15 +3,6 @@
   "source": "tasks/task_graph.json",
   "tasks": [
     {
-      "id": "TASK-FIX-005",
-      "name": "fix cucumber scenario outline expansion",
-      "feature_file": "N/A",
-      "priority": "p1",
-      "scenarios": [],
-      "depends_on": [],
-      "estimated_hours": 3
-    },
-    {
       "id": "fix-invalid-api-handler",
       "name": "fix invalid api handler",
       "feature_file": "N/A",
