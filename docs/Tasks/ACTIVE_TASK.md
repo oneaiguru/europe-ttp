@@ -1,1 +1,0 @@
-restrict-docs-static-dir
