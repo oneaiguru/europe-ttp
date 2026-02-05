@@ -11,7 +11,7 @@
     "jsx": "react"
   },
   "include": ["test/typescript/**/*.ts", "scripts/**/*.ts", "app/**/*.tsx", "app/**/*.ts"],
-  "exclude": ["node_modules", "test/typescript/node_modules"],
+  "exclude": ["node_modules", "test/typescript/node_modules", "app/api"],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"
