@@ -12,7 +12,13 @@
 2. Role-based visibility - evaluator cannot see other evaluators' submissions
 3. Evaluator can only evaluate assigned applicants
 
+## Current Test Status (T Loop)
+- Python BDD runner failed before executing scenarios: `ConfigError: No feature files in '/workspace/test/python'` when running `bun scripts/bdd/run-python.ts specs/features/`.
+- TypeScript BDD runner failed before executing scenarios: missing `esbuild` dependency when running `bun scripts/bdd/run-typescript.ts specs/features/`.
+
 ## Steps Requiring Implementation
+No missing steps identified yet. All steps in `specs/features/e2e/full_evaluator_workflow.feature` are already mapped in `test/bdd/step-registry.ts` to Python and TypeScript paths.
+Re-run BDD tests after fixing runner issues to confirm whether any steps fail at runtime.
 
 ### Scenario 1: Evaluator views and evaluates applicant
 1. `applicant "Test Applicant" has submitted TTC application for "test_us_future"` - NEW
@@ -39,8 +45,8 @@
 3. `I should see "not authorized" or "not assigned" error` - NEW
 
 ## Acceptance Criteria
-- All 3 scenarios pass in Python
-- All 3 scenarios pass in TypeScript
+- All 3 scenarios pass in Python (feature: `specs/features/e2e/full_evaluator_workflow.feature`)
+- All 3 scenarios pass in TypeScript (feature: `specs/features/e2e/full_evaluator_workflow.feature`)
 - Step registry updated with all new steps
 - No orphan steps or dead steps after implementation
 - Typecheck passes
