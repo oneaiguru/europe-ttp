@@ -3,16 +3,6 @@
   "source": "IMPLEMENTATION_PLAN.md",
   "tasks": [
     {
-      "id": "TASK-FIX-002",
-      "name": "remove committed secrets",
-      "feature_file": "N/A",
-      "priority": "p2",
-      "scenarios": [],
-      "depends_on": [],
-      "estimated_hours": 2,
-      "status": "\ud83d\udd34 TODO"
-    },
-    {
       "id": "TASK-FIX-003",
       "name": "fix verify alignment placeholder matching",
       "feature_file": "N/A",

@@ -3,15 +3,6 @@
   "source": "/Users/m/git/clients/aol/europe-ttp/tasks/task_graph.json",
   "tasks": [
     {
-      "id": "TASK-FIX-002",
-      "name": "remove committed secrets",
-      "feature_file": "N/A",
-      "priority": "p2",
-      "scenarios": [],
-      "depends_on": [],
-      "estimated_hours": 2
-    },
-    {
       "id": "TASK-FIX-003",
       "name": "fix verify alignment placeholder matching",
       "feature_file": "N/A",
