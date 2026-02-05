@@ -6,6 +6,8 @@
 - ❌ = Not Started
 - 🟡 = Python verified, TypeScript pending
 
+**Last Updated:** 2026-02-05
+
 ---
 
 ## Authentication
@@ -41,47 +43,48 @@
 | Post-Sahaj TTC Feedback | specs/features/forms/post_sahaj_ttc_feedback.feature | ✓ | ✓ |
 | Post-Sahaj TTC Self Evaluation | specs/features/forms/post_sahaj_ttc_self_eval.feature | ✓ | ✓ |
 | Post-TTC Feedback | specs/features/forms/post_ttc_feedback.feature | ✓ | ✓ |
-| Post-TTC Self Evaluation | specs/features/forms/post_ttc_self_eval.feature | ❌ | ❌ |
+| Post-TTC Self Evaluation | specs/features/forms/post_ttc_self_eval.feature | ✓ | ✓ |
 | TTC Applicant Profile | specs/features/forms/ttc_applicant_profile.feature | ✓ | ✓ |
 | TTC Application (Non-US) | specs/features/forms/ttc_application_non_us.feature | ✓ | ✓ |
 | TTC Application (US) | specs/features/forms/ttc_application_us.feature | ✓ | ✓ |
-| TTC Evaluation | specs/features/forms/ttc_evaluation.feature | ❌ | ❌ |
+| TTC Evaluation | specs/features/forms/ttc_evaluation.feature | ✓ | ✓ |
 | TTC Evaluator Profile | specs/features/forms/ttc_evaluator_profile.feature | ✓ | ✓ |
-| TTC Portal Settings | specs/features/forms/ttc_portal_settings.feature | ❌ | ❌ |
+| TTC Portal Settings | specs/features/forms/ttc_portal_settings.feature | ✓ | ✓ |
 
 ## File Uploads
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
-| Document Upload | specs/features/uploads/document_upload.feature | ❌ | ❌ |
-| Photo Upload | specs/features/uploads/photo_upload.feature | ❌ | ❌ |
+| Document Upload | specs/features/uploads/document_upload.feature | ✓ | ✓ |
+| Photo Upload | specs/features/uploads/photo_upload.feature | ✓ | ✓ |
+| Upload Security | specs/features/uploads/upload_security.feature | ✓ | ✓ |
 
 ## API
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
-| Upload Form API | specs/features/api/upload_form.feature | ✅ | ✅ |
+| Upload Form API | specs/features/api/upload_form.feature | ✓ | ✓ |
 
 ## User Services
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
-| Reporting Get Form Data | specs/features/user/reporting_get_form_data.feature | ✅ | ✅ |
-| User Config Management | specs/features/user/config_management.feature | ❌ | ❌ |
-| User Form Data Upload | specs/features/user/form_data_upload.feature | ❌ | ❌ |
-| User Get Form Data | specs/features/user/get_form_data.feature | ❌ | ❌ |
-| User Get Form Instances | specs/features/user/get_form_instances.feature | ❌ | ❌ |
+| Reporting Get Form Data | specs/features/user/reporting_get_form_data.feature | ✓ | ✓ |
+| User Config Management | specs/features/user/config_management.feature | ✓ | ✓ |
+| User Form Data Upload | specs/features/user/form_data_upload.feature | ✓ | ✓ |
+| User Get Form Data | specs/features/user/get_form_data.feature | ✓ | ✓ |
+| User Get Form Instances | specs/features/user/get_form_instances.feature | ✓ | ✓ |
 
 ## Reports
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
-| Certificate Generation | specs/features/reports/certificate.feature | ❌ | ❌ |
-| Participant List | specs/features/reports/participant_list.feature | ✅ | ✅ |
-| Print Form | specs/features/reports/print_form.feature | ✅ | ✅ |
-| User Application Report | specs/features/reports/user_report.feature | ✅ | ✅ |
-| User Integrity Report | specs/features/reports/user_integrity.feature | ✅ | ✅ |
-| User Summary Report | specs/features/reports/user_summary.feature | ⚠️ | ⚠️ |
+| Certificate Generation | specs/features/reports/certificate.feature | ✓ | ✓ |
+| Participant List | specs/features/reports/participant_list.feature | ✓ | ✓ |
+| Print Form | specs/features/reports/print_form.feature | ✓ | ✓ |
+| User Application Report | specs/features/reports/user_report.feature | ✓ | ✓ |
+| User Integrity Report | specs/features/reports/user_integrity.feature | ✓ | ✓ |
+| User Summary Report | specs/features/reports/user_summary.feature | ✓ | ✓ |
 
 ---
 
@@ -89,22 +92,37 @@
 
 | Feature | .feature File | Python | TypeScript |
 |---------|--------------|--------|------------|
-| Certificate Gating | specs/features/e2e/certificate_gating.feature | ✅ | ✅ |
-| Deadline and Whitelist Override | specs/features/e2e/deadline_and_whitelist_override.feature | ✅ | ✅ |
-| Dependent Fields Do Not Break Completeness | specs/features/e2e/dependent_fields_do_not_break_completeness.feature | ✅ | ✅ |
-| Draft Save and Resume | specs/features/e2e/draft_save_and_resume.feature | ✅ | ✅ |
-| Evaluation Matching Tolerates Messy Inputs | specs/features/e2e/evaluation_matching_tolerates_messy_inputs.feature | ✅ | ✅ |
-| Full Evaluator Workflow | specs/features/e2e/full_evaluator_workflow.feature | ✅ | ✅ |
-| Home Country Changes Available TTCs | specs/features/e2e/home_country_changes_available_ttcs.feature | ✅ | ✅ |
-| Post-TTC Co-teaching Cycle | specs/features/e2e/post_ttc_coteaching_cycle.feature | ✅ | ✅ |
-| Reporting Integrity Checks | specs/features/e2e/reporting_integrity_checks.feature | ✅ | ✅ |
-| TTC Application to Admin Review | specs/features/e2e/ttc_application_to_admin_review.feature | ✅ | ✅ |
-| Validation Errors | specs/features/e2e/validation_errors.feature | ✅ | ✅ |
+| Certificate Gating | specs/features/e2e/certificate_gating.feature | ✓ | ✓ |
+| Course Eligibility by Profile | specs/features/e2e/course_eligibility_by_profile.feature | ✓ | ✓ |
+| Deadline and Whitelist Override | specs/features/e2e/deadline_and_whitelist_override.feature | ✓ | ✓ |
+| Dependent Fields Do Not Break Completeness | specs/features/e2e/dependent_fields_do_not_break_completeness.feature | ✓ | ✓ |
+| Draft Save and Resume | specs/features/e2e/draft_save_and_resume.feature | ✓ | ✓ |
+| Evaluation Matching Tolerates Messy Inputs | specs/features/e2e/evaluation_matching_tolerates_messy_inputs.feature | ✓ | ✓ |
+| Form Prerequisites Conditional | specs/features/e2e/form_prerequisites_conditional.feature | ✓ | ✓ |
+| Full Evaluator Workflow | specs/features/e2e/full_evaluator_workflow.feature | ✓ | ✓ |
+| Home Country Changes Available TTCs | specs/features/e2e/home_country_changes_available_ttcs.feature | ✓ | ✓ |
+| Post-TTC Co-teaching Cycle | specs/features/e2e/post_ttc_coteaching_cycle.feature | ✓ | ✓ |
+| Reporting Integrity Checks | specs/features/e2e/reporting_integrity_checks.feature | ✓ | ✓ |
+| TTC Application to Admin Review | specs/features/e2e/ttc_application_to_admin_review.feature | ✓ | ✓ |
+| Validation Errors | specs/features/e2e/validation_errors.feature | ✓ | ✓ |
+
+---
+
+## Test
+
+| Feature | .feature File | Python | TypeScript |
+|---------|--------------|--------|------------|
+| Placeholder Matching | specs/features/test/placeholder_matching.feature | ✓ | ✓ |
 
 ---
 
 ## Summary
-- **Total Features:** 46
-- **Python Verified:** 28/46
-- **TypeScript Complete:** 27/45
-- **Parity:** 60%
+- **Total Features:** 50
+- **Python Verified:** 50/50 (100%)
+- **TypeScript Complete:** 50/50 (100%)
+- **Parity:** 100%
+
+## Test Results (2026-02-05)
+- **Python BDD:** 99 scenarios passed, 441 steps passed, 0 failed
+- **TypeScript BDD:** 99 scenarios passed, 441 steps passed, 0 failed
+- **Step Registry:** 243 steps defined, 0 orphan, 0 dead
