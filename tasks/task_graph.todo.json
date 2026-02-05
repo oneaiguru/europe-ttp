@@ -1,19 +1,235 @@
 {
-  "generated_at": "2026-02-05T04:29:29.288280+00:00",
+  "generated_at": "2026-02-05T07:57:03.952794+00:00",
   "source": "/Users/m/git/clients/aol/europe-ttp/tasks/task_graph.json",
   "tasks": [
     {
       "id": "TASK-FIX-002",
-      "name": "Remove Committed Secrets",
+      "name": "remove committed secrets",
       "feature_file": "N/A",
-      "priority": "p1",
+      "priority": "p2",
       "scenarios": [],
       "depends_on": [],
-      "estimated_hours": 3
+      "estimated_hours": 2
     },
     {
       "id": "TASK-FIX-003",
-      "name": "Fix verify-alignment placeholder matching",
+      "name": "fix verify alignment placeholder matching",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "harden-signed-upload-url",
+      "name": "harden signed upload url",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "fix-invalid-api-handler",
+      "name": "fix invalid api handler",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "fix-user-report-imports",
+      "name": "fix user report imports",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "fix-db-user-import",
+      "name": "fix db user import",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "sanitize-portal-rendering",
+      "name": "sanitize portal rendering",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "bdd-verify-detect-placeholder-impls",
+      "name": "bdd verify detect placeholder impls",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "fix-verify-alignment-js-placeholders",
+      "name": "fix verify alignment js placeholders",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "reduce-test-fallback-masking",
+      "name": "reduce test fallback masking",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "reset-ts-step-state",
+      "name": "reset ts step state",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "validate-ttc-config-fixtures",
+      "name": "validate ttc config fixtures",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "replace-assert-true-placeholders",
+      "name": "replace assert true placeholders",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "guard-unauthenticated-post",
+      "name": "guard unauthenticated post",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "handle-missing-update-datetime",
+      "name": "handle missing update datetime",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "restrict-docs-static-dir",
+      "name": "restrict docs static dir",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "pin-python-dependencies",
+      "name": "pin python dependencies",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "replace-report-stubs",
+      "name": "replace report stubs",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "stop-api-step-masking",
+      "name": "stop api step masking",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "update-http-links",
+      "name": "update http links",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "prevent-open-redirects",
+      "name": "prevent open redirects",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "lint-app-sources",
+      "name": "lint app sources",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "reconcile-task-status",
+      "name": "reconcile task status",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "fill-task-plan-line-refs",
+      "name": "fill task plan line refs",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "remove-pii-fixtures",
+      "name": "remove pii fixtures",
+      "feature_file": "N/A",
+      "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2
+    },
+    {
+      "id": "remove-hardcoded-keys-app-yaml",
+      "name": "remove hardcoded keys app yaml",
       "feature_file": "N/A",
       "priority": "p2",
       "scenarios": [],
