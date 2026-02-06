@@ -70,29 +70,6 @@ function validatePayload(payload: unknown): { valid: boolean; errors: Validation
   return { valid: true, errors: [], data: data as UploadFormPayload };
 }
 
-function parseMaybeJson(value: unknown): unknown {
-  if (typeof value !== 'string') {
-    return value;
-  }
-  const trimmed = value.trim();
-  if (!trimmed) {
-    return value;
-  }
-  try {
-    return JSON.parse(trimmed);
-  } catch {
-    return value;
-  }
-}
-
-function normalizePayload(payload: UploadFormPayload): UploadFormPayload {
-  return {
-    ...payload,
-    form_data: parseMaybeJson(payload.form_data) ?? {},
-    form_instance_page_data: parseMaybeJson(payload.form_instance_page_data) ?? {},
-  };
-}
-
 async function readPayload(request: Request): Promise<UploadFormPayload> {
   // Security: Check payload size before parsing
   const contentLength = request.headers.get('content-length');
