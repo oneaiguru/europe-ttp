@@ -22,7 +22,7 @@
 
 | Task | Priority | Status | Notes |
 |------|----------|--------|-------|
-| TASK-INFRA-001 | p1 | 🟡 TODO | Make dependency bootstrap lockfile-aware (pnpm-lock.yaml) |
+| TASK-INFRA-001 | p1 | ✅ DONE | Make dependency bootstrap lockfile-aware (pnpm-lock.yaml) - Already correct in f039d4d |
 
 ---
 
