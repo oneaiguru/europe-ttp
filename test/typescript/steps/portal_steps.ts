@@ -60,34 +60,9 @@ function resolveHomeCountryName(iso: string): string {
   return mapping[iso] || iso;
 }
 
-function renderPortalHomeFallback(options: PortalHomeRenderOptions): string {
-  const reportLinks = options.reportLinks ?? [];
-  const reportsHtml = reportLinks.length
-    ? `<ul>${reportLinks
-        .map((link) => `<li><a rel="admin" href="${link.href}">${link.label}</a></li>`)
-        .join('')}</ul>`
-    : '';
-  return [
-    '<div id="profile">',
-    `<div id="logged_in_as">Logged in as ${options.userEmail}</div>`,
-    '<div id="logout">LOGOUT</div>',
-    `<div id="user_home_country">${options.homeCountryName}</div>`,
-    `<div id="user_home_country_iso">${options.homeCountryIso}</div>`,
-    '</div>',
-    reportsHtml,
-  ].join('');
-}
-
 async function renderPortalHomeHtml(options: PortalHomeRenderOptions): Promise<string> {
-  try {
-    const module = await import('../../../app/portal/home/render');
-    if (typeof module.renderPortalHome === 'function') {
-      return module.renderPortalHome(options);
-    }
-  } catch {
-    // Ignore missing module, fallback below.
-  }
-  return renderPortalHomeFallback(options);
+  const module = await import('../../../app/portal/home/render');
+  return module.renderPortalHome(options);
 }
 
 When('I open the TTC portal home', async function () {
@@ -138,15 +113,8 @@ const DISABLED_NOTICE_TEXT =
   'The TTC Portal is not available on Mobile. Please use the portal from a Desktop web browser.';
 
 async function renderDisabledHtml(): Promise<string> {
-  try {
-    const module = await import('../../../app/portal/disabled/render');
-    if (typeof module.renderDisabledPage === 'function') {
-      return module.renderDisabledPage();
-    }
-  } catch {
-    // Ignore missing module, fallback below.
-  }
-  return `<div id="disabled_notice">${DISABLED_NOTICE_TEXT}</div>`;
+  const module = await import('../../../app/portal/disabled/render');
+  return module.renderDisabledPage();
 }
 
 Given('the TTC portal is in disabled mode', function () {
@@ -171,20 +139,9 @@ type PortalTabRenderOptions = {
   userHomeCountryName: string;
 };
 
-function renderPortalTabFallback(options: PortalTabRenderOptions): string {
-  return `<div>${options.userHomeCountryName} TTC Desk</div>`;
-}
-
 async function renderPortalTabHtml(options: PortalTabRenderOptions): Promise<string> {
-  try {
-    const module = await import('../../../app/portal/tabs/render');
-    if (typeof module.renderPortalTab === 'function') {
-      return module.renderPortalTab(options);
-    }
-  } catch {
-    // Ignore missing module, fallback below.
-  }
-  return renderPortalTabFallback(options);
+  const module = await import('../../../app/portal/tabs/render');
+  return module.renderPortalTab(options);
 }
 
 When('I request a tab template page', async function () {
@@ -218,4 +175,22 @@ Then('I should see the rendered tab content with user context', function () {
 
   assert.ok(html.includes(homeCountryName));
   assert.ok(html.includes('TTC Desk'));
+});
+
+// TASK-058: HTML escaping test
+Then('the HTML output should have dangerous characters escaped', function () {
+  const world = getWorld(this);
+  const html = world.responseHtml || '';
+
+  // Verify raw script tags are not present (XSS check)
+  assert.ok(!html.includes('<script>'), 'Should not contain raw script tag');
+  assert.ok(!html.includes('<img src=x onerror'), 'Should not contain XSS img payload');
+
+  // Verify quotes in attributes are escaped
+  assert.ok(!html.includes('onclick='), 'Should not contain onclick handler');
+  assert.ok(!html.includes('onload='), 'Should not contain onload handler');
+
+  // Verify < is escaped to &lt; if it would be dangerous
+  // (This is a basic sanity check; actual escaping happens in render functions)
+  assert.ok(!html.includes('<') || html.includes('&lt;'), 'Angle brackets should be escaped');
 });

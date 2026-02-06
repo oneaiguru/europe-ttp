@@ -10,6 +10,8 @@ PROJECT_ROOT = os.path.dirname(
 )
 sys.path.insert(0, PROJECT_ROOT)
 
+from steps.common import _fake_response
+
 
 class StubUser(object):
     def __init__(self, email):
@@ -42,14 +44,6 @@ def _response_body_text(response):
         return body.decode('utf-8', 'ignore')
     except Exception:
         return body
-
-
-def _fake_response(body_text):
-    return type('obj', (object,), {
-        'body': body_text,
-        'status': '200 OK',
-        'status_int': 200
-    })()
 
 
 @given('I am on the TTC portal login page')

@@ -7,7 +7,7 @@
  */
 
 import { spawn } from 'child_process';
-import { lstat, mkdir, realpath, symlink } from 'fs/promises';
+import { mkdir } from 'fs/promises';
 import path from 'path';
 
 const PROJECT_ROOT = path.resolve();
@@ -17,18 +17,6 @@ const OUTPUT_DIR = path.join(PROJECT_ROOT, 'test/reports');
 const featurePath = process.argv[2] || SPEC_FEATURES;
 
 await mkdir(OUTPUT_DIR, { recursive: true }).catch(() => {});
-
-const nodeModulesReal = await realpath(path.join(PROJECT_ROOT, 'node_modules')).catch(() => '');
-if (nodeModulesReal) {
-  const nestedNodeModules = path.join(nodeModulesReal, 'node_modules');
-  try {
-    await lstat(nestedNodeModules);
-  } catch (error) {
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
-      await symlink(nodeModulesReal, nestedNodeModules, 'dir');
-    }
-  }
-}
 
 console.log(`[run-typescript] Running Cucumber on: ${featurePath}`);
 
@@ -64,14 +52,18 @@ const proc = spawn(
   },
 );
 
-proc.on('exit', (code) => {
+proc.on('exit', (code, signal) => {
+  if (signal) {
+    console.error(`[run-typescript] Cucumber terminated by signal: ${signal}`);
+    process.exit(1);
+  }
   if (code !== 0) {
     console.error(`[run-typescript] Cucumber exited with code ${code}`);
     console.error('[run-typescript] Hint: Run "bun install" at repo root');
-  } else {
-    console.log('[run-typescript] Cucumber completed successfully');
+    process.exit(code);
   }
-  process.exit(code || 0);
+  console.log('[run-typescript] Cucumber completed successfully');
+  process.exit(0);
 });
 
 proc.on('error', (err) => {

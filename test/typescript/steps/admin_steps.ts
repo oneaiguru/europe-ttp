@@ -29,7 +29,15 @@ function getWorld(world: unknown): AdminWorld {
   return world as AdminWorld;
 }
 
-let cachedUsers: TestUser[] | null = null;
+export let cachedUsers: TestUser[] | null = null;
+
+/**
+ * Reset cached data between test scenarios.
+ * Called by common.ts Before hook to prevent state leakage.
+ */
+export function resetAdminStepsCache(): void {
+  cachedUsers = null;
+}
 
 function loadTestUsers(): TestUser[] {
   if (cachedUsers) {
@@ -46,8 +54,6 @@ function getUserByRole(role: string): TestUser | undefined {
   return loadTestUsers().find((user) => user.role === role);
 }
 
-const ADMIN_DASHBOARD_FALLBACK_HTML =
-  '<h1>Admin</h1><table id="ttc_applicants_summary"></table>';
 const ADMIN_REPORTS_LIST_LINKS = [
   { href: 'ttc_applicants_reports.html', label: 'TTC Report' },
   { href: 'ttc_applicants_integrity.html', label: 'TTC Integrity Report' },
@@ -55,46 +61,20 @@ const ADMIN_REPORTS_LIST_LINKS = [
   { href: 'post_sahaj_ttc_course_feedback_summary.html', label: 'Post Sahaj TTC Report' },
   { href: 'admin_settings.html', label: 'Admin Settings' },
 ];
-const ADMIN_REPORTS_LIST_FALLBACK_HTML = `<h1>Admin</h1><ul>${ADMIN_REPORTS_LIST_LINKS.map(
-  (link) => `<li><a rel="admin" href="${link.href}">${link.label}</a></li>`,
-).join('')}</ul>`;
-const ADMIN_SETTINGS_FALLBACK_HTML =
-  '<h1>Admin Settings</h1><p>Please enter settings for TTC portal</p><div id="settings_page"></div>';
 
 async function renderAdminDashboardHtml(): Promise<string> {
-  try {
-    const module = await import('../../../app/admin/ttc_applicants_summary/render');
-    if (typeof module.renderAdminDashboard === 'function') {
-      return module.renderAdminDashboard();
-    }
-  } catch {
-    // Ignore missing module, fallback below.
-  }
-  return ADMIN_DASHBOARD_FALLBACK_HTML;
+  const module = await import('../../../app/admin/ttc_applicants_summary/render');
+  return module.renderAdminDashboard();
 }
 
 async function renderAdminReportsListHtml(): Promise<string> {
-  try {
-    const module = await import('../../../app/admin/reports_list/render');
-    if (typeof module.renderAdminReportsList === 'function') {
-      return module.renderAdminReportsList();
-    }
-  } catch {
-    // Ignore missing module, fallback below.
-  }
-  return ADMIN_REPORTS_LIST_FALLBACK_HTML;
+  const module = await import('../../../app/admin/reports_list/render');
+  return module.renderAdminReportsList();
 }
 
 async function renderAdminSettingsHtml(): Promise<string> {
-  try {
-    const module = await import('../../../app/admin/settings/render');
-    if (typeof module.renderAdminSettings === 'function') {
-      return module.renderAdminSettings();
-    }
-  } catch {
-    // Ignore missing module, fallback below.
-  }
-  return ADMIN_SETTINGS_FALLBACK_HTML;
+  const module = await import('../../../app/admin/settings/render');
+  return module.renderAdminSettings();
 }
 
 Given('I am authenticated as an admin user', function () {

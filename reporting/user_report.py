@@ -18,6 +18,8 @@ import jinja2
 import webapp2
 
 import cloudstorage as gcs
+from google.appengine.ext import blobstore
+from google.appengine.api import images
 
 import constants
 import ttc_portal_user
@@ -33,13 +35,8 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 class UserReport(webapp2.RequestHandler):
 
     def get_user_image_url(self, image_file, max_width):
-        # from google.appengine.ext.blobstore import BlobKey
-        # from google.appengine.api.images import get_serving_url
-        # key = BlobKey('imagekey')
-        # url = get_serving_url(key)
-
         # https://stackoverflow.com/questions/6566383/clear-example-of-using-google-app-engine-images-get-serving-url
-        path = '/gs' + CLOUD_STORAGE_LOCATION + image_file
+        path = '/gs' + constants.CLOUD_STORAGE_LOCATION + image_file
         key = blobstore.create_gs_key(path)
         # This is going to generate url for original sized image
         # url = images.get_serving_url(key, size=0)

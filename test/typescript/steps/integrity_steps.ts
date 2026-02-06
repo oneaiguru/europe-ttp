@@ -64,7 +64,7 @@ type IntegrityContext = {
   };
 };
 
-function getIntegrityContext(): IntegrityContext {
+export function getIntegrityContext(): IntegrityContext {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (typeof (globalThis as any).integrityContext === 'undefined') {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

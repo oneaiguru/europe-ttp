@@ -147,9 +147,17 @@ interface UserFormContext {
   formInstances?: Record<string, { page_data: Record<string, unknown>; display: string }>;
 }
 
-const userFormContext: UserFormContext = {};
+export const userFormContext: UserFormContext = {};
 
-let cachedSubmissions: FormSubmission[] | null = null;
+export let cachedSubmissions: FormSubmission[] | null = null;
+
+/**
+ * Reset cached data between test scenarios.
+ * Called by common.ts Before hook to prevent state leakage.
+ */
+export function resetUserStepsCache(): void {
+  cachedSubmissions = null;
+}
 
 function loadFormSubmissions(): FormSubmission[] {
   if (cachedSubmissions) {
@@ -260,7 +268,7 @@ interface ConfigContext {
   lastConfigUpdate?: Record<string, unknown>;
 }
 
-const configContext: ConfigContext = {};
+export const configContext: ConfigContext = {};
 
 When('I request my user configuration', function (this: World) {
   // Get or create ttcUser from configContext
@@ -338,7 +346,7 @@ interface GetFormDataContext {
   retrievedFormData?: Record<string, unknown>;
 }
 
-const getFormDataContext: GetFormDataContext = {};
+export const getFormDataContext: GetFormDataContext = {};
 
 Given('I have previously saved form data for a form instance', async function () {
   const submission = resolveSubmission();
@@ -470,7 +478,7 @@ interface ReportingContext {
   formData?: Record<string, Record<string, StoredFormData>>;
 }
 
-const reportingContext: ReportingContext = {};
+export const reportingContext: ReportingContext = {};
 
 When('I request form data for a specific user via reporting', async function () {
   // Create a target user with form data for testing

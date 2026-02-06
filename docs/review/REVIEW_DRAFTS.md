@@ -21,6 +21,11 @@ Local checks run:
 
 ## Pending
 
+None.
+
+## Processed
+
+### 2026-02-06
 Task: scrub-secrets-in-repo-text
 Slug: scrub-secrets-in-repo-text
 Goal: Remove committed secret values from comments and documentation so secret scans and external publication are safe.
@@ -143,7 +148,104 @@ Acceptance Criteria:
 2. `.gitignore` covers these patterns.
 Evidence: `experimental/.DS_Store:1`; `test/python/.DS_Store:1`; `test/typescript/.DS_Store:1`
 
-## Processed
+Task: escape-portal-rendering-html
+Slug: escape-portal-rendering-html
+Goal: Prevent XSS/HTML injection in portal HTML render helpers.
+Acceptance Criteria:
+1. Escape `userEmail`, `homeCountryName`, and `homeCountryIso` before interpolating into HTML.
+2. Validate or encode `reportLinks` values (`href`, `label`) to prevent attribute/text injection.
+3. Add a small unit test (or fixture assertion) that demonstrates escaping for `<`, `"`, and `'`.
+Evidence: `app/portal/home/render.ts:16-25`; `app/portal/tabs/render.ts:23-29`
+
+Task: upload-form-data-missing-auth-and-validation
+Slug: upload-form-data-missing-auth-and-validation
+Goal: Require auth and validate input on the upload-form-data POST route to prevent misuse and unsafe echoing.
+Acceptance Criteria:
+1. Enforce authentication and authorization on POST.
+2. Validate allowed fields/types; reject unknown keys or oversized payloads.
+3. Avoid echoing raw user input unless strictly necessary and safely sanitized.
+Evidence: `app/users/upload-form-data/route.ts:64-76`
+
+Task: signed-upload-key-forgeable-and-leaky
+Slug: signed-upload-key-forgeable-and-leaky
+Goal: Make upload keys opaque and non-forgeable (do not embed user/path in client-visible tokens).
+Acceptance Criteria:
+1. Replace base64 of `user:timestamp:fullFilename` with an HMAC-signed token or server-generated opaque ID.
+2. Do not embed user email or path data in client-visible tokens.
+3. Add verification logic wherever the token is consumed.
+Evidence: `app/api/upload/signed-url/route.ts:107-108`
+
+Task: bdd-verify-symlink-cycle
+Slug: bdd-verify-symlink-cycle
+Goal: Prevent `bdd:verify` from hanging or escaping the repo when feature directories contain symlink cycles.
+Acceptance Criteria:
+1. The feature walker does not follow symlinked directories (use `lstat`, or track visited realpaths/inodes).
+2. Broken symlinks or unreadable paths do not crash the verifier (skip with warning or fail with a clear error).
+Evidence: `scripts/bdd/verify-alignment.ts:9-20`
+
+Task: bdd-verify-support-asterisk-steps
+Slug: bdd-verify-support-asterisk-steps
+Goal: Include Gherkin `*` steps in alignment verification to avoid false greens.
+Acceptance Criteria:
+1. `verify-alignment.ts` extracts `*` steps the same way it extracts `Given/When/Then/And/But`.
+2. Add a fixture feature using `*` so a missing registry entry is detected by `bun run bdd:verify`.
+Evidence: `scripts/bdd/verify-alignment.ts:7`
+
+Task: bdd-verify-placeholder-semantics
+Slug: bdd-verify-placeholder-semantics
+Goal: Align placeholder fallback matching with Cucumber expression semantics to avoid false dead-step reports.
+Acceptance Criteria:
+1. `{string}` matches common quoted forms (single and double quotes) consistently with the step registry patterns.
+2. `{int}` and `{float}` accept negative values and common float formats (e.g., `-1`, `-1.5`, `0.5`).
+3. Placeholder matching remains deterministic across repeated matches.
+Evidence: `scripts/bdd/verify-alignment.ts:52-60`
+
+Task: ts-step-state-leakage
+Slug: ts-step-state-leakage
+Goal: Prevent cross-scenario state leakage in TS Cucumber steps by eliminating shared mutable module/global state.
+Acceptance Criteria:
+1. Replace `globalThis` contexts with a per-scenario Cucumber `World`, or add a single shared `Before` that fully resets all fields used across step files.
+2. Reset `testContext` optional/extended fields (e.g., `field_errors`, `drafts`, `currentApplicantEmail`, `currentApplicantSubmission`, `currentView`, `applicantUploads`) per scenario.
+3. Reset `draftContext` and `integrityContext` per scenario (or migrate them into the World).
+Evidence: `test/typescript/steps/e2e_api_steps.ts:106-132`; `test/typescript/steps/draft_steps.ts:35-43`; `test/typescript/steps/integrity_steps.ts:44-67`
+
+Task: ts-then-steps-must-assert
+Slug: ts-then-steps-must-assert
+Goal: Eliminate false greens by ensuring `Then` steps assert real outcomes and do not mutate state to force success.
+Acceptance Criteria:
+1. Remove or implement empty `Then` steps so they validate at least one concrete condition.
+2. Convert `Then` steps that currently mutate shared state into `Given/When` steps, and make `Then` steps assertion-only.
+Evidence: `test/typescript/steps/e2e_api_steps.ts:624-627`; `test/typescript/steps/e2e_api_steps.ts:663-665`; `test/typescript/steps/e2e_api_steps.ts:703-710`
+
+Task: ts-reports-steps-mocked-calls-false-green
+Slug: ts-reports-steps-mocked-calls-false-green
+Goal: Ensure TS report steps validate meaningful behavior instead of hard-coded success.
+Acceptance Criteria:
+1. `When` steps either call real report endpoints or use explicit fixture-backed stubs that can fail.
+2. `Then` steps validate meaningful fields from responses, not just status codes and empty objects.
+Evidence: `test/typescript/steps/reports_steps.ts:34-59`; `test/typescript/steps/reports_steps.ts:61-72`
+
+Task: tsconfig-missing-test-bdd
+Slug: tsconfig-missing-test-bdd
+Goal: Ensure TypeScript typecheck covers `test/bdd` sources so registry/tooling drift is caught early.
+Acceptance Criteria:
+1. `bun run typecheck` fails on type errors in `test/bdd/**/*.ts` (either by including it in `tsconfig.json` or using a dedicated typecheck config).
+Evidence: `tsconfig.json:13-14`; `test/bdd/step-registry.ts:1`
+
+Task: tsconfig-excludes-app-api
+Slug: tsconfig-excludes-app-api
+Goal: Prevent false-green typechecks for server/API code by including `app/api` in TypeScript typechecking.
+Acceptance Criteria:
+1. `bun run typecheck` fails on type errors in `app/api/**` (either by including it in `tsconfig.json` or using a dedicated typecheck config).
+Evidence: `tsconfig.json:14`
+
+Task: eslint-coverage-gaps
+Slug: eslint-coverage-gaps
+Goal: Ensure linting covers application TS/TSX and runtime JS config to avoid lint false-greens.
+Acceptance Criteria:
+1. ESLint runs on `app/**/*.ts` and `app/**/*.tsx` (or an equivalent lint target does).
+2. JS config files like `cucumber.cjs` are linted (or explicitly justified if excluded).
+Evidence: `eslint.config.js:7-17`; `cucumber.cjs:1`
 
 ### 2026-02-05
 Task: remove-committed-secrets
@@ -179,3 +281,15 @@ Evidence: `scripts/bdd/verify-alignment.ts:49-63`
 - fix-db-user-common-import -> `db/user.py:2`
 - fix-reporting-user-report-imports -> `reporting/user_report.py:42-46`
 - eliminate-ds-store-pyc -> `experimental/.DS_Store:1`; `test/python/.DS_Store:1`; `test/typescript/.DS_Store:1`
+- escape-portal-rendering-html -> `app/portal/home/render.ts:16-25`; `app/portal/tabs/render.ts:23-29`
+- upload-form-data-missing-auth-and-validation -> `app/users/upload-form-data/route.ts:64-76`
+- signed-upload-key-forgeable-and-leaky -> `app/api/upload/signed-url/route.ts:107-108`
+- bdd-verify-symlink-cycle -> `scripts/bdd/verify-alignment.ts:9-20`
+- bdd-verify-support-asterisk-steps -> `scripts/bdd/verify-alignment.ts:7`
+- bdd-verify-placeholder-semantics -> `scripts/bdd/verify-alignment.ts:52-60`
+- ts-step-state-leakage -> `test/typescript/steps/e2e_api_steps.ts:106-132`; `test/typescript/steps/draft_steps.ts:35-43`; `test/typescript/steps/integrity_steps.ts:44-67`
+- ts-then-steps-must-assert -> `test/typescript/steps/e2e_api_steps.ts:624-627`; `test/typescript/steps/e2e_api_steps.ts:663-665`; `test/typescript/steps/e2e_api_steps.ts:703-710`
+- ts-reports-steps-mocked-calls-false-green -> `test/typescript/steps/reports_steps.ts:34-59`; `test/typescript/steps/reports_steps.ts:61-72`
+- tsconfig-missing-test-bdd -> `tsconfig.json:13-14`; `test/bdd/step-registry.ts:1`
+- tsconfig-excludes-app-api -> `tsconfig.json:14`
+- eslint-coverage-gaps -> `eslint.config.js:7-17`; `cucumber.cjs:1`

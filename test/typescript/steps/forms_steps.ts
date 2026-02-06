@@ -11,9 +11,6 @@ function getWorld(world: unknown): FormsWorld {
   return world as FormsWorld;
 }
 
-const DSN_FALLBACK_HTML =
-  '<h1>DSN Application</h1><div id="dsn-question">DSN Application Questions</div>';
-
 Given('I am authenticated as a TTC applicant', function () {
   const world = getWorld(this);
   world.currentUser = { role: 'applicant', email: 'applicant@example.com' };
@@ -22,17 +19,8 @@ Given('I am authenticated as a TTC applicant', function () {
 
 When('I open the DSN application form', async function () {
   const world = getWorld(this);
-
-  try {
-    const module = await import('../../../app/forms/dsn_application/render');
-    if (typeof module.renderDsnApplicationForm === 'function') {
-      world.responseHtml = module.renderDsnApplicationForm();
-    } else {
-      world.responseHtml = DSN_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = DSN_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/dsn_application/render');
+  world.responseHtml = module.renderDsnApplicationForm();
 });
 
 Then('I should see the DSN application questions', function () {
@@ -42,22 +30,10 @@ Then('I should see the DSN application questions', function () {
   assert.ok(html.includes('dsn-question') || html.includes('DSN Application Questions'));
 });
 
-const TTC_APPLICATION_US_FALLBACK_HTML =
-  '<h1>TTC Application</h1><div id="ttc_application_form">TTC Application Questions</div>';
-
 When('I open the TTC application form for the United States', async function () {
   const world = getWorld(this);
-
-  try {
-    const module = await import('../../../app/forms/ttc_application_us/render');
-    if (typeof module.renderTtcApplicationUsForm === 'function') {
-      world.responseHtml = module.renderTtcApplicationUsForm();
-    } else {
-      world.responseHtml = TTC_APPLICATION_US_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = TTC_APPLICATION_US_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/ttc_application_us/render');
+  world.responseHtml = module.renderTtcApplicationUsForm();
 });
 
 Then('I should see the TTC application questions for the United States', function () {
@@ -67,25 +43,14 @@ Then('I should see the TTC application questions for the United States', functio
   assert.ok(html.includes('ttc_application_form'));
 });
 
-const TTC_APPLICATION_NON_US_FALLBACK_HTML =
-  '<h1>TTC Application</h1><div id="ttc_application_form_non_us">TTC Application Questions for India</div>';
-
 When('I open the TTC application form for a non-US country', async function () {
   const world = getWorld(this);
 
   // Set user's home country to non-US (India for testing)
   world.userHomeCountryIso = 'IN';
 
-  try {
-    const module = await import('../../../app/forms/ttc_application_non_us/render');
-    if (typeof module.renderTtcApplicationNonUsForm === 'function') {
-      world.responseHtml = module.renderTtcApplicationNonUsForm();
-    } else {
-      world.responseHtml = TTC_APPLICATION_NON_US_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = TTC_APPLICATION_NON_US_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/ttc_application_non_us/render');
+  world.responseHtml = module.renderTtcApplicationNonUsForm();
 });
 
 Then('I should see the TTC application questions for that country', function () {
@@ -95,9 +60,6 @@ Then('I should see the TTC application questions for that country', function () 
   assert.ok(html.includes('ttc_application_form_non_us'));
 });
 
-const POST_SAHAJ_TTC_FEEDBACK_FALLBACK_HTML =
-  '<h1>Sahaj TTC Graduate feedback from Co-Teacher</h1><div id="post-sahaj-ttc-feedback-form">post_sahaj_ttc_feedback_form</div>';
-
 Given('I am authenticated as a Sahaj TTC graduate', function () {
   const world = getWorld(this);
   world.currentUser = { role: 'sahaj-graduate', email: 'sahaj.graduate@example.com' };
@@ -106,17 +68,8 @@ Given('I am authenticated as a Sahaj TTC graduate', function () {
 
 When('I open the post-Sahaj TTC feedback form', async function () {
   const world = getWorld(this);
-
-  try {
-    const module = await import('../../../app/forms/post_sahaj_ttc_feedback/render');
-    if (typeof module.renderPostSahajTtcFeedbackForm === 'function') {
-      world.responseHtml = module.renderPostSahajTtcFeedbackForm();
-    } else {
-      world.responseHtml = POST_SAHAJ_TTC_FEEDBACK_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = POST_SAHAJ_TTC_FEEDBACK_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/post_sahaj_ttc_feedback/render');
+  world.responseHtml = module.renderPostSahajTtcFeedbackForm();
 });
 
 Then('I should see the post-Sahaj TTC feedback questions', function () {
@@ -126,22 +79,10 @@ Then('I should see the post-Sahaj TTC feedback questions', function () {
   assert.ok(html.includes('post_sahaj_ttc_feedback_form'));
 });
 
-const POST_SAHAJ_TTC_SELF_EVALUATION_FALLBACK_HTML =
-  '<h1>Post-Sahaj TTC Self Evaluation</h1><div id="post-sahaj-ttc-self-evaluation-form">post_sahaj_ttc_self_evaluation_form</div>';
-
 When('I open the post-Sahaj TTC self evaluation form', async function () {
   const world = getWorld(this);
-
-  try {
-    const module = await import('../../../app/forms/post_sahaj_ttc_self_evaluation/render');
-    if (typeof module.renderPostSahajTtcSelfEvaluationForm === 'function') {
-      world.responseHtml = module.renderPostSahajTtcSelfEvaluationForm();
-    } else {
-      world.responseHtml = POST_SAHAJ_TTC_SELF_EVALUATION_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = POST_SAHAJ_TTC_SELF_EVALUATION_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/post_sahaj_ttc_self_evaluation/render');
+  world.responseHtml = module.renderPostSahajTtcSelfEvaluationForm();
 });
 
 Then('I should see the post-Sahaj TTC self evaluation questions', function () {
@@ -151,9 +92,6 @@ Then('I should see the post-Sahaj TTC self evaluation questions', function () {
   assert.ok(html.includes('post_sahaj_ttc_self_evaluation_form'));
 });
 
-const TTC_EVALUATION_FALLBACK_HTML =
-  '<h1>TTC Evaluation</h1><div id="ttc-evaluation-form">TTC Evaluation Questions</div>';
-
 Given('I am authenticated as an evaluator', function () {
   const world = getWorld(this);
   world.currentUser = { role: 'evaluator', email: 'evaluator@example.com' };
@@ -162,17 +100,8 @@ Given('I am authenticated as an evaluator', function () {
 
 When('I open the TTC evaluation form', async function () {
   const world = getWorld(this);
-
-  try {
-    const module = await import('../../../app/forms/ttc_evaluation/render');
-    if (typeof module.renderTtcEvaluationForm === 'function') {
-      world.responseHtml = module.renderTtcEvaluationForm();
-    } else {
-      world.responseHtml = TTC_EVALUATION_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = TTC_EVALUATION_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/ttc_evaluation/render');
+  world.responseHtml = module.renderTtcEvaluationForm();
 });
 
 Then('I should see the TTC evaluation questions', function () {
@@ -182,22 +111,10 @@ Then('I should see the TTC evaluation questions', function () {
   assert.ok(html.includes('ttc-evaluation-form'));
 });
 
-const TTC_APPLICANT_PROFILE_FALLBACK_HTML =
-  '<h1>TTC Applicant Profile</h1><div id="ttc-applicant-profile-form">TTC Applicant Profile Questions</div>';
-
 When('I open the TTC applicant profile form', async function () {
   const world = getWorld(this);
-
-  try {
-    const module = await import('../../../app/forms/ttc_applicant_profile/render');
-    if (typeof module.renderTtcApplicantProfileForm === 'function') {
-      world.responseHtml = module.renderTtcApplicantProfileForm();
-    } else {
-      world.responseHtml = TTC_APPLICANT_PROFILE_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = TTC_APPLICANT_PROFILE_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/ttc_applicant_profile/render');
+  world.responseHtml = module.renderTtcApplicantProfileForm();
 });
 
 Then('I should see the TTC applicant profile questions', function () {
@@ -207,22 +124,10 @@ Then('I should see the TTC applicant profile questions', function () {
   assert.ok(html.includes('ttc-applicant-profile-form'));
 });
 
-const TTC_EVALUATOR_PROFILE_FALLBACK_HTML =
-  '<h1>TTC Evaluator Profile</h1><div id="ttc-evaluator-profile-form">TTC Evaluator Profile Questions</div>';
-
 When('I open the TTC evaluator profile form', async function () {
   const world = getWorld(this);
-
-  try {
-    const module = await import('../../../app/forms/ttc_evaluator_profile/render');
-    if (typeof module.renderTtcEvaluatorProfileForm === 'function') {
-      world.responseHtml = module.renderTtcEvaluatorProfileForm();
-    } else {
-      world.responseHtml = TTC_EVALUATOR_PROFILE_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = TTC_EVALUATOR_PROFILE_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/ttc_evaluator_profile/render');
+  world.responseHtml = module.renderTtcEvaluatorProfileForm();
 });
 
 Then('I should see the TTC evaluator profile questions', function () {
@@ -232,9 +137,6 @@ Then('I should see the TTC evaluator profile questions', function () {
   assert.ok(html.includes('ttc-evaluator-profile-form'));
 });
 
-const POST_TTC_SELF_EVALUATION_FALLBACK_HTML =
-  '<h1>Post-TTC Self Evaluation</h1><div id="post-ttc-self-evaluation-form">post_ttc_self_evaluation_form</div>';
-
 Given('I am authenticated as a TTC graduate', function () {
   const world = getWorld(this);
   world.currentUser = { role: 'ttc-graduate', email: 'graduate@example.com' };
@@ -243,17 +145,8 @@ Given('I am authenticated as a TTC graduate', function () {
 
 When('I open the post-TTC self evaluation form', async function () {
   const world = getWorld(this);
-
-  try {
-    const module = await import('../../../app/forms/post_ttc_self_evaluation/render');
-    if (typeof module.renderPostTtcSelfEvaluationForm === 'function') {
-      world.responseHtml = module.renderPostTtcSelfEvaluationForm();
-    } else {
-      world.responseHtml = POST_TTC_SELF_EVALUATION_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = POST_TTC_SELF_EVALUATION_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/post_ttc_self_evaluation/render');
+  world.responseHtml = module.renderPostTtcSelfEvaluationForm();
 });
 
 Then('I should see the post-TTC self evaluation questions', function () {
@@ -263,22 +156,10 @@ Then('I should see the post-TTC self evaluation questions', function () {
   assert.ok(html.includes('post_ttc_self_evaluation_form'));
 });
 
-const POST_TTC_FEEDBACK_FALLBACK_HTML =
-  '<h1>Post-TTC Feedback</h1><div id="post-ttc-feedback-form">post_ttc_feedback_form</div>';
-
 When('I open the post-TTC feedback form', async function () {
   const world = getWorld(this);
-
-  try {
-    const module = await import('../../../app/forms/post_ttc_feedback/render');
-    if (typeof module.renderPostTtcFeedbackForm === 'function') {
-      world.responseHtml = module.renderPostTtcFeedbackForm();
-    } else {
-      world.responseHtml = POST_TTC_FEEDBACK_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = POST_TTC_FEEDBACK_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/post_ttc_feedback/render');
+  world.responseHtml = module.renderPostTtcFeedbackForm();
 });
 
 Then('I should see the post-TTC feedback questions', function () {
@@ -288,9 +169,6 @@ Then('I should see the post-TTC feedback questions', function () {
   assert.ok(html.includes('post_ttc_feedback_form'));
 });
 
-const TTC_PORTAL_SETTINGS_FALLBACK_HTML =
-  '<h1>TTC Portal Settings</h1><div id="ttc-portal-settings-form">TTC Portal Settings Questions</div>';
-
 Given('I am authenticated as a TTC admin', function () {
   const world = getWorld(this);
   world.currentUser = { role: 'ttc-admin', email: 'ttc-admin@example.com' };
@@ -299,17 +177,8 @@ Given('I am authenticated as a TTC admin', function () {
 
 When('I open the TTC portal settings form', async function () {
   const world = getWorld(this);
-
-  try {
-    const module = await import('../../../app/forms/ttc_portal_settings/render');
-    if (typeof module.renderTtcPortalSettingsForm === 'function') {
-      world.responseHtml = module.renderTtcPortalSettingsForm();
-    } else {
-      world.responseHtml = TTC_PORTAL_SETTINGS_FALLBACK_HTML;
-    }
-  } catch {
-    world.responseHtml = TTC_PORTAL_SETTINGS_FALLBACK_HTML;
-  }
+  const module = await import('../../../app/forms/ttc_portal_settings/render');
+  world.responseHtml = module.renderTtcPortalSettingsForm();
 });
 
 Then('I should see the TTC portal settings questions', function () {

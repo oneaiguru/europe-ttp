@@ -17,6 +17,49 @@
 - **Quality Checks:** ✓ typecheck, ✓ lint, ✓ BDD alignment
 - **Review Backlog:** `docs/review/REVIEW_DRAFTS.md` (scan @ `aa2db64784b7353cc040efe9c4be60cc1569ae9b`)
 
+## Backlog
+
+| task_key | name | priority | status | refs |
+|----------|------|----------|--------|------|
+| TASK-056 | fix-reporting-user-report-imports | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `reporting/user_report.py` |
+| TASK-059 | upload-form-data-missing-auth-and-validation | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `app/users/upload-form-data/route.ts` |
+| TASK-060 | signed-upload-key-forgeable-and-leaky | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `app/api/upload/signed-url/route.ts` |
+| TASK-061 | bdd-verify-symlink-cycle | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `scripts/bdd/verify-alignment.ts` |
+| TASK-062 | bdd-verify-support-asterisk-steps | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `scripts/bdd/verify-alignment.ts` |
+| TASK-063 | bdd-verify-placeholder-semantics | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `scripts/bdd/verify-alignment.ts` |
+| TASK-065 | ts-then-steps-must-assert | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `test/typescript/steps/e2e_api_steps.ts` |
+| TASK-066 | ts-reports-steps-mocked-calls-false-green | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `test/typescript/steps/reports_steps.ts` |
+| TASK-067 | tsconfig-missing-test-bdd | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `tsconfig.json`, `test/bdd/step-registry.ts` |
+| TASK-068 | tsconfig-excludes-app-api | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `tsconfig.json` |
+| TASK-069 | eslint-coverage-gaps | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `eslint.config.js`, `cucumber.cjs` |
+
+## Active
+
+| task_key | name | priority | status | claimed_by | refs |
+|----------|------|----------|--------|------------|------|
+
+## Done
+
+| task_key | name | completed | summary |
+|----------|------|-----------|---------|
+| TASK-043 | scrub-secrets-in-repo-text | 2026-02-06 | Redacted all SendGrid, Google Maps, and Harmony API keys from tracked files; created scan script. |
+| TASK-044 | remove-pii-experimental-fixtures | 2026-02-06 | Removed 5 .zip files from git tracking; changed http:// to https:// in legacy code; added .gitignore patterns. |
+| TASK-048 | restrict-docs-serving | 2026-02-06 | Removed unused /docs static handlers from all app.yaml files to prevent serving internal docs. |
+| TASK-052 | reduce-test-fallbacks-python | 2026-02-06 | Created common.py with explicit MOCK_MODE; updated api_steps, portal_steps, auth_steps to fail-fast when legacy unavailable. |
+| TASK-045 | fix-api-py-or-disable-handler | 2026-02-06 | Disabled broken /api/.* handler in all app.yaml files; api.py kept as historical reference. |
+| TASK-046 | harden-python-signed-upload | 2026-02-06 | Added filepath validation, server-controlled filenames, ownership checks in pyutils/upload.py. |
+| TASK-047 | harden-nextjs-signed-upload | 2026-02-06 | Added auth warnings, server-controlled filenames, URL encoding in Next.js signed upload route. |
+| TASK-049 | fix-verify-alignment-js | 2026-02-06 | Removed obsolete verify-alignment.js; TypeScript version is now single source of truth. |
+| TASK-050 | bdd-runner-signal-exit | 2026-02-06 | Verified both Python and TypeScript runners handle signal termination correctly. |
+| TASK-051 | remove-node-modules-cycle | 2026-02-06 | Removed nested node_modules symlink creation from TypeScript BDD runner. |
+| TASK-057 | eliminate-ds-store-pyc | 2026-02-06 | Removed tracked .pyc files from git; added Python cache patterns to .gitignore. |
+| TASK-064 | ts-step-state-leakage | 2026-02-06 | Fixed TS BDD step state leakage; removed state mutation, added meaningful assertions. |
+| TASK-053 | reduce-test-fallbacks-typescript | 2026-02-06 | Removed fallback HTML from admin_steps.ts; created common.ts with Before hook for state reset. |
+| TASK-054 | fix-legacy-xss-sinks | 2026-02-06 | Fixed XSS vulnerabilities: replaced .html() with .text() in postFSMessage, added escapeHTMLAttr() helper, escaped onclick handlers. |
+| TASK-055 | fix-db-user-common-import | 2026-02-06 | Fixed broken import in db/user.py: changed `from common import Utils` to `from pyutils.utils import mask`. |
+| TASK-058 | escape-portal-rendering-html | 2026-02-06 | Created app/utils/html.ts with escapeHtml/escapeHtmlAttr; updated portal render.ts files to escape user-controlled values. |
+| TASK-056 | fix-reporting-user-report-imports | 2026-02-06 | Added blobstore and images imports; fixed CLOUD_STORAGE_LOCATION to use constants.CLOUD_STORAGE_LOCATION. |
+
 ---
 
 ## Phase 4: Infra / Orchestration (In Progress)
@@ -169,22 +212,22 @@ All 13 E2E tasks have been implemented and verified:
 
 ---
 
-## Phase 3: Fixes (Blocking) ✅ ALL COMPLETE
+## Phase 3: Fixes (Blocking) 🟡 IN PROGRESS
 
 | Task | Priority | Status | Notes |
 |------|----------|--------|-------|
 | TASK-FIX-001 | p1 | ✅ DONE | Fix TypeScript type errors (`bun run typecheck`) |
 | TASK-FIX-002 | p1 | ✅ DONE | Remove committed secrets (constants/sendgrid/service account) |
 | TASK-FIX-003 | p2 | ✅ DONE | Fix verify-alignment placeholder matching + add test |
-| TASK-FIX-004 (harden-signed-upload-url) | p1 | ✅ DONE | Security hardening for signed upload URL endpoint |
+| TASK-FIX-004 (harden-signed-upload-url) | p1 | ✅ DONE | Next.js signed upload now: added auth warning comments, generates server-controlled filenames, URL-encodes object keys (see `app/api/upload/signed-url/route.ts`). |
 | TASK-FIX-005 | p1 | ✅ DONE | Fix cucumber scenario outline expansion |
 | fix-invalid-api-handler | p2 | ✅ DONE | API handlers properly typed and secured |
 | fix-user-report-imports | p2 | ✅ DONE | No circular import issues in report code |
 | fix-db-user-import | p2 | ✅ DONE | No problematic db/user imports |
 | sanitize-portal-rendering | p2 | ✅ DONE | React JSX auto-escaping provides XSS protection |
 | bdd-verify-detect-placeholder-impls | p2 | ✅ DONE | No TODO/FIXME placeholders in step definitions |
-| fix-verify-alignment-js-placeholders | p2 | ✅ DONE | No .js placeholder paths in registry |
-| reduce-test-fallback-masking | p2 | ✅ DONE | Try/catch blocks are legitimate error handling |
+| fix-verify-alignment-js-placeholders | p2 | ✅ DONE | `scripts/bdd/verify-alignment.js` was already removed; only `.ts` version exists |
+| reduce-test-fallback-masking | p2 | ✅ DONE | Removed all fallback try-catch masking from TS BDD steps; created missing render.ts files for `ttc_application_non_us` and `ttc_portal_settings` |
 | reset-ts-step-state | p2 | ✅ DONE | Cucumber v11 handles world state reset automatically |
 | validate-ttc-config-fixtures | p2 | ✅ DONE | All TTC and test fixtures are valid JSON |
 | replace-assert-true-placeholders | p2 | ✅ DONE | assert True statements have meaningful messages |
@@ -201,6 +244,13 @@ All 13 E2E tasks have been implemented and verified:
 | fill-task-plan-line-refs | p2 | ✅ DONE | No issues found |
 | remove-pii-fixtures | p2 | ✅ DONE | No issues found |
 | remove-hardcoded-keys-app-yaml | p2 | ✅ DONE | No issues found |
+| fix-api-py-or-disable-handler | p2 | ✅ DONE | Disabled broken /api/.* handler in app.yaml files |
+| TASK-FIX-009 (bdd-runner-signal-exit) | p2 | ✅ DONE | Already handles signal termination correctly in both runners |
+| TASK-FIX-010 (remove-node_modules-cycle) | p2 | ✅ DONE | Removed nested node_modules symlink creation from TS runner |
+| eliminate-ds-store-pyc | p2 | ✅ DONE | Removed tracked .pyc files from git, added Python cache patterns to .gitignore |
+| remove-pii-experimental-fixtures | p1 | ✅ DONE | Removed 5 .zip files from git, fixed http→https links in legacy code, added *.zip to .gitignore |
+| REVIEW-001 (scrub-secrets-in-repo-text) | p1 | ✅ DONE | Redacted all SendGrid, Google Maps, and Harmony API keys; created scan script at `scripts/security/scan-secrets.sh` |
+| TASK-FIX-011 (ts-step-state-leakage) | p2 | ✅ DONE | Fixed TS BDD step state leakage and mutation bugs: Removed state mutation from "Then" step in e2e_api_steps.ts:629, replaced no-op assertions in reports_steps.ts:72,115 with meaningful checks |
 
 ### TASK-E2E-008: Validation Errors (A3)
 **Feature:** `specs/features/e2e/validation_errors.feature`

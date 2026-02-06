@@ -1,3 +1,5 @@
+import { escapeHtml, escapeHtmlAttr } from '../../utils/html';
+
 export type PortalTabRenderOptions = {
   templateName: string;
   userHomeCountryIso: string;
@@ -14,14 +16,15 @@ function resolveContactEmail(iso: string): string {
 
 export function renderPortalTab(options: PortalTabRenderOptions): string {
   const templateName = normalizeTemplateName(options.templateName);
-  const homeCountryName = options.userHomeCountryName;
+  const homeCountryName = escapeHtml(options.userHomeCountryName);
 
   if (templateName === 'contact.html') {
     const email = resolveContactEmail(options.userHomeCountryIso);
+    const escapedEmail = escapeHtml(email);
     return [
       '<div class="tab-contact">',
       `<div>${homeCountryName} TTC Desk</div>`,
-      `<a href="mailto:${email}">${email}</a>`,
+      `<a href="mailto:${escapeHtmlAttr(email)}">${escapedEmail}</a>`,
       '</div>',
     ].join('');
   }

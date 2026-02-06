@@ -74,13 +74,17 @@ const proc = spawn(
   },
 );
 
-proc.on('exit', (code) => {
+proc.on('exit', (code, signal) => {
+  if (signal) {
+    console.error(`[run-python] Behave terminated by signal: ${signal}`);
+    process.exit(1);
+  }
   if (code !== 0) {
     console.error(`[run-python] Behave exited with code ${code}`);
-  } else {
-    console.log('[run-python] Behave completed successfully');
+    process.exit(code);
   }
-  process.exit(code || 0);
+  console.log('[run-python] Behave completed successfully');
+  process.exit(0);
 });
 
 proc.on('error', (err) => {

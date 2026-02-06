@@ -185,7 +185,7 @@ var REQUIRED_FIELDS_HIGHLIGHT_BORDER_COLOR = "red";
 var TEXTBOX_BACKGROUND_COLOR = "#fff8fb";
 var TEXTBOX_BORDER_COLOR = "#CFCFCF";
 var TEXT_COLOR = "#717171";
-// var GOOGLE_MAPS_API_KEY = 'AIzaSyCRXv1cpuBAO5GFZhjR3VT96QOnbuGPvKY';
+// var GOOGLE_MAPS_API_KEY = 'AIza.REDACTED.GOOGLE_MAPS';
 
 String.prototype.endsWith = function(suffix) {
   return this.indexOf(suffix, this.length - suffix.length) !== -1;
@@ -198,6 +198,20 @@ function isValidEmailAddress(emailAddress) {
   var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
   return pattern.test(emailAddress);
 };
+
+/**
+ * Escape HTML special characters to prevent XSS.
+ * @param {string} str - The string to escape
+ * @return {string} Escaped string safe for HTML attribute context
+ */
+function escapeHTMLAttr(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
 // function checkEmailFields() {
 //   // Check for invalid email addresses. If so return false at the end
@@ -633,7 +647,7 @@ function formatPhoneNo(s) {
 
 function postFSMessage(msg,delay,persist)
 {
-  $("#txtHintFS").html(msg);
+  $("#txtHintFS").text(msg);
   $('#txtHintFSBG').show();
   $('#txtHintFS').show();
   if (!persist)
@@ -1269,8 +1283,8 @@ function getShowHideHTML(
     }
     _content = '' +
       '<div id="shMore' + _id_suffix + '" style="text-overflow:ellipsis; white-space:nowrap; overflow:hidden;">' +
-        '<span id="shShowButton' + _id_suffix + '" onclick="showHide(\'' + _id_suffix + '\', \'' + show_button_text + '\', \'' + hide_button_text + '\', true)" style="color:blue;cursor:pointer;display:none; font-family:\'Ubuntu Mono\',monospace;">' + show_button_text + '</span>&nbsp;' + 
-        '<span id="shHideButton' + _id_suffix + '" onclick="showHide(\'' + _id_suffix + '\', \'' + show_button_text + '\', \'' + hide_button_text + '\', true)" style="color:blue;cursor:pointer;display:none; font-family:\'Ubuntu Mono\',monospace;">' + hide_button_text + '</span>&nbsp;' + 
+        '<span id="shShowButton' + _id_suffix + '" onclick="showHide(\'' + _id_suffix + '\', \'' + escapeHTMLAttr(show_button_text) + '\', \'' + escapeHTMLAttr(hide_button_text) + '\', true)" style="color:blue;cursor:pointer;display:none; font-family:\'Ubuntu Mono\',monospace;">' + show_button_text + '</span>&nbsp;' +
+        '<span id="shHideButton' + _id_suffix + '" onclick="showHide(\'' + _id_suffix + '\', \'' + escapeHTMLAttr(show_button_text) + '\', \'' + escapeHTMLAttr(hide_button_text) + '\', true)" style="color:blue;cursor:pointer;display:none; font-family:\'Ubuntu Mono\',monospace;">' + hide_button_text + '</span>&nbsp;' + 
         _content + 
       '</div>' +
       _actual_content;
@@ -1291,7 +1305,7 @@ function getShowHideHTML(
           _hidden_text + 
         '</span>' + 
         _btn_sep + 
-        '<span id="shButton' + _id_suffix + '" onclick="showHide(\'' + _id_suffix + '\', \'' + show_button_text + '\', \'' + hide_button_text + '\', false)" style="color:blue;cursor:pointer;display:inline-block; font-family:\'Ubuntu Mono\',monospace;">' + 
+        '<span id="shButton' + _id_suffix + '" onclick="showHide(\'' + _id_suffix + '\', \'' + escapeHTMLAttr(show_button_text) + '\', \'' + escapeHTMLAttr(hide_button_text) + '\', false)" style="color:blue;cursor:pointer;display:inline-block; font-family:\'Ubuntu Mono\',monospace;">' + 
           show_button_text + 
         '</span>';
     }

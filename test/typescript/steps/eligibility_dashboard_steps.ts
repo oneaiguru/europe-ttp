@@ -50,12 +50,12 @@ interface DataTable {
   rows?: string[][];
 }
 
-const eligibilityDashboardContext: EligibilityDashboard = {
+export const eligibilityDashboardContext: EligibilityDashboard = {
   courses: [],
   formMessages: {},
 };
 
-let formAccessAttempt: string | null = null;
+export let formAccessAttempt: string | null = null;
 
 /**
  * Get list of courses with eligibility status based on course completions.
@@ -100,6 +100,16 @@ function initEligibilityDashboardContext(): void {
   initPrerequisitesContext();
   updateAvailableForms();
 
+  eligibilityDashboardContext.courses = [];
+  eligibilityDashboardContext.formMessages = {};
+  formAccessAttempt = null;
+}
+
+/**
+ * Reset eligibility dashboard state between test scenarios.
+ * Called by common.ts Before hook to prevent state leakage.
+ */
+export function resetEligibilityDashboardState(): void {
   eligibilityDashboardContext.courses = [];
   eligibilityDashboardContext.formMessages = {};
   formAccessAttempt = null;

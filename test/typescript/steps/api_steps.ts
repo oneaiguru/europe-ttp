@@ -24,13 +24,22 @@ interface TestConfig {
   };
 }
 
-const apiContext: {
+export const apiContext: {
   responseStatus?: number;
   lastPayload?: Record<string, unknown>;
 } = {};
 
-let cachedConfig: TestConfig | null = null;
-let cachedSubmissions: FormSubmission[] | null = null;
+export let cachedConfig: TestConfig | null = null;
+export let cachedSubmissions: FormSubmission[] | null = null;
+
+/**
+ * Reset cached data between test scenarios.
+ * Called by common.ts Before hook to prevent state leakage.
+ */
+export function resetApiStepsCache(): void {
+  cachedConfig = null;
+  cachedSubmissions = null;
+}
 
 function loadTestConfig(): TestConfig {
   if (cachedConfig) {
@@ -80,21 +89,17 @@ When('I submit form data to the upload form API', async () => {
   const endpoint = config.api_endpoints?.upload_form_data ?? '/users/upload-form-data';
   const url = new URL(endpoint, 'http://localhost');
 
-  try {
-    const { POST } = await import('../../../app/users/upload-form-data/route');
-    const response = await POST(
-      new Request(url.toString(), {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      }),
-    );
-    apiContext.responseStatus = response.status;
-  } catch {
-    apiContext.responseStatus = 200;
-  }
+  const { POST } = await import('../../../app/users/upload-form-data/route');
+  const response = await POST(
+    new Request(url.toString(), {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    }),
+  );
+  apiContext.responseStatus = response.status;
 });
 
 Then('the API should accept the form submission', () => {

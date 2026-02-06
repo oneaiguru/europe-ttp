@@ -8,7 +8,6 @@ export default [
       "node_modules/",
       "test/typescript/node_modules/",
       "javascript/**",
-      "experimental/**",
       "*.js",
       "*.mjs",
       "dist/**",

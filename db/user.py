@@ -1,5 +1,5 @@
 from google.appengine.ext import ndb
-from common import Utils
+from pyutils.utils import mask
 import json
 
 class Lead(ndb.Model):
@@ -23,7 +23,7 @@ class Lead(ndb.Model):
     def dict(self, isAdmin = False):
         d = self.to_dict()
         for p in Lead.SENSITIVE_PROPS:
-            d[p] = Utils.mask(d[p])
+            d[p] = mask(d[p])
         # convert time to isoformat to serialize json
         for p in Lead.DATETIME_PROPS:
             if d[p]:

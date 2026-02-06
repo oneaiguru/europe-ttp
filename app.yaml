@@ -60,21 +60,11 @@ handlers:
   static_dir: styles
   secure: always
 
-- url: /docs
-  static_dir: docs
-  login: required
-  secure: always
-
 - url: /ext
   static_dir: ext
 
 - url: /disabled
   script: disabled.app
-  login: required
-  secure: always
-
-- url: /api/.*
-  script: api.app
   login: required
   secure: always
 

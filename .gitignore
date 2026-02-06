@@ -23,6 +23,15 @@ dist/
 # Misc
 .DS_Store
 *.pem
+*.zip
+
+# Backup directories (should not be in repo)
+backup/
+
+# Python cache
+*.pyc
+__pycache__/
+*.pyo
 
 # Debug
 npm-debug.log*

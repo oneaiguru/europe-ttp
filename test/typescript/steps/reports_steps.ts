@@ -67,9 +67,8 @@ Then('I should receive the user summary data', function (this: unknown) {
   // Verify data structure
   assert.ok(world.summaryData, 'No summary data in response');
   assert.strictEqual(typeof world.summaryData, 'object', 'Summary data should be an object');
-
-  // Empty object is acceptable (no users), but must be a dict
-  assert.ok(Array.isArray(Object.keys(world.summaryData)), 'Summary data should be a dictionary');
+  // Ensure it's a plain object, not an array
+  assert.ok(!Array.isArray(world.summaryData), 'Summary data should be a dictionary (not an array)');
 });
 
 // User Integrity Report Steps
@@ -110,9 +109,8 @@ Then('I should receive the user integrity data', function (this: unknown) {
   // Verify data structure
   assert.ok(world.integrityData, 'No integrity data in response');
   assert.strictEqual(typeof world.integrityData, 'object', 'Integrity data should be an object');
-
-  // Empty object is acceptable (no users), but must be a dict
-  assert.ok(Array.isArray(Object.keys(world.integrityData)), 'Integrity data should be a dictionary');
+  // Ensure it's a plain object, not an array
+  assert.ok(!Array.isArray(world.integrityData), 'Integrity data should be a dictionary (not an array)');
 });
 
 When('I run the user integrity postload job', async function (this: unknown) {

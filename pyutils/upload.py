@@ -7,6 +7,7 @@ import time
 import json
 import datetime
 import re
+import urllib
 import webapp2
 import jinja2
 
@@ -41,7 +42,11 @@ MAX_FILE_SIZE = 10 * 1024 * 1024
 # Security: Signed URL expiration time (15 minutes)
 SIGNED_URL_EXPIRATION_MINUTES = 15
 
-client = storage.Client().from_service_account_json(os.environ['SERVICE_JSON_FILE'])
+# Security: Handle missing service account file gracefully
+service_account_path = os.environ.get('SERVICE_JSON_FILE')
+if not service_account_path:
+    raise ValueError('SERVICE_JSON_FILE environment variable must be set for GCS operations')
+client = storage.Client().from_service_account_json(service_account_path)
 bucket = storage.Bucket(client, constants.BUCKET_NAME)
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -92,8 +97,19 @@ class SignedUrlHandler(webapp2.RequestHandler):
             self.response.write(json.dumps({'error': 'Invalid content type'}))
             return
 
-        # Generate filename with validated filepath
-        filename = filepath + self.request.get('filename', default_filename_prefix + '_{}'.format(int(time.time())))
+        # Security: Ignore client-provided filename for security; use server-controlled format
+        # Client could provide malicious filename content, so we generate our own
+        _ = self.request.get('filename', '')  # Deliberately ignored
+        timestamp = int(time.time())
+        # Sanitize user email for use in filename (replace non-alphanumeric with underscore)
+        safe_prefix = re.sub(r'[^\w\-]', '_', user.email())
+        server_filename = safe_prefix + '_{}'.format(timestamp)
+
+        # Generate filename with validated filepath and server-controlled filename
+        filename = filepath + server_filename
+
+        # Security: URL-encode the filename for GCS blob path (safe='/')
+        filename = urllib.quote(filename.encode('utf-8'), safe='/')
 
         # Security: Generate signed URL with reduced expiration (15 minutes instead of 2 hours)
         # and enforce file size limit
@@ -113,15 +129,38 @@ class SignedUrlHandler(webapp2.RequestHandler):
 
 class PostUploadHandler(webapp2.RequestHandler):
     def post(self):
-        """After upload is completed, this handler can be triggered to do some post processing"""
+        """After upload is completed, this handler can be triggered to do some post processing
+
+        Security: Requires authentication, validates file exists, validates ownership
+        """
         key = self.request.params.get('key')
-        file_obj = ndb.Key(urlsafe=key).get()
         user = users.get_current_user()
-        if user:
-            _ttc_user = ttc_portal_user.TTCPortalUser(user.email())
-            _ttc_user.set_photo_file(file_obj.filename)
-            # _ttc_user.set_photo_url()
-            _ttc_user.save_user_data()
+
+        # Security: Require authentication before any database access
+        if not user:
+            self.response.status = 401
+            self.response.write(json.dumps({'error': 'Authentication required'}))
+            return
+
+        # Security: Validate file exists
+        file_obj = ndb.Key(urlsafe=key).get()
+        if not file_obj:
+            self.response.status = 404
+            self.response.write(json.dumps({'error': 'File not found'}))
+            return
+
+        # Security: Validate ownership - filename should contain user's email
+        # This prevents users from accessing files uploaded by other users
+        # (filename format is: sanitizedEmail_timestamp, URL-encoded)
+        if user.email() not in file_obj.filename:
+            self.response.status = 403
+            self.response.write(json.dumps({'error': 'Access denied'}))
+            return
+
+        _ttc_user = ttc_portal_user.TTCPortalUser(user.email())
+        _ttc_user.set_photo_file(file_obj.filename)
+        # _ttc_user.set_photo_url()
+        _ttc_user.save_user_data()
         # do something with it
 
 

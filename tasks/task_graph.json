@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-06T03:04:32Z",
+  "generated_at": "2026-02-06T04:00:00Z",
   "source": "IMPLEMENTATION_PLAN.md",
   "tasks": [
     {
@@ -267,6 +267,16 @@
       "name": "remove hardcoded keys app yaml",
       "feature_file": "N/A",
       "priority": "p2",
+      "scenarios": [],
+      "depends_on": [],
+      "estimated_hours": 2,
+      "status": "✅ DONE"
+    },
+    {
+      "id": "REVIEW-001",
+      "name": "scrub secrets in repo text",
+      "feature_file": "N/A",
+      "priority": "p1",
       "scenarios": [],
       "depends_on": [],
       "estimated_hours": 2,

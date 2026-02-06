@@ -16,6 +16,8 @@ PROJECT_ROOT = os.path.dirname(
 )
 sys.path.insert(0, PROJECT_ROOT)
 
+from steps.common import _fake_response
+
 
 class StubUser(object):
     def __init__(self, email_addr):
@@ -68,14 +70,6 @@ def _patch_ttc_portal_user_storage(ttc_portal_user_module):
         ttc_user_cls.send_submission_emails = lambda *args, **kwargs: None
 
     ttc_portal_user_module._bdd_storage_patched = True
-
-
-def _fake_response():
-    return type('obj', (object,), {
-        'body': '',
-        'status': '200 OK',
-        'status_int': 200
-    })()
 
 
 def _resolve_submission(context):

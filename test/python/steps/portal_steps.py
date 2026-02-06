@@ -3,6 +3,16 @@ from __future__ import absolute_import
 
 from behave import given, when, then
 
+import os
+import sys
+
+PROJECT_ROOT = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+)
+sys.path.insert(0, PROJECT_ROOT)
+
+from steps.common import _fake_response
+
 
 class _StubUser(object):
     def __init__(self, email):
@@ -36,14 +46,6 @@ def _response_body_text(response):
     if isinstance(body, bytes):
         return body.decode('utf-8', 'ignore')
     return body
-
-
-def _fake_response(body_text):
-    return type('obj', (object,), {
-        'body': body_text,
-        'status': '200 OK',
-        'status_int': 200
-    })()
 
 
 def _resolve_current_user(context):

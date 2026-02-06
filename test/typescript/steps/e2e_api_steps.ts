@@ -627,7 +627,16 @@ Then('the evaluation should be matched to the applicant', () => {
 });
 
 Then('the evaluation should count toward the applicant\'s evaluation total', () => {
-  testContext.evaluationsCount++;
+  // Assert that an evaluation was recorded
+  if (testContext.evaluations.length === 0) {
+    throw new Error('At least one evaluation should be recorded');
+  }
+  // Assert that the counter reflects the evaluations array
+  if (testContext.evaluationsCount !== testContext.evaluations.length) {
+    throw new Error(
+      `Evaluation count (${testContext.evaluationsCount}) should match recorded evaluations (${testContext.evaluations.length})`
+    );
+  }
 });
 
 Then('the evaluation should be matched via name fallback', () => {
