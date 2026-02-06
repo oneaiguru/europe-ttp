@@ -4,17 +4,18 @@
 🟢 **Phase 0 Complete** - All planning artifacts generated, build tools ready
 🟢 **Phase 1 Complete** - All 35 basic feature scenarios implemented
 🟢 **Phase 2E Complete** - All 13 E2E scenarios implemented
-🟢 **Phase 3 Complete** - All fix/hardening tasks completed (26 tasks total)
+🟡 **Phase 3 In Progress** - Fix/hardening backlog tracked in `docs/review/REVIEW_DRAFTS.md`
 🟡 **Phase 4 Pending** - Infra/orchestration hardening tasks
 
 ---
 
-## Current State (2026-02-05)
-- **Python BDD:** 99 scenarios passed, 441 steps passed
+## Current State (2026-02-06)
+- **Python BDD:** 99 scenarios passed, 441 steps passed (with import warnings; see `docs/review/REVIEW_DRAFTS.md`)
 - **TypeScript BDD:** 99 scenarios passed, 441 steps passed
 - **Step Registry:** 243 steps defined, 0 orphan, 0 dead
 - **Parity:** 100% - All features implemented in both Python and TypeScript
 - **Quality Checks:** ✓ typecheck, ✓ lint, ✓ BDD alignment
+- **Review Backlog:** `docs/review/REVIEW_DRAFTS.md` (scan @ `aa2db64784b7353cc040efe9c4be60cc1569ae9b`)
 
 ---
 
