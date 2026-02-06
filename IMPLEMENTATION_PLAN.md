@@ -5,6 +5,7 @@
 🟢 **Phase 1 Complete** - All 35 basic feature scenarios implemented
 🟢 **Phase 2E Complete** - All 13 E2E scenarios implemented
 🟢 **Phase 3 Complete** - All fix/hardening tasks completed (26 tasks total)
+🟡 **Phase 4 Pending** - Infra/orchestration hardening tasks
 
 ---
 
@@ -14,6 +15,14 @@
 - **Step Registry:** 243 steps defined, 0 orphan, 0 dead
 - **Parity:** 100% - All features implemented in both Python and TypeScript
 - **Quality Checks:** ✓ typecheck, ✓ lint, ✓ BDD alignment
+
+---
+
+## Phase 4: Infra / Orchestration (In Progress)
+
+| Task | Priority | Status | Notes |
+|------|----------|--------|-------|
+| TASK-INFRA-001 | p1 | 🟡 TODO | Make dependency bootstrap lockfile-aware (pnpm-lock.yaml) |
 
 ---
 

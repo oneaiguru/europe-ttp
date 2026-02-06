@@ -18,14 +18,24 @@ Before any role, confirm you are in the repo root. In the Weaver container, the 
 - Task graph: `/workspace/tasks/task_graph.json`
 - Active task: `/workspace/docs/Tasks/ACTIVE_TASK.md`
 
-Ensure JS dependencies are present (some images do not include `bun`):
+Ensure JS dependencies are present (lockfile-aware; do not run `npm ci` unless `package-lock.json` exists):
 
 ```bash
 if [ ! -d node_modules ]; then
-  if command -v bun >/dev/null 2>&1; then
+  if command -v bun >/dev/null 2>&1 && ( [ -f bun.lockb ] || [ -f bun.lock ] ); then
+    bun install
+  elif [ -f pnpm-lock.yaml ]; then
+    corepack enable >/dev/null 2>&1 || true
+    pnpm install --frozen-lockfile
+  elif [ -f package-lock.json ]; then
+    npm ci
+  elif [ -f yarn.lock ]; then
+    yarn install --frozen-lockfile
+  elif command -v bun >/dev/null 2>&1; then
+    # bun is present but no bun lockfile; fall back to bun anyway (still deterministic-ish vs npm install).
     bun install
   else
-    npm ci
+    npm install
   fi
 fi
 ```
