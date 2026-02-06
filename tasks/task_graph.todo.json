@@ -1,16 +1,5 @@
 {
-  "generated_at": "2026-02-06T03:04:32Z",
+  "generated_at": "2026-02-06T03:20:00Z",
   "source": "tasks/task_graph.json",
-  "tasks": [
-    {
-      "id": "TASK-INFRA-001",
-      "name": "fix dependency bootstrap for pnpm-lock.yaml",
-      "feature_file": "N/A",
-      "priority": "p1",
-      "scenarios": [],
-      "depends_on": [],
-      "estimated_hours": 1,
-      "status": "🟡 TODO"
-    }
-  ]
+  "tasks": []
 }
