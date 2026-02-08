@@ -74,7 +74,30 @@ const proc = spawn(
   },
 );
 
+// Track forced kill timeout for cleanup
+let forcedKillTimeout: ReturnType<typeof setTimeout> | null = null;
+
+// Forward termination signals to child process
+['SIGTERM', 'SIGINT'].forEach((signal) => {
+  process.on(signal, () => {
+    console.log(`[run-python] Received ${signal}, forwarding to child...`);
+    proc.kill(signal as NodeJS.Signals);
+
+    // Force kill if child doesn't exit gracefully within 5 seconds
+    forcedKillTimeout = setTimeout(() => {
+      console.error(`[run-python] Child did not exit gracefully, force killing...`);
+      proc.kill('SIGKILL' as NodeJS.Signals);
+    }, 5000);
+  });
+});
+
 proc.on('exit', (code, signal) => {
+  // Clear any pending forced kill timeout
+  if (forcedKillTimeout) {
+    clearTimeout(forcedKillTimeout);
+    forcedKillTimeout = null;
+  }
+
   if (signal) {
     console.error(`[run-python] Behave terminated by signal: ${signal}`);
     process.exit(1);

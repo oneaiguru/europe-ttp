@@ -14,6 +14,47 @@ set -euo pipefail
 AGENTOSTS_DIR="apps/agentosts"
 DATA_DIR="$AGENTOSTS_DIR/data/week0/live"
 
+# Function: check if agentosts tracking is available
+check_tracking_available() {
+  # Check directory exists
+  if [ ! -d "$AGENTOSTS_DIR" ]; then
+    return 1
+  fi
+
+  # Check pnpm available
+  if ! command -v pnpm >/dev/null 2>&1; then
+    return 1
+  fi
+
+  # Check tracker can run (dry run)
+  if ! pnpm --dir "$AGENTOSTS_DIR" run tracker -- --help >/dev/null 2>&1; then
+    return 1
+  fi
+
+  return 0
+}
+
+# Handle --skip-tracking flag
+if [ "${1:-}" = "--skip-tracking" ] || [ "${1:-}" = "--untracked" ]; then
+  echo "[tracked-loop] skipping tracking, delegating to loop_mix.sh"
+  exec ./loop_mix.sh "$@"
+fi
+
+# Verify tracking is available
+if ! check_tracking_available; then
+  echo "Error: agentosts tracker not available"
+  echo ""
+  echo "The tracker requires:"
+  echo "  1. Directory: $AGENTOSTS_DIR"
+  echo "  2. pnpm command available in PATH"
+  echo "  3. agentosts project set up (pnpm install run)"
+  echo ""
+  echo "Options:"
+  echo "  - Use loop_mix.sh for untracked execution"
+  echo "  - Pass --skip-tracking to this script"
+  exit 1
+fi
+
 # Determine mode (same logic as loop_mix.sh)
 MODE="build"
 MAX_ITERATIONS=1

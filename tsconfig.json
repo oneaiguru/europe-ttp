@@ -4,14 +4,16 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "strict": true,
+    // skipLibCheck: true required because Bun runtime + @types/node have intentional type conflicts (duplicate Web API identifiers)
+    // These conflicts are expected and cannot be fixed in application code
     "skipLibCheck": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "types": ["node"],
     "jsx": "react"
   },
-  "include": ["test/typescript/**/*.ts", "scripts/**/*.ts", "app/**/*.tsx", "app/**/*.ts"],
-  "exclude": ["node_modules", "test/typescript/node_modules", "app/api"],
+  "include": ["test/typescript/**/*.ts", "test/utils/**/*.ts", "scripts/**/*.ts", "app/**/*.tsx", "app/**/*.ts"],
+  "exclude": ["node_modules", "test/typescript/node_modules"],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"

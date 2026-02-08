@@ -4,17 +4,24 @@ import tsEslint from "@typescript-eslint/eslint-plugin";
 
 export default [
   {
+    // Base ignores - legacy code, build outputs, and compiled artifacts only
     ignores: [
       "node_modules/",
       "test/typescript/node_modules/",
       "javascript/**",
-      "*.js",
-      "*.mjs",
       "dist/**",
+      "test/typescript/steps/forms_steps.cjs",  // compiled output
+      "experimental/**",  // third-party jsPDF
     ],
   },
   {
-    files: ["scripts/**/*.ts", "test/**/*.ts"],
+    // TypeScript source: scripts, test, app .ts, and app .tsx files
+    files: [
+      "scripts/**/*.ts",
+      "test/**/*.ts",
+      "app/**/*.ts",
+      "app/**/*.tsx",
+    ],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
@@ -29,6 +36,19 @@ export default [
     rules: {
       ...tsEslint.configs.recommended.rules,
       "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    },
+  },
+  {
+    // JS config files (cucumber, etc)
+    files: ["cucumber.cjs", ".cucumberrc.cjs"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "commonjs",
+    },
+    rules: {
+      // Basic JS linting for config files
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "no-undef": "error",
     },
   },
 ];

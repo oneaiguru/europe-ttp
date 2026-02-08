@@ -4,9 +4,9 @@
  * Generates a signed URL for uploading files to Google Cloud Storage.
  *
  * SECURITY NOTES:
- * 1. Authentication: Currently uses x-user-email header for compatibility with
- *    legacy App Engine deployment. Platform-level auth is REQUIRED in production.
- *    TODO: Replace with NextAuth.js or similar for standalone deployments.
+ * 1. Authentication: Uses environment-gated authentication based on AUTH_MODE:
+ *    - platform: Trust x-user-email header (App Engine with IAP)
+ *    - session: Validate bearer token with HMAC signature (standalone)
  *
  * 2. Filenames: Server-controlled only. Client-provided filenames are ignored
  *    to prevent path traversal and malicious file naming.
@@ -15,7 +15,8 @@
  *    @google-cloud/storage library and proper GCS credentials.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { generateUploadToken, getHmacSecret } from '../../../utils/crypto';
+import { getAuthenticatedUser } from '../../../utils/auth';
 
 // Security: Content-type whitelist for allowed file uploads
 const ALLOWED_CONTENT_TYPES = [
@@ -45,16 +46,11 @@ interface SignedUrlResponse {
   error?: string;
 }
 
-export async function POST(request: NextRequest): Promise<NextResponse<SignedUrlResponse>> {
-  // 1. Security: Check authentication
-  // WARNING: This endpoint currently relies on x-user-email header for compatibility
-  // with the legacy App Engine deployment where authentication is handled at the
-  // platform level. In a standalone deployment, this MUST be replaced with proper
-  // session-based authentication (e.g., NextAuth.js).
-  // TODO: Implement proper session-based auth for standalone deployments
-  const user = request.headers.get('x-user-email');
+export async function POST(request: Request): Promise<Response> {
+  // 1. Security: Check authentication (uses AUTH_MODE to determine method)
+  const user = await getAuthenticatedUser(request);
   if (!user) {
-    return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    return Response.json({ error: 'Authentication required' }, { status: 401 });
   }
 
   // 2. Parse request body
@@ -62,7 +58,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<SignedUrl
   try {
     body = (await request.json()) as SignedUrlRequest;
   } catch {
-    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+    return Response.json({ error: 'Invalid request body' }, { status: 400 });
   }
   // Security: Client-provided filename is intentionally ignored
   const { filepath, content_type } = body;
@@ -71,17 +67,17 @@ export async function POST(request: NextRequest): Promise<NextResponse<SignedUrl
   if (filepath) {
     // Reject directory traversal attempts
     if (filepath.includes('..') || filepath.startsWith('/')) {
-      return NextResponse.json({ error: 'Invalid filepath' }, { status: 400 });
+      return Response.json({ error: 'Invalid filepath' }, { status: 400 });
     }
     // Only allow alphanumeric, hyphens, underscores, and forward slashes
     if (!/^[\w\-/]+$/.test(filepath)) {
-      return NextResponse.json({ error: 'Invalid filepath characters' }, { status: 400 });
+      return Response.json({ error: 'Invalid filepath characters' }, { status: 400 });
     }
   }
 
   // 4. Security: Validate content type against whitelist
-  if (content_type && !ALLOWED_CONTENT_TYPES.includes(content_type as any)) {
-    return NextResponse.json({ error: 'Invalid content type' }, { status: 400 });
+  if (content_type && !ALLOWED_CONTENT_TYPES.includes(content_type as (typeof ALLOWED_CONTENT_TYPES)[number])) {
+    return Response.json({ error: 'Invalid content type' }, { status: 400 });
   }
 
   // 5. Generate server-controlled filename (ignore client input for security)
@@ -105,9 +101,15 @@ export async function POST(request: NextRequest): Promise<NextResponse<SignedUrl
   const signedUrl = `https://storage.googleapis.com/${bucketName}/${encodedFilename}?Expires=${expiresAt}&GoogleAccessId=`;
 
   // 7. Generate upload key (for tracking)
-  const uploadKey = Buffer.from(`${user}:${timestamp}:${fullFilename}`).toString('base64');
+  // SECURITY: Use HMAC-signed token instead of base64 to prevent:
+  // - Token forgery (clients cannot encode arbitrary values)
+  // - Information leakage (user email and filepath are not visible in base64)
+  const uploadKey = generateUploadToken(
+    { user, timestamp, filename: fullFilename },
+    getHmacSecret()
+  );
 
-  return NextResponse.json({
+  return Response.json({
     url: signedUrl,
     key: uploadKey,
   });

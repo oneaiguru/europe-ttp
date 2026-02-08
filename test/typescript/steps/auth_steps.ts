@@ -3,6 +3,22 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  TEST_HMAC_SECRET,
+  TEST_AUTH_MODE_PLATFORM,
+  TEST_AUTH_MODE_SESSION,
+  TEST_SESSION_MAX_AGE_SECONDS,
+} from '../../fixtures/test-config.js';
+
+// Lazy load auth utilities to avoid import issues during initial load
+let authUtils: typeof import('../../../app/utils/auth') | null = null;
+
+async function getAuthUtils() {
+  if (!authUtils) {
+    authUtils = await import('../../../app/utils/auth');
+  }
+  return authUtils;
+}
 
 // ESM-compatible __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +35,24 @@ export const authContext: {
   currentPage?: string;
   passwordResetEmail?: string;
   responseHtml?: string;
+  authMode?: 'platform' | 'session';
+  sessionToken?: string;
+  lastAuthResult?: string | null;
 } = {};
+
+/**
+ * Reset the authContext to its initial empty state.
+ * Called by the Before hook in common.ts before each scenario.
+ */
+export function resetAuthContext(): void {
+  authContext.currentUser = undefined;
+  authContext.currentPage = undefined;
+  authContext.passwordResetEmail = undefined;
+  authContext.responseHtml = undefined;
+  authContext.authMode = undefined;
+  authContext.sessionToken = undefined;
+  authContext.lastAuthResult = undefined;
+}
 
 let cachedUsers: TestUser[] | null = null;
 
@@ -102,4 +135,183 @@ Then('I should receive a password reset prompt from the identity provider', () =
   assert.equal(authContext.currentPage, 'password_reset');
   assert.ok(authContext.responseHtml, 'Expected responseHtml to be set');
   assert.ok(authContext.responseHtml?.includes('PASSWORD RESET PROMPT'));
+});
+
+// ============================================================================
+// Upload API Authentication Step Definitions
+// ============================================================================
+
+Given('I am in platform auth mode', () => {
+  process.env.AUTH_MODE = TEST_AUTH_MODE_PLATFORM;
+  process.env.UPLOAD_HMAC_SECRET = TEST_HMAC_SECRET;
+  process.env.SESSION_MAX_AGE_SECONDS = TEST_SESSION_MAX_AGE_SECONDS.toString();
+  authContext.authMode = TEST_AUTH_MODE_PLATFORM;
+});
+
+Given('I am in session auth mode', () => {
+  process.env.AUTH_MODE = TEST_AUTH_MODE_SESSION;
+  process.env.UPLOAD_HMAC_SECRET = TEST_HMAC_SECRET;
+  process.env.SESSION_MAX_AGE_SECONDS = TEST_SESSION_MAX_AGE_SECONDS.toString();
+  authContext.authMode = TEST_AUTH_MODE_SESSION;
+});
+
+Given('I have a valid user email {string}', (email: string) => {
+  authContext.currentUser = { email, role: 'applicant' };
+});
+
+Given('I have a valid session token for {string}', async (email: string) => {
+  const auth = await getAuthUtils();
+  const secret = TEST_HMAC_SECRET;
+  const token = auth.generateSessionToken(email, secret);
+  authContext.sessionToken = token;
+});
+
+Given('I have an expired session token for {string}', async (email: string) => {
+  const auth = await getAuthUtils();
+  const secret = TEST_HMAC_SECRET;
+
+  // Create a token with an old timestamp to make it expired
+  const timestamp = Math.floor(Date.now() / 1000) - 7200; // 2 hours ago
+  const nonce = Buffer.from(Math.random().toString()).toString('base64url');
+  const encodedEmail = Buffer.from(email).toString('base64');
+  const payloadString = `${encodedEmail}:${timestamp}:${nonce}`;
+  const encodedPayload = Buffer.from(payloadString).toString('base64url');
+
+  // Generate HMAC signature
+  const { createHmac } = await import('node:crypto');
+  const signature = createHmac('sha256', secret)
+    .update(encodedPayload)
+    .digest('base64url');
+
+  authContext.sessionToken = `${encodedPayload}.${signature}`;
+});
+
+Given('I have a tampered session token for {string}', async (email: string) => {
+  const auth = await getAuthUtils();
+  const secret = TEST_HMAC_SECRET;
+  const token = auth.generateSessionToken(email, secret);
+
+  // Tamper with the token by changing a character
+  const parts = token.split('.');
+  parts[0] = parts[0].substring(0, parts[0].length - 1) + 'X';
+  authContext.sessionToken = parts.join('.');
+});
+
+When('I call getAuthenticatedUser with x-user-email header {string}', async (email: string) => {
+  const auth = await getAuthUtils();
+
+  // Create a mock Request object with the x-user-email header
+  const mockRequest = {
+    headers: {
+      get: (name: string) => name === 'x-user-email' ? email : null,
+    },
+  } as Request;
+
+  authContext.lastAuthResult = await auth.getAuthenticatedUser(mockRequest);
+});
+
+When('I call getAuthenticatedUser without x-user-email header', async () => {
+  const auth = await getAuthUtils();
+
+  const mockRequest = {
+    headers: {
+      get: (name: string) => null,
+    },
+  } as Request;
+
+  authContext.lastAuthResult = await auth.getAuthenticatedUser(mockRequest);
+});
+
+When('I call getAuthenticatedUser with bearer token', async () => {
+  const auth = await getAuthUtils();
+  const token = authContext.sessionToken ?? '';
+
+  const mockRequest = {
+    headers: {
+      get: (name: string) => name === 'authorization' ? `Bearer ${token}` : null,
+    },
+  } as Request;
+
+  authContext.lastAuthResult = await auth.getAuthenticatedUser(mockRequest);
+});
+
+When('I call getAuthenticatedUser with bearer token {string}', async (token: string) => {
+  const auth = await getAuthUtils();
+
+  const mockRequest = {
+    headers: {
+      get: (name: string) => name === 'authorization' ? `Bearer ${token}` : null,
+    },
+  } as Request;
+
+  authContext.lastAuthResult = await auth.getAuthenticatedUser(mockRequest);
+});
+
+When('I call getAuthenticatedUser without authorization header', async () => {
+  const auth = await getAuthUtils();
+
+  const mockRequest = {
+    headers: {
+      get: (name: string) => null,
+    },
+  } as Request;
+
+  authContext.lastAuthResult = await auth.getAuthenticatedUser(mockRequest);
+});
+
+When('I call getAuthenticatedUser with x-user-email header {string} and no bearer token', async (email: string) => {
+  const auth = await getAuthUtils();
+
+  const mockRequest = {
+    headers: {
+      get: (name: string) => name === 'x-user-email' ? email : null,
+    },
+  } as Request;
+
+  authContext.lastAuthResult = await auth.getAuthenticatedUser(mockRequest);
+});
+
+When('I generate a session token for {string}', async (email: string) => {
+  const auth = await getAuthUtils();
+  const secret = TEST_HMAC_SECRET;
+  authContext.sessionToken = auth.generateSessionToken(email, secret);
+});
+
+When('I verify the session token', async () => {
+  const auth = await getAuthUtils();
+  const secret = TEST_HMAC_SECRET;
+  const token = authContext.sessionToken ?? '';
+  authContext.lastAuthResult = auth.verifySessionToken(token, secret);
+});
+
+Then('the response should be the user {string}', (expectedEmail: string) => {
+  assert.equal(authContext.lastAuthResult, expectedEmail);
+});
+
+Then('the response should be null', () => {
+  assert.equal(authContext.lastAuthResult, null);
+});
+
+Then('the token should have a valid format', () => {
+  const token = authContext.sessionToken;
+  assert.ok(token, 'Expected session token to be set');
+
+  // Token format: base64url(payload) + "." + base64url(signature)
+  const parts = token?.split('.') ?? [];
+  assert.equal(parts.length, 2, 'Token should have exactly two parts separated by a dot');
+
+  const [payload, signature] = parts;
+  assert.ok(payload, 'Token payload should not be empty');
+  assert.ok(signature, 'Token signature should not be empty');
+
+  // Verify base64url format (only alphanumeric, hyphen, underscore)
+  const base64urlRegex = /^[A-Za-z0-9_-]+$/;
+  assert.ok(base64urlRegex.test(payload), 'Token payload should be base64url encoded');
+  assert.ok(base64urlRegex.test(signature), 'Token signature should be base64url encoded');
+});
+
+Given('I generated a session token for {string}', async (email: string) => {
+  const auth = await getAuthUtils();
+  const secret = TEST_HMAC_SECRET;
+  authContext.sessionToken = auth.generateSessionToken(email, secret);
 });

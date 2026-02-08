@@ -19,19 +19,11 @@
 
 ## Backlog
 
-| task_key | name | priority | status | refs |
-|----------|------|----------|--------|------|
-| TASK-056 | fix-reporting-user-report-imports | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `reporting/user_report.py` |
-| TASK-059 | upload-form-data-missing-auth-and-validation | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `app/users/upload-form-data/route.ts` |
-| TASK-060 | signed-upload-key-forgeable-and-leaky | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `app/api/upload/signed-url/route.ts` |
-| TASK-061 | bdd-verify-symlink-cycle | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `scripts/bdd/verify-alignment.ts` |
-| TASK-062 | bdd-verify-support-asterisk-steps | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `scripts/bdd/verify-alignment.ts` |
-| TASK-063 | bdd-verify-placeholder-semantics | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `scripts/bdd/verify-alignment.ts` |
-| TASK-065 | ts-then-steps-must-assert | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `test/typescript/steps/e2e_api_steps.ts` |
-| TASK-066 | ts-reports-steps-mocked-calls-false-green | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `test/typescript/steps/reports_steps.ts` |
-| TASK-067 | tsconfig-missing-test-bdd | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `tsconfig.json`, `test/bdd/step-registry.ts` |
-| TASK-068 | tsconfig-excludes-app-api | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `tsconfig.json` |
-| TASK-069 | eslint-coverage-gaps | P2 | TODO | `docs/review/REVIEW_DRAFTS.md`, `eslint.config.js`, `cucumber.cjs` |
+
+
+
+
+
 
 ## Active
 
@@ -42,6 +34,11 @@
 
 | task_key | name | completed | summary |
 |----------|------|-----------|---------|
+| TASK-098 | guard-loop-mix-tracked-agentosts | 2026-02-08 | Added availability checks and --skip-tracking flag to loop_mix_tracked.sh for graceful handling when agentosts is unavailable. |
+| TASK-097 | prune-stale-test-bdd-js-registry | 2026-02-08 | Deleted obsolete .js and .bak step registry files; TypeScript version is single source of truth. |
+| TASK-096 | bdd-verify-detect-overlapping-patterns | 2026-02-08 | Added suffix overlap detection to verify-alignment.ts; catches patterns like "A {p}" vs "A {p} B". |
+| TASK-095 | isolate-process-env-in-tests | 2026-02-08 | Created test/fixtures/test-config.ts with constants; replaced process.env reads in BDD step files. |
+| TASK-094 | harden-session-auth-secret-and-expiry | 2026-02-08 | Replaced insecure default secret with getHmacSecret() and added SESSION_MAX_AGE_SECONDS validation. |
 | TASK-043 | scrub-secrets-in-repo-text | 2026-02-06 | Redacted all SendGrid, Google Maps, and Harmony API keys from tracked files; created scan script. |
 | TASK-044 | remove-pii-experimental-fixtures | 2026-02-06 | Removed 5 .zip files from git tracking; changed http:// to https:// in legacy code; added .gitignore patterns. |
 | TASK-048 | restrict-docs-serving | 2026-02-06 | Removed unused /docs static handlers from all app.yaml files to prevent serving internal docs. |
@@ -54,11 +51,45 @@
 | TASK-051 | remove-node-modules-cycle | 2026-02-06 | Removed nested node_modules symlink creation from TypeScript BDD runner. |
 | TASK-057 | eliminate-ds-store-pyc | 2026-02-06 | Removed tracked .pyc files from git; added Python cache patterns to .gitignore. |
 | TASK-064 | ts-step-state-leakage | 2026-02-06 | Fixed TS BDD step state leakage; removed state mutation, added meaningful assertions. |
+| TASK-065 | ts-then-steps-must-assert | 2026-02-06 | Fixed 10 TS Then steps: added assertions to 6 empty steps, converted 4 state-mutating steps to proper assertions. |
 | TASK-053 | reduce-test-fallbacks-typescript | 2026-02-06 | Removed fallback HTML from admin_steps.ts; created common.ts with Before hook for state reset. |
 | TASK-054 | fix-legacy-xss-sinks | 2026-02-06 | Fixed XSS vulnerabilities: replaced .html() with .text() in postFSMessage, added escapeHTMLAttr() helper, escaped onclick handlers. |
 | TASK-055 | fix-db-user-common-import | 2026-02-06 | Fixed broken import in db/user.py: changed `from common import Utils` to `from pyutils.utils import mask`. |
 | TASK-058 | escape-portal-rendering-html | 2026-02-06 | Created app/utils/html.ts with escapeHtml/escapeHtmlAttr; updated portal render.ts files to escape user-controlled values. |
 | TASK-056 | fix-reporting-user-report-imports | 2026-02-06 | Added blobstore and images imports; fixed CLOUD_STORAGE_LOCATION to use constants.CLOUD_STORAGE_LOCATION. |
+| TASK-059 | upload-form-data-missing-auth-and-validation | 2026-02-06 | Added auth check, field whitelist validation, payload size limit, and removed unsafe payload echo. |
+| TASK-060 | signed-upload-key-forgeable-and-leaky | 2026-02-06 | Replaced base64 upload key with HMAC-signed token; added crypto utils and verification endpoint. |
+| TASK-061 | bdd-verify-symlink-cycle | 2026-02-06 | Replaced statSync with lstatSync to prevent symlink cycles, repo escape, and crashes from broken symlinks. |
+| TASK-062 | bdd-verify-support-asterisk-steps | 2026-02-06 | Added asterisk (*) step extraction to verify-alignment.ts; added test fixture with asterisk step and registry entry. |
+| TASK-063 | bdd-verify-placeholder-semantics | 2026-02-06 | Aligned placeholder matching with Cucumber semantics: {string} supports single quotes, {int} and {float} support negative numbers. |
+| TASK-066 | ts-reports-steps-mocked-calls-false-green | 2026-02-06 | Replaced hard-coded success mocks with fixture-backed stubs and meaningful field assertions in TS report steps. |
+| TASK-067 | tsconfig-missing-test-bdd | 2026-02-06 | Added test/bdd/**/*.ts to tsconfig include array so typecheck covers BDD tooling. |
+| TASK-068 | tsconfig-excludes-app-api | 2026-02-07 | Added baseUrl to tsconfig and removed app/api from exclude to expose type errors in API routes. |
+| TASK-069 | eslint-coverage-gaps | 2026-02-07 | Added app/**/*.ts and app/**/*.tsx to ESLint; added .cjs config linting; fixed @typescript-eslint/no-explicit-any error. |
+| TASK-070 | fix-ts-typecheck-next-alias | 2026-02-07 | Replaced Next.js imports with standard Web API types in upload routes to align with Bun runtime. |
+| TASK-071 | fix-ts-bdd-upload-form-auth | 2026-02-07 | Added x-user-email auth header to TypeScript BDD upload form API test step. |
+| TASK-072 | ts-step-state-leakage-followup | 2026-02-07 | Added E2ETestContext property resets to Before hook to prevent cross-scenario state leakage. |
+| TASK-073 | improve-code-self-documentation | 2026-02-07 | Added JSDoc to verify-alignment.ts, upload-form-data helpers, api_steps helpers, uploads_steps World interface, and test_steps file header. |
+| TASK-074 | secure-x-user-email-auth | 2026-02-07 | Added environment-gated authentication with platform/session modes; created auth utilities and BDD tests. |
+| TASK-075 | require-upload-hmac-secret | 2026-02-07 | Added getHmacSecret() function that throws if UPLOAD_HMAC_SECRET not set; updated upload routes to use it. |
+| TASK-076 | enforce-upload-form-body-size | 2026-02-07 | Implemented stream-based body size enforcement to prevent DoS via large payloads; returns HTTP 413 for oversized requests. |
+| TASK-077 | enforce-signed-upload-constraints | 2026-02-07 | No changes needed; constraints already implemented in TASK-047 (content-type whitelist, directory traversal prevention, path normalization). |
+| TASK-079 | reset-authcontext-per-scenario | 2026-02-07 | Added resetAuthContext() function and called it from Before hook to prevent cross-scenario auth state leakage. |
+| TASK-080 | tighten-ts-bdd-step-assertions | 2026-02-07 | Fixed tautological assertions in uploads_steps.ts, added India form verification to form_prerequisites_steps.ts, implemented response body validation in api_steps.ts, added fuzzy matching method assertions in e2e_api_steps.ts. |
+| TASK-081 | bdd-verify-detect-ambiguous-steps | 2026-02-07 | Added ambiguity detection to verify-alignment.ts to detect duplicate step patterns that cause Cucumber/behave runtime errors. |
+| TASK-082 | bdd-verify-regex-state-safety | 2026-02-07 | Added safety documentation to verify-alignment.ts explaining state safety, ReDoS mitigation (trusted inputs), and caching rationale. |
+| TASK-078 | timing-safe-upload-token-verify | 2026-02-07 | Replaced timing-unsafe string comparison with crypto.timingSafeEqual() to prevent timing attack on HMAC signature verification. |
+| TASK-083 | bdd-verify-deterministic-output | 2026-02-07 | Added .sort() to readdirSync() in walk() function to guarantee deterministic file traversal order across filesystems. |
+| TASK-084 | bdd-runner-forward-signals | 2026-02-07 | Added SIGTERM/SIGINT forwarding to both BDD runners with 5-second force kill timeout for graceful shutdown. |
+| TASK-085 | align-ts-module-resolution | 2026-02-07 | Removed .js extension from import in api_steps.ts for consistency with bundler mode; verified moduleResolution is correct for Bun. |
+| TASK-086 | enable-type-aware-tsx-lint | 2026-02-07 | Enabled type-aware linting for TSX files by adding app/**/*.tsx to the TypeScript block with parserOptions.project; removed duplicate TSX files that had corresponding TS versions. |
+| TASK-087 | revisit-skiplibcheck | 2026-02-07 | Verified skipLibCheck is necessary for Bun runtime with @types/node; added documentation comment to tsconfig.json explaining the rationale. |
+| TASK-088 | fix-eslint-type-aware-project | 2026-02-07 | Removed app/api from tsconfig exclude and added test/utils/**/*.ts to include; fixed @ts-ignore to @ts-expect-error. |
+| TASK-089 | ts-bdd-generated-session-token-step | 2026-02-07 | Added Given step for pre-generated session token to align with Python stub and feature file requirements. |
+| TASK-090 | harden-session-token-verification | 2026-02-07 | Replaced timing-unsafe string comparison with crypto.timingSafeEqual() to prevent timing attacks on session tokens. |
+| TASK-091 | prune-stale-bdd-js-scripts | 2026-02-07 | Deleted obsolete .js/.mjs BDD runners; TypeScript versions are single source of truth. |
+| TASK-092 | fix-loop-mix-review-prompt-path | 2026-02-08 | Fixed review prompt path in loop_mix.sh and loop_mix_pretty.sh to use REVIEW_DRAFTS.md. |
+| TASK-093 | purge-stale-app-js-artifacts | 2026-02-08 | Removed 17 stale .js files from app/ directory that had been superseded by .ts equivalents. |
 
 ---
 

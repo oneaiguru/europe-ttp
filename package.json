@@ -16,6 +16,7 @@
     "@cucumber/cucumber": "^11.1.0",
     "@cucumber/pretty-formatter": "^1.0.0",
     "@playwright/test": "^1.58.1",
+    "@types/jspdf": "^2.0.0",
     "@types/node": "^20.17.0",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
     "@typescript-eslint/parser": "^8.23.0",
@@ -28,5 +29,8 @@
   "engines": {
     "node": ">=20.0.0 <21.0.0",
     "bun": ">=1.1.0"
+  },
+  "dependencies": {
+    "jspdf": "^4.1.0"
   }
 }

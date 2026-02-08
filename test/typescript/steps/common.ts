@@ -24,6 +24,9 @@ import { resetEligibilityDashboardState } from './eligibility_dashboard_steps';
 import { prerequisitesContext } from './form_prerequisites_steps';
 import { getIntegrityContext } from './integrity_steps';
 import { resetAdminStepsCache } from './admin_steps';
+import { resetReportsState } from './reports_steps';
+import { resetAuthContext } from './auth_steps';
+import { resetPDFContext } from './deterministic_pdf_steps';
 
 /**
  * Reset all module-level state before each scenario.
@@ -95,4 +98,13 @@ Before(function () {
   integrityCtx.mismatchedEvaluation = undefined;
   integrityCtx.lastReportRun = undefined;
   integrityCtx.response = undefined;
+
+  // Reset reports state
+  resetReportsState();
+
+  // Reset authContext
+  resetAuthContext();
+
+  // Reset PDF context
+  resetPDFContext();
 });

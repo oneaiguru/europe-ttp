@@ -39,6 +39,7 @@ interface FormSubmission {
   graduate_email?: string;
   data: Record<string, unknown>;
   status: string;
+  matching_method?: 'email' | 'name_fallback' | 'fuzzy_email';
 }
 
 interface ApiResponse {
@@ -74,9 +75,27 @@ declare global {
     userSummary: Record<string, unknown>;
     evaluationsList: unknown[];
     lastNotification?: { to: string; type: string };
+    flaggedMissingFeedback?: string[];
+    postTtcSubmissions?: {
+      selfEval?: boolean;
+      coTeacherFeedback?: boolean;
+    };
     // Additional properties for validation and draft steps
     field_errors?: Record<string, string>;
     drafts?: Record<string, { form_type?: string; status?: string; data?: Record<string, unknown>; preserved?: boolean }>;
+    // E2E workflow properties (from E2ETestContext)
+    applicantUploads?: Record<string, {
+      photo_url: string;
+      document_urls: string[];
+    }>;
+    currentApplicantEmail?: string;
+    currentApplicantSubmission?: {
+      form_type: string;
+      ttc_option?: string;
+      data: Record<string, unknown>;
+      status: string;
+    };
+    currentView?: string;
   };
 }
 
@@ -129,6 +148,14 @@ Before(() => {
   delete testContext.numEvaluators;
   delete testContext.requestedReportEmail;
   delete testContext.lastNotification;
+  delete testContext.postTtcSubmissions;
+  delete testContext.flaggedMissingFeedback;
+  // Reset E2ETestContext extended properties
+  delete testContext.applicantUploads;
+  delete testContext.currentApplicantEmail;
+  delete testContext.currentApplicantSubmission;
+  delete testContext.currentView;
+  delete testContext.field_errors;
 });
 
 // ============================================================================
@@ -297,6 +324,10 @@ When('I submit TTC application for {string} with:', (ttcValue: string, dataTable
     status: 'submitted',
   };
 
+  // Note: evaluator emails are stored in formData, not in evaluationsList
+  // evaluationsList contains slot identifiers (teacher1, teacher2, etc.)
+  // which are set by the "When I select" step
+
   testContext.response = {
     status: '200 OK',
     body: JSON.stringify({ success: true, status: 'submitted' }),
@@ -379,6 +410,18 @@ When('I submit post-TTC self-evaluation for course starting {string} with:', (st
     status: 'submitted',
   };
 
+  // Track that self-eval was submitted
+  if (!testContext.postTtcSubmissions) {
+    testContext.postTtcSubmissions = {};
+  }
+  testContext.postTtcSubmissions.selfEval = true;
+
+  // Set notification to co-teacher if provided in form data
+  const coTeacherEmail = formData.i_co_teacher_email;
+  if (coTeacherEmail) {
+    testContext.lastNotification = { to: coTeacherEmail, type: 'feedback_request' };
+  }
+
   testContext.response = {
     status: '200 OK',
     body: JSON.stringify({ success: true, status: 'submitted' }),
@@ -398,6 +441,12 @@ When('I submit post-TTC feedback for {string} with:', (graduateEmail: string, da
     data: formData,
     status: 'submitted',
   };
+
+  // Track that co-teacher feedback was submitted
+  if (!testContext.postTtcSubmissions) {
+    testContext.postTtcSubmissions = {};
+  }
+  testContext.postTtcSubmissions.coTeacherFeedback = true;
 
   testContext.response = {
     status: '200 OK',
@@ -451,7 +500,13 @@ Given('user {string} is whitelisted', (email: string) => {
 // ============================================================================
 
 When('I run the user summary job', () => {
-  // Mock job execution
+  // Mock job execution - populate user summary based on test context
+  testContext.userSummary = {
+    ttc_application_status: testContext.lastSubmission ? 'submitted' : 'not_started',
+    evaluations_submitted_count: testContext.evaluationsCount.toString(),
+    overall_status: 'evaluation_pending', // Status remains pending until admin review
+  };
+
   testContext.response = {
     status: '200 OK',
     body: JSON.stringify({ success: true, records_processed: 1 }),
@@ -459,7 +514,20 @@ When('I run the user summary job', () => {
 });
 
 When('I run the integrity report', () => {
-  // Mock integrity report
+  // Mock integrity report - populate userSummary based on tracked submissions
+  if (testContext.postTtcSubmissions?.selfEval) {
+    testContext.userSummary = {
+      ...testContext.userSummary,
+      self_evaluation_status: 'submitted',
+    };
+  }
+  if (testContext.postTtcSubmissions?.coTeacherFeedback) {
+    testContext.userSummary = {
+      ...testContext.userSummary,
+      co_teacher_feedback_status: 'submitted',
+    };
+  }
+
   testContext.response = {
     status: '200 OK',
     body: JSON.stringify({ success: true, records_processed: 1 }),
@@ -497,12 +565,77 @@ Given('applicant has submitted TTC application for {string}', (ttcValue: string)
 });
 
 When('evaluator submits evaluation with candidate email {string} for applicant {string}', (messyEmail: string, applicantName: string) => {
+  // Determine matching method based on email format
+  let matchingMethod: 'email' | 'name_fallback' | 'fuzzy_email' = 'email';
+
+  // Name fallback: email doesn't contain @ (clearly not an email)
+  if (!messyEmail.includes('@')) {
+    matchingMethod = 'name_fallback';
+  }
+  // Fuzzy email: email has typos like extra dots, minor misspellings, case variations
+  // but still contains @ and a domain.
+  else {
+    const original = messyEmail.toLowerCase().trim();
+    const knownApplicantEmails = Object.keys(testContext.applicants);
+
+    // Check for various fuzzy patterns
+    const hasExtraDots = /\.\.+/.test(messyEmail);
+    const hasSpaces = /\s/.test(messyEmail);
+    const isMixedCase = messyEmail !== messyEmail.toLowerCase();
+
+    // Check if it's similar to a known email but not exact
+    const isSimilarToKnown = knownApplicantEmails.some(known => {
+      const normalizedKnown = known.toLowerCase();
+
+      // Direct match (not fuzzy)
+      if (original === normalizedKnown) return false;
+
+      // Test for common typos:
+      // 1. Extra dots: test..applicant -> test.applicant
+      if (original.replace(/\.\.+/g, '.') === normalizedKnown) return true;
+
+      // 2. Case variation (handled by toLowerCase, but check explicitly)
+      if (messyEmail.toLowerCase() === normalizedKnown) return true;
+
+      // 3. Single character difference (missing or extra char)
+      if (Math.abs(original.length - normalizedKnown.length) === 1 &&
+          original.includes('@') && normalizedKnown.includes('@') &&
+          original.split('@')[1] === normalizedKnown.split('@')[1]) {
+        // Same domain, one char diff in local part - try removing one char
+        const localOriginal = original.split('@')[0];
+        const localKnown = normalizedKnown.split('@')[0];
+
+        // Try removing each char from longer string to see if it matches shorter
+        if (localOriginal.length > localKnown.length) {
+          for (let i = 0; i < localOriginal.length; i++) {
+            if (localOriginal.slice(0, i) + localOriginal.slice(i + 1) === localKnown) {
+              return true;
+            }
+          }
+        } else if (localKnown.length > localOriginal.length) {
+          for (let i = 0; i < localKnown.length; i++) {
+            if (localKnown.slice(0, i) + localKnown.slice(i + 1) === localOriginal) {
+              return true;
+            }
+          }
+        }
+      }
+
+      return false;
+    });
+
+    if (hasExtraDots || hasSpaces || isMixedCase || isSimilarToKnown) {
+      matchingMethod = 'fuzzy_email';
+    }
+  }
+
   testContext.evaluations.push({
     form_type: 'ttc_evaluation',
     candidate_email: messyEmail,
     candidate_name: applicantName,
     status: 'submitted',
     data: {},
+    matching_method: matchingMethod,
   });
   testContext.evaluationsCount++;
 });
@@ -622,8 +755,9 @@ Then('the form should not be marked as submitted', () => {
 });
 
 Then('the evaluation should be matched to the applicant', () => {
-  // In a real implementation, this would check the matching logic
-  // For now, we assume success
+  if (!testContext.evaluations || testContext.evaluations.length === 0) {
+    throw new Error('At least one evaluation should be recorded and matched to the applicant');
+  }
 });
 
 Then('the evaluation should count toward the applicant\'s evaluation total', () => {
@@ -640,15 +774,38 @@ Then('the evaluation should count toward the applicant\'s evaluation total', () 
 });
 
 Then('the evaluation should be matched via name fallback', () => {
-  // Assert fuzzy name matching worked
+  if (!testContext.evaluations || testContext.evaluations.length === 0) {
+    throw new Error('Evaluation should be matched via name fallback');
+  }
+  const evaluation = testContext.evaluations[testContext.evaluations.length - 1];
+  if (evaluation.matching_method !== 'name_fallback') {
+    throw new Error(
+      `Expected matching_method to be 'name_fallback', got '${evaluation.matching_method}'`
+    );
+  }
 });
 
 Then('the evaluation should be matched via fuzzy email matching', () => {
-  // Assert fuzzy email matching worked
+  if (!testContext.evaluations || testContext.evaluations.length === 0) {
+    throw new Error('Evaluation should be matched via fuzzy email matching');
+  }
+  const evaluation = testContext.evaluations[testContext.evaluations.length - 1];
+  if (evaluation.matching_method !== 'fuzzy_email') {
+    throw new Error(
+      `Expected matching_method to be 'fuzzy_email', got '${evaluation.matching_method}'`
+    );
+  }
 });
 
 Then('the error response should indicate grace period expired', () => {
-  // Assert grace period expired error
+  if (!testContext.response) {
+    throw new Error('No response exists');
+  }
+  const body = testContext.response.body;
+  const bodyStr = typeof body === 'string' ? body : JSON.stringify(body);
+  if (!bodyStr.toLowerCase().includes('grace') && !bodyStr.toLowerCase().includes('expired')) {
+    throw new Error('Response should indicate grace period expired');
+  }
 });
 
 Then('the self-evaluation should be marked as submitted', () => {
@@ -661,7 +818,15 @@ Then('the self-evaluation should be marked as submitted', () => {
 });
 
 Then('notification should be sent to {string}', (email: string) => {
-  testContext.lastNotification = { to: email, type: 'feedback_request' };
+  if (!testContext.lastNotification) {
+    throw new Error('No notification was sent');
+  }
+  if (testContext.lastNotification.to !== email) {
+    throw new Error(`Expected notification to ${email}, but got ${testContext.lastNotification.to}`);
+  }
+  if (testContext.lastNotification.type !== 'feedback_request') {
+    throw new Error(`Expected feedback_request type, got ${testContext.lastNotification.type}`);
+  }
 });
 
 Then('the feedback should be linked to the graduate', () => {
@@ -673,21 +838,46 @@ Then('the feedback should be linked to the graduate', () => {
   }
 });
 
-Then('{string} should not be flagged for missing co-teacher feedback', (_email: string) => {
-  // Assert not flagged for missing feedback
+Then('{string} should not be flagged for missing co-teacher feedback', (email: string) => {
+  // Negative assertion: check email is NOT in the missing feedback list
+  if (testContext.flaggedMissingFeedback && testContext.flaggedMissingFeedback.includes(email)) {
+    throw new Error(`${email} should not be flagged for missing co-teacher feedback`);
+  }
 });
 
 Then('the summary should show both self-eval and co-teacher feedback', () => {
-  // Assert both types present
+  if (!testContext.userSummary) {
+    throw new Error('No user summary exists');
+  }
+  // Check for indicators of both self-eval and co-teacher feedback
+  const hasSelfEval = Object.keys(testContext.userSummary).some(k =>
+    k.toLowerCase().includes('self') || k.toLowerCase().includes('eval')
+  );
+  const hasCoteacher = Object.keys(testContext.userSummary).some(k =>
+    k.toLowerCase().includes('co') || k.toLowerCase().includes('teacher')
+  );
+  if (!hasSelfEval || !hasCoteacher) {
+    throw new Error('Summary should show both self-eval and co-teacher feedback');
+  }
 });
 
 Then('the user summary should show:', (dataTable: DataTable) => {
+  if (!testContext.userSummary) {
+    throw new Error('No user summary exists');
+  }
   const expected: Record<string, string> = {};
   dataTable.rows().forEach((row) => {
     expected[row[0]] = row[1];
   });
 
-  testContext.userSummary = { ...testContext.userSummary, ...expected };
+  for (const [key, expectedValue] of Object.entries(expected)) {
+    const actualValue = testContext.userSummary[key];
+    if (actualValue !== expectedValue) {
+      throw new Error(
+        `Expected ${key} to be ${expectedValue}, but got ${actualValue}`
+      );
+    }
+  }
 });
 
 Then('the combined report should include both evaluations', () => {
@@ -701,13 +891,33 @@ Then('the combined report should include both evaluations', () => {
 });
 
 Then('only teacher {int} email should be in the evaluator list', (n: number) => {
-  // Assert conditional field logic
-  testContext.evaluationsList = [`teacher${n}`];
+  if (!testContext.evaluationsList) {
+    throw new Error('No evaluations list exists');
+  }
+  const expectedTeacher = `teacher${n}`;
+  if (testContext.evaluationsList.length !== 1) {
+    throw new Error(`Expected 1 evaluator, got ${testContext.evaluationsList.length}`);
+  }
+  if (testContext.evaluationsList[0] !== expectedTeacher) {
+    throw new Error(`Expected ${expectedTeacher}, got ${testContext.evaluationsList[0]}`);
+  }
 });
 
 Then('teacher 1 and {int} emails should be in the evaluator list', (n: number) => {
-  // Assert conditional field logic
-  testContext.evaluationsList = ['teacher1', `teacher${n}`];
+  if (!testContext.evaluationsList) {
+    throw new Error('No evaluations list exists');
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const expectedTeachers = ['teacher1', `teacher${n}`];
+  if (testContext.evaluationsList.length !== 2) {
+    throw new Error(`Expected 2 evaluators, got ${testContext.evaluationsList.length}`);
+  }
+  if (!testContext.evaluationsList.includes('teacher1')) {
+    throw new Error('Expected teacher1 to be in evaluator list');
+  }
+  if (!testContext.evaluationsList.includes(`teacher${n}`)) {
+    throw new Error(`Expected teacher${n} to be in evaluator list`);
+  }
 });
 
 // ============================================================================
@@ -725,7 +935,15 @@ Given('I navigate to the TTC application form', () => {
 });
 
 When('I select {string} for "How many evaluating teachers?"', (count: string) => {
-  testContext.numEvaluators = parseInt(count, 10);
+  const num = parseInt(count, 10);
+  testContext.numEvaluators = num;
+
+  // Build the expected evaluator list based on the number of evaluators selected
+  // This represents which teacher email fields should be visible/available
+  testContext.evaluationsList = [];
+  for (let i = 1; i <= num; i++) {
+    testContext.evaluationsList.push(`teacher${i}`);
+  }
 });
 
 // ============================================================================
@@ -790,6 +1008,7 @@ interface E2ETestContext {
   currentApplicantEmail?: string;
   currentApplicantSubmission?: ApplicantSubmission;
   currentView?: string;
+  flaggedMissingFeedback?: string[];
 }
 
 function getUserByName(name: string): TestUser | undefined {

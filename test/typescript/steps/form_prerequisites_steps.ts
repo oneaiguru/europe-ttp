@@ -55,14 +55,19 @@ function initPrerequisitesContext(): void {
 }
 
 /**
- * Update the list of available forms based on course completions
+ * Update the list of available forms based on course completions and home country
  */
 function updateAvailableForms(): void {
   const completions = prerequisitesContext.course_completions;
+  const homeCountry = prerequisitesContext.home_country;
   const forms: string[] = [];
 
-  // Base form always available
-  forms.push('ttc_application_us');
+  // Base form - depends on home country
+  if (homeCountry === 'IN') {
+    forms.push('ttc_application_in');
+  } else {
+    forms.push('ttc_application_us');
+  }
 
   // DSN requires Happiness Program
   if (completions.happiness_program) {
@@ -237,10 +242,8 @@ Then('the Part 2 course application should become available', function () {
 When('my home country is {string}', function (country: string) {
   initPrerequisitesContext();
   prerequisitesContext.home_country = country;
-  // Ensure available forms is initialized
-  if (!prerequisitesContext.available_forms || prerequisitesContext.available_forms.length === 0) {
-    updateAvailableForms();
-  }
+  // Always update available forms when home country changes
+  updateAvailableForms();
 });
 
 // Step: US-specific TTC options should be available
@@ -274,6 +277,7 @@ Then('India-specific TTC options should NOT be available', function () {
 When('I update my home country to {string}', function (country: string) {
   initPrerequisitesContext();
   prerequisitesContext.home_country = country;
+  updateAvailableForms();
 });
 
 // Step: India-specific TTC options should become available
@@ -281,8 +285,13 @@ Then('India-specific TTC options should become available', function () {
   if (prerequisitesContext.home_country !== 'IN') {
     throw new Error('Home country should be IN');
   }
-  // For this test, we just verify the country is set correctly
-  // In a real implementation, this would check country-specific forms
+  // Verify that India-specific form is in the available forms list
+  const forms = prerequisitesContext.available_forms || [];
+  if (!forms.includes('ttc_application_in')) {
+    throw new Error(
+      `India-specific TTC options should be available, got: ${JSON.stringify(forms)}`
+    );
+  }
 });
 
 // Export context and functions for use by other step files (e.g., eligibility_dashboard_steps)
