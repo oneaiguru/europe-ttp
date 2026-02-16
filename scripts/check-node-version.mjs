@@ -4,6 +4,9 @@
  * Exits with error if Node version is not exactly 20.20.0
  */
 
+import { fileURLToPath, pathToFileURL } from 'url';
+import { realpathSync } from 'fs';
+
 const REQUIRED_VERSION = '20.20.0';
 const REQUIRED_MAJOR = 20;
 const REQUIRED_MINOR = 20;
@@ -37,5 +40,28 @@ export function checkNodeVersion() {
   console.log(`[check-node-version] OK: Node.js ${current}`);
 }
 
-// Run check when executed directly
-checkNodeVersion();
+// Run check only when executed directly (not when imported as a module)
+// Uses realpathSync to resolve symlinks for accurate comparison
+if (process.argv[1]) {
+  try {
+    const scriptRealPath = realpathSync(fileURLToPath(import.meta.url));
+    const entryRealPath = realpathSync(process.argv[1]);
+    if (scriptRealPath === entryRealPath) {
+      checkNodeVersion();
+    }
+  } catch {
+    // Fallback for edge cases (e.g., path doesn't exist)
+    // Use URL comparison as secondary check
+    try {
+      const entryUrl = pathToFileURL(process.argv[1]).href;
+      if (import.meta.url === entryUrl) {
+        checkNodeVersion();
+      }
+    } catch {
+      // Last resort: simple string comparison
+      if (import.meta.url === `file://${process.argv[1]}`) {
+        checkNodeVersion();
+      }
+    }
+  }
+}
