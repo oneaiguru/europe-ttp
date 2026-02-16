@@ -238,7 +238,8 @@ export async function POST(request: Request): Promise<Response> {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
     // If the package is not found, provide a helpful error
-    if (errorMessage.includes('Cannot find module') || errorMessage.includes('Cannot resolve package')) {
+    // Note: ESM can report "Cannot find package" vs CommonJS "Cannot find module"
+    if (errorMessage.includes('Cannot find module') || errorMessage.includes('Cannot resolve package') || errorMessage.includes('Cannot find package')) {
       const production = isProductionMode();
       return Response.json(
         {

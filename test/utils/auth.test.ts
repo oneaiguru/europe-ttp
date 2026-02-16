@@ -949,5 +949,74 @@ describe('auth utilities', () => {
 
       restoreEnv();
     });
+
+    it('detects IAP_JWT_PUBLIC_KEY env change and reloads key', async () => {
+      // This test verifies the fix for P2-PR97-IAP-KEY-PROMISE
+      // When the env var changes while a promise is cached, the function
+      // should detect the change and create a new promise instead of returning
+      // the old cached promise.
+
+      const restoreEnv = setStrictPlatformEnv();
+      const assertion1 = await createTestIapJwt(testEmail);
+
+      // First authentication with initial key
+      const request1 = createMockRequest({
+        'x-user-email': testEmail,
+        'x-goog-iap-jwt-assertion': assertion1,
+      });
+
+      const user1 = await getAuthenticatedUser(request1);
+      expect(user1).toBe(testEmail);
+
+      // Simulate key rotation by changing to an INVALID key
+      // This should cause authentication to fail since the JWT was signed with the old key
+      process.env.IAP_JWT_PUBLIC_KEY = 'invalid-public-key-for-testing';
+
+      const request2 = createMockRequest({
+        'x-user-email': testEmail,
+        'x-goog-iap-jwt-assertion': assertion1, // Still signed with old key
+      });
+
+      // Should fail because env changed and new key is invalid
+      const user2 = await getAuthenticatedUser(request2);
+      expect(user2).toBeNull();
+
+      restoreEnv();
+    });
+
+    it('handles key rotation to a new valid key', async () => {
+      // This test verifies key rotation works correctly when rotating to a new valid key.
+      // We use the same key but simulate rotation by ensuring the cache is invalidated.
+
+      const restoreEnv = setStrictPlatformEnv();
+
+      // First request with initial key
+      const assertion1 = await createTestIapJwt(testEmail);
+      const request1 = createMockRequest({
+        'x-user-email': testEmail,
+        'x-goog-iap-jwt-assertion': assertion1,
+      });
+
+      const user1 = await getAuthenticatedUser(request1);
+      expect(user1).toBe(testEmail);
+
+      // "Rotate" the key by re-setting it (in real scenario, this would be a different key)
+      // The important thing is that the env var is accessed fresh each time
+      const originalKey = process.env.IAP_JWT_PUBLIC_KEY;
+      delete process.env.IAP_JWT_PUBLIC_KEY;
+      process.env.IAP_JWT_PUBLIC_KEY = originalKey;
+
+      // Second request should still work with the "rotated" key
+      const assertion2 = await createTestIapJwt(testEmail);
+      const request2 = createMockRequest({
+        'x-user-email': testEmail,
+        'x-goog-iap-jwt-assertion': assertion2,
+      });
+
+      const user2 = await getAuthenticatedUser(request2);
+      expect(user2).toBe(testEmail);
+
+      restoreEnv();
+    });
   });
 });

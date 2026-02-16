@@ -31,6 +31,7 @@ export const CLOCK_SKEW_TOLERANCE = 300;
 let cachedIapPublicKey: KeyLike | null = null;
 let cachedIapPublicKeyPem: string | null = null;
 let iapPublicKeyPromise: Promise<KeyLike | null> | null = null;
+let iapPublicKeyPromisePem: string | null = null;
 
 function isValidEmail(email: string): boolean {
   return EMAIL_REGEX.test(email);
@@ -46,12 +47,15 @@ async function getIapPublicKey(): Promise<KeyLike | null> {
     return cachedIapPublicKey;
   }
 
-  // If already fetching, return the existing promise to deduplicate concurrent calls
-  if (iapPublicKeyPromise) {
+  // If already fetching for the same PEM, return the existing promise to deduplicate concurrent calls
+  // If PEM changed, discard old promise and start fresh
+  if (iapPublicKeyPromise && iapPublicKeyPromisePem === publicKey) {
     return iapPublicKeyPromise;
   }
 
   // Create and store the promise for concurrent callers to share
+  // Store the PEM associated with this promise for env change detection
+  iapPublicKeyPromisePem = publicKey;
   iapPublicKeyPromise = (async () => {
     try {
       const imported = await importSPKI(publicKey, 'RS256');
@@ -61,6 +65,7 @@ async function getIapPublicKey(): Promise<KeyLike | null> {
     } catch {
       // Reset promise on failure to allow retry on next call
       iapPublicKeyPromise = null;
+      iapPublicKeyPromisePem = null;
       return null;
     }
   })();
