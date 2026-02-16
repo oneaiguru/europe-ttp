@@ -13,8 +13,13 @@ checkNodeVersion();
 import { spawn } from 'child_process';
 import { mkdir, readdir } from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const PROJECT_ROOT = path.resolve();
+// Resolve PROJECT_ROOT from script location, not caller's CWD
+// Fixes P2-PR97: path.resolve() uses CWD which fails when run from CI with absolute path
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const SPEC_FEATURES = path.join(PROJECT_ROOT, 'specs/features');
 const OUTPUT_DIR = path.join(PROJECT_ROOT, 'test/reports');
 const STEPS_ROOT = path.join(PROJECT_ROOT, 'test/typescript/steps');
