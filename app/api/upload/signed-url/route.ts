@@ -134,6 +134,11 @@ export async function POST(request: Request): Promise<Response> {
 
   // 3. Security: Validate filepath to prevent directory traversal attacks
   if (filepath) {
+    // Security: Validate filepath is a string before calling string methods
+    // Prevents TypeError if client sends non-string (e.g., { "filepath": 123 })
+    if (typeof filepath !== 'string') {
+      return Response.json({ error: 'Invalid filepath type' }, { status: 400 });
+    }
     // Reject directory traversal attempts
     if (filepath.includes('..') || filepath.startsWith('/')) {
       return Response.json({ error: 'Invalid filepath' }, { status: 400 });
