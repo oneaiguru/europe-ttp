@@ -117,7 +117,12 @@ export async function POST(request: Request): Promise<Response> {
   let body: SignedUrlRequest;
   try {
     const bodyText = await readBodyWithLimit(request, MAX_BODY_SIZE);
-    body = JSON.parse(bodyText) as SignedUrlRequest;
+    const parsed = JSON.parse(bodyText);
+    // Security: Ensure parsed body is a non-null object (not "null", primitives, etc.)
+    if (typeof parsed !== 'object' || parsed === null) {
+      return Response.json({ error: 'Invalid request body' }, { status: 400 });
+    }
+    body = parsed as SignedUrlRequest;
   } catch (e) {
     if (isPayloadTooLargeError(e)) {
       return Response.json({ error: 'Payload too large' }, { status: 413 });

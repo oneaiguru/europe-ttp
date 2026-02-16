@@ -57,7 +57,11 @@ export async function POST(request: Request): Promise<Response> {
   let body: VerifyRequest;
   try {
     const bodyText = await readBodyWithLimit(request, MAX_BODY_SIZE);
-    body = JSON.parse(bodyText) as VerifyRequest;
+    const parsed = JSON.parse(bodyText);
+    if (typeof parsed !== 'object' || parsed === null) {
+      return Response.json({ error: 'Invalid request body' }, { status: 400 });
+    }
+    body = parsed as VerifyRequest;
   } catch (e) {
     if (isPayloadTooLargeError(e)) {
       return Response.json({ error: 'Payload too large' }, { status: 413 });

@@ -74,7 +74,17 @@ function normalizeFeatureSubpath(input?: string): string {
   return subpath;
 }
 
+import { existsSync } from 'fs';
+
 const featureSubpath = normalizeFeatureSubpath(process.argv[2]);
+
+// Check if Python test directory exists (may not be included in TypeScript-only PRs)
+if (!existsSync(PYTHON_DIR)) {
+  console.log('[run-python] Python tests not available (test/python directory not found)');
+  console.log('[run-python] This is expected in TypeScript-only deployments');
+  console.log('[run-python] Skipping Python BDD tests...');
+  process.exit(0);
+}
 
 await mkdir(OUTPUT_DIR, { recursive: true }).catch(() => {});
 
