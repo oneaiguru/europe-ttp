@@ -1,0 +1,5 @@
+{
+  "status": 200,
+  "content_type": "text/html",
+  "body": "<!DOCTYPE html><html><head><title>Combined Application Report</title></head><body><div class=\"combined-report\"><h1>Combined Application Data</h1><div class=\"forms\"><h2>Form 1: TTC Application</h2><p>Status: Submitted</p></div><div class=\"forms\"><h2>Form 2: Course Completion</h2><p>Status: Completed</p></div></div></body></html>"
+}

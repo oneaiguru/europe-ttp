@@ -1,0 +1,28 @@
+{
+	"test_mode": {
+		"enabled": true,
+		"description": "Configuration for BDD test mode",
+		"bypass_deadline_checks": true,
+		"bypass_email_sending": true,
+		"use_local_fixtures": true
+	},
+	"deadline_whitelist": {
+		"enabled": true,
+		"grace_period_days": 7,
+		"whitelisted_emails": []
+	},
+	"test_ttc_options": {
+		"default_us_option": "test_us_future",
+		"default_ca_option": "test_ca_future",
+		"expired_option": "test_expired"
+	},
+	"api_endpoints": {
+		"upload_form_data": "/users/upload-form-data",
+		"get_form_data": "/users/get-form-data",
+		"get_form_instances": "/users/get-form-instances",
+		"admin_set_config": "/admin/set-config",
+		"admin_get_config": "/admin/get-config",
+		"user_summary_load": "/jobs/reporting/user-summary/load",
+		"user_integrity_load": "/jobs/reporting/user-integrity/load"
+	}
+}

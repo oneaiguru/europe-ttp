@@ -1,0 +1,14 @@
+{
+  "status": 200,
+  "data": [
+    {
+      "email": "test.applicant@example.com",
+      "name": "Test Applicant",
+      "ttc_option": "test_us_future",
+      "enrollment_count": 10,
+      "enrollment_list_count": 8,
+      "application_status": "submitted",
+      "last_update": "2024-01-15 10:30:00"
+    }
+  ]
+}

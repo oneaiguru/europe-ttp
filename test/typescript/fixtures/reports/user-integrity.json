@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "data": {
+    "test.applicant@example.com": {
+      "user_email": "test.applicant@example.com",
+      "flags": ["missing_photo"],
+      "missing_uploads": ["photo"],
+      "incomplete_forms": []
+    }
+  }
+}

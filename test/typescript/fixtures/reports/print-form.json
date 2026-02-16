@@ -1,0 +1,5 @@
+{
+  "status": 200,
+  "content_type": "text/html",
+  "body": "<!DOCTYPE html><html><head><title>Print Form</title></head><body><div class=\"printable-form\"><h1>TTC Application Form</h1><div class=\"form-section\"><label>First Name:</label><span>Test</span></div><div class=\"form-section\"><label>Last Name:</label><span>Applicant</span></div><div class=\"form-section\"><label>Email:</label><span>test.applicant@example.com</span></div></div></body></html>"
+}

@@ -1,0 +1,61 @@
+{
+  "name": "europe-ttp-migration",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Europe TTP Migration: Python 2.7 App Engine → Node.js 20 + Next.js 16",
+  "scripts": {
+    "precheck": "node scripts/check-node-version.mjs",
+    "predev": "node scripts/check-node-version.mjs",
+    "prebuild": "node scripts/check-node-version.mjs",
+    "prestart": "node scripts/check-node-version.mjs",
+    "pretypecheck": "node scripts/check-node-version.mjs",
+    "prelint": "node scripts/check-node-version.mjs",
+    "prebdd:verify": "node scripts/check-node-version.mjs",
+    "prebdd:python": "node scripts/check-node-version.mjs",
+    "prebdd:typescript": "node scripts/check-node-version.mjs",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "bdd:verify": "node --import tsx scripts/bdd/verify-alignment.ts",
+    "bdd:python": "node --import tsx scripts/bdd/run-python.ts",
+    "bdd:typescript": "node --import tsx scripts/bdd/run-typescript.ts",
+    "bdd:all": "npm run bdd:verify && npm run bdd:python && npm run bdd:typescript",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "verify:infra": "node scripts/verify-infra.mjs",
+    "ui:snapshot:new": "node --import tsx scripts/ui/capture-new-ui-snapshots.ts",
+    "ui:parity": "playwright test test/playwright/ui_parity.spec.ts",
+    "test:redirect": "playwright test test/playwright/redirect-sanitization.spec.ts",
+    "test:unit": "node --import tsx --test test/bdd/*.test.ts",
+    "test": "npm run bdd:all"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.1.0",
+    "@cucumber/pretty-formatter": "^1.0.0",
+    "@playwright/test": "^1.58.1",
+    "@types/jspdf": "^2.0.0",
+    "@types/node": "^20.17.0",
+    "@types/react": "19.2.13",
+    "@typescript-eslint/eslint-plugin": "^8.23.0",
+    "@typescript-eslint/parser": "^8.23.0",
+    "eslint": "^9.17.0",
+    "playwright": "^1.58.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": "20.20.0"
+  },
+  "packageManager": "npm@10.9.0",
+  "dependencies": {
+    "jose": "^5.10.0",
+    "jspdf": "^4.1.0",
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "optionalDependencies": {
+    "@google-cloud/storage": "^7.0.0"
+  }
+}
