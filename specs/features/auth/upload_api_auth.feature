@@ -114,8 +114,8 @@ Feature: Upload API Authentication
       | production  | null            |
       | development | test@example.com |
       | test        | test@example.com |
-      | staging     | test@example.com |
-      | unset       | test@example.com |
+      | staging     | null            |
+      | unset       | null            |
 
   Scenario Outline: Platform mode behavior across NODE_ENV values with strict enabled
     Given I am in platform auth mode with NODE_ENV "<node_env>"
@@ -183,9 +183,9 @@ Feature: Upload API Authentication
     When I call getAuthenticatedUser with x-user-email header "test@example.com" without IAP JWT assertion
     Then the response should require IAP verification
 
-  Scenario: Unset NODE_ENV without strict mode allows header
+  Scenario: Unset NODE_ENV without strict mode fails closed
     Given I am in platform auth mode with NODE_ENV "unset"
     And AUTH_MODE_PLATFORM_STRICT is "unset"
     And I have a valid user email "test@example.com"
     When I call getAuthenticatedUser with x-user-email header "test@example.com"
-    Then the response should be the user "test@example.com"
+    Then the response should be null
