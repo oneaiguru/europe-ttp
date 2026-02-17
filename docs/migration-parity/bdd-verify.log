@@ -1,0 +1,17 @@
+
+> europe-ttp-migration@0.1.0 prebdd:verify
+> node scripts/check-node-version.mjs
+
+[check-node-version] OK: Node.js v20.20.0
+
+> europe-ttp-migration@0.1.0 bdd:verify
+> node --import tsx scripts/bdd/verify-alignment.ts
+
+✓ 375 steps defined, 0 orphan, 0 dead, 0 ambiguous, 0 overlapping
+TypeScript-only steps (platform-specific): 6
+  - I am using the upload-form-data endpoint
+  - I submit a form with payload size {int} bytes
+  - the submission should succeed
+  - I should receive a 413 error
+  - the error should mention size limit
+  - I submit a multipart/form-data payload claiming {int} bytes but actually {int} bytes
