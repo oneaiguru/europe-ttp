@@ -219,7 +219,8 @@ async function runParityTest(
     };
 
     if (assert) {
-      test.skip(true, `Snapshot not available: ${mapping.legacy_id} -> ${mapping.new_id}`);
+      // Fail the test, don't skip - missing snapshots indicate a real problem
+      expect(false, `Snapshot not available: ${mapping.legacy_id} -> ${mapping.new_id}`).toBe(true);
     }
 
     return result;
@@ -243,7 +244,8 @@ async function runParityTest(
     };
 
     if (assert) {
-      test.skip(true, `Entry excluded from parity check: ${mapping.legacy_id}`);
+      // Fail the test, don't skip - excluded entries in mapping indicate a configuration problem
+      expect(false, `Entry excluded from parity check: ${mapping.legacy_id} -> ${mapping.new_id}`).toBe(true);
     }
 
     return result;
@@ -273,7 +275,8 @@ async function runParityTest(
     };
 
     if (assert) {
-      test.skip(true, `Snapshot path not defined for: ${mapping.legacy_id} -> ${mapping.new_id}`);
+      // Fail the test, don't skip - missing snapshot paths indicate a configuration problem
+      expect(false, `Snapshot path not defined for: ${mapping.legacy_id} -> ${mapping.new_id}`).toBe(true);
     }
 
     return result;
