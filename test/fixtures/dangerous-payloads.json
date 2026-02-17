@@ -1,0 +1,41 @@
+{
+  "description": "Dangerous XSS payloads for testing HTML escaping",
+  "payloads": [
+    {
+      "name": "script_tag",
+      "input": "<script>alert('xss')</script>",
+      "should_not_contain": ["<script>", "</script>"],
+      "should_contain": ["&lt;script&gt;", "&lt;/script&gt;"]
+    },
+    {
+      "name": "img_onerror",
+      "input": "<img src=x onerror=\"alert('xss')\">",
+      "should_not_contain": ["<img"],
+      "should_contain": ["&lt;img"]
+    },
+    {
+      "name": "div_onclick",
+      "input": "<div onclick=\"alert('xss')\">click</div>",
+      "should_not_contain": ["<div onclick=", "click</div>"],
+      "should_contain": ["&lt;div", "&lt;/div&gt;"]
+    },
+    {
+      "name": "svg_onload",
+      "input": "<svg onload=alert('xss')>",
+      "should_not_contain": ["<svg onload="],
+      "should_contain": "&lt;"
+    },
+    {
+      "name": "angle_brackets_only",
+      "input": "<>test",
+      "should_not_contain": "<>",
+      "should_contain": "&lt;&gt;"
+    },
+    {
+      "name": "ampersand",
+      "input": "test & malicious",
+      "should_not_contain": " & ",
+      "should_contain": "&amp;"
+    }
+  ]
+}

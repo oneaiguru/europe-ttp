@@ -1,0 +1,69 @@
+{
+	"users": [
+		{
+			"email": "test.applicant@example.com",
+			"role": "applicant",
+			"home_country": "US",
+			"name": "Test Applicant",
+			"password": "test_password_123"
+		},
+		{
+			"email": "test.applicant.ca@example.com",
+			"role": "applicant",
+			"home_country": "CA",
+			"name": "Test Applicant Canada",
+			"password": "test_password_123"
+		},
+		{
+			"email": "test.applicant.in@example.com",
+			"role": "applicant",
+			"home_country": "IN",
+			"name": "Test Applicant India",
+			"password": "test_password_123"
+		},
+		{
+			"email": "test.evaluator1@example.com",
+			"role": "evaluator",
+			"home_country": "US",
+			"name": "Test Evaluator One",
+			"password": "test_password_123"
+		},
+		{
+			"email": "test.evaluator2@example.com",
+			"role": "evaluator",
+			"home_country": "US",
+			"name": "Test Evaluator Two",
+			"password": "test_password_123"
+		},
+		{
+			"email": "test.evaluator3@example.com",
+			"role": "evaluator",
+			"home_country": "CA",
+			"name": "Test Evaluator Three",
+			"password": "test_password_123"
+		},
+		{
+			"email": "test.admin@example.com",
+			"role": "admin",
+			"home_country": "US",
+			"name": "Test Admin",
+			"password": "test_password_123"
+		},
+		{
+			"email": "test.graduate@example.com",
+			"role": "graduate",
+			"home_country": "US",
+			"name": "Test Graduate",
+			"password": "test_password_123",
+			"completed_ttc": "test_us_future",
+			"graduation_date": "2027-06-15"
+		},
+		{
+			"email": "test.coteacher@example.com",
+			"role": "coteacher",
+			"home_country": "US",
+			"name": "Test Co-Teacher",
+			"password": "test_password_123"
+		}
+	]
+}

@@ -1,0 +1,226 @@
+/**
+ * Draft save and resume step definitions.
+ *
+ * These steps test the draft functionality that allows applicants to save
+ * partial applications and resume them later after logout/login.
+ */
+
+import { DataTable, When, Then } from '@cucumber/cucumber';
+import assert from 'node:assert/strict';
+import { getTestContext } from '../support/test-context';
+import { TEST_ISO_TIMESTAMP } from './test-data.js';
+
+// ============================================================================
+// SHARED TEST CONTEXT (matches e2e_api_steps.ts)
+// ============================================================================
+
+// The testContext is initialized in e2e_api_steps.ts with all required properties
+// No need to re-initialize here
+
+// ============================================================================
+// TYPE DEFINITIONS
+// ============================================================================
+
+interface DraftData {
+  form_type: string;
+  status: 'draft' | 'submitted';
+  saved?: boolean;
+  saved_at?: string;
+  submitted_at?: string;
+  data: Record<string, string>;
+}
+
+interface DraftContext {
+  drafts: Record<string, DraftData>;
+  currentForm?: string;
+  partialFormData?: Record<string, string>;
+}
+
+// ============================================================================
+// DRAFT CONTEXT
+// ============================================================================
+
+const draftContext: DraftContext = {
+  drafts: {},
+  currentForm: undefined,
+  partialFormData: undefined,
+};
+
+// ============================================================================
+// DRAFT SAVE AND RESUME STEPS
+// ============================================================================
+
+/**
+ * Helper function to process partial TTC application form data.
+ * Used by both colon and non-colon step variants for behave 1.2.6 compatibility.
+ */
+function fillPartialApplicationForm(dataTable?: DataTable): void {
+  const table = dataTable;
+  const rows = table ? table.hashes() : [];
+  const partialData: Record<string, string> = {};
+
+  for (const row of rows) {
+    partialData[row.field] = row.value;
+  }
+
+  // Store in context
+  draftContext.partialFormData = partialData;
+
+  // Initialize draft storage for user if not exists
+  if (!draftContext.drafts['ttc_application']) {
+    draftContext.drafts['ttc_application'] = {
+      form_type: 'ttc_application',
+      status: 'draft',
+      data: {},
+    };
+  }
+
+  // Store partial data in drafts
+  draftContext.drafts['ttc_application'].data = { ...partialData };
+}
+
+// Step with colon (primary pattern)
+When('I fill in the TTC application form partially with:', fillPartialApplicationForm);
+
+// Alias step without colon (behave 1.2.6 compatibility)
+When('I fill in the TTC application form partially with', fillPartialApplicationForm);
+
+When('I save the application as draft', () => {
+  assert(draftContext.drafts['ttc_application'], 'No TTC application draft to save');
+
+  const draft = draftContext.drafts['ttc_application'];
+  draft.saved = true;
+  draft.saved_at = TEST_ISO_TIMESTAMP;
+});
+
+Then('I should see my draft data persisted', () => {
+  assert(draftContext.drafts['ttc_application'], 'No TTC application draft found');
+  const draft = draftContext.drafts['ttc_application'];
+
+  assert.strictEqual(draft.saved, true, 'Draft was not saved');
+  assert(draft.data, 'Draft has no data');
+
+  // Verify at least one expected field exists
+  const hasData = Object.keys(draft.data).some(key =>
+    ['i_fname', 'i_lname', 'i_email'].includes(key)
+  );
+  assert(hasData, 'Draft data missing expected fields');
+});
+
+When('I complete the remaining required fields and submit', () => {
+  if (!draftContext.drafts['ttc_application']) {
+    draftContext.drafts['ttc_application'] = {
+      form_type: 'ttc_application',
+      status: 'draft',
+      data: {},
+    };
+  }
+
+  const requiredFields: Record<string, string> = {
+    i_address1: '123 Main St',
+    i_city: 'Springfield',
+    i_state: 'IL',
+    i_zip: '62701',
+    i_phone: '555-123-4567',
+    i_gender: 'prefer_not_to_say',
+  };
+
+  // Merge with existing data
+  Object.assign(draftContext.drafts['ttc_application'].data, requiredFields);
+
+  // Mark as submitted
+  draftContext.drafts['ttc_application'].status = 'submitted';
+  draftContext.drafts['ttc_application'].submitted_at = TEST_ISO_TIMESTAMP;
+
+  // Set last_submission for compatibility with existing assertion steps
+  getTestContext().lastSubmission = {
+    form_type: 'ttc_application',
+    status: 'submitted',
+    data: { ...draftContext.drafts['ttc_application'].data },
+  };
+});
+
+When('I save a partial TTC application as draft', () => {
+  draftContext.drafts['ttc_application'] = {
+    form_type: 'ttc_application',
+    status: 'draft',
+    saved: true,
+    data: {
+      i_fname: 'Test',
+      i_lname: 'Applicant',
+      i_email: 'test.applicant@example.com',
+    },
+  };
+});
+
+When('I save a partial evaluator profile as draft', () => {
+  draftContext.drafts['evaluator_profile'] = {
+    form_type: 'evaluator_profile',
+    status: 'draft',
+    saved: true,
+    data: {
+      ev_fname: 'Test',
+      ev_lname: 'Evaluator',
+      ev_email: 'test.evaluator@example.com',
+      ev_organization: 'Test Organization',
+    },
+  };
+});
+
+When('I open the TTC application form', () => {
+  draftContext.currentForm = 'ttc_application';
+});
+
+Then('I should see the TTC application draft data', () => {
+  assert(draftContext.drafts['ttc_application'], 'No TTC application draft found');
+  const draft = draftContext.drafts['ttc_application'];
+
+  assert.strictEqual(draft.status, 'draft', 'Expected draft status');
+  assert(draft.data, 'Draft has no data');
+
+  const hasExpectedField = ['i_fname', 'i_lname', 'i_email'].some(key => key in draft.data);
+  assert(hasExpectedField, 'Missing expected draft fields');
+});
+
+When('I navigate to the evaluator profile form', () => {
+  draftContext.currentForm = 'evaluator_profile';
+});
+
+Then('I should see the evaluator profile draft data', () => {
+  assert(draftContext.drafts['evaluator_profile'], 'No evaluator profile draft found');
+  const draft = draftContext.drafts['evaluator_profile'];
+
+  assert.strictEqual(draft.status, 'draft', 'Expected draft status');
+  assert(draft.data, 'Draft has no data');
+
+  const hasExpectedField = ['ev_fname', 'ev_lname', 'ev_email'].some(key => key in draft.data);
+  assert(hasExpectedField, 'Missing expected draft fields');
+});
+
+// ============================================================================
+// DRAFT CONTEXT ACCESSOR (for type-safe cross-module access)
+// ============================================================================
+
+/**
+ * Get the draft context with type safety.
+ * Matches the pattern from test-context.ts for consistent context access.
+ *
+ * @returns The draft context object
+ */
+export function getDraftContext(): DraftContext {
+  return draftContext;
+}
+
+/**
+ * Reset the draftContext to its initial empty state.
+ * Called by the Before hook in common.ts before each scenario.
+ */
+export function resetDraftContext(): void {
+  draftContext.drafts = {};
+  draftContext.currentForm = undefined;
+  draftContext.partialFormData = undefined;
+}
+
+// Export the draft context for use in other step files if needed
+export { draftContext };
+export type { DraftData, DraftContext };

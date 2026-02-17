@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirect Sanitization Test Harness</title>
+</head>
+<body>
+  <!--
+    Test harness for redirect sanitization Playwright tests.
+
+    This file loads the actual runtime javascript/utils.js and exposes
+    the sanitizeRedirectUrl function for testing.
+
+    IMPORTANT: This must be served via http://example.com for same-origin
+    tests to work correctly. Use Playwright's route mocking to set hostname.
+  -->
+  <script src="../../../javascript/utils.js"></script>
+  <script>
+    // Expose the runtime function for Playwright evaluation
+    window.__testSanitizeRedirectUrl = sanitizeRedirectUrl;
+    window.__testSanitizeHttpUrl = sanitizeHttpUrl;
+  </script>
+</body>
+</html>

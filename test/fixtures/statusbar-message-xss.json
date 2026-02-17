@@ -1,0 +1,45 @@
+{
+  "description": "Status bar message escaping and redirect URL allowlist expectations",
+  "message_payloads": [
+    {
+      "name": "img_onerror",
+      "input": "<img src=x onerror=\"alert('xss')\">",
+      "expected_dom_text": "<img src=x onerror=\"alert('xss')\">"
+    },
+    {
+      "name": "script_tag",
+      "input": "<script>alert('xss')</script>",
+      "expected_dom_text": "<script>alert('xss')</script>"
+    },
+    {
+      "name": "svg_onload",
+      "input": "<svg onload=alert('xss')>",
+      "expected_dom_text": "<svg onload=alert('xss')>"
+    }
+  ],
+  "redirect_urls": [
+    {
+      "name": "javascript_scheme",
+      "input": "javascript:alert(1)",
+      "allowed": false,
+      "reason": "non-http scheme"
+    },
+    {
+      "name": "data_scheme",
+      "input": "data:text/html,<svg onload=alert(1)>",
+      "allowed": false,
+      "reason": "non-http scheme"
+    },
+    {
+      "name": "relative_path",
+      "input": "/portal/home",
+      "allowed": true
+    },
+    {
+      "name": "same_origin_https",
+      "input": "https://example.com/portal/home",
+      "allowed": "only if same origin"
+    }
+  ],
+  "notes": "Messages must render as text (no HTML execution). Redirect URLs allow only root-relative or same-origin http(s)."
+}
