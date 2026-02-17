@@ -133,19 +133,19 @@ Feature: Upload API Authentication
       | staging     |
       | unset       |
 
-  Scenario: NODE_ENV case sensitivity - Production (capitalized) is not production
+  Scenario: NODE_ENV case sensitivity - Production (capitalized) fails closed
     Given I am in platform auth mode with NODE_ENV "Production"
     And AUTH_MODE_PLATFORM_STRICT is "unset"
     And I have a valid user email "test@example.com"
     When I call getAuthenticatedUser with x-user-email header "test@example.com"
-    Then the response should be the user "test@example.com"
+    Then the response should be null
 
-  Scenario: NODE_ENV case sensitivity - PRODUCTION (uppercase) is not production
+  Scenario: NODE_ENV case sensitivity - PRODUCTION (uppercase) fails closed
     Given I am in platform auth mode with NODE_ENV "PRODUCTION"
     And AUTH_MODE_PLATFORM_STRICT is "unset"
     And I have a valid user email "test@example.com"
     When I call getAuthenticatedUser with x-user-email header "test@example.com"
-    Then the response should be the user "test@example.com"
+    Then the response should be null
 
   Scenario: AUTH_MODE_PLATFORM_STRICT only accepts literal "true"
     Given I am in platform auth mode with NODE_ENV "production"
