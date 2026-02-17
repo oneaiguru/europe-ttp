@@ -33,9 +33,11 @@ const MIN_PARITY_SCORE = 50; // 50% minimum parity
  * functional, and accessibility parity.
  */
 test.describe('UI Parity Audit', () => {
-  let legacyManifest: Manifest;
-  let newManifest: Manifest;
-  let parityMapping: ParityMappingConfig;
+  // Initialize with empty defaults to prevent parse-time crashes
+  // Playwright evaluates test.describe callbacks at import time, before beforeAll runs
+  let legacyManifest: Manifest = { entries: [] };
+  let newManifest: Manifest = { entries: [] };
+  let parityMapping: ParityMappingConfig = { mappings: [], unmapped_legacy: [], unmapped_new: [] };
 
   test.beforeAll(async () => {
     // Load all configuration files
@@ -186,22 +188,22 @@ async function runParityTest(
   const legacyEntry = legacyManifest.entries.find((e) => e.id === mapping.legacy_id);
   const newEntry = newManifest.entries.find((e) => e.id === mapping.new_id);
 
-  // Skip if either entry doesn't exist or is excluded
+  // Fail if either entry doesn't exist - missing snapshots should not be treated as passing
   if (!legacyEntry || !newEntry) {
     const result: TestResult = {
       legacyId: mapping.legacy_id,
       newId: mapping.new_id,
       kind: mapping.kind,
-      passed: true,
-      score: 100,
+      passed: false,
+      score: 0,
       structuralMatches: 0,
       structuralTotal: 0,
       functionalMatches: 0,
       functionalTotal: 0,
       accessibilityMatches: 0,
       accessibilityTotal: 0,
-      missingElements: [],
-      failures: [],
+      missingElements: [!legacyEntry ? `legacy:${mapping.legacy_id}` : `new:${mapping.new_id}`],
+      failures: [`Snapshot not found: ${!legacyEntry ? mapping.legacy_id : mapping.new_id}`],
     };
 
     if (assert) {
@@ -216,8 +218,8 @@ async function runParityTest(
       legacyId: mapping.legacy_id,
       newId: mapping.new_id,
       kind: mapping.kind,
-      passed: true,
-      score: 100,
+      passed: false,
+      score: 0,
       structuralMatches: 0,
       structuralTotal: 0,
       functionalMatches: 0,
@@ -225,7 +227,7 @@ async function runParityTest(
       accessibilityMatches: 0,
       accessibilityTotal: 0,
       missingElements: [],
-      failures: [],
+      failures: [`Entry excluded from parity check: ${!legacyEntry.include ? mapping.legacy_id : mapping.new_id}`],
     };
 
     if (assert) {
@@ -246,8 +248,8 @@ async function runParityTest(
       legacyId: mapping.legacy_id,
       newId: mapping.new_id,
       kind: mapping.kind,
-      passed: true,
-      score: 100,
+      passed: false,
+      score: 0,
       structuralMatches: 0,
       structuralTotal: 0,
       functionalMatches: 0,
@@ -255,7 +257,7 @@ async function runParityTest(
       accessibilityMatches: 0,
       accessibilityTotal: 0,
       missingElements: [],
-      failures: [],
+      failures: [`Snapshot path not defined for: ${!legacySnapshotPath ? mapping.legacy_id : mapping.new_id}`],
     };
 
     if (assert) {

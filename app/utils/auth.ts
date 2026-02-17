@@ -376,15 +376,17 @@ export async function getAuthenticatedUser(request: Request): Promise<string | n
   // Platform mode: Trust x-user-email header (unless strict mode is enabled)
   const headerEmail = request.headers.get('x-user-email');
 
-  // Production safety: require strict IAP verification in production
-  const isProduction = process.env.NODE_ENV === 'production';
+  // Security: Fail closed outside development/test unless strict mode is enabled
+  // This prevents auth bypass in staging, preview, or unset NODE_ENV scenarios
+  const nodeEnv = process.env.NODE_ENV;
+  const isDevelopment = nodeEnv === 'development' || nodeEnv === 'test';
   const isStrictMode = process.env.AUTH_MODE_PLATFORM_STRICT === 'true';
 
-  if (isProduction && !isStrictMode) {
-    // Fail closed in production when platform mode is enabled without strict verification
-    // Non-strict platform mode is only allowed for development/testing
+  if (!isDevelopment && !isStrictMode) {
+    // Fail closed when not in explicit dev/test environment and strict mode is disabled
+    // Non-strict platform mode is ONLY allowed for development/testing
     console.warn(
-      'Platform mode in production requires AUTH_MODE_PLATFORM_STRICT=true. ' +
+      'Platform mode requires AUTH_MODE_PLATFORM_STRICT=true outside development. ' +
         'Request rejected for security.'
     );
     return null;
