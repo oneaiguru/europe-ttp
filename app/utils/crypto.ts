@@ -167,14 +167,22 @@ export function isUploadTokenExpired(payload: UploadPayload, maxAgeSeconds: numb
   return false;
 }
 
+// Known placeholder secrets from .env.example that must not be used in production
+const DEFAULT_SECRETS = [
+  'development-secret-change-in-production',
+  'change-this-to-a-random-32-byte-string',
+  'change-this-to-a-different-random-32-byte-string',
+];
+
 /**
  * Get the HMAC secret for signing upload tokens.
  * Throws if UPLOAD_HMAC_SECRET is not set or if using the default value in production.
  *
  * @throws {Error} If UPLOAD_HMAC_SECRET environment variable is not set
- * @throws {Error} If using the default secret in production mode (NODE_ENV=production)
+ * @throws {Error} If using a known placeholder secret in production mode (NODE_ENV=production)
  * @returns The HMAC secret
  */
+
 export function getHmacSecret(): string {
   const secret = process.env.UPLOAD_HMAC_SECRET;
   if (!secret) {
@@ -185,23 +193,21 @@ export function getHmacSecret(): string {
     );
   }
 
-  const DEFAULT_SECRET = 'development-secret-change-in-production';
-
   // Security: Fail closed outside development/test environments
   // This prevents HMAC token forgery in staging, preview, or unset NODE_ENV scenarios
   const nodeEnv = process.env.NODE_ENV;
   const isDevelopment = nodeEnv === 'development' || nodeEnv === 'test';
 
-  if (!isDevelopment && secret === DEFAULT_SECRET) {
+  if (!isDevelopment && DEFAULT_SECRETS.includes(secret)) {
     throw new Error(
-      'UPLOAD_HMAC_SECRET is set to the default development value. ' +
+      'UPLOAD_HMAC_SECRET is set to a known placeholder value. ' +
       'This is insecure outside development/test environments. ' +
       'Generate a secure random value with: openssl rand -base64 32'
     );
   }
 
-  // Warn if using the default development value (development/test only)
-  if (isDevelopment && secret === DEFAULT_SECRET) {
+  // Warn if using a default development value (development/test only)
+  if (isDevelopment && DEFAULT_SECRETS.includes(secret)) {
     console.warn(
       'WARNING: Using default UPLOAD_HMAC_SECRET. ' +
       'This is insecure for production. Generate a secure random value.'
@@ -228,23 +234,22 @@ export function getSessionHmacSecret(): string {
   const secret = process.env.SESSION_HMAC_SECRET;
   if (secret) {
     // Validate SESSION_HMAC_SECRET if set
-    const DEFAULT_SECRET = 'development-secret-change-in-production';
 
     // Security: Fail closed outside development/test environments
     // This prevents session token forgery in staging, preview, or unset NODE_ENV scenarios
     const nodeEnv = process.env.NODE_ENV;
     const isDevelopment = nodeEnv === 'development' || nodeEnv === 'test';
 
-    if (!isDevelopment && secret === DEFAULT_SECRET) {
+    if (!isDevelopment && DEFAULT_SECRETS.includes(secret)) {
       throw new Error(
-        'SESSION_HMAC_SECRET is set to the default development value. ' +
+        'SESSION_HMAC_SECRET is set to a known placeholder value. ' +
         'This is insecure outside development/test environments. ' +
         'Generate a secure random value with: openssl rand -base64 32'
       );
     }
 
-    // Warn if using the default development value (development/test only)
-    if (isDevelopment && secret === DEFAULT_SECRET) {
+    // Warn if using a default development value (development/test only)
+    if (isDevelopment && DEFAULT_SECRETS.includes(secret)) {
       console.warn(
         'WARNING: Using default SESSION_HMAC_SECRET. ' +
         'This is insecure for production. Generate a secure random value.'
