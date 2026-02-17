@@ -87,11 +87,14 @@ export function sanitizeHref(href: string | null | undefined): string {
   }
 
   // Allow root-relative paths (e.g., "/path") but NOT protocol-relative URLs (e.g., "//evil.com")
-  if (trimmed.charAt(0) === '/') {
-    if (trimmed.charAt(1) === '/') {
-      return ''; // Reject protocol-relative URL
+  // Also reject backslash-based bypasses (e.g., "/\evil.com" or "\\evil.com")
+  // Browsers normalize backslashes as path separators, treating these as network-path references
+  if (trimmed.charAt(0) === '/' || trimmed.charAt(0) === '\\') {
+    if (trimmed.charAt(1) === '/' || trimmed.charAt(1) === '\\') {
+      return ''; // Reject protocol-relative URL or backslash bypass
     }
-    return trimmed; // Allow root-relative path
+    // Normalize leading backslash to forward slash for root-relative URLs
+    return trimmed.charAt(0) === '\\' ? '/' + trimmed.slice(1) : trimmed;
   }
 
   // Use URL constructor to check for absolute URLs with protocols
