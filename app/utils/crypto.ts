@@ -185,20 +185,23 @@ export function getHmacSecret(): string {
     );
   }
 
-  const isProduction = process.env.NODE_ENV === 'production';
   const DEFAULT_SECRET = 'development-secret-change-in-production';
 
-  // In production, reject the default development secret
-  if (isProduction && secret === DEFAULT_SECRET) {
+  // Security: Fail closed outside development/test environments
+  // This prevents HMAC token forgery in staging, preview, or unset NODE_ENV scenarios
+  const nodeEnv = process.env.NODE_ENV;
+  const isDevelopment = nodeEnv === 'development' || nodeEnv === 'test';
+
+  if (!isDevelopment && secret === DEFAULT_SECRET) {
     throw new Error(
       'UPLOAD_HMAC_SECRET is set to the default development value. ' +
-      'This is insecure for production. ' +
+      'This is insecure outside development/test environments. ' +
       'Generate a secure random value with: openssl rand -base64 32'
     );
   }
 
-  // Warn if using the default development value (non-production only)
-  if (!isProduction && secret === DEFAULT_SECRET) {
+  // Warn if using the default development value (development/test only)
+  if (isDevelopment && secret === DEFAULT_SECRET) {
     console.warn(
       'WARNING: Using default UPLOAD_HMAC_SECRET. ' +
       'This is insecure for production. Generate a secure random value.'
