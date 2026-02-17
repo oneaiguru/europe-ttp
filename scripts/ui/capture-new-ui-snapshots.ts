@@ -10,7 +10,7 @@
  */
 
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { join, dirname, relative, resolve } from 'node:path';
+import { join, dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -31,7 +31,7 @@ export function getValidatedModuleUrl(modulePath: string): string {
   const resolved = resolve(REPO_ROOT, modulePath);
   const normalizedRoot = resolve(REPO_ROOT);
 
-  if (!resolved.startsWith(normalizedRoot + '/') && resolved !== normalizedRoot) {
+  if (!resolved.startsWith(normalizedRoot + sep) && resolved !== normalizedRoot) {
     throw new Error(`Path traversal rejected: ${modulePath} resolves outside repo root`);
   }
 

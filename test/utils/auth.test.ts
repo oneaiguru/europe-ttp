@@ -635,14 +635,14 @@ describe('auth utilities', () => {
       {
         nodeEnv: 'staging',
         strictMode: undefined,
-        expectedResult: 'allow_header',
-        description: 'staging without strict should allow header',
+        expectedResult: 'reject',
+        description: 'staging without strict should reject',
       },
       {
         nodeEnv: 'staging',
         strictMode: 'false',
-        expectedResult: 'allow_header',
-        description: 'staging with strict=false should allow header',
+        expectedResult: 'reject',
+        description: 'staging with strict=false should reject',
       },
       {
         nodeEnv: 'staging',
@@ -655,14 +655,14 @@ describe('auth utilities', () => {
       {
         nodeEnv: undefined,
         strictMode: undefined,
-        expectedResult: 'allow_header',
-        description: 'unset NODE_ENV without strict should allow header',
+        expectedResult: 'reject',
+        description: 'unset NODE_ENV without strict should reject',
       },
       {
         nodeEnv: undefined,
         strictMode: 'false',
-        expectedResult: 'allow_header',
-        description: 'unset NODE_ENV with strict=false should allow header',
+        expectedResult: 'reject',
+        description: 'unset NODE_ENV with strict=false should reject',
       },
       {
         nodeEnv: undefined,
@@ -675,14 +675,14 @@ describe('auth utilities', () => {
       {
         nodeEnv: 'Production',
         strictMode: undefined,
-        expectedResult: 'allow_header',
-        description: 'Production (capitalized) without strict should allow header (case-sensitive)',
+        expectedResult: 'reject',
+        description: 'Production (capitalized) without strict should reject',
       },
       {
         nodeEnv: 'PRODUCTION',
         strictMode: undefined,
-        expectedResult: 'allow_header',
-        description: 'PRODUCTION (uppercase) without strict should allow header (case-sensitive)',
+        expectedResult: 'reject',
+        description: 'PRODUCTION (uppercase) without strict should reject',
       },
       {
         nodeEnv: 'Production',
