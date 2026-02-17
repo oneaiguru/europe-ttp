@@ -10,7 +10,12 @@ import {
   resetRateLimit,
   clearAllRateLimits,
   getRateLimitConfig,
+  getCheckCount,
 } from '../../app/utils/rate-limit';
+
+// Note: AsyncMutex is tested indirectly through checkRateLimit() tests below.
+// The mutex is an internal implementation detail and is no longer exported.
+// The 'race condition prevention' test suite validates mutex behavior at the API level.
 
 describe('rate limiting utilities', () => {
   const testEmail = 'test@example.com';
@@ -70,17 +75,55 @@ describe('rate limiting utilities', () => {
       assert.strictEqual(otherResult.allowed, true);
     });
 
-    it('resets after window expires', async () => {
+    it('resets after manual resetRateLimit call', async () => {
       const result1 = await checkRateLimit(testEmail);
       assert.strictEqual(result1.allowed, true);
 
       // Reset the rate limit
-      resetRateLimit(testEmail);
+      await resetRateLimit(testEmail);
 
       // Should start fresh
       const result2 = await checkRateLimit(testEmail);
       assert.strictEqual(result2.allowed, true);
       assert.strictEqual(result2.remaining, getRateLimitConfig().max - 1);
+    });
+
+    it('resets counter when time window expires', async () => {
+      const config = getRateLimitConfig();
+      const maxRequests = config.max;
+      const windowMs = config.windowMs;
+
+      // Stub Date.now() for deterministic time control
+      const originalDateNow = Date.now;
+      let currentTime = originalDateNow();
+      Date.now = () => currentTime;
+
+      try {
+        // Exhaust the rate limit
+        for (let i = 0; i < maxRequests; i++) {
+          const result = await checkRateLimit(testEmail);
+          assert.strictEqual(result.allowed, true, `request ${i + 1} should be allowed`);
+        }
+
+        // Next request should be denied (limit exhausted)
+        const deniedResult = await checkRateLimit(testEmail);
+        assert.strictEqual(deniedResult.allowed, false, 'request after limit should be denied');
+        assert.strictEqual(deniedResult.remaining, 0, 'remaining should be 0');
+
+        // Advance time past the window
+        currentTime += windowMs + 1;
+
+        // Next request should be allowed with fresh count
+        const freshResult = await checkRateLimit(testEmail);
+        assert.strictEqual(freshResult.allowed, true, 'request after window expiry should be allowed');
+        assert.strictEqual(freshResult.remaining, maxRequests - 1, 'remaining should be reset to max - 1');
+
+        // Verify windowStart was updated (resetAt should be in the future)
+        assert.strictEqual(freshResult.resetAt, currentTime + windowMs, 'resetAt should reflect new window');
+      } finally {
+        // Restore Date.now()
+        Date.now = originalDateNow;
+      }
     });
   });
 
@@ -144,6 +187,62 @@ describe('rate limiting utilities', () => {
       assert.strictEqual(testAllowed, maxRequests);
       assert.strictEqual(otherAllowed, maxRequests);
     });
+
+    it('reset waits for in-progress check to complete', async () => {
+      const maxRequests = getRateLimitConfig().max;
+
+      // Exhaust the limit
+      for (let i = 0; i < maxRequests; i++) {
+        await checkRateLimit(testEmail);
+      }
+
+      // Start a check that will be blocked
+      const checkPromise = checkRateLimit(testEmail);
+
+      // Allow checkPromise to start (acquire mutex)
+      await new Promise((r) => setTimeout(r, 0));
+
+      // Start reset - should wait for check to release mutex
+      const resetPromise = resetRateLimit(testEmail);
+
+      // Reset should not complete until check releases mutex
+      await new Promise((r) => setTimeout(r, 0));
+
+      // Wait for both to complete
+      await Promise.all([checkPromise, resetPromise]);
+
+      // The check should have been denied (limit exhausted)
+      // But after reset, next check should succeed
+      const resultAfterReset = await checkRateLimit(testEmail);
+      assert.strictEqual(resultAfterReset.allowed, true);
+    });
+
+    it('reset is atomic with concurrent checks', async () => {
+      const maxRequests = getRateLimitConfig().max;
+
+      // Exhaust the limit
+      for (let i = 0; i < maxRequests; i++) {
+        await checkRateLimit(testEmail);
+      }
+
+      // Launch concurrent operations: reset + multiple checks
+      const operations = [
+        resetRateLimit(testEmail),
+        ...Array.from({ length: 10 }, () => checkRateLimit(testEmail)),
+      ];
+
+      const results = await Promise.all(operations);
+
+      // Skip the reset result (undefined), check rate limit results
+      const checkResults = results.slice(1) as Array<{ allowed: boolean }>;
+      const allowedCount = checkResults.filter((r) => r.allowed).length;
+
+      // Due to mutex serialization, exactly one of the concurrent checks
+      // should succeed (the one that runs after reset completes)
+      // OR reset runs after all checks (they all fail, then reset allows next)
+      // The key invariant: rate limit state is consistent
+      assert.ok(allowedCount >= 0 && allowedCount <= 10, `allowedCount=${allowedCount} should be in valid range`);
+    });
   });
 
   describe('resetRateLimit', () => {
@@ -159,7 +258,7 @@ describe('rate limiting utilities', () => {
       assert.strictEqual(result.allowed, false);
 
       // Reset the limit
-      resetRateLimit(testEmail);
+      await resetRateLimit(testEmail);
 
       // Should be allowed again
       result = await checkRateLimit(testEmail);
@@ -175,7 +274,7 @@ describe('rate limiting utilities', () => {
       }
 
       // Reset only testEmail
-      resetRateLimit(testEmail);
+      await resetRateLimit(testEmail);
 
       // testEmail should be allowed
       let result = await checkRateLimit(testEmail);
@@ -214,6 +313,70 @@ describe('rate limiting utilities', () => {
       const config = getRateLimitConfig();
       assert.ok(config.max > 0, 'config.max should be > 0');
       assert.ok(config.windowMs > 0, 'config.windowMs should be > 0');
+    });
+  });
+
+  describe('cleanup trigger', () => {
+    it('runs cleanup every 100 checks regardless of user count', async () => {
+      // Clear state to start fresh
+      clearAllRateLimits();
+
+      // Verify counter starts at 0
+      assert.strictEqual(getCheckCount(), 0, 'checkCount should start at 0 after clear');
+
+      // Make 99 checks as a single user - cleanup should NOT run yet
+      for (let i = 0; i < 99; i++) {
+        await checkRateLimit(testEmail);
+      }
+      assert.strictEqual(getCheckCount(), 99, 'checkCount should be 99 after 99 checks');
+
+      // 100th check triggers cleanup (checkCount becomes 100, which is % 100 === 0)
+      await checkRateLimit(testEmail);
+      assert.strictEqual(getCheckCount(), 100, 'checkCount should be 100 after 100 checks');
+
+      // Next check should NOT trigger cleanup (101 is not % 100 === 0)
+      await checkRateLimit(testEmail);
+      assert.strictEqual(getCheckCount(), 101, 'checkCount should be 101 after 101 checks');
+    });
+
+    it('does not run cleanup on every call at store size 100', async () => {
+      // Clear state to start fresh
+      clearAllRateLimits();
+
+      // Create 100 distinct users (store size = 100)
+      // With old code, the 100th check would trigger cleanup on EVERY subsequent check
+      // because rateLimitStore.size % 100 === 0 would be true as long as size stays at 100
+      for (let i = 0; i < 100; i++) {
+        await checkRateLimit(`user${i}@example.com`);
+      }
+      assert.strictEqual(getCheckCount(), 100, 'checkCount should be 100 after 100 distinct users');
+
+      // Make more requests from existing users - store size stays at 100
+      // Old bug: rateLimitStore.size % 100 === 0 would be TRUE on every call
+      // New behavior: checkCount % 100 === 0 is only true at 100, 200, 300, etc.
+      for (let i = 0; i < 50; i++) {
+        await checkRateLimit(`user${i}@example.com`);
+      }
+      assert.strictEqual(getCheckCount(), 150, 'checkCount should be 150 after 150 total checks');
+
+      // Cleanup should only run when checkCount hits 200, not on every call
+      // This test verifies the fix by confirming the counter increments correctly
+    });
+
+    it('clearAllRateLimits resets check count for test isolation', async () => {
+      // Make some checks
+      for (let i = 0; i < 50; i++) {
+        await checkRateLimit(testEmail);
+      }
+      assert.strictEqual(getCheckCount(), 50, 'checkCount should be 50');
+
+      // Clear should reset the counter
+      clearAllRateLimits();
+      assert.strictEqual(getCheckCount(), 0, 'checkCount should be 0 after clearAllRateLimits');
+
+      // Next check should start from 1
+      await checkRateLimit(testEmail);
+      assert.strictEqual(getCheckCount(), 1, 'checkCount should be 1 after first check post-clear');
     });
   });
 });

@@ -4,12 +4,13 @@
  */
 
 // @ts-expect-error - bun:test is a built-in Bun module
-import { describe, it, expect } from 'bun:test';
+import { describe, it, expect, spyOn } from 'bun:test';
 import {
   generateUploadToken,
   verifyUploadToken,
   isUploadTokenExpired,
   getHmacSecret,
+  getSessionHmacSecret,
   type UploadPayload,
 } from '../../app/utils/crypto';
 
@@ -206,6 +207,36 @@ describe('crypto utilities', () => {
       // With 60 second max age, 30 seconds is not expired
       expect(isUploadTokenExpired(oldPayload, 60)).toBe(false);
     });
+
+    it('rejects tokens with timestamp far in the future', () => {
+      const futurePayload: UploadPayload = {
+        user: 'test@example.com',
+        timestamp: Math.floor(Date.now() / 1000) + 600, // 10 minutes ahead
+        filename: 'test.pdf',
+      };
+      // Should be expired because timestamp is beyond CLOCK_SKEW_TOLERANCE
+      expect(isUploadTokenExpired(futurePayload)).toBe(true);
+    });
+
+    it('accepts tokens with timestamp within clock skew tolerance', () => {
+      const nearFuturePayload: UploadPayload = {
+        user: 'test@example.com',
+        timestamp: Math.floor(Date.now() / 1000) + 120, // 2 minutes ahead
+        filename: 'test.pdf',
+      };
+      // Should NOT be expired because timestamp is within CLOCK_SKEW_TOLERANCE
+      expect(isUploadTokenExpired(nearFuturePayload)).toBe(false);
+    });
+
+    it('accepts tokens with timestamp slightly in the past', () => {
+      const pastPayload: UploadPayload = {
+        user: 'test@example.com',
+        timestamp: Math.floor(Date.now() / 1000) - 120, // 2 minutes ago
+        filename: 'test.pdf',
+      };
+      // Should NOT be expired (within 15 minute max age)
+      expect(isUploadTokenExpired(pastPayload)).toBe(false);
+    });
   });
 
   describe('getHmacSecret', () => {
@@ -232,7 +263,7 @@ describe('crypto utilities', () => {
       // @ts-expect-error - NODE_ENV not in ProcessEnv, set for test
       process.env.NODE_ENV = 'production';
       process.env.UPLOAD_HMAC_SECRET = 'development-secret-change-in-production';
-      expect(() => getHmacSecret()).toThrow('default UPLOAD_HMAC_SECRET');
+      expect(() => getHmacSecret()).toThrow('default development value');
       // Restore
       if (originalNodeEnv) {
         // @ts-expect-error - NODE_ENV not in ProcessEnv
@@ -251,7 +282,6 @@ describe('crypto utilities', () => {
       // @ts-expect-error - NODE_ENV not in ProcessEnv, set for test
       process.env.NODE_ENV = 'development';
       process.env.UPLOAD_HMAC_SECRET = 'development-secret-change-in-production';
-      // @ts-expect-error - bun:test mock
       const warnSpy = spyOn(console, 'warn').mockImplementation(() => {});
       expect(getHmacSecret()).toBe('development-secret-change-in-production');
       expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('WARNING'));
@@ -284,6 +314,128 @@ describe('crypto utilities', () => {
         delete process.env.NODE_ENV;
       }
       if (originalSecret) process.env.UPLOAD_HMAC_SECRET = originalSecret;
+      else delete process.env.UPLOAD_HMAC_SECRET;
+    });
+  });
+
+  describe('getSessionHmacSecret', () => {
+    it('returns SESSION_HMAC_SECRET when set', () => {
+      const originalSessionSecret = process.env.SESSION_HMAC_SECRET;
+      const originalUploadSecret = process.env.UPLOAD_HMAC_SECRET;
+      process.env.SESSION_HMAC_SECRET = 'session-secret-123';
+      delete process.env.UPLOAD_HMAC_SECRET;
+
+      expect(getSessionHmacSecret()).toBe('session-secret-123');
+
+      if (originalSessionSecret) process.env.SESSION_HMAC_SECRET = originalSessionSecret;
+      else delete process.env.SESSION_HMAC_SECRET;
+      if (originalUploadSecret) process.env.UPLOAD_HMAC_SECRET = originalUploadSecret;
+      else delete process.env.UPLOAD_HMAC_SECRET;
+    });
+
+    it('falls back to UPLOAD_HMAC_SECRET when SESSION_HMAC_SECRET not set', () => {
+      const originalSessionSecret = process.env.SESSION_HMAC_SECRET;
+      const originalUploadSecret = process.env.UPLOAD_HMAC_SECRET;
+      delete process.env.SESSION_HMAC_SECRET;
+      process.env.UPLOAD_HMAC_SECRET = 'upload-secret-456';
+
+      const warnSpy = spyOn(console, 'warn').mockImplementation(() => {});
+      expect(getSessionHmacSecret()).toBe('upload-secret-456');
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('SESSION_HMAC_SECRET not set'));
+      warnSpy.mockRestore();
+
+      if (originalSessionSecret) process.env.SESSION_HMAC_SECRET = originalSessionSecret;
+      else delete process.env.SESSION_HMAC_SECRET;
+      if (originalUploadSecret) process.env.UPLOAD_HMAC_SECRET = originalUploadSecret;
+      else delete process.env.UPLOAD_HMAC_SECRET;
+    });
+
+    it('throws when both SESSION_HMAC_SECRET and UPLOAD_HMAC_SECRET are unset', () => {
+      const originalSessionSecret = process.env.SESSION_HMAC_SECRET;
+      const originalUploadSecret = process.env.UPLOAD_HMAC_SECRET;
+      delete process.env.SESSION_HMAC_SECRET;
+      delete process.env.UPLOAD_HMAC_SECRET;
+
+      expect(() => getSessionHmacSecret()).toThrow('UPLOAD_HMAC_SECRET environment variable is required');
+
+      if (originalSessionSecret) process.env.SESSION_HMAC_SECRET = originalSessionSecret;
+      else delete process.env.SESSION_HMAC_SECRET;
+      if (originalUploadSecret) process.env.UPLOAD_HMAC_SECRET = originalUploadSecret;
+      else delete process.env.UPLOAD_HMAC_SECRET;
+    });
+
+    it('throws when using default SESSION_HMAC_SECRET in production', () => {
+      const originalNodeEnv = process.env.NODE_ENV;
+      const originalSessionSecret = process.env.SESSION_HMAC_SECRET;
+      const originalUploadSecret = process.env.UPLOAD_HMAC_SECRET;
+      // @ts-expect-error - NODE_ENV not in ProcessEnv, set for test
+      process.env.NODE_ENV = 'production';
+      process.env.SESSION_HMAC_SECRET = 'development-secret-change-in-production';
+      delete process.env.UPLOAD_HMAC_SECRET;
+
+      expect(() => getSessionHmacSecret()).toThrow('default development value');
+
+      if (originalNodeEnv) {
+        // @ts-expect-error - NODE_ENV not in ProcessEnv
+        process.env.NODE_ENV = originalNodeEnv;
+      } else {
+        // @ts-expect-error - NODE_ENV not in ProcessEnv
+        delete process.env.NODE_ENV;
+      }
+      if (originalSessionSecret) process.env.SESSION_HMAC_SECRET = originalSessionSecret;
+      else delete process.env.SESSION_HMAC_SECRET;
+      if (originalUploadSecret) process.env.UPLOAD_HMAC_SECRET = originalUploadSecret;
+      else delete process.env.UPLOAD_HMAC_SECRET;
+    });
+
+    it('warns but returns default SESSION_HMAC_SECRET in non-production', () => {
+      const originalNodeEnv = process.env.NODE_ENV;
+      const originalSessionSecret = process.env.SESSION_HMAC_SECRET;
+      const originalUploadSecret = process.env.UPLOAD_HMAC_SECRET;
+      // @ts-expect-error - NODE_ENV not in ProcessEnv, set for test
+      process.env.NODE_ENV = 'development';
+      process.env.SESSION_HMAC_SECRET = 'development-secret-change-in-production';
+      delete process.env.UPLOAD_HMAC_SECRET;
+
+      const warnSpy = spyOn(console, 'warn').mockImplementation(() => {});
+      expect(getSessionHmacSecret()).toBe('development-secret-change-in-production');
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('WARNING'));
+      warnSpy.mockRestore();
+
+      if (originalNodeEnv) {
+        // @ts-expect-error - NODE_ENV not in ProcessEnv
+        process.env.NODE_ENV = originalNodeEnv;
+      } else {
+        // @ts-expect-error - NODE_ENV not in ProcessEnv
+        delete process.env.NODE_ENV;
+      }
+      if (originalSessionSecret) process.env.SESSION_HMAC_SECRET = originalSessionSecret;
+      else delete process.env.SESSION_HMAC_SECRET;
+      if (originalUploadSecret) process.env.UPLOAD_HMAC_SECRET = originalUploadSecret;
+      else delete process.env.UPLOAD_HMAC_SECRET;
+    });
+
+    it('allows non-default SESSION_HMAC_SECRET in production', () => {
+      const originalNodeEnv = process.env.NODE_ENV;
+      const originalSessionSecret = process.env.SESSION_HMAC_SECRET;
+      const originalUploadSecret = process.env.UPLOAD_HMAC_SECRET;
+      // @ts-expect-error - NODE_ENV not in ProcessEnv, set for test
+      process.env.NODE_ENV = 'production';
+      process.env.SESSION_HMAC_SECRET = 'secure-session-secret-789';
+      delete process.env.UPLOAD_HMAC_SECRET;
+
+      expect(getSessionHmacSecret()).toBe('secure-session-secret-789');
+
+      if (originalNodeEnv) {
+        // @ts-expect-error - NODE_ENV not in ProcessEnv
+        process.env.NODE_ENV = originalNodeEnv;
+      } else {
+        // @ts-expect-error - NODE_ENV not in ProcessEnv
+        delete process.env.NODE_ENV;
+      }
+      if (originalSessionSecret) process.env.SESSION_HMAC_SECRET = originalSessionSecret;
+      else delete process.env.SESSION_HMAC_SECRET;
+      if (originalUploadSecret) process.env.UPLOAD_HMAC_SECRET = originalUploadSecret;
       else delete process.env.UPLOAD_HMAC_SECRET;
     });
   });
