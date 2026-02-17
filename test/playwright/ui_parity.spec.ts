@@ -1,9 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import fs from 'node:fs';
 import {
-  loadManifest,
-  loadParityMapping,
   getSnapshotFileUrl,
   runParityCheck,
   formatParityResult,
@@ -27,25 +26,44 @@ const NEW_SNAPSHOT_BASE = path.resolve(__dirname, '../../docs/ui/new');
 const MIN_PARITY_SCORE = 50; // 50% minimum parity
 
 /**
+ * Synchronously load a JSON file, returning null if it doesn't exist.
+ * This is required because Playwright evaluates test.describe callbacks at
+ * module load time - async beforeAll hooks run too late.
+ */
+function loadJsonSync<T>(filePath: string, defaultValue: T): T {
+  try {
+    if (fs.existsSync(filePath)) {
+      const content = fs.readFileSync(filePath, 'utf-8');
+      return JSON.parse(content) as T;
+    }
+  } catch (error) {
+    console.warn(`Warning: Could not load ${filePath}: ${error}`);
+  }
+  return defaultValue;
+}
+
+// Load configuration synchronously at module level
+// This ensures data is available when Playwright evaluates test.describe callbacks
+const legacyManifest: Manifest = loadJsonSync(LEGACY_MANIFEST_PATH, { entries: [] });
+const newManifest: Manifest = loadJsonSync(NEW_MANIFEST_PATH, { entries: [] });
+const parityMapping: ParityMappingConfig = loadJsonSync(PARITY_MAPPING_PATH, {
+  mappings: [],
+  unmapped_legacy: [],
+  unmapped_new: [],
+});
+
+// Pre-filter mappings by kind at module level for dynamic test generation
+const portalMappings = parityMapping.mappings.filter((m) => m.kind === 'portal');
+const formMappings = parityMapping.mappings.filter((m) => m.kind === 'form');
+const adminMappings = parityMapping.mappings.filter((m) => m.kind === 'admin');
+
+/**
  * UI Parity Audit Test Suite
  *
  * Compares legacy UI snapshots with new UI snapshots to verify structural,
  * functional, and accessibility parity.
  */
 test.describe('UI Parity Audit', () => {
-  // Initialize with empty defaults to prevent parse-time crashes
-  // Playwright evaluates test.describe callbacks at import time, before beforeAll runs
-  let legacyManifest: Manifest = { entries: [] };
-  let newManifest: Manifest = { entries: [] };
-  let parityMapping: ParityMappingConfig = { mappings: [], unmapped_legacy: [], unmapped_new: [] };
-
-  test.beforeAll(async () => {
-    // Load all configuration files
-    legacyManifest = await loadManifest(LEGACY_MANIFEST_PATH);
-    newManifest = await loadManifest(NEW_MANIFEST_PATH);
-    parityMapping = await loadParityMapping(PARITY_MAPPING_PATH);
-  });
-
   /**
    * Test: Verify configuration files exist and are valid
    */
@@ -66,8 +84,6 @@ test.describe('UI Parity Audit', () => {
    * Test: Portal page parity
    */
   test.describe('Portal Pages', () => {
-    const portalMappings = parityMapping.mappings.filter((m) => m.kind === 'portal');
-
     for (const mapping of portalMappings) {
       test(`${mapping.legacy_id} → ${mapping.new_id}`, async ({ page }) => {
         await runParityTest(page, mapping, legacyManifest, newManifest);
@@ -79,8 +95,6 @@ test.describe('UI Parity Audit', () => {
    * Test: Form parity
    */
   test.describe('Forms', () => {
-    const formMappings = parityMapping.mappings.filter((m) => m.kind === 'form');
-
     for (const mapping of formMappings) {
       test(`${mapping.legacy_id} → ${mapping.new_id}`, async ({ page }) => {
         await runParityTest(page, mapping, legacyManifest, newManifest);
@@ -92,8 +106,6 @@ test.describe('UI Parity Audit', () => {
    * Test: Admin page parity
    */
   test.describe('Admin Pages', () => {
-    const adminMappings = parityMapping.mappings.filter((m) => m.kind === 'admin');
-
     for (const mapping of adminMappings) {
       test(`${mapping.legacy_id} → ${mapping.new_id}`, async ({ page }) => {
         await runParityTest(page, mapping, legacyManifest, newManifest);
@@ -141,7 +153,7 @@ test.describe('UI Parity Audit', () => {
     expect(parityMapping.unmapped_legacy).toBeInstanceOf(Array);
 
     if (parityMapping.unmapped_legacy.length > 0) {
-      console.log('\n⚠️  Unmapped Legacy Pages:');
+      console.log('\nUnmapped Legacy Pages:');
       for (const entry of parityMapping.unmapped_legacy) {
         console.log(`  - ${entry.legacy_id} (${entry.kind}): ${entry.reason}`);
       }
@@ -156,7 +168,7 @@ test.describe('UI Parity Audit', () => {
     expect(parityMapping.unmapped_new).toBeInstanceOf(Array);
 
     if (parityMapping.unmapped_new.length > 0) {
-      console.log('\n✨ New Features (not in legacy):');
+      console.log('\nNew Features (not in legacy):');
       for (const entry of parityMapping.unmapped_new) {
         console.log(`  - ${entry.new_id} (${entry.kind}): ${entry.reason}`);
       }
@@ -207,7 +219,7 @@ async function runParityTest(
     };
 
     if (assert) {
-      test.skip(true, `Snapshot not available: ${mapping.legacy_id} → ${mapping.new_id}`);
+      test.skip(true, `Snapshot not available: ${mapping.legacy_id} -> ${mapping.new_id}`);
     }
 
     return result;
@@ -261,7 +273,7 @@ async function runParityTest(
     };
 
     if (assert) {
-      test.skip(true, `Snapshot path not defined for: ${mapping.legacy_id} → ${mapping.new_id}`);
+      test.skip(true, `Snapshot path not defined for: ${mapping.legacy_id} -> ${mapping.new_id}`);
     }
 
     return result;
@@ -316,7 +328,7 @@ async function runParityTest(
     // Assert minimum parity score
     expect(
       parityResult.totalScore,
-      `${mapping.legacy_id} → ${mapping.new_id}: Parity score ${parityResult.totalScore}% is below ${MIN_PARITY_SCORE}%. Missing: ${parityResult.missingElements.join(', ')}`
+      `${mapping.legacy_id} -> ${mapping.new_id}: Parity score ${parityResult.totalScore}% is below ${MIN_PARITY_SCORE}%. Missing: ${parityResult.missingElements.join(', ')}`
     ).toBeGreaterThanOrEqual(MIN_PARITY_SCORE);
   }
 
