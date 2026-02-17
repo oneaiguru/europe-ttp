@@ -143,9 +143,9 @@ export async function POST(request: Request): Promise<Response> {
     if (filepath.includes('..') || filepath.startsWith('/')) {
       return Response.json({ error: 'Invalid filepath' }, { status: 400 });
     }
-    // Allow alphanumeric, hyphens, underscores, @ and . (for user emails), and forward slashes
+    // Allow alphanumeric, hyphens, underscores, @ and . (for user emails), + (for email tags), and forward slashes
     // Note: @ and . are allowed but cross-user @ segments are validated later
-    if (!/^[\w@./-]+$/.test(filepath)) {
+    if (!/^[\w@./+-]+$/.test(filepath)) {
       return Response.json({ error: 'Invalid filepath characters' }, { status: 400 });
     }
   }
