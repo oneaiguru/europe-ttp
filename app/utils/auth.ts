@@ -324,18 +324,14 @@ export function extractBearerToken(authHeader: string | null): string | null {
     return null;
   }
 
-  const parts = authHeader.split(' ');
-  if (parts.length !== 2) {
+  // Use regex to be tolerant of multiple spaces between "Bearer" and the token
+  // e.g., "Bearer    <token>" should be valid
+  const match = authHeader.match(/^bearer\s+(.+)$/i);
+  if (!match) {
     return null;
   }
 
-  // HTTP schemes are case-insensitive per RFC 2616 Section 3.8
-  const scheme = parts[0].toLowerCase();
-  if (scheme !== 'bearer') {
-    return null;
-  }
-
-  return parts[1];
+  return match[1];
 }
 
 /**
