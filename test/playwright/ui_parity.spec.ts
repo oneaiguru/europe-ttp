@@ -268,24 +268,31 @@ async function runParityTest(
   const legacyFileUrl = getSnapshotFileUrl(LEGACY_SNAPSHOT_BASE, legacySnapshotPath);
   const newFileUrl = getSnapshotFileUrl(NEW_SNAPSHOT_BASE, newSnapshotPath);
 
-  // Create two contexts for parallel page loading
-  const legacyPage = page.context().browser()?.contexts()[0]?.pages()[0] || page;
-  const newPage = page.context().browser()?.contexts()[0]?.pages()?.[1] || page;
+  // Use separate pages for legacy and new snapshots
+  // The injected 'page' is used for legacy, create a new page for new UI
+  const legacyPage = page;
+  const newPage = await page.context().newPage();
 
-  // Load both snapshots
-  await legacyPage.goto(legacyFileUrl);
-  await newPage.goto(newFileUrl);
+  let parityResult;
+  try {
+    // Load both snapshots
+    await legacyPage.goto(legacyFileUrl);
+    await newPage.goto(newFileUrl);
 
-  // Run parity checks
-  const parityResult = await runParityCheck(
-    legacyPage,
-    newPage,
-    mapping.parity_checks || {
-      structural: ['h1', 'h2', 'h3', 'form', 'button', 'a'],
-      functional: ['[type=submit]', '[type=button]', 'button'],
-      accessibility: ['[aria-label]', '[role]', 'label', 'alt'],
-    }
-  );
+    // Run parity checks
+    parityResult = await runParityCheck(
+      legacyPage,
+      newPage,
+      mapping.parity_checks || {
+        structural: ['h1', 'h2', 'h3', 'form', 'button', 'a'],
+        functional: ['[type=submit]', '[type=button]', 'button'],
+        accessibility: ['[aria-label]', '[role]', 'label', 'alt'],
+      }
+    );
+  } finally {
+    // Ensure new page is always closed to prevent resource leaks
+    await newPage.close();
+  }
 
   const result: TestResult = {
     legacyId: mapping.legacy_id,

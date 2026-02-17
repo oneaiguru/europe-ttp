@@ -9,7 +9,7 @@
  * Usage: npm run ui:snapshot:new
  */
 
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -219,6 +219,7 @@ async function captureSnapshot(
  */
 function writeSnapshot(kind: string, id: string, html: string): string {
   const kindDir = join(SNAPSHOTS_DIR, kind);
+  mkdirSync(kindDir, { recursive: true });
   const snapshotPath = join(kindDir, `${id}.html`);
 
   writeFileSync(snapshotPath, html, 'utf-8');
@@ -300,6 +301,7 @@ async function main(): Promise<void> {
   }
 
   // Write manifest
+  mkdirSync(OUTPUT_DIR, { recursive: true });
   const manifest: Manifest = {
     $schema: './manifest.schema.json',
     version: '1.0.0',
