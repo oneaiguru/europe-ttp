@@ -177,9 +177,9 @@ export async function runParityCheck(
     countSelectors(newPage, accessibility),
   ]);
 
-  const structuralScore = legacyStructural > 0 ? (newStructural / legacyStructural) * 100 : 100;
-  const functionalScore = legacyFunctional > 0 ? (newFunctional / legacyFunctional) * 100 : 100;
-  const accessibilityScore = legacyA11y > 0 ? (newA11y / legacyA11y) * 100 : 100;
+  const structuralScore = Math.min(100, legacyStructural > 0 ? (newStructural / legacyStructural) * 100 : 100);
+  const functionalScore = Math.min(100, legacyFunctional > 0 ? (newFunctional / legacyFunctional) * 100 : 100);
+  const accessibilityScore = Math.min(100, legacyA11y > 0 ? (newA11y / legacyA11y) * 100 : 100);
 
   const totalScore = (structuralScore + functionalScore + accessibilityScore) / 3;
 
