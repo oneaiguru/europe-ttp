@@ -331,7 +331,7 @@ export function extractBearerToken(authHeader: string | null): string | null {
     return null;
   }
 
-  return match[1];
+  return match[1].trim();
 }
 
 /**
