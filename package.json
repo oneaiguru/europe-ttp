@@ -27,6 +27,8 @@
     "ui:parity": "playwright test test/playwright/ui_parity.spec.ts",
     "test:redirect": "playwright test test/playwright/redirect-sanitization.spec.ts",
     "test:unit": "node --import tsx --test test/bdd/*.test.ts",
+    "test:utils": "bun test test/utils/ test/playwright/helpers/",
+    "test:all": "npm run test:unit && npm run test:utils",
     "test": "npm run bdd:all"
   },
   "devDependencies": {
