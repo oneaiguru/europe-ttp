@@ -33,7 +33,7 @@ export function escapeHtmlAttr(text: string): string {
 
 /**
  * Sanitize URL href values to prevent XSS via dangerous URI schemes.
- * Allows only http:, https:, and root-relative paths (starting with / but not //).
+ * Allows only http:, https:, and relative paths (root-relative or plain relative).
  * Rejects javascript:, data:, vbscript:, file:, and other unsafe schemes.
  *
  * ## Security Policy: HTTP URLs Allowed
@@ -46,16 +46,25 @@ export function escapeHtmlAttr(text: string): string {
  *
  * **Recommendation**: Deploy with HSTS enabled to enforce HTTPS at the browser level.
  *
+ * ## Security Policy: Relative URLs Allowed
+ * This function allows plain relative URLs (e.g., "report.html") and root-relative
+ * paths (e.g., "/admin/report.html") for internal application navigation. This is
+ * safe because:
+ * 1. Relative URLs cannot contain protocol schemes (no javascript:, data:, etc.)
+ * 2. They are resolved relative to the current page origin
+ * 3. Protocol-relative URLs (//evil.com) are explicitly blocked
+ *
  * Example:
  * - "https://example.com/report" → "https://example.com/report"
  * - "http://legacy-site.example/report" → "http://legacy-site.example/report"
  * - "/reports.html" → "/reports.html"
+ * - "ttc_applicants_reports.html" → "/ttc_applicants_reports.html"
  * - "javascript:alert(1)" → ""
  * - "data:text/html,<script>alert(1)</script>" → ""
  * - "//evil.com" → ""
  *
  * @param href - The URL to sanitize
- * @returns Sanitized URL, or empty string if unsafe
+ * @returns Sanitized URL (relative paths are normalized to root-relative), or empty string if unsafe
  */
 export function sanitizeHref(href: string | null | undefined): string {
   if (href === null || href === undefined) {
@@ -63,6 +72,17 @@ export function sanitizeHref(href: string | null | undefined): string {
   }
   const trimmed = String(href).trim();
   if (!trimmed) {
+    return '';
+  }
+
+  // Check for dangerous schemes first (before any URL parsing)
+  const lower = trimmed.toLowerCase();
+  if (
+    lower.startsWith('javascript:') ||
+    lower.startsWith('data:') ||
+    lower.startsWith('vbscript:') ||
+    lower.startsWith('file:')
+  ) {
     return '';
   }
 
@@ -74,7 +94,7 @@ export function sanitizeHref(href: string | null | undefined): string {
     return trimmed; // Allow root-relative path
   }
 
-  // Use URL constructor for robust parsing
+  // Use URL constructor to check for absolute URLs with protocols
   try {
     const url = new URL(trimmed);
     const protocol = url.protocol.toLowerCase();
@@ -82,20 +102,11 @@ export function sanitizeHref(href: string | null | undefined): string {
     if (protocol === 'http:' || protocol === 'https:') {
       return url.href;
     }
-    return ''; // Reject all other schemes (javascript:, data:, vbscript:, file:, etc.)
+    return ''; // Reject all other schemes
   } catch {
-    // Invalid URL (e.g., "javascript:" without // may not throw, check below)
-    const lower = trimmed.toLowerCase();
-    // Explicitly check for dangerous schemes
-    if (
-      lower.startsWith('javascript:') ||
-      lower.startsWith('data:') ||
-      lower.startsWith('vbscript:') ||
-      lower.startsWith('file:')
-    ) {
-      return '';
-    }
-    // For other invalid URLs, return empty to be safe
-    return '';
+    // Not an absolute URL with a protocol - treat as a relative path
+    // Normalize to root-relative by prepending "/" for consistent handling
+    // This is safe because we've already checked for dangerous schemes above
+    return '/' + trimmed;
   }
 }
