@@ -227,7 +227,9 @@ ${status} ${result.legacyId} → ${result.newId}
  * Create a visual score bar
  */
 function createScoreBar(score: number): string {
-  const filled = Math.round(score / 10);
+  // Clamp score to 0-100 to prevent negative repeat counts
+  const clampedScore = Math.max(0, Math.min(100, score));
+  const filled = Math.round(clampedScore / 10);
   const empty = 10 - filled;
   return '[' + '█'.repeat(filled) + '░'.repeat(empty) + ']';
 }
