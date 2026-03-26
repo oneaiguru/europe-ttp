@@ -220,7 +220,7 @@ function format(d) {
               '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_email_aol||'') + '</td>' +
               '<td style="background-color:white;">Status:</td>' +
               '<td style="background-color:white;color:' + getStatusColor(_e['${rk}'].reporting_status) + ';">' + _e['${rk}'].reporting_status + '</td>' +
-              '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\'post_sahaj_ttc_feedback_form\',\'' + encodeURIComponent(_e.email) + '\',\'' + encodeURIComponent(_e.form_instance) + '\');">View</a></td>' +
+              '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'post_sahaj_ttc_feedback_form\\',\\'' + encodeURIComponent(_e.email) + '\\',\\'' + encodeURIComponent(_e.form_instance) + '\\');">View</a></td>' +
             '</tr>' +
             '<tr>' +
               '<td style="background-color:white;">Volunteer:</td>' +
@@ -241,9 +241,9 @@ function format(d) {
       _rows +=
         '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border:1px solid #eee;background-color:white;margin-bottom:13px;">' +
           '<tr>' +
-            '<td style="background-color:white;font-weight:bold;color:#176792;font-family:\'Ubuntu Mono\',monospace;">SELF</td>' +
+            '<td style="background-color:white;font-weight:bold;color:#176792;font-family:\\'Ubuntu Mono\\',monospace;">SELF</td>' +
             '<td style="background-color:white;color:' + getStatusColor(_self['${rk}'].reporting_status) + ';">' + _self['${rk}'].reporting_status + '</td>' +
-            '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\'post_sahaj_ttc_self_evaluation_form\',\'' + encodeURIComponent(d.email) + '\',\'' + encodeURIComponent(_self.form_instance) + '\');">View</a></td>' +
+            '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'post_sahaj_ttc_self_evaluation_form\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(_self.form_instance) + '\\');">View</a></td>' +
           '</tr>' +
         '</table>';
     }
@@ -261,12 +261,12 @@ function format(d) {
         var _dateStr = _f.course_start_date ? formatDate(_f.course_start_date) : '';
         _rows +=
           '<tr>' +
-            '<td style="background-color:white;font-weight:bold;color:#7c3602;font-family:\'Ubuntu Mono\',monospace;">EVAL</td>' +
+            '<td style="background-color:white;font-weight:bold;color:#7c3602;font-family:\\'Ubuntu Mono\\',monospace;">EVAL</td>' +
             '<td style="background-color:white;">Course Date: ' + _dateStr + '</td>' +
             '<td style="background-color:white;color:' + getStatusColor(_f['${rk}'].reporting_status) + ';">' + _f['${rk}'].reporting_status + '</td>' +
             '<td style="background-color:white;border-right:1px solid #eee;">' + (_f.data.i_fname||'') + ' ' + (_f.data.i_lname||'') + '</td>' +
             '<td style="background-color:white;border-right:1px solid #eee;">' + (_f.data.i_email_aol||'') + '</td>' +
-            '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\'post_sahaj_ttc_feedback_form\',\'' + encodeURIComponent(_f.email) + '\',\'' + encodeURIComponent(_f.form_instance) + '\');">View</a></td>' +
+            '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'post_sahaj_ttc_feedback_form\\',\\'' + encodeURIComponent(_f.email) + '\\',\\'' + encodeURIComponent(_f.form_instance) + '\\');">View</a></td>' +
           '</tr>';
       }
       _rows += '</table>';

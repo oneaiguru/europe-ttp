@@ -26,6 +26,7 @@ export type AdminShellOptions = {
   title: string;
   bodyHtml: string;
   extraHeadHtml?: string;
+  extraCdnJs?: string;
 };
 
 /**
@@ -43,8 +44,9 @@ export function wrapAdminShell(options: AdminShellOptions): string {
   ${options.extraHeadHtml ?? ''}
 </head>
 <body>
-  ${options.bodyHtml}
   ${ADMIN_CDN_JS}
+  ${options.extraCdnJs ?? ''}
+  ${options.bodyHtml}
 </body>
 </html>`;
 }

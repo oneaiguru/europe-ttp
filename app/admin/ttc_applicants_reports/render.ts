@@ -18,11 +18,8 @@ export type ReportsRenderOptions = {
   ttcListHtml: string;
 };
 
-/**
- * Extra <head> HTML for jQuery UI (slider widget).
- */
-export const REPORTS_EXTRA_HEAD_HTML = `<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>`;
+export const REPORTS_EXTRA_HEAD_CSS = `<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">`;
+export const REPORTS_EXTRA_CDN_JS = `<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>`;
 
 export function renderReports(options: ReportsRenderOptions): string {
   const { reportingKey, ttcCountryAndDates, ttcListHtml } = options;
@@ -465,7 +462,7 @@ function format(d) {
           '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_email_aol||'') + '</td>' +
           '<td style="background-color:white;">Status:</td>' +
           '<td style="background-color:white;color:' + getStatusColor(_e['${rk}'].reporting_status) + ';">' + _e['${rk}'].reporting_status + '</td>' +
-          '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\'ttc_evaluation\',\'' + encodeURIComponent(_e.email) + '\',\'' + encodeURIComponent(_e.form_instance) + '\');">View</a></td>' +
+          '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'ttc_evaluation\\',\\'' + encodeURIComponent(_e.email) + '\\',\\'' + encodeURIComponent(_e.form_instance) + '\\');">View</a></td>' +
         '</tr>' +
         '<tr>' +
           '<td style="background-color:white;">Volunteer:</td>' +
@@ -499,7 +496,7 @@ function format(d) {
           '<td style="background-color:white;border-right:1px solid #eee;">' + (_ev.data.i_email_aol||_ev.email||'') + '</td>' +
           '<td style="background-color:white;">Status:</td>' +
           '<td style="background-color:white;color:' + getStatusColor(_ev['${rk}'].reporting_status) + ';">' + _ev['${rk}'].reporting_status + '</td>' +
-          '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\'ttc_evaluation\',\'' + encodeURIComponent(_ev.email) + '\',\'' + encodeURIComponent(_ev.form_instance) + '\');">View</a></td>' +
+          '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'ttc_evaluation\\',\\'' + encodeURIComponent(_ev.email) + '\\',\\'' + encodeURIComponent(_ev.form_instance) + '\\');">View</a></td>' +
         '</tr>';
       _forms.push({form_type:'ttc_evaluation', email:_ev.email, form_instance:_ev.form_instance});
     }
@@ -510,11 +507,11 @@ function format(d) {
   return '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border:1px solid #eee;background-color:white;">' +
     _rows + '</table>' +
     '<div style="margin-top:13px;margin-bottom:7px;">' +
-      '<a class="an-simple-button" onclick="view_form_standalone_combined(\'' + encodeURIComponent(d.email) + '\',\'Y\');">Print</a>&nbsp;' +
-      '<a class="an-simple-button" onclick="view_form_standalone_combined(\'' + encodeURIComponent(d.email) + '\',\'N\');">View with evaluations (new window)</a>&nbsp;' +
-      '<a class="an-simple-button" onclick="view_form(\'ttc_application\',\'' + encodeURIComponent(d.email) + '\',\'' + encodeURIComponent(d.form_instance) + '\');">View Application</a>&nbsp;' +
-      '<a class="an-simple-button" onclick="view_form_standalone(\'ttc_application\',\'' + encodeURIComponent(d.email) + '\',\'' + encodeURIComponent(d.form_instance) + '\');">View Application (new window)</a>&nbsp;' +
-      '<a class="an-simple-button" onclick="save_ttcdesk_data(\'ttc_application\',\'' + encodeURIComponent(d.email) + '\',\'' + encodeURIComponent(d.form_instance) + '\');">Save Comments</a>&nbsp;' +
+      '<a class="an-simple-button" onclick="view_form_standalone_combined(\\'' + encodeURIComponent(d.email) + '\\',\\'Y\\');">Print</a>&nbsp;' +
+      '<a class="an-simple-button" onclick="view_form_standalone_combined(\\'' + encodeURIComponent(d.email) + '\\',\\'N\\');">View with evaluations (new window)</a>&nbsp;' +
+      '<a class="an-simple-button" onclick="view_form(\\'ttc_application\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(d.form_instance) + '\\');">View Application</a>&nbsp;' +
+      '<a class="an-simple-button" onclick="view_form_standalone(\\'ttc_application\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(d.form_instance) + '\\');">View Application (new window)</a>&nbsp;' +
+      '<a class="an-simple-button" onclick="save_ttcdesk_data(\\'ttc_application\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(d.form_instance) + '\\');">Save Comments</a>&nbsp;' +
       '<textarea id="local_ttcdesk_comments-' + d.email + '-' + d.form_instance + '" rows="2" cols="40" placeholder="Comments"></textarea>' +
     '</div>';
 }

@@ -210,8 +210,8 @@ function format(d) {
 
   return _tables +
     '<div style="margin-top:13px;margin-bottom:7px;">' +
-      '<a class="an-simple-button" onclick="view_form_standalone(\'ttc_application\',\'' + encodeURIComponent(d.email) + '\',\'' + encodeURIComponent(d.form_instance) + '\');">View Application</a>&nbsp;' +
-      '<a class="an-simple-button" onclick="view_form(\'ttc_application\',\'' + encodeURIComponent(d.email) + '\',\'' + encodeURIComponent(d.form_instance) + '\');">View Application (inline)</a>' +
+      '<a class="an-simple-button" onclick="view_form_standalone(\\'ttc_application\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(d.form_instance) + '\\');">View Application</a>&nbsp;' +
+      '<a class="an-simple-button" onclick="view_form(\\'ttc_application\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(d.form_instance) + '\\');">View Application (inline)</a>' +
     '</div>';
 }
 

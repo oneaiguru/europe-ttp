@@ -1,5 +1,5 @@
 import { wrapAdminShell } from '../../../admin/shared/admin-shell';
-import { renderReports, REPORTS_EXTRA_HEAD_HTML } from '../../../admin/ttc_applicants_reports/render';
+import { renderReports, REPORTS_EXTRA_HEAD_CSS, REPORTS_EXTRA_CDN_JS } from '../../../admin/ttc_applicants_reports/render';
 
 // TODO: In production, ttcListHtml and ttcCountryAndDates come from config/storage layer.
 const DEFAULT_TTC_LIST_HTML = `
@@ -19,7 +19,8 @@ export async function GET() {
   const page = wrapAdminShell({
     title: 'TTC Applicants Reports',
     bodyHtml,
-    extraHeadHtml: REPORTS_EXTRA_HEAD_HTML,
+    extraHeadHtml: REPORTS_EXTRA_HEAD_CSS,
+    extraCdnJs: REPORTS_EXTRA_CDN_JS,
   });
   return new Response(page, {
     headers: { 'content-type': 'text/html' },
