@@ -1,0 +1,8 @@
+node_modules
+.next
+.git
+.claude-trace
+.DS_Store
+*.tsbuildinfo
+test-results
+reports
