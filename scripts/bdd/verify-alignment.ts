@@ -533,8 +533,16 @@ function main(): number {
   const featureFiles = walk('specs/features');
   const featureSteps = new Set<string>();
 
+  const skippedFiles: string[] = [];
   for (const file of featureFiles) {
     try {
+      const firstLine = readFileSync(file, 'utf8').split(/\r?\n/)[0].trim();
+      // Skip @pending features (not yet implemented) and @browser features
+      // (use Playwright step definitions, not the Cucumber step registry)
+      if (firstLine.includes('@pending') || firstLine.includes('@browser')) {
+        skippedFiles.push(file);
+        continue;
+      }
       for (const step of extractFeatureSteps(file)) {
         featureSteps.add(step);
       }
@@ -542,6 +550,9 @@ function main(): number {
       console.error(err instanceof Error ? err.message : String(err));
       return 1;
     }
+  }
+  if (skippedFiles.length > 0) {
+    console.log(`Skipped ${skippedFiles.length} @browser/@pending feature file(s)`);
   }
 
   // Check for dead steps (used in .feature files but not defined in step registry)

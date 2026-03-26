@@ -55,16 +55,18 @@ function getUserByRole(role: string): TestUser | undefined {
 }
 
 const ADMIN_REPORTS_LIST_LINKS = [
-  { href: 'ttc_applicants_reports.html', label: 'TTC Report' },
-  { href: 'ttc_applicants_integrity.html', label: 'TTC Integrity Report' },
-  { href: 'post_ttc_course_feedback_summary.html', label: 'Post TTC Report' },
-  { href: 'post_sahaj_ttc_course_feedback_summary.html', label: 'Post Sahaj TTC Report' },
-  { href: 'admin_settings.html', label: 'Admin Settings' },
+  { href: '/api/admin/ttc_applicants_reports', label: 'TTC Report' },
+  { href: '/api/admin/ttc_applicants_integrity', label: 'TTC Integrity Report' },
+  { href: '/api/admin/post_ttc_course_feedback', label: 'Post TTC Report' },
+  { href: '/api/admin/post_sahaj_ttc_course_feedback', label: 'Post Sahaj TTC Report' },
+  { href: '/api/admin/settings', label: 'Admin Settings' },
 ];
 
 async function renderAdminDashboardHtml(): Promise<string> {
   const module = await import('../../../app/admin/ttc_applicants_summary/render');
-  return module.renderAdminDashboard();
+  return module.renderAdminDashboard({
+    ttcListHtml: '<div><select id="ttc_list"><option value="test_ttc">Test TTC</option></select></div>',
+  });
 }
 
 async function renderAdminReportsListHtml(): Promise<string> {
