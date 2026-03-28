@@ -29,20 +29,18 @@ Europe Teacher Training Program - application portal and admin dashboard.
    cd europe-ttp
    ```
 
-3. **Create your environment file**
-   - Windows: `copy .env.example .env`
-   - Mac/Linux: `cp .env.example .env`
-   - Open `.env` in a text editor and fill in the API keys provided to you
-   - Save and close
-
-4. **Start the application**
+3. **Start the application**
    ```
-   docker compose up
+   docker compose up --build
    ```
    First run takes 2-3 minutes to download Node.js and install dependencies.
 
-5. **Open in your browser**
+4. **Open in your browser**
    - Go to http://localhost:3000
+
+> **Note**: No `.env` file is needed to view the pages. All admin dashboards and
+> forms render without API keys. If you need backend features (email, file upload),
+> copy `.env.example` to `.env` and fill in the keys.
 
 ### Available Pages
 

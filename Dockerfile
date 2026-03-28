@@ -10,4 +10,7 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0"]
+ENV NODE_ENV=development
+ENV HOSTNAME=0.0.0.0
+
+CMD ["npx", "next", "dev", "--hostname", "0.0.0.0"]
