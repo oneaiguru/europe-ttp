@@ -283,51 +283,57 @@ $(document).ready(function() {
   const ttcListSection = ttcListHtml;
 
   return `${pageStyles}
-<div class="site-container">
-  <div class="form-header-block text-left">
-    ${escapeHtml(ADMIN_DASHBOARD_TITLE)}
-    <div class="smallertext mt-[7px]">
+<div class="max-w-7xl mx-auto p-6 space-y-6">
+  <div>
+    <h1 class="text-2xl font-light text-gray-800">
+      ${escapeHtml(ADMIN_DASHBOARD_TITLE)}
+    </h1>
+    <div class="text-sm text-gray-500 mb-4">
       Please see below TTC applications for country
     </div>
   </div>
 
-  ${ttcListSection}
+  <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+    ${ttcListSection}
 
-  <div class="mt-[35px] mb-[23px]">
-    <label for="show_lifetime_yes">Show lifetime evaluations?</label>
-    <span class="smallertext">Show evaluations from other TTCs as well. This is helpful if the teacher submitted evaluations using another TTC</span>
-    <div class="mt-[8px]">
-      <form autocomplete="off">
-        <input type="radio" onchange="load_table_data()" id="show_lifetime_yes" name="show_lifetime" value="yes" required>&nbsp;<label for="show_lifetime_yes">Yes</label>
-        <input type="radio" onchange="load_table_data()" id="show_lifetime_no" name="show_lifetime" value="no" required checked>&nbsp;<label for="show_lifetime_no">No</label>
-      </form>
+    <div class="mt-[35px] mb-[23px]">
+      <label for="show_lifetime_yes">Show lifetime evaluations?</label>
+      <span class="smallertext">Show evaluations from other TTCs as well. This is helpful if the teacher submitted evaluations using another TTC</span>
+      <div class="mt-[8px]">
+        <form autocomplete="off">
+          <input type="radio" onchange="load_table_data()" id="show_lifetime_yes" name="show_lifetime" value="yes" required>&nbsp;<label for="show_lifetime_yes">Yes</label>
+          <input type="radio" onchange="load_table_data()" id="show_lifetime_no" name="show_lifetime" value="no" required checked>&nbsp;<label for="show_lifetime_no">No</label>
+        </form>
+      </div>
     </div>
   </div>
 
-  <table id="${escapeHtmlAttr(ADMIN_DASHBOARD_TABLE_ID)}" class="display nowrap w-full">
-    <thead class="font-light uppercase">
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Status</th>
-        <th>Evals Status</th>
-        <th>Evals</th>
-        <th>Evals (Lifetime)</th>
-        <th>Email</th>
-        <th>Cell Phone</th>
-        <th>Home Phone</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Last Updated (EST)</th>
-      </tr>
-    </thead>
-    <tfoot>
-      <tr>
-        <th></th>
-        <th colspan="11" class="text-left">Total Complete Applications: <i class="font-normal">loading</i>, Total Submitted Applications: <i class="font-normal">loading</i></th>
-      </tr>
-    </tfoot>
-  </table>
+  <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-4 overflow-x-auto">
+    <table id="${escapeHtmlAttr(ADMIN_DASHBOARD_TABLE_ID)}" class="display nowrap w-full">
+      <thead class="font-light uppercase">
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Evals Status</th>
+          <th>Evals</th>
+          <th>Evals (Lifetime)</th>
+          <th>Email</th>
+          <th>Cell Phone</th>
+          <th>Home Phone</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Last Updated (EST)</th>
+        </tr>
+      </thead>
+      <tfoot class="text-sm text-gray-600 mt-4">
+        <tr>
+          <th></th>
+          <th colspan="11" class="text-left">Total Complete Applications: <i class="font-normal">loading</i>, Total Submitted Applications: <i class="font-normal">loading</i></th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 
   <div id="step_post_submit_message"></div>
 </div>
