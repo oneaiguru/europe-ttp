@@ -87,8 +87,8 @@ function getShowHideHTML(data, idx, maxLen, showLabel, hideLabel, startCollapsed
   hideLabel = hideLabel || '[-]';
   var short = data.substring(0, maxLen);
   if (startCollapsed) {
-    return '<span id="short' + idx + '">' + short + ' <a onclick="document.getElementById(\\'short' + idx + '\\').style.display=\\'none\\';document.getElementById(\\'full' + idx + '\\').style.display=\\'inline\\';">' + showLabel + '</a></span>' +
-      '<span id="full' + idx + '" style="display:none;">' + data + ' <a onclick="document.getElementById(\\'full' + idx + '\\').style.display=\\'none\\';document.getElementById(\\'short' + idx + '\\').style.display=\\'inline\\';">' + hideLabel + '</a></span>';
+    return '<span id="short' + idx + '">' + short + ' <a onclick="document.getElementById(\\'short' + idx + '\\').classList.add(\\'hidden\\');document.getElementById(\\'full' + idx + '\\').classList.remove(\\'hidden\\');">' + showLabel + '</a></span>' +
+      '<span id="full' + idx + '" class="hidden">' + data + ' <a onclick="document.getElementById(\\'full' + idx + '\\').classList.add(\\'hidden\\');document.getElementById(\\'short' + idx + '\\').classList.remove(\\'hidden\\');">' + hideLabel + '</a></span>';
   }
   return data;
 }
