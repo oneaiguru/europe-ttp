@@ -6,3 +6,12 @@ node_modules
 *.tsbuildinfo
 test-results
 reports
+.agent
+.playwright-mcp
+docs/Tasks
+IMPLEMENTATION_PLAN.md
+PROMPT_build.md
+AGENTS.md
+loop.sh
+loop_no_active_task.sh
+scripts/dev
