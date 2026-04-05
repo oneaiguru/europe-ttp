@@ -1,11 +1,18 @@
 import { ADMIN_REPORTS_LIST_LINKS } from './admin/reports_list/render';
 
-const EXTRA_ADMIN_LINKS = [
+type LinkItem = {
+  href: string;
+  label: string;
+};
+
+const ADMIN_LINKS: LinkItem[] = [
+  { href: '/api/admin/reports_list', label: 'Reports List' },
   { href: '/api/admin/permissions', label: 'Permissions' },
   { href: '/api/admin/ttc_applicants_summary', label: 'TTC Applicants Summary' },
+  ...ADMIN_REPORTS_LIST_LINKS,
 ];
 
-const FORM_LINKS = [
+const FORM_LINKS: LinkItem[] = [
   { href: '/api/forms/ttc_application_us', label: 'TTC Application (US)' },
   { href: '/api/forms/ttc_application_non_us', label: 'TTC Application (Non-US)' },
   { href: '/api/forms/ttc_evaluation', label: 'TTC Evaluation' },
@@ -19,41 +26,46 @@ const FORM_LINKS = [
   { href: '/api/forms/ttc_portal_settings', label: 'Portal Settings' },
 ];
 
-export default function HomePage() {
-  const adminLinks = [...ADMIN_REPORTS_LIST_LINKS, ...EXTRA_ADMIN_LINKS];
+function LinkGrid({ links, emptyText }: { links: LinkItem[]; emptyText: string }) {
+  if (links.length === 0) {
+    return <p className="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-500">{emptyText}</p>;
+  }
 
   return (
-    <div style={{ fontFamily: 'Ubuntu, sans-serif', fontWeight: 300, maxWidth: 800, margin: '0 auto', padding: 20 }}>
-      <h1 style={{ fontWeight: 300, fontSize: '1.8em' }}>Europe TTP</h1>
-      <p style={{ color: '#666' }}>Teacher Training Program — application portal and admin dashboard.</p>
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {links.map((link) => (
+        <a
+          key={link.href}
+          href={link.href}
+          className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+        >
+          <p className="text-base font-medium text-slate-900 group-hover:text-blue-600">{link.label}</p>
+          <p className="mt-1 truncate text-sm text-slate-500">{link.href}</p>
+        </a>
+      ))}
+    </div>
+  );
+}
 
-      <h2 style={{ fontWeight: 300, fontSize: '1.3em', marginTop: 30, borderBottom: '1px solid #ddd', paddingBottom: 8 }}>
-        Admin Pages
-      </h2>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {adminLinks.map((link) => (
-          <li key={link.href} style={{ padding: '6px 0' }}>
-            <a href={link.href} style={{ color: '#1565c0', textDecoration: 'none' }}>
-              {link.label}
-            </a>
-            <span style={{ color: '#999', fontSize: '0.85em', marginLeft: 10 }}>{link.href}</span>
-          </li>
-        ))}
-      </ul>
+export default function HomePage() {
+  return (
+    <div className="mx-auto max-w-6xl space-y-10 px-4 py-8 sm:px-6 lg:px-8">
+      <header className="space-y-2">
+        <h1 className="text-3xl font-light text-slate-900">Europe TTP</h1>
+        <p className="text-sm text-slate-600">
+          Teacher Training Program — application portal and admin dashboard.
+        </p>
+      </header>
 
-      <h2 style={{ fontWeight: 300, fontSize: '1.3em', marginTop: 30, borderBottom: '1px solid #ddd', paddingBottom: 8 }}>
-        Form Pages
-      </h2>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {FORM_LINKS.map((link) => (
-          <li key={link.href} style={{ padding: '6px 0' }}>
-            <a href={link.href} style={{ color: '#1565c0', textDecoration: 'none' }}>
-              {link.label}
-            </a>
-            <span style={{ color: '#999', fontSize: '0.85em', marginLeft: 10 }}>{link.href}</span>
-          </li>
-        ))}
-      </ul>
+      <section className="space-y-4">
+        <h2 className="border-b border-slate-200 pb-2 text-xl font-light text-slate-800">Admin Pages</h2>
+        <LinkGrid links={ADMIN_LINKS} emptyText="No admin links are available." />
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="border-b border-slate-200 pb-2 text-xl font-light text-slate-800">Form Pages</h2>
+        <LinkGrid links={FORM_LINKS} emptyText="No form links are available." />
+      </section>
     </div>
   );
 }
