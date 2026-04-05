@@ -219,24 +219,24 @@ function format(d) {
       for (var i = 0; i < _c.evaluations.length; i++) {
         var _e = _c.evaluations[i];
         _rows +=
-          '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border:1px solid #eee;background-color:white;margin-bottom:13px;">' +
+          '<table class="w-full border border-[#eee] bg-white px-[13px] py-0 mb-[13px]">' +
             '<tr>' +
-              '<td style="background-color:white;">Evaluator:</td>' +
-              '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_fname||'') + ' ' + (_e.data.i_lname||'') + '</td>' +
-              '<td style="background-color:white;">Email:</td>' +
-              '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_email_aol||'') + '</td>' +
-              '<td style="background-color:white;">Status:</td>' +
-              '<td style="background-color:white;color:' + getStatusColor(_e['${rk}'].reporting_status) + ';">' + _e['${rk}'].reporting_status + '</td>' +
-              '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'post_ttc_feedback_form\\',\\'' + encodeURIComponent(_e.email) + '\\',\\'' + encodeURIComponent(_e.form_instance) + '\\');">View</a></td>' +
+              '<td class="bg-white">Evaluator:</td>' +
+              '<td class="bg-white border-r border-[#eee]">' + (_e.data.i_fname||'') + ' ' + (_e.data.i_lname||'') + '</td>' +
+              '<td class="bg-white">Email:</td>' +
+              '<td class="bg-white border-r border-[#eee]">' + (_e.data.i_email_aol||'') + '</td>' +
+              '<td class="bg-white">Status:</td>' +
+              '<td class="bg-white" style="color:' + getStatusColor(_e['${rk}'].reporting_status) + ';">' + _e['${rk}'].reporting_status + '</td>' +
+              '<td class="bg-white"><a class="an-simple-button" onclick="view_form_standalone(\\'post_ttc_feedback_form\\',\\'' + encodeURIComponent(_e.email) + '\\',\\'' + encodeURIComponent(_e.form_instance) + '\\');">View</a></td>' +
             '</tr>' +
             '<tr>' +
-              '<td style="background-color:white;">Volunteer:</td>' +
-              '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_ttc_graduate_name||'') + '</td>' +
-              '<td style="background-color:white;">Email:</td>' +
-              '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_ttc_graduate_email||'') + '</td>' +
-              '<td style="background-color:white;">Course Start:</td>' +
-              '<td style="background-color:white;">' + (_e.data.i_course_start||'') + '</td>' +
-              '<td style="background-color:white;"></td>' +
+              '<td class="bg-white">Volunteer:</td>' +
+              '<td class="bg-white border-r border-[#eee]">' + (_e.data.i_ttc_graduate_name||'') + '</td>' +
+              '<td class="bg-white">Email:</td>' +
+              '<td class="bg-white border-r border-[#eee]">' + (_e.data.i_ttc_graduate_email||'') + '</td>' +
+              '<td class="bg-white">Course Start:</td>' +
+              '<td class="bg-white">' + (_e.data.i_course_start||'') + '</td>' +
+              '<td class="bg-white"></td>' +
             '</tr>' +
           '</table>';
       }
@@ -252,30 +252,30 @@ function format(d) {
       return (a.course_start_date - b.course_start_date) / (1000 * 60 * 60 * 24);
     });
 
-    _rows += '<div style="margin-bottom:5px;font-size:15px;">Self and Teacher feedback sorted in order of course date:</div>';
-    _rows += '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border:1px solid #eee;background-color:white;margin-bottom:13px;">';
+    _rows += '<div class="mb-[5px] text-[15px]">Self and Teacher feedback sorted in order of course date:</div>';
+    _rows += '<table class="w-full border border-[#eee] bg-white px-[13px] py-0 mb-[13px]">';
     for (var k = 0; k < _display_forms.length; k++) {
       var _f = _display_forms[k];
       var _dateStr = _f.course_start_date ? formatDate(_f.course_start_date) : '';
       if (_f.data.hasOwnProperty('i_ttc_graduate_email')) {
         _rows +=
           '<tr>' +
-            '<td style="background-color:white;font-weight:bold;color:#7c3602;font-family:\\'Ubuntu Mono\\',monospace;">EVAL</td>' +
-            '<td style="background-color:white;">Course Date: ' + _dateStr + '</td>' +
-            '<td style="background-color:white;color:' + getStatusColor(_f['${rk}'].reporting_status) + ';">' + _f['${rk}'].reporting_status + '</td>' +
-            '<td style="background-color:white;border-right:1px solid #eee;">' + (_f.data.i_fname||'') + ' ' + (_f.data.i_lname||'') + '</td>' +
-            '<td style="background-color:white;border-right:1px solid #eee;">' + (_f.data.i_email_aol||'') + '</td>' +
-            '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'post_ttc_feedback_form\\',\\'' + encodeURIComponent(_f.email) + '\\',\\'' + encodeURIComponent(_f.form_instance) + '\\');">View</a></td>' +
+            '<td class="bg-white font-bold text-[#7c3602] font-mono">EVAL</td>' +
+            '<td class="bg-white">Course Date: ' + _dateStr + '</td>' +
+            '<td class="bg-white" style="color:' + getStatusColor(_f['${rk}'].reporting_status) + ';">' + _f['${rk}'].reporting_status + '</td>' +
+            '<td class="bg-white border-r border-[#eee]">' + (_f.data.i_fname||'') + ' ' + (_f.data.i_lname||'') + '</td>' +
+            '<td class="bg-white border-r border-[#eee]">' + (_f.data.i_email_aol||'') + '</td>' +
+            '<td class="bg-white"><a class="an-simple-button" onclick="view_form_standalone(\\'post_ttc_feedback_form\\',\\'' + encodeURIComponent(_f.email) + '\\',\\'' + encodeURIComponent(_f.form_instance) + '\\');">View</a></td>' +
           '</tr>';
       } else {
         _rows +=
           '<tr>' +
-            '<td style="background-color:white;font-weight:bold;color:#176792;font-family:\\'Ubuntu Mono\\',monospace;">SELF</td>' +
-            '<td style="background-color:white;">Course Date: ' + _dateStr + '</td>' +
-            '<td style="background-color:white;color:' + getStatusColor(_f['${rk}'].reporting_status) + ';">' + _f['${rk}'].reporting_status + '</td>' +
-            '<td style="background-color:white;"></td>' +
-            '<td style="background-color:white;"></td>' +
-            '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'post_ttc_self_evaluation_form\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(_f.form_instance) + '\\');">View</a></td>' +
+            '<td class="bg-white font-bold text-[#176792] font-mono">SELF</td>' +
+            '<td class="bg-white">Course Date: ' + _dateStr + '</td>' +
+            '<td class="bg-white" style="color:' + getStatusColor(_f['${rk}'].reporting_status) + ';">' + _f['${rk}'].reporting_status + '</td>' +
+            '<td class="bg-white"></td>' +
+            '<td class="bg-white"></td>' +
+            '<td class="bg-white"><a class="an-simple-button" onclick="view_form_standalone(\\'post_ttc_self_evaluation_form\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(_f.form_instance) + '\\');">View</a></td>' +
           '</tr>';
       }
     }
@@ -290,37 +290,34 @@ $(document).ready(function() {
 </script>`;
 
   return `${pageStyles}
-<div class="site-container">
-  <div class="form-header-block" style="text-align:left;">
-    ${escapeHtml(POST_TTC_FEEDBACK_TITLE)}
-    <div class="smallertext" style="margin-top:7px;">
-      Please see below Post TTC feedback for country
-    </div>
+<div class="max-w-7xl mx-auto p-6">
+  <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6 mb-6">
+    <h1 class="text-2xl font-light mb-2">${escapeHtml(POST_TTC_FEEDBACK_TITLE)}</h1>
+    <div class="smallertext mb-[7px]">Please see below Post TTC feedback for country</div>
+    <table id="${escapeHtmlAttr(POST_TTC_FEEDBACK_TABLE_ID)}" class="display nowrap cell-border w-full">
+      <thead class="uppercase font-light">
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Evaluations</th>
+          <th>TTC Dates</th>
+          <th>TTC Location</th>
+          <th>Email</th>
+          <th>Cell Phone</th>
+          <th>Home Phone</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th></th>
+          <th colspan="8" class="text-left">Total Submitted Feedback:</th>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div id="step_post_submit_message"></div>
   </div>
-
-  <table id="${escapeHtmlAttr(POST_TTC_FEEDBACK_TABLE_ID)}" class="display nowrap cell-border" style="width:100%;">
-    <thead style="font-family:Ubuntu;font-weight:300;text-transform:uppercase;">
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Status</th>
-        <th>Evaluations</th>
-        <th>TTC Dates</th>
-        <th>TTC Location</th>
-        <th>Email</th>
-        <th>Cell Phone</th>
-        <th>Home Phone</th>
-      </tr>
-    </thead>
-    <tfoot>
-      <tr>
-        <th></th>
-        <th colspan="8" style="text-align:left;">Total Submitted Feedback:</th>
-      </tr>
-    </tfoot>
-  </table>
-
-  <div id="step_post_submit_message"></div>
 </div>
 ${appScript}`;
 }
