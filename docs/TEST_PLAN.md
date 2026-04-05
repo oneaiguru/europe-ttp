@@ -1,19 +1,40 @@
 # Europe TTP - Test Plan
 
-This is a page-by-page verification checklist for the new TypeScript/Next.js TTP application.
+## What Is This?
+
+This is the **new TypeScript/Next.js version** of the Europe TTP (Teacher Training Program) admin portal and application system. It replaces the old Python 2.7 application with a modern stack while keeping the same functionality and page structure.
+
+## Your Goal
+
+Go through every page listed below and verify:
+1. The page loads without errors
+2. The layout looks clean and professional (Tailwind CSS styling)
+3. Admin pages show sample data in tables (this is mock data for testing — real data comes from the backend)
+4. Form pages show all fields with proper labels, inputs, and a Submit button
+5. Check each box as you verify it
 
 ## Setup
 
-1. Start the application:
+**On Windows (C:\work):**
+1. Clone the repository and checkout the branch:
+   ```
+   git clone https://github.com/oneaiguru/europe-ttp.git
+   cd europe-ttp
+   git checkout experiment/trpi-split
+   ```
+
+2. Start with Docker:
    ```
    docker compose up
    ```
-   Or without Docker:
+   Or without Docker (requires Node.js 20):
    ```
-   PORT=8009 npm run dev
+   npm install
+   set PORT=8009
+   npm run dev
    ```
 
-2. Open your browser to: **http://localhost:8009**
+3. Open your browser to: **http://localhost:8009**
 
 ## Landing Page
 
