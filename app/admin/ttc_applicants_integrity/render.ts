@@ -173,17 +173,17 @@ function format(d) {
     for (var _mae in d.enrolled_matches) {
       var _matches = d.enrolled_matches[_mae];
       _enrolled_match_rows +=
-        '<tr><td style="background-color:white;">Matched with Applicant:</td>' +
-        '<td style="background-color:white;border-right:1px solid #eee;">' + _mae + '</td></tr>';
+        '<tr><td class="bg-white">Matched with Applicant:</td>' +
+        '<td class="bg-white border-r border-gray-200">' + _mae + '</td></tr>';
       for (var i = 0; i < _matches.length; i++) {
         _enrolled_match_rows +=
-          '<tr><td style="background-color:white;">' + (i+1) + '</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + _matches[i] + '</td></tr>';
+          '<tr><td class="bg-white">' + (i+1) + '</td>' +
+          '<td class="bg-white border-r border-gray-200">' + _matches[i] + '</td></tr>';
       }
     }
     if (_enrolled_match_rows !== '') {
       _tables += 'Enrolled Matches: <br>' +
-        '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border:1px solid #eee;background-color:white;">' +
+        '<table cellpadding="5" cellspacing="0" border="0" class="border border-gray-200 bg-white p-[13px]">' +
         _enrolled_match_rows + '</table><br>';
     }
 
@@ -191,17 +191,17 @@ function format(d) {
     for (var _mae2 in d.org_course_matches) {
       var _matches2 = d.org_course_matches[_mae2];
       _course_match_rows +=
-        '<tr><td style="background-color:white;">Matched with Applicant:</td>' +
-        '<td style="background-color:white;border-right:1px solid #eee;">' + _mae2 + '</td></tr>';
+        '<tr><td class="bg-white">Matched with Applicant:</td>' +
+        '<td class="bg-white border-r border-gray-200">' + _mae2 + '</td></tr>';
       for (var j = 0; j < _matches2.length; j++) {
         _course_match_rows +=
-          '<tr><td style="background-color:white;">' + (j+1) + '</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + _matches2[j] + '</td></tr>';
+          '<tr><td class="bg-white">' + (j+1) + '</td>' +
+          '<td class="bg-white border-r border-gray-200">' + _matches2[j] + '</td></tr>';
       }
     }
     if (_course_match_rows !== '') {
       _tables += 'Course matches: <br>' +
-        '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border:1px solid #eee;background-color:white;">' +
+        '<table cellpadding="5" cellspacing="0" border="0" class="border border-gray-200 bg-white p-[13px]">' +
         _course_match_rows + '</table><br>';
     }
   }
@@ -209,9 +209,9 @@ function format(d) {
   forms[d.email] = _forms;
 
   return _tables +
-    '<div style="margin-top:13px;margin-bottom:7px;">' +
-      '<a class="an-simple-button" onclick="view_form_standalone(\\'ttc_application\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(d.form_instance) + '\\');">View Application</a>&nbsp;' +
-      '<a class="an-simple-button" onclick="view_form(\\'ttc_application\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(d.form_instance) + '\\');">View Application (inline)</a>' +
+    '<div class="mt-[13px] mb-[7px]">' +
+      '<a class="px-3 py-1.5 text-sm rounded-md border border-gray-300 bg-white hover:bg-gray-50" onclick="view_form_standalone(\\'ttc_application\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(d.form_instance) + '\\');">View Application</a>&nbsp;' +
+      '<a class="px-3 py-1.5 text-sm rounded-md border border-gray-300 bg-white hover:bg-gray-50" onclick="view_form(\\'ttc_application\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(d.form_instance) + '\\');">View Application (inline)</a>' +
     '</div>';
 }
 
@@ -223,34 +223,38 @@ $(document).ready(function() {
 </script>`;
 
   return `${pageStyles}
-<div class="site-container">
-  <div class="form-header-block" style="text-align:left;">
+<div class="max-w-7xl mx-auto p-6 space-y-6">
+  <div class="text-2xl font-light text-gray-800">
     ${escapeHtml(INTEGRITY_REPORT_TITLE)}
-    <div class="smallertext" style="margin-top:7px;">
+    <div class="text-sm text-gray-500 mt-1">
       Please see below TTC applications for country
     </div>
   </div>
 
-  ${ttcListHtml}
+  <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+    ${ttcListHtml}
+  </div>
 
-  <table id="${escapeHtmlAttr(INTEGRITY_TABLE_ID)}" class="display nowrap cell-border" style="width:100%;">
-    <thead style="font-family:Ubuntu;font-weight:300;text-transform:uppercase;">
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Last Updated<br><span class="smallertext">(EST)</span></th>
-        <th>Enrolled Matches</th>
-        <th>Org Courses Matches</th>
-      </tr>
-    </thead>
-    <tfoot>
-      <tr>
-        <th></th>
-        <th colspan="5" style="text-align:left;">Total Applications:</th>
-      </tr>
-    </tfoot>
-  </table>
+  <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-4 overflow-x-auto">
+    <table id="${escapeHtmlAttr(INTEGRITY_TABLE_ID)}" class="display nowrap cell-border w-full">
+      <thead class="font-light uppercase">
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Last Updated<br><span class="text-sm text-gray-500">(EST)</span></th>
+          <th>Enrolled Matches</th>
+          <th>Org Courses Matches</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th></th>
+          <th colspan="5" class="text-left">Total Applications:</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 
   <div id="step_post_submit_message"></div>
 </div>
