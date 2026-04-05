@@ -16,18 +16,33 @@ Go through every page listed below and verify:
 ## Setup
 
 **On Windows (C:\work):**
-1. Clone the repository and checkout the branch:
+
+1. Get the code — choose ONE option:
+
+   **Option A — Fresh clone:**
    ```
+   cd C:\work
    git clone https://github.com/oneaiguru/europe-ttp.git
    cd europe-ttp
    git checkout experiment/trpi-split
    ```
 
-2. Start with Docker:
+   **Option B — If you already have the repo:**
+   ```
+   cd C:\work\europe-ttp
+   git fetch origin
+   git checkout experiment/trpi-split
+   git pull origin experiment/trpi-split
+   ```
+
+2. Start the application — choose ONE option:
+
+   **Option A — With Docker (recommended):**
    ```
    docker compose up
    ```
-   Or without Docker (requires Node.js 20):
+
+   **Option B — Without Docker (requires Node.js 20):**
    ```
    npm install
    set PORT=8009
