@@ -594,7 +594,7 @@ $(document).ready(function() {
 
   <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-4 overflow-x-auto">
     <table id="${escapeHtmlAttr(REPORTS_TABLE_ID)}" class="display nowrap cell-border w-full">
-      <thead class="font-light uppercase">
+      <thead class="font-light text-xs">
         <tr>
           <th></th>
           <th>Name</th>
