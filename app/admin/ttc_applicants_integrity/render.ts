@@ -54,7 +54,7 @@ function get_user_data() {
 }
 
 function get_table_data() {
-  var _selected_ttcs = $('#ttc_list').val();
+  var _selected_ttcs = $('#ttc_list').val() || [];
   var applicant_data = [];
 
   for (var _ae in user_data) {

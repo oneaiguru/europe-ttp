@@ -172,7 +172,7 @@ function report_filter(_applicant, _application, _report, _show_lifetime) {
 }
 
 function get_table_data() {
-  var _selected_ttcs = $('#ttc_list').val();
+  var _selected_ttcs = $('#ttc_list').val() || [];
   if (_selected_ttcs.length > 1) {
     document.getElementById('show_lifetime_yes').checked = true;
   }
@@ -290,7 +290,7 @@ function get_table_data() {
         if (_evaluator.hasOwnProperty(_selected_ttc)) {
           for (var _ve in _evaluator[_selected_ttc]) {
             var _eval = _evaluator[_selected_ttc][_ve];
-            if ('[Reporting.KEY]' in _eval && 'is_reporting_matched' in _eval['[Reporting.KEY]'] && _eval['[Reporting.KEY]']['is_reporting_matched'] === 'N') {
+            if ('${rk}' in _eval && 'is_reporting_matched' in _eval['${rk}'] && _eval['${rk}']['is_reporting_matched'] === 'N') {
               var _matched_ttc_list = _eval['lifetime_reporting_matched_ttc_list'];
               if (_matched_ttc_list !== undefined) {
                 _matched_ttc_list = _matched_ttc_list.filter(function(n) { return _selected_ttcs.indexOf(n) !== -1; });

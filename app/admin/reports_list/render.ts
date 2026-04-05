@@ -14,16 +14,13 @@ export function renderAdminReportsList(): string {
   const linksHtml = ADMIN_REPORTS_LIST_LINKS.map(
     (link) => `
     <a
-      rel="admin"
-      class="block rounded-lg border border-gray-200 bg-white p-4 hover:shadow-sm transition-shadow"
-      href="${escapeHtmlAttr(link.href)}">
-      <span class="text-blue-600 hover:text-blue-800 font-medium">${escapeHtml(link.label)}</span>
+      href="${escapeHtmlAttr(link.href)}"
+      class="block rounded-lg border border-gray-200 bg-white p-4 mb-3 hover:shadow-md transition-shadow text-blue-600 hover:text-blue-800 font-medium text-lg">
+      ${escapeHtml(link.label)}
     </a>`,
   ).join('');
-  return `<div class="max-w-4xl mx-auto p-6 space-y-6">
-    <h1 class="text-2xl font-light text-gray-800 mb-6">${escapeHtml(ADMIN_REPORTS_LIST_TITLE)}</h1>
-    <div class="space-y-3">
-      ${linksHtml}
-    </div>
+  return `<div class="max-w-2xl mx-auto p-8">
+    <h1 class="text-3xl font-light text-gray-800 mb-8">${escapeHtml(ADMIN_REPORTS_LIST_TITLE)}</h1>
+    ${linksHtml}
   </div>`;
 }

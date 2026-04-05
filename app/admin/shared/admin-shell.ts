@@ -3,7 +3,8 @@ import { escapeHtml } from '../../utils/html';
 /**
  * CDN CSS: DataTables 1.13 + Buttons + ColReorder, Select2 4.1
  */
-export const ADMIN_CDN_CSS = `<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/cr-1.7.0/datatables.min.css"/>
+export const ADMIN_CDN_CSS = `<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/cr-1.7.0/datatables.min.css"/>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>`;
 
 /**

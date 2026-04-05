@@ -15,6 +15,7 @@ export function wrapFormShell(options: FormShellOptions): string {
 <head>
   <meta charset="UTF-8">
   <title>${escapeHtml(options.title)}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { font-family: Ubuntu, sans-serif; font-weight: 300; margin: 0; padding: 15px; }
     .form-container { margin: 0 auto; max-width: 700px; padding: 0 15px; }

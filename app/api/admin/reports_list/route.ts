@@ -4,7 +4,7 @@ export async function GET() {
   const html = renderAdminReportsList();
   const page = `<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>Admin Reports</title></head>
+<head><meta charset="UTF-8"><title>Admin Reports</title><script src="https://cdn.tailwindcss.com"></script></head>
 <body>${html}</body>
 </html>`;
   return new Response(page, {
