@@ -3,7 +3,13 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "baseUrl": ".",
     "strict": true,
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
     // skipLibCheck: true required for large codebases with @types/node to avoid type conflicts in third-party modules
     // These conflicts are expected and cannot be fixed in application code
     "skipLibCheck": true,
