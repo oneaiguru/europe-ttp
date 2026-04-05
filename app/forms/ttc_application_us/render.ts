@@ -22,8 +22,8 @@ const fields: FieldDef[] = [
 ];
 
 function renderTtcSelect(options: Array<{ value: string; display: string }>): string {
-  return `<div class="form-group"><label for="i_ttc_country_and_dates">TTC Country and Dates</label>` +
-    `<select id="i_ttc_country_and_dates" name="i_ttc_country_and_dates" class="form-select">` +
+  return `<div class="form-group"><label for="i_ttc_country_and_dates" class="text-sm font-medium text-gray-700">TTC Country and Dates</label>` +
+    `<select id="i_ttc_country_and_dates" name="i_ttc_country_and_dates" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">` +
     `<option value="">-- Select --</option>` +
     options.map(o => `<option value="${escapeHtmlAttr(o.value)}">${escapeHtml(o.display)}</option>`).join('') +
     `</select></div>`;
@@ -32,14 +32,16 @@ function renderTtcSelect(options: Array<{ value: string; display: string }>): st
 export function renderTtcApplicationUsForm(options?: { ttcOptions?: Array<{ value: string; display: string }> }): string {
   const ttcSelectHtml = options?.ttcOptions ? renderTtcSelect(options.ttcOptions) : '';
 
-  return `<div class="form-container">` +
-    `<h1>${escapeHtml(TTC_APPLICATION_US_FORM_TITLE)}</h1>` +
+  return `<div class="max-w-3xl mx-auto p-6 space-y-6">` +
+    `<div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">` +
+    `<h1 class="text-2xl font-light text-gray-800 mb-4">${escapeHtml(TTC_APPLICATION_US_FORM_TITLE)}</h1>` +
     `<div id="form-message"></div>` +
     `<form id="${escapeHtmlAttr(TTC_APPLICATION_US_FORM_ID)}">` +
     renderFields(fields) +
     ttcSelectHtml +
     renderSubmitButton('Submit') +
     `</form>` +
+    `</div>` +
     formSubmitScript(TTC_APPLICATION_US_FORM_ID) +
     `</div>`;
 }

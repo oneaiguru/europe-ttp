@@ -32,13 +32,15 @@ const fields: FieldDef[] = [
 ];
 
 export function renderTtcEvaluationForm(): string {
-  return `<div class="form-container">
-  <div class="form-header">${TTC_EVALUATION_FORM_TITLE}</div>
+  return `<div class="max-w-3xl mx-auto p-6 space-y-6">
+  <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+  <h1 class="text-2xl font-light text-gray-800 mb-4">${TTC_EVALUATION_FORM_TITLE}</h1>
   <form id="${FORM_ID}">
 ${renderFields(fields)}
 ${renderSubmitButton()}
   </form>
   <div id="form-message" class="form-message"></div>
+</div>
 </div>
 ${formSubmitScript(FORM_ID)}`;
 }

@@ -12,13 +12,15 @@ const fields: FieldDef[] = [
 ];
 
 export function renderDsnApplicationForm(): string {
-  return `<div class="form-container">` +
-    `<h1>${escapeHtml(DSN_FORM_TITLE)}</h1>` +
+  return `<div class="max-w-3xl mx-auto p-6 space-y-6">` +
+    `<div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">` +
+    `<h1 class="text-2xl font-light text-gray-800 mb-4">${escapeHtml(DSN_FORM_TITLE)}</h1>` +
     `<div id="form-message"></div>` +
     `<form id="${escapeHtmlAttr(DSN_CONTAINER_ID)}">` +
     renderFields(fields) +
     renderSubmitButton('Submit') +
     `</form>` +
+    `</div>` +
     formSubmitScript(DSN_CONTAINER_ID) +
     `</div>`;
 }

@@ -13,13 +13,15 @@ const FORM_ID = 'post-sahaj-ttc-feedback-form';
 
 export function renderPostSahajTtcFeedbackForm(): string {
   return (
-    '<div class="form-container">' +
-    '<h1 class="form-header">Sahaj TTC Graduate feedback from Co-Teacher</h1>' +
-    `<form id="${FORM_ID}"><span class="form-type" style="display:none;">post_sahaj_ttc_feedback_form</span>` +
+    '<div class="max-w-3xl mx-auto p-6 space-y-6">' +
+    '<div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">' +
+    '<h1 class="text-2xl font-light text-gray-800 mb-4">Sahaj TTC Graduate feedback from Co-Teacher</h1>' +
+    `<form id="${FORM_ID}"><span class="form-type hidden">post_sahaj_ttc_feedback_form</span>` +
     renderFields(FIELDS) +
     renderSubmitButton() +
     '</form>' +
     '<div id="form-message" class="form-message"></div>' +
+    '</div>' +
     '</div>' +
     formSubmitScript(FORM_ID)
   );

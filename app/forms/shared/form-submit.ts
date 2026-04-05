@@ -24,10 +24,10 @@ $(document).ready(function() {
     var msgEl = document.getElementById('form-message');
     $.post(window.location.pathname, { data: JSON.stringify(formData) })
       .done(function() {
-        if (msgEl) msgEl.innerHTML = '<div style="color:green;padding:10px;">Your data has been submitted successfully.</div>';
+        if (msgEl) msgEl.innerHTML = '<div class="text-green-700 py-2.5 px-2.5">Your data has been submitted successfully.</div>';
       })
       .fail(function() {
-        if (msgEl) msgEl.innerHTML = '<div style="color:red;padding:10px;">There was an error submitting your data.</div>';
+        if (msgEl) msgEl.innerHTML = '<div class="text-red-700 py-2.5 px-2.5">There was an error submitting your data.</div>';
       });
   });
 });
