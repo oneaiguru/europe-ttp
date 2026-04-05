@@ -7,22 +7,8 @@ export const ADMIN_SETTINGS_CONTAINER_ID = 'settings_page';
 const SETTINGS_CSS = `
 <style>
   ${BUTTON_CSS}
-  .textbox { width: 100%; max-width: 400px; padding: 6px 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; }
   .label_required { font-weight: 400; }
   .label_required::after { content: ' *'; color: #c62828; }
-  .silver-hr { border: none; border-top: 1px solid #ddd; margin: 15px 0; }
-  .settings-row { display: flex; gap: 20px; margin-bottom: 12px; align-items: flex-start; }
-  .settings-row .left { flex: 1; max-width: 400px; }
-  .settings-row .right { flex: 1; max-width: 400px; }
-  .an-c2a-button {
-    display: inline-block; padding: 8px 20px; background: #1565c0; color: white;
-    border-radius: 3px; cursor: pointer; text-decoration: none; font-size: 14px;
-  }
-  .an-c2a-button:hover { background: #0d47a1; }
-  #step_submit {
-    position: fixed; bottom: 0; left: 0; right: 0; background: white;
-    z-index: 13; border-top: 1px solid #eee; padding: 8px; text-align: center;
-  }
 </style>`;
 
 export function renderAdminSettings(): string {
@@ -35,12 +21,12 @@ var REPEATER_DISPLAY_INPUT_CNT = 2;
 
 function postErrorMessage(msg) {
   var el = document.getElementById('step_post_submit_message');
-  if (el) el.innerHTML = '<div style="color:red;padding:10px;">' + msg + '</div>';
+  if (el) el.innerHTML = '<div class="text-red-600 text-sm py-2.5 px-2.5">' + msg + '</div>';
 }
 
 function postDoneMessage(msg) {
   var el = document.getElementById('step_post_submit_message');
-  if (el) el.innerHTML = '<div style="color:green;padding:10px;">' + msg + '</div>';
+  if (el) el.innerHTML = '<div class="text-green-600 text-sm py-2.5 px-2.5">' + msg + '</div>';
 }
 
 function hideLoadingIndicator() {}
@@ -248,65 +234,64 @@ $(document).ready(function() {
 </script>`;
 
   return `${SETTINGS_CSS}
-<div class="site-container">
-  <div class="form-header-block" style="text-align:left;">
-    Admin Settings
-    <div class="smallertext" style="margin-top:13px;">
+<div class="max-w-7xl mx-auto p-6 space-y-6">
+  <div>
+    <h1 class="text-2xl font-light text-gray-800">Admin Settings</h1>
+    <div class="text-sm text-gray-700 mt-1">
       ${ADMIN_SETTINGS_HELPER}
     </div>
   </div>
 
-  <div id="${ADMIN_SETTINGS_CONTAINER_ID}" style="margin-top:20px;">
-    <hr class="silver-hr">
-
-    <div style="margin-bottom:15px;">
-      <div style="margin-bottom:8px;">
-        <strong>Whitelisted Users</strong>
-        (<span id="i_whitelisted_user_count">0</span> added)
-      </div>
-      <div class="smallertext" style="margin-bottom:10px;">
-        Please enter users who you want to whitelist to allow application or evaluation submission even after the deadline.
-        See the dropdown for users already added.
-      </div>
-
-      <div style="margin-bottom:10px;">
-        <select id="i_whitelisted_user" form-entry-type="repeater" required style="max-width:300px;">
-          <option value="summary">0 added</option>
-        </select>
-        &nbsp;
-        <a class="an-simple-button" onclick="new_repeat_entry('i_whitelisted_user');">+ New</a>
-        &nbsp;
-        <a class="an-simple-button" onclick="remove_repeat_entry('i_whitelisted_user');">- Remove</a>
-      </div>
-
-      <div name="i_whitelisted_user_name" style="margin-bottom:8px;">
-        <label name="i_whitelisted_user_name" for="i_whitelisted_user_name" class="label_required">Name</label>
-        <div class="smallertext">The name here is only for identification purposes.</div>
-        <input class="textbox" type="text" id="i_whitelisted_user_name">
-      </div>
-
-      <div name="i_whitelisted_user_email" style="margin-bottom:8px;">
-        <label name="i_whitelisted_user_email" for="i_whitelisted_user_email" class="label_required">Email</label>
-        <div class="smallertext">Ensure that this is the email address they will login with.</div>
-        <input class="textbox" type="text" id="i_whitelisted_user_email">
-      </div>
-
-      <div id="i_whitelisted_user_save" style="margin-bottom:15px;">
-        <a class="an-simple-button" onclick="save_repeat_entry('i_whitelisted_user');">Add User</a>
-        <div class="smallertext" style="margin-top:7px;font-style:italic;">
-          Remember to save your entry by clicking "Add User"
+  <div id="${ADMIN_SETTINGS_CONTAINER_ID}" class="space-y-4">
+    <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6 space-y-4">
+      <div class="space-y-1">
+        <div class="text-base font-medium text-gray-800">
+          Whitelisted Users <span>(<span id="i_whitelisted_user_count">0</span> added)</span>
+        </div>
+        <div class="text-sm text-gray-700">
+          Please enter users who you want to whitelist to allow application or evaluation submission even after the deadline.
+          See the dropdown for users already added.
         </div>
       </div>
 
-      <hr class="silver-hr">
+      <div class="space-y-4">
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="i_whitelisted_user" form-entry-type="repeater" required class="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm">
+            <option value="summary">0 added</option>
+          </select>
+          <a class="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 inline-block" onclick="new_repeat_entry('i_whitelisted_user');">+ New</a>
+          <a class="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 inline-block" onclick="remove_repeat_entry('i_whitelisted_user');">- Remove</a>
+        </div>
+      </div>
+
+      <div name="i_whitelisted_user_name" class="space-y-2">
+        <label name="i_whitelisted_user_name" for="i_whitelisted_user_name" class="label_required text-sm font-medium text-gray-700">Name</label>
+        <div class="text-sm text-gray-700">The name here is only for identification purposes.</div>
+        <input class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" type="text" id="i_whitelisted_user_name">
+      </div>
+
+      <div name="i_whitelisted_user_email" class="space-y-2">
+        <label name="i_whitelisted_user_email" for="i_whitelisted_user_email" class="label_required text-sm font-medium text-gray-700">Email</label>
+        <div class="text-sm text-gray-700">Ensure that this is the email address they will login with.</div>
+        <input class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" type="text" id="i_whitelisted_user_email">
+      </div>
+
+      <div id="i_whitelisted_user_save" class="space-y-2">
+        <a class="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 inline-block" onclick="save_repeat_entry('i_whitelisted_user');">Add User</a>
+        <div class="text-sm text-gray-700 italic">
+          Remember to save your entry by clicking "Add User"
+        </div>
+      </div>
     </div>
   </div>
 
-  <div id="step_submit">
-    <a id="btn_save" name="btns_save_submit" class="an-c2a-button" onclick="savePage();">Save</a>
+  <div id="step_submit" class="fixed left-0 right-0 bottom-0 z-10 bg-white border-t border-gray-200">
+    <div class="max-w-7xl mx-auto p-4 flex justify-center">
+      <a id="btn_save" name="btns_save_submit" class="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700 inline-block" onclick="savePage();">Save</a>
+    </div>
   </div>
 
-  <div id="step_post_submit_message" style="margin-top:15px;margin-bottom:60px;"></div>
+  <div id="step_post_submit_message" class="text-sm mt-4"></div>
 </div>
 ${appScript}`;
 }

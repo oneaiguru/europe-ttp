@@ -61,12 +61,12 @@ function dict2bullets(d) {
   for (var k in d) {
     if (d.hasOwnProperty(k)) items.push(k + ': ' + d[k]);
   }
-  return items.length > 0 ? '<ul style="margin:0;padding-left:16px;"><li>' + items.join('</li><li>') + '</li></ul>' : '';
+  return items.length > 0 ? '<ul class="mt-0 pl-4"><li>' + items.join('</li><li>') + '</li></ul>' : '';
 }
 
 function array2bullets(arr) {
   if (!arr || !Array.isArray(arr) || arr.length === 0) return '';
-  return '<ul style="margin:0;padding-left:16px;"><li>' + arr.join('</li><li>') + '</li></ul>';
+  return '<ul class="mt-0 pl-4"><li>' + arr.join('</li><li>') + '</li></ul>';
 }
 
 function calculateAge(dob) {
@@ -368,16 +368,16 @@ function load_table_data() {
           render: function(data, type, row, meta) {
             var idx = '-' + meta.row + '-' + meta.col;
             var _view_mode = $('input[name=view_mode]:checked');
-            var _content;
-            if (_view_mode.val() === 'c') {
-              _content = getShowHideHTML(data, idx, 19, '[+]', '[-]', true);
-            } else {
-              _content = getShowHideHTML(data, idx);
-            }
-            return "<div style='white-space:normal;max-width:200px;'>" + _content + "</div>";
-          },
-          targets: '_all'
+        var _content;
+        if (_view_mode.val() === 'c') {
+          _content = getShowHideHTML(data, idx, 19, '[+]', '[-]', true);
+        } else {
+          _content = getShowHideHTML(data, idx);
         }
+        return "<div class='whitespace-normal max-w-[200px]'>" + _content + "</div>";
+      },
+      targets: '_all'
+    }
       ],
       order: [[1,'asc']],
       rowCallback: function(row, data) {
@@ -456,23 +456,23 @@ function format(d) {
       var _e = d.evaluations[i];
       _rows +=
         '<tr>' +
-          '<td style="background-color:white;">Evaluator:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_name||'') + '</td>' +
-          '<td style="background-color:white;">Email:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_email_aol||'') + '</td>' +
-          '<td style="background-color:white;">Status:</td>' +
+          '<td class="bg-white">Evaluator:</td>' +
+          '<td class="bg-white border-r border-[#eee]">' + (_e.data.i_name||'') + '</td>' +
+          '<td class="bg-white">Email:</td>' +
+          '<td class="bg-white border-r border-[#eee]">' + (_e.data.i_email_aol||'') + '</td>' +
+          '<td class="bg-white">Status:</td>' +
           '<td style="background-color:white;color:' + getStatusColor(_e['${rk}'].reporting_status) + ';">' + _e['${rk}'].reporting_status + '</td>' +
-          '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'ttc_evaluation\\',\\'' + encodeURIComponent(_e.email) + '\\',\\'' + encodeURIComponent(_e.form_instance) + '\\');">View</a></td>' +
+          '<td class="bg-white"><a class="an-simple-button" onclick="view_form_standalone(\\'ttc_evaluation\\',\\'' + encodeURIComponent(_e.email) + '\\',\\'' + encodeURIComponent(_e.form_instance) + '\\');">View</a></td>' +
         '</tr>' +
         '<tr>' +
-          '<td style="background-color:white;">Volunteer:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_volunteer_name||'') + '</td>' +
-          '<td style="background-color:white;">Email:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_volunteer_email||'') + '</td>' +
-          '<td style="background-color:white;"></td><td style="background-color:white;"></td><td style="background-color:white;"></td>' +
+          '<td class="bg-white">Volunteer:</td>' +
+          '<td class="bg-white border-r border-[#eee]">' + (_e.data.i_volunteer_name||'') + '</td>' +
+          '<td class="bg-white">Email:</td>' +
+          '<td class="bg-white border-r border-[#eee]">' + (_e.data.i_volunteer_email||'') + '</td>' +
+          '<td class="bg-white"></td><td class="bg-white"></td><td class="bg-white"></td>' +
         '</tr>';
       if (i === d.evaluations.length - 1) {
-        _rows += '<tr><td style="background-color:#fafafa;line-height:5px;" colspan="7"></td></tr>';
+        _rows += '<tr><td class="bg-[#fafafa] leading-[5px]" colspan="7"></td></tr>';
       }
     }
   } else {
@@ -485,18 +485,18 @@ function format(d) {
         var _display = '';
         if (_ev.ttc_metadata) { _display = _ev.ttc_metadata.display; }
         else { _display = _ev.data.dates || _ev.data.Dates || (_ev.data.i_ttc_country_and_dates||'').toUpperCase(); }
-        _ttc_dates = '<td style="background-color:white;">TTC:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + _display + '</td>';
+        _ttc_dates = '<td class="bg-white">TTC:</td>' +
+          '<td class="bg-white border-r border-[#eee]">' + _display + '</td>';
       }
       _rows +=
         '<tr>' + _ttc_dates +
-          '<td style="background-color:white;">Evaluator:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_ev.data.i_name||'') + '</td>' +
-          '<td style="background-color:white;">Email:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_ev.data.i_email_aol||_ev.email||'') + '</td>' +
-          '<td style="background-color:white;">Status:</td>' +
+          '<td class="bg-white">Evaluator:</td>' +
+          '<td class="bg-white border-r border-[#eee]">' + (_ev.data.i_name||'') + '</td>' +
+          '<td class="bg-white">Email:</td>' +
+          '<td class="bg-white border-r border-[#eee]">' + (_ev.data.i_email_aol||_ev.email||'') + '</td>' +
+          '<td class="bg-white">Status:</td>' +
           '<td style="background-color:white;color:' + getStatusColor(_ev['${rk}'].reporting_status) + ';">' + _ev['${rk}'].reporting_status + '</td>' +
-          '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'ttc_evaluation\\',\\'' + encodeURIComponent(_ev.email) + '\\',\\'' + encodeURIComponent(_ev.form_instance) + '\\');">View</a></td>' +
+          '<td class="bg-white"><a class="an-simple-button" onclick="view_form_standalone(\\'ttc_evaluation\\',\\'' + encodeURIComponent(_ev.email) + '\\',\\'' + encodeURIComponent(_ev.form_instance) + '\\');">View</a></td>' +
         '</tr>';
       _forms.push({form_type:'ttc_evaluation', email:_ev.email, form_instance:_ev.form_instance});
     }
@@ -504,9 +504,9 @@ function format(d) {
 
   forms[d.email] = _forms;
 
-  return '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border:1px solid #eee;background-color:white;">' +
+  return '<table cellpadding="5" cellspacing="0" border="0" class="p-[0_13px] border border-[#eee] bg-white">' +
     _rows + '</table>' +
-    '<div style="margin-top:13px;margin-bottom:7px;">' +
+    '<div class="mt-[13px] mb-[7px]">' +
       '<a class="an-simple-button" onclick="view_form_standalone_combined(\\'' + encodeURIComponent(d.email) + '\\',\\'Y\\');">Print</a>&nbsp;' +
       '<a class="an-simple-button" onclick="view_form_standalone_combined(\\'' + encodeURIComponent(d.email) + '\\',\\'N\\');">View with evaluations (new window)</a>&nbsp;' +
       '<a class="an-simple-button" onclick="view_form(\\'ttc_application\\',\\'' + encodeURIComponent(d.email) + '\\',\\'' + encodeURIComponent(d.form_instance) + '\\');">View Application</a>&nbsp;' +
@@ -539,100 +539,104 @@ $(document).ready(function() {
 </script>`;
 
   return `${pageStyles}
-<div class="site-container">
-  <div class="form-header-block" style="text-align:left;">
+<div class="max-w-7xl mx-auto p-6 space-y-6">
+  <div class="form-header-block text-2xl font-light text-gray-800">
     ${escapeHtml(REPORTS_TITLE)}
-    <div class="smallertext" style="margin-top:7px;">
+    <div class="smallertext mt-2">
       Please see below TTC applications for country
     </div>
   </div>
 
-  ${ttcListHtml}
+  <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6 space-y-6">
+    ${ttcListHtml}
 
-  <div style="margin-top:35px;margin-bottom:23px;">
-    <label for="show_lifetime_yes">Show lifetime evaluations?</label>
-    <span class="smallertext">Show evaluations from other TTCs as well. This is helpful if the teacher submitted evaluations using another TTC</span>
-    <div style="margin-top:8px;">
-      <form autocomplete="off">
-        <input type="radio" onchange="load_table_data()" id="show_lifetime_yes" name="show_lifetime" value="yes" required checked>&nbsp;<label for="show_lifetime_yes">Yes</label>
-        <input type="radio" onchange="load_table_data()" id="show_lifetime_no" name="show_lifetime" value="no" required>&nbsp;<label for="show_lifetime_no">No</label>
-      </form>
+    <div class="mt-8 mb-6">
+      <label for="show_lifetime_yes">Show lifetime evaluations?</label>
+      <span class="smallertext">Show evaluations from other TTCs as well. This is helpful if the teacher submitted evaluations using another TTC</span>
+      <div class="mt-2">
+        <form autocomplete="off">
+          <input type="radio" onchange="load_table_data()" id="show_lifetime_yes" name="show_lifetime" value="yes" required checked>&nbsp;<label for="show_lifetime_yes">Yes</label>
+          <input type="radio" onchange="load_table_data()" id="show_lifetime_no" name="show_lifetime" value="no" required>&nbsp;<label for="show_lifetime_no">No</label>
+        </form>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <label for="select_report">Report</label>
+      <span class="smallertext">Select the report from the dropdown</span>
+      <div class="mt-2">
+        <select onchange="show_report()" class="textbox w-full max-w-[600px]" id="select_report">
+          <option value="">Show All</option>
+          <option value="no_prereq">1. Answered "No" for any of the pre-requisites</option>
+          <option value="not_ready">2. Evaluators answered anything other than "Ready Now" for teaching readiness</option>
+          <option value="less_than_3_rating">3. Evaluators rated them less than 3 on any category</option>
+          <option value="no_of_courses_org">4. Filter based on # of courses Organized and Assisted</option>
+          <option value="late_vtp_30">5. Attended VTP date less than 1 month from Application deadline</option>
+          <option value="late_vtp_90">6. Attended VTP date less than 3 months from Application deadline</option>
+          <option value="only_kids_courses">7. Only applied for Kids courses</option>
+          <option value="intros_organized">8. Number of intro talks organized</option>
+          <option value="enrollments_mentioned">9. Number of enrolled people</option>
+          <option value="enrollments_list_count">10. Number of enrolled people listed</option>
+        </select>
+      </div>
+      <div name="count_slider_section" class="mt-[13px]">
+        <input type="text" id="i_count" readonly class="display_only_text max-w-[210px] mb-[13px]" />
+        <div id="count_slider" class="max-w-[210px]"></div>
+      </div>
+    </div>
+
+    <div class="mb-2 smallertext">
+      <label for="view_mode_compact">View Mode:</label>&nbsp;
+      <input type="radio" onchange="load_table_data()" id="view_mode_compact" name="view_mode" value="c" required>&nbsp;<label for="view_mode_compact">Compact</label>
+      <input type="radio" onchange="load_table_data()" id="view_mode_expanded" name="view_mode" value="x" required checked>&nbsp;<label for="view_mode_expanded">Expanded</label>
     </div>
   </div>
 
-  <div style="margin-bottom:23px;">
-    <label for="select_report">Report</label>
-    <span class="smallertext">Select the report from the dropdown</span>
-    <div style="margin-top:8px;">
-      <select onchange="show_report()" class="textbox" id="select_report" style="max-width:600px;width:100%;">
-        <option value="">Show All</option>
-        <option value="no_prereq">1. Answered "No" for any of the pre-requisites</option>
-        <option value="not_ready">2. Evaluators answered anything other than "Ready Now" for teaching readiness</option>
-        <option value="less_than_3_rating">3. Evaluators rated them less than 3 on any category</option>
-        <option value="no_of_courses_org">4. Filter based on # of courses Organized and Assisted</option>
-        <option value="late_vtp_30">5. Attended VTP date less than 1 month from Application deadline</option>
-        <option value="late_vtp_90">6. Attended VTP date less than 3 months from Application deadline</option>
-        <option value="only_kids_courses">7. Only applied for Kids courses</option>
-        <option value="intros_organized">8. Number of intro talks organized</option>
-        <option value="enrollments_mentioned">9. Number of enrolled people</option>
-        <option value="enrollments_list_count">10. Number of enrolled people listed</option>
-      </select>
-    </div>
-    <div name="count_slider_section" style="margin-top:13px;">
-      <input type="text" id="i_count" readonly class="display_only_text" style="max-width:210px;margin-bottom:13px;" />
-      <div id="count_slider" style="max-width:210px;"></div>
-    </div>
+  <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-4 overflow-x-auto">
+    <table id="${escapeHtmlAttr(REPORTS_TABLE_ID)}" class="display nowrap cell-border w-full">
+      <thead class="font-light uppercase">
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Last Updated<br><span class="smallertext">(EST)</span></th>
+          <th>Evals</th>
+          <th>Evals<br><span class="smallertext">(lifetime)</span></th>
+          <th>Evaluators</th>
+          <th>Eval: Teaching Readiness</th>
+          <th>Eval: Ratings below 3 (Evals)</th>
+          <th>Eval: Mental Fitness</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Cell Phone</th>
+          <th>Home Phone</th>
+          <th>City</th>
+          <th>State</th>
+          <th># courses listed</th>
+          <th># courses organized<br><span class="smallertext">(last 2 years)</span></th>
+          <th># courses assisted<br><span class="smallertext">(last 2 years)</span></th>
+          <th># intro talks<br><span class="smallertext">(last 1 year)</span></th>
+          <th>Enrollment</th>
+          <th>Enrollment<br><span class="smallertext">(listed names)</span></th>
+          <th># "No" Pre-Requisites</th>
+          <th>VTP teacher</th>
+          <th>VTP date</th>
+          <th>VTP days<br><span class="smallertext">(till application deadline)</span></th>
+          <th>VTP location</th>
+          <th>Youthteacher</th>
+          <th>Course wishlist</th>
+          <th>Special interest groups</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th></th>
+          <th colspan="30" class="text-left">Total Submitted Applications:</th>
+        </tr>
+      </tfoot>
+    </table>
   </div>
-
-  <div style="margin-bottom:8px;" class="smallertext">
-    <label for="view_mode_compact">View Mode:</label>&nbsp;
-    <input type="radio" onchange="load_table_data()" id="view_mode_compact" name="view_mode" value="c" required>&nbsp;<label for="view_mode_compact">Compact</label>
-    <input type="radio" onchange="load_table_data()" id="view_mode_expanded" name="view_mode" value="x" required checked>&nbsp;<label for="view_mode_expanded">Expanded</label>
-  </div>
-
-  <table id="${escapeHtmlAttr(REPORTS_TABLE_ID)}" class="display nowrap cell-border" style="width:100%;">
-    <thead style="font-family:Ubuntu;font-weight:300;text-transform:uppercase;">
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Status</th>
-        <th>Last Updated<br><span class="smallertext">(EST)</span></th>
-        <th>Evals</th>
-        <th>Evals<br><span class="smallertext">(lifetime)</span></th>
-        <th>Evaluators</th>
-        <th>Eval: Teaching Readiness</th>
-        <th>Eval: Ratings below 3 (Evals)</th>
-        <th>Eval: Mental Fitness</th>
-        <th>Age</th>
-        <th>Gender</th>
-        <th>Cell Phone</th>
-        <th>Home Phone</th>
-        <th>City</th>
-        <th>State</th>
-        <th># courses listed</th>
-        <th># courses organized<br><span class="smallertext">(last 2 years)</span></th>
-        <th># courses assisted<br><span class="smallertext">(last 2 years)</span></th>
-        <th># intro talks<br><span class="smallertext">(last 1 year)</span></th>
-        <th>Enrollment</th>
-        <th>Enrollment<br><span class="smallertext">(listed names)</span></th>
-        <th># "No" Pre-Requisites</th>
-        <th>VTP teacher</th>
-        <th>VTP date</th>
-        <th>VTP days<br><span class="smallertext">(till application deadline)</span></th>
-        <th>VTP location</th>
-        <th>Youthteacher</th>
-        <th>Course wishlist</th>
-        <th>Special interest groups</th>
-      </tr>
-    </thead>
-    <tfoot>
-      <tr>
-        <th></th>
-        <th colspan="30" style="text-align:left;">Total Submitted Applications:</th>
-      </tr>
-    </tfoot>
-  </table>
 
   <div id="step_post_submit_message"></div>
 </div>
