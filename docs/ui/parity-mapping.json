@@ -1,0 +1,49 @@
+{
+  "mappings": [
+    {
+      "legacy_id": "admin-settings",
+      "new_id": "settings",
+      "kind": "admin",
+      "description": "Admin settings page",
+      "parity_checks": {
+        "structural": ["h1", "h2", "h3", "form", "input", "select", "textarea", "button", "label"],
+        "functional": ["[type=submit]", "[type=button]", "button", "select"],
+        "accessibility": ["[aria-label]", "[role]", "label", "[for]"]
+      }
+    },
+    {
+      "legacy_id": "ttc-applicants-summary",
+      "new_id": "ttc-applicants-summary",
+      "kind": "admin",
+      "description": "TTC applicants summary/dashboard page",
+      "parity_checks": {
+        "structural": ["h1", "h2", "table", "th", "td", "form", "input", "button"],
+        "functional": ["[type=submit]", "[type=button]", "button", "a"],
+        "accessibility": ["[aria-label]", "[role]", "label", "[for]", "th"]
+      }
+    }
+  ],
+  "unmapped_legacy": [
+    {
+      "legacy_id": "ttc-applicants-reports",
+      "kind": "admin",
+      "reason": "no render.ts -- legacy HTML only, migration pending"
+    },
+    {
+      "legacy_id": "ttc-applicants-integrity",
+      "kind": "admin",
+      "reason": "no render.ts -- legacy HTML only, migration pending"
+    },
+    {
+      "legacy_id": "post-ttc-course-feedback-summary",
+      "kind": "admin",
+      "reason": "no render.ts -- legacy HTML only, migration pending"
+    },
+    {
+      "legacy_id": "post-sahaj-ttc-course-feedback-summary",
+      "kind": "admin",
+      "reason": "no render.ts -- legacy HTML only, migration pending"
+    }
+  ],
+  "unmapped_new": []
+}

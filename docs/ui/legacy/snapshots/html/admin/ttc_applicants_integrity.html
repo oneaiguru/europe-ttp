@@ -1,0 +1,383 @@
+<link rel="stylesheet" type="text/css" href="javascript/datatables/datatables.min.css" />
+<script type="text/javascript" src="javascript/datatables/datatables.min.js"></script>
+
+<link href="javascript/select2/css/select2.min.css" rel="stylesheet" />
+<script src="javascript/select2/js/select2.min.js"></script>
+<link href="styles/an-select2.css" rel="stylesheet" />
+<link href="styles/an-datatables.css" rel="stylesheet" />
+
+<style>
+    td.details-control {
+        background: url('javascript/datatables/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('javascript/datatables/details_close.png') no-repeat center center;
+    }
+
+    table.dataTable thead th {
+        border-bottom: 2px solid #ccc;
+    }
+
+    table.dataTable tfoot th {
+        border-top: 2px solid #ccc;
+    }
+
+    /* Unsetting margin to fix misaligned body */
+    table.dataTable {
+        margin: unset;
+    }
+
+    table.dataTable td, .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>td, .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>td {
+        vertical-align: top;
+    }
+
+</style>
+
+<script type="text/javascript">
+
+    var ttc_country_and_dates = JSON.parse('{{ttc_country_and_dates|safe}}');
+    
+    var user_data = undefined;
+    var table = undefined;
+    var forms = {}
+
+    function get_user_data() {
+        if (user_data) {
+            return;
+        }
+        console.log('[get_user_data] Getting user summary');
+        var jqxhr = $.get("integrity/user-integrity/get-by-user",
+            {
+            })
+            .done(function (data) {
+                // result = data.results;
+                // alert(JSON.stringify(data.results[0].formatted_address));
+                // alert(JSON.stringify(data.results));
+                user_data = JSON.parse(data);
+
+                load_table_data();                
+            })
+            .fail(function () {
+                // return address;
+            })
+            .always(function () {
+                // 
+            });            
+    }
+
+    function get_table_data() {
+        var _selected_ttcs = $('#ttc_list').val();
+
+        let applicant_data = [];
+        let _unmapped_evaluations = [];
+
+        for (const _ae in user_data) {
+            if (user_data[_ae].hasOwnProperty('ttc_application')) {
+                let _applicant = user_data[_ae]['ttc_application'];
+                _selected_ttcs.forEach(_selected_ttc => {
+                    if (_applicant.hasOwnProperty(_selected_ttc)) {
+                        let _application = _applicant[_selected_ttc];
+
+                        if ('data' in _application) {
+                            let _name = _application['data']['i_fname'] + ' ' + _application['data']['i_lname'];
+
+                            let enrolled_matches_count = 0;
+                            if ('enrolled_matches' in _applicant['{{INTEGRITY_KEY}}']) {
+                                for (const _me in _applicant['{{INTEGRITY_KEY}}']['enrolled_matches']) {
+                                    if (Object.hasOwnProperty.call(_applicant['{{INTEGRITY_KEY}}']['enrolled_matches'], _me)) {
+                                        const _mee = _applicant['{{INTEGRITY_KEY}}']['enrolled_matches'][_me];
+                                        if (Array.isArray(_mee)) {
+                                            enrolled_matches_count += _mee.length;
+                                        }
+                                    }
+                                }
+                            }
+                            let org_course_matches_count = 0;
+                            if ('org_course_matches' in _applicant['{{INTEGRITY_KEY}}']) {
+                                for (const _me in _applicant['{{INTEGRITY_KEY}}']['org_course_matches']) {
+                                    if (Object.hasOwnProperty.call(_applicant['{{INTEGRITY_KEY}}']['org_course_matches'], _me)) {
+                                        const _mee = _applicant['{{INTEGRITY_KEY}}']['org_course_matches'][_me];
+                                        if (Array.isArray(_mee)) {
+                                            org_course_matches_count += _mee.length;
+                                        }
+                                    }
+                                }
+                            }
+                                
+                            if (
+                                enrolled_matches_count > 0 ||
+                                org_course_matches_count > 0
+                            ) {
+                                enrolled_people_count = Object.keys(_application['data']['i_enrolled_people'] || {}).length;
+                                org_courses_count = Object.keys(_application['data']['i_org_courses'] || {}).length;
+                                enrolled_matches_count = enrolled_matches_count.toString() + " / " + enrolled_people_count.toString();
+                                org_course_matches_count = org_course_matches_count.toString() + " / " + org_courses_count.toString();
+                                let _applicant_rec = {
+                                    name: _name,
+                                    email: _ae,
+                                    last_update_datetime: _application['last_update_datetime_est'],
+                                    enrolled_matches_count: enrolled_matches_count,
+                                    org_course_matches_count: org_course_matches_count,
+                                    enrolled_matches: _applicant['{{INTEGRITY_KEY}}']['enrolled_matches'],
+                                    org_course_matches: _applicant['{{INTEGRITY_KEY}}']['org_course_matches'],
+                                    form_instance: _application['form_instance']
+                                }
+
+                                // console.log('[get_table_data] _application = ' + JSON.stringify(_application));
+                                // console.log('[get_table_data] _applicant_rec = ' + JSON.stringify(_applicant_rec));
+                                applicant_data.push(_applicant_rec);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        return applicant_data;
+    }
+
+    function load_table_data() {
+        let applicant_data = get_table_data();
+        // console.log('[load_table_data] applicant_data = \n' + JSON.stringify(applicant_data));
+        console.log('[load_table_data] applicant_data row count = ' + applicant_data.length.toString());
+
+        if (table) {
+            table.clear();
+            table.rows.add(applicant_data);
+            table.draw();
+        } else {
+            // Search header
+            table = $('#ttc_applicants_summary').DataTable({
+                data: applicant_data,
+                // responsive: true,
+                // fixedColumns: true,
+                orderCellsTop: true,
+                // fixedHeader: true,
+                scrollX: true,
+                // colReorder: true,
+                iDisplayLength: 50,
+                dom: 'Bfrtlip',
+                buttons: [
+                    {'extend': 'copy', 'className': 'an-simple-button'},
+                    {'extend': 'excel', 'className': 'an-simple-button'}, 
+                    {'extend': 'pdf', 'className': 'an-simple-button'}, 
+                    {'extend': 'print', 'className': 'an-simple-button'}
+                ],     
+                columns: [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
+                    { data: "name" },
+                    { data: "email" },
+                    { data: "last_update_datetime" },
+                    { data: "enrolled_matches_count" },
+                    { data: "org_course_matches_count" }
+                ],
+                order: [[1, 'asc']]
+            });            
+
+            // Add event listener for opening and closing details
+            $('#ttc_applicants_summary tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                    hideAllChildren(tr);
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                    showAllChildren(tr);
+                }
+            });
+
+        }
+    }
+
+    function view_form(form_type, email, form_instance) {
+        var jqxhr = $.get("reporting/user-report/get-user-application-html",
+            {
+                email: email,
+                form_type: form_type,
+                form_instance: form_instance
+            })
+            .done(function (data) {
+                // alert(data);
+                postFullscreenMessage(data);
+            })
+            .fail(function () {
+                // alert("failed1");
+                postErrorMessage("There was an error retrieving the application");
+                $('#step_post_submit_message').html("There was an error retrieving the data Sorry for the inconvenience.");
+            });
+    }
+
+    function view_form_standalone(form_type, email, form_instance) {
+        window.open("reporting/user-report/get-user-application?email=" + email + "&form_type=" + form_type + "&form_instance=" + form_instance);
+    }
+
+    $(document).ready(function () {
+        $('#ttc_list').attr('multiple', 'multiple');
+        $('#ttc_list').select2();
+
+        $('#ttc_applicants_summary thead tr').clone(true).appendTo('#ttc_applicants_summary thead');
+        $('#ttc_applicants_summary thead tr:eq(1) th:not(:eq(0))').each(function (i) {
+            // var title = $(this).text();
+            $(this).html('<input class="table_column_search_textbox" type="textbox" placeholder="Search" />');
+
+            $('input', this).on('keyup change', function () {
+                // Offsite of 1 since the first column is not searchable
+                if (table.column(i + 1).search() !== this.value) {
+                    table
+                        .column(i + 1)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+
+        console.log('[ttc_applicants_summary][ready] called');
+        get_user_data();  
+    }); // When the page first loads
+    
+    // function init() {
+    //     console.log('[ttc_applicants_summary][init] called');
+    //     get_user_data();
+    // }
+
+    /* Formatting function for row details - modify as you need */
+    function format(d) {
+        // `d` is the original data object for the row
+        let _enrolled_match_rows = '';
+        let _course_match_rows = '';
+        let _tables = '';
+        let _forms = [];
+        _forms.push(
+            {
+                'form_type': 'ttc_application',
+                'email': d.email,
+                'form_instance': d.form_instance
+            }
+        );
+
+        if (d.email != '') {
+            for (const _mae in d.enrolled_matches) {
+                let _matches = d.enrolled_matches[_mae];
+                _enrolled_match_rows +=
+                    '<tr>' +
+                        '<td style="background-color: white;">Matched with Applicant:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _mae + '</td>' +
+                    '</tr>';
+                for (let i = 0; i < _matches.length; i++) {
+                    const _e = _matches[i];
+                    _enrolled_match_rows +=
+                        '<tr>' +
+                            '<td style="background-color: white;">' + (i+1).toString() + '</td>' +
+                            '<td style="background-color: white; border-right:1px solid #eee;">' + _e + '</td>' +
+                        '</tr>';
+                }
+            }
+            if (_enrolled_match_rows !== '') {
+                _tables += 'Enrolled Matches: <br>' +
+                    '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border: 1px solid #eee; background-color: white;">' +
+                        _enrolled_match_rows +
+                    '</table><br>';
+            }
+
+            for (const _mae in d.org_course_matches) {
+                let _matches = d.org_course_matches[_mae];
+                _course_match_rows +=
+                    '<tr>' +
+                        '<td style="background-color: white;">Matched with Applicant:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _mae + '</td>' +
+                    '</tr>';
+                for (let i = 0; i < _matches.length; i++) {
+                    const _e = _matches[i];
+                    _course_match_rows +=
+                        '<tr>' +
+                            '<td style="background-color: white;">' + (i+1).toString() + '</td>' +
+                            '<td style="background-color: white; border-right:1px solid #eee;">' + _e + '</td>' +
+                        '</tr>';
+                }
+            }
+            if (_course_match_rows !== '') {
+                _tables += 'Course matches: <br>' + 
+                    '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border: 1px solid #eee; background-color: white;">' +
+                        _course_match_rows +
+                    '</table><br>';
+            }
+        }
+
+        forms[d.email] = _forms;
+        
+        return _tables + 
+            '<div style="margin-top:13px; margin-bottom:7px;">' + 
+                '<a class="an-simple-button" onclick="javascript:view_form_standalone_combined(\'' + d.email + '\', \'Y\');">Print</a>&nbsp;' + 
+                '<a class="an-simple-button" onclick="javascript:view_form(\'ttc_application\', \'' + d.email + '\',\'' + d.form_instance + '\');">View Application</a>&nbsp;' +
+                '<a class="an-simple-button" onclick="javascript:view_form_standalone(\'ttc_application\', \'' + d.email + '\',\'' + d.form_instance + '\');">View Application (new window)</a>' + 
+            '</div>';
+    }
+
+</script>
+
+<div style="margin: 0 auto;" class="site-container">
+    <div class="site-inner-container site-inner-container-reporting-override">
+        <div id="form_header" class="form-tab-content form-tab-content-reporting-override">
+            <div class="tablebody">
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <div id="deepen" class="form-header-block" style="text-align: left;">
+                            Admin: TTC Integrity Report
+                            <div class="smallertext" style="margin-top:7px;">
+                                Please see below TTC applications for country 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ ttc_list_html | safe }}
+
+        <div id="step_form" class="form-tab-content form-tab-content-reporting-override">
+            <div class="tablebody">
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <span style="font-style: italic;" class="smallertext">Last updated {{ user_integrity_last_updated_datetime }}</span>
+                    </div>
+                </div>
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <table id="ttc_applicants_summary" class="display nowrap cell-border">
+                            <thead class="an-dtbl-title">
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Last Updated<br><span class="an-dtbl-subtitle">(EST)</span></th>
+                                    <th>Enrolled Matches</th>
+                                    <th>Org Courses Matches</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th colspan="5" style="text-align:left">Total Applications:</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,436 @@
+<link rel="stylesheet" type="text/css" href="javascript/datatables/datatables.min.css" />
+<script type="text/javascript" src="javascript/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="javascript/date.js"></script>
+
+<link href="styles/an-datatables.css" rel="stylesheet" />
+
+<style>
+    td.details-control {
+        background: url('javascript/datatables/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('javascript/datatables/details_close.png') no-repeat center center;
+    }
+
+    table.dataTable thead th {
+        border-bottom: 2px solid #ccc;
+    }
+
+    table.dataTable tfoot th {
+        border-top: 2px solid #ccc;
+    }
+
+    /* Unsetting margin to fix misaligned body */
+    table.dataTable {
+        margin: unset;
+    }
+</style>
+
+<script type="text/javascript">
+
+    var user_data = undefined;
+    var table = undefined;
+
+    function get_user_data() {
+        if (user_data) {
+            return;
+        }
+        console.log('[get_user_data] Getting user summary');
+        var jqxhr = $.get("reporting/user-summary/get-by-user",
+            {
+            })
+            .done(function (data) {
+                // result = data.results;
+                // alert(JSON.stringify(data.results[0].formatted_address));
+                // alert(JSON.stringify(data.results));
+                user_data = JSON.parse(data);
+                console.log('[get_user_data] Received data ' + user_data.length);
+
+                load_table_data();
+            })
+            .fail(function () {
+                // return address;
+            })
+            .always(function () {
+                // 
+            });
+    }
+
+    function get_table_data() {
+        let applicant_data = {};
+        let r_applicant_data = [];
+        // let _unmapped_evaluations = []
+        for (const _ae_raw in user_data) {
+            // console.log('[get_table_data] Data has ' + _ae);
+            if (user_data[_ae_raw].hasOwnProperty('post_sahaj_ttc_self_evaluation_form')) {
+                // console.log('[get_table_data] Data has feedback');
+                let _ae = _ae_raw.toLowerCase();
+                const _self_evaluations = user_data[_ae_raw]['post_sahaj_ttc_self_evaluation_form'];
+
+                if (!applicant_data.hasOwnProperty(_ae)) {
+                    applicant_data[_ae] = {};
+                    applicant_data[_ae]['evaluations_count'] = 0;
+                    applicant_data[_ae]['evaluations'] = [];
+                    applicant_data[_ae]['evaluations_status'] = 'pending';
+                    applicant_data[_ae]['self_evaluations'] = [];
+                }
+
+                // console.log('[get_table_data] evaluations = ' + JSON.stringify(_self_evaluations['{{REPORTING_KEY}}']['evaluations']));
+                for (const _te in _self_evaluations['{{REPORTING_KEY}}']['evaluations']) {
+                    for (const _fi in _self_evaluations['{{REPORTING_KEY}}']['evaluations'][_te]) {
+                        for (const _ve in _self_evaluations['{{REPORTING_KEY}}']['evaluations'][_te][_fi]) {
+                            let _evaluation = user_data[_te]['post_sahaj_ttc_feedback_form'][_fi][_ve];
+                            _evaluation['course_start_date'] = string2date(_evaluation.data.i_course_start) || null;
+                            let _reporting_status = _evaluation['{{REPORTING_KEY}}']['reporting_status'];
+                            if (_reporting_status == 'submitted' || _reporting_status == 'complete') {
+                                applicant_data[_ae]['evaluations_count'] += 1;
+                            }
+                            applicant_data[_ae]['evaluations'].push(_evaluation);
+                        }
+                    }
+                }
+                if (applicant_data[_ae]['evaluations_count'] > 0) {
+                    applicant_data[_ae]['evaluations_status'] = 'submitted: ' + applicant_data[_ae]['evaluations_count'].toString();
+                }
+
+                for (const _tcd1 in _self_evaluations) {
+                    if (_self_evaluations.hasOwnProperty(_tcd1) && _tcd1 !== '{{REPORTING_KEY}}') {
+                        let _self_evaluation = _self_evaluations[_tcd1];
+                        if ('data' in _self_evaluation) {
+                            // console.log('[get_table_data] Adding feedback for ' + _ae);
+                            let _reporting_status = _self_evaluation['{{REPORTING_KEY}}']['reporting_status'];
+                            if (isEmpty(applicant_data[_ae]['name'])) {
+                                applicant_data[_ae]['name'] = _self_evaluation['data']['i_fname'] + ' ' + _self_evaluation['data']['i_lname'];
+                                applicant_data[_ae]['email'] = _ae;
+                            }
+                            // Checking this separately since name and email might be set via evaluation
+                            if (isEmpty(applicant_data[_ae]['ttc_dates'])) {
+                                applicant_data[_ae]['ttc_dates'] = _self_evaluation['data']['i_ttc_dates'];
+                                applicant_data[_ae]['ttc_location'] = _self_evaluation['data']['i_ttc_location'];
+                                applicant_data[_ae]['cellphone'] = _self_evaluation['data']['i_cellphone'];
+                                applicant_data[_ae]['homephone'] = _self_evaluation['data']['i_homephone'];
+                            }
+                            applicant_data[_ae]['status'] = _reporting_status;
+                            applicant_data[_ae]['self_evaluations'].push(_self_evaluation);
+                        }
+                    }
+                }
+            }
+
+            if (user_data[_ae_raw].hasOwnProperty('post_sahaj_ttc_feedback_form')) {
+                const _evaluations = user_data[_ae_raw]['post_sahaj_ttc_feedback_form'];
+                for (const _tcd2 in _evaluations) {
+                    for (const _ve_raw in _evaluations[_tcd2]) {
+                        let _evaluation = _evaluations[_tcd2][_ve_raw];
+                        if (_evaluation && _evaluation.hasOwnProperty('{{REPORTING_KEY}}') && _evaluation['{{REPORTING_KEY}}'].hasOwnProperty('is_reporting_matched') && _evaluation['{{REPORTING_KEY}}']['is_reporting_matched'] == 'N') {
+                            // console.log('[get_table_data] Adding unmapped evaluation from ' + _ae);
+                            _evaluation['course_start_date'] = string2date(_evaluation.data.i_course_start) || null;
+                            // Using same variable name as above to make it easy to copy-paste code
+                            const _ae = _ve_raw.toLowerCase();
+                            if (!applicant_data.hasOwnProperty(_ae)) {
+                                applicant_data[_ae] = {};
+                                applicant_data[_ae]['evaluations_count'] = 0;
+                                applicant_data[_ae]['evaluations'] = [];
+                                applicant_data[_ae]['self_evaluations'] = [];
+                            }
+                            if (isEmpty(applicant_data[_ae]['name'])) {
+                                applicant_data[_ae]['name'] = _evaluation['data']['i_ttc_graduate_name'];
+                                applicant_data[_ae]['email'] = _evaluation['data']['i_ttc_graduate_email'];
+                                applicant_data[_ae]['status'] = 'pending';
+                                applicant_data[_ae]['ttc_dates'] = '';
+                                applicant_data[_ae]['ttc_location'] = '';
+                                applicant_data[_ae]['cellphone'] = '';
+                                applicant_data[_ae]['homephone'] = '';
+                            }
+                            let _reporting_status = _evaluation['{{REPORTING_KEY}}']['reporting_status'];
+                            if (_reporting_status == 'submitted' || _reporting_status == 'complete') {
+                                applicant_data[_ae]['evaluations_count'] += 1;
+                            }
+                            if (applicant_data[_ae]['evaluations_count'] > 0) {
+                                applicant_data[_ae]['evaluations_status'] = 'submitted: ' + applicant_data[_ae]['evaluations_count'].toString();
+                            } else {
+                                applicant_data[_ae]['evaluations_status'] = _reporting_status;
+                            }
+                            applicant_data[_ae]['evaluations'].push(_evaluation);
+                            // _unmapped_evaluations.push(_evaluation);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (const _ae in applicant_data) {
+            r_applicant_data.push(applicant_data[_ae]);
+        }
+        // if (_unmapped_evaluations.length > 0) {
+        //     r_applicant_data.push({
+        //         name: 'UNMAPPED FEEDBACK',
+        //         status: '',
+        //         email: '',
+        //         ttc_dates: '',
+        //         ttc_location: '',
+        //         cellphone: '',
+        //         homephone: '',
+        //         evaluations: _unmapped_evaluations,
+        //         evaluations_count: _unmapped_evaluations.length,
+        //         self_evaluations: []
+        //     });
+        // }
+
+        console.log('[get_table_data] Completed setting data');
+        // console.log('[get_table_data] applicant_data = \n' + JSON.stringify(r_applicant_data));
+
+        return r_applicant_data;
+    }
+
+    function load_table_data() {
+        let applicant_data = get_table_data();
+        // console.log('[load_table_data] applicant_data = \n' + JSON.stringify(applicant_data));
+        console.log('[load_table_data] applicant_data row count = ' + applicant_data.length.toString());
+
+        if (table) {
+            table.clear();
+            console.log('[load_table_data] Cleared data');
+            table.rows.add(applicant_data);
+            console.log('[load_table_data] Set data');
+            table.draw();
+        } else {
+            console.log('[load_table_data] Setting table');
+            table = $('#post_ttc_feedback_summary').DataTable({
+                data: applicant_data,
+                // responsive: true,
+                // fixedColumns: true,
+                orderCellsTop: true,
+                // fixedHeader: true,
+                scrollX: true,
+                // colReorder: true,
+                iDisplayLength: 50,
+                dom: 'Bfrtlip',
+                buttons: [
+                    { 'extend': 'copy', 'className': 'an-simple-button' },
+                    { 'extend': 'excel', 'className': 'an-simple-button' },
+                    { 'extend': 'pdf', 'className': 'an-simple-button' },
+                    { 'extend': 'print', 'className': 'an-simple-button' }
+                ],
+                columns: [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
+                    { data: "name" },
+                    { data: "status" },
+                    { data: "evaluations_status" },
+                    { data: "ttc_dates" },
+                    { data: "ttc_location" },
+                    { data: "email" },
+                    { data: "cellphone" },
+                    { data: "homephone" }
+                ],
+                order: [[1, 'asc']],
+                rowCallback: function (row, data, index) {
+                    $(row).find('td:eq(2)').css('color', getStatusColor(data.status));
+                    $(row).find('td:eq(3)').css('color', getStatusColor(data.evaluations_status));
+                }
+            });
+            console.log('[load_table_data] Set table');
+
+            // Add event listener for opening and closing details
+            $('#post_ttc_feedback_summary tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                }
+            });
+        }
+    }
+
+    function view_form(form_type, email, form_instance) {
+        var jqxhr = $.get("reporting/user-report/get-user-application-html",
+            {
+                email: email,
+                form_type: form_type,
+                form_instance: form_instance
+            })
+            .done(function (data) {
+                // alert(data);
+                postFullscreenMessage(data);
+            })
+            .fail(function () {
+                // alert("failed1");
+                postErrorMessage("There was an error retrieving the application");
+                $('#step_post_submit_message').html("There was an error retrieving the data Sorry for the inconvenience.");
+            });
+    }
+
+    function view_form_standalone(form_type, email, form_instance) {
+        window.open("reporting/user-report/get-user-application?email=" + email + "&form_type=" + form_type + "&form_instance=" + form_instance);
+    }
+
+    $(document).ready(function () {
+        console.log('[post_ttc_feedback_summary][ready] called');
+        get_user_data();
+    }); // When the page first loads
+
+    // function init() {
+    //     console.log('[post_ttc_feedback_summary][init] called');
+    //     get_user_data();
+    // }
+
+    /* Formatting function for row details - modify as you need */
+    function format(d) {
+        // `d` is the original data object for the row
+        let _rows = '';
+        // Unmapped evaluations
+        if (d.email == '') {
+            for (let j = 0; j < d.self_evaluations.length; j++) {
+                const _c = d.self_evaluations[j];
+                for (let i = 0; i < _c.evaluations.length; i++) {
+                    const _e = _c.evaluations[i];
+                    // Unmapped evaluations
+                    _rows +=
+                        '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border: 1px solid #eee; background-color: white; margin-bottom: 13px;">' +
+                        '<tr>' +
+                        '<td style="background-color: white;">Evaluator:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_fname + ' ' + _e.data.i_lname + '</td>' +
+                        '<td style="background-color: white;">Email:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_email_aol + '</td>' +
+                        '<td style="background-color: white;">Status:</td>' +
+                        '<td style="background-color: white; color: ' + getStatusColor(_e['{{REPORTING_KEY}}'].reporting_status) + ';">' + _e['{{REPORTING_KEY}}'].reporting_status + '</td>' +
+                        '<td style="background-color: white;"><a class="an-simple-button" onclick="javascript:view_form_standalone(\'post_sahaj_ttc_feedback_form\', \'' + _e.email + '\',\'' + _e.form_instance + '\');">View</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td style="background-color: white;">Volunteer:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_ttc_graduate_name + '</td>' +
+                        '<td style="background-color: white;">Email:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_ttc_graduate_email + '</td>' +
+                        '<td style="background-color: white;">Course Start: </td>' +
+                        '<td style="background-color: white;">' + _e.data.i_course_start + '</td>' +
+                        '<td style="background-color: white;"></td>' +
+                        '</tr>' +
+                        '</table>';
+                    // if (i == _c.evaluations.length-1) {
+                    //     _rows += '<br>';                    
+                    // }
+                }
+            }
+        } else {
+            if (d.hasOwnProperty('self_evaluations') && d['self_evaluations'].length > 0) {
+                let _self_evaluation = d.self_evaluations[0];
+                _rows += '<div style="margin-bottom: 5px; font-size: 15px;">Self feedback:</div>';
+                _rows +=
+                    '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border: 1px solid #eee; background-color: white; margin-bottom: 13px;">' +
+                        '<tr>' +
+                            '<td style="background-color: white; font-weight:bold; color:#176792; font-family: \'Ubuntu Mono\', monospace;">SELF</td>' +
+                            '<td style="background-color: white; color: ' + getStatusColor(_self_evaluation['{{REPORTING_KEY}}'].reporting_status) + ';">' + _self_evaluation['{{REPORTING_KEY}}'].reporting_status + '</td>' +
+                            '<td style="background-color: white;"><a class="an-simple-button" onclick="javascript:view_form_standalone(\'post_sahaj_ttc_self_evaluation_form\', \'' + d.email + '\',\'' + _self_evaluation.form_instance + '\');">View</td>' +
+                        '</tr>' +
+                    '</table>';
+            }
+            if (d.hasOwnProperty('evaluations')) {
+                let _evaluations = d.evaluations;
+                // Sorting data to display in ascending order of course date
+                // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+                _evaluations.sort(function (a, b) {
+                    let diff = 0;
+                    // Catch exception and sort invalid dates to the end
+                    if (a.course_start_date === null) {
+                        diff = 9999;
+                    } else {
+                        if (b.course_start_date === null) {
+                            diff = -9999;
+                        }
+                    }
+                    if (diff === 0) {
+                        diff = (a.course_start_date - b.course_start_date) / (1000 * 60 * 60 * 24);
+                    }
+                    return diff;
+                });
+                _rows += '<div style="margin-bottom: 5px; font-size: 15px;">Teacher feedback sorted in order of course date:</div>';
+                _rows += '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border: 1px solid #eee; background-color: white; margin-bottom: 13px;">';
+                for (let i = 0; i < _evaluations.length; i++) {
+                    const _e = _evaluations[i];
+                    _rows +=
+                        '<tr>' +
+                            '<td style="background-color: white; font-weight:bold; color:#7c3602; font-family: \'Ubuntu Mono\', monospace;">EVAL</td>' +
+                            '<td style="background-color: white;">Course Date: ' + _e.course_start_date.format('MM/dd/yyyy') + '</td>' +
+                            '<td style="background-color: white; color: ' + getStatusColor(_e['{{REPORTING_KEY}}'].reporting_status) + ';">' + _e['{{REPORTING_KEY}}'].reporting_status + '</td>' +
+                            '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_fname + ' ' + _e.data.i_lname + '</td>' +
+                            '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_email_aol + '</td>' +
+                            '<td style="background-color: white;"><a class="an-simple-button" onclick="javascript:view_form_standalone(\'post_sahaj_ttc_feedback_form\', \'' + _e.email + '\',\'' + _e.form_instance + '\');">View</td>' +
+                        '</tr>';
+                }
+                _rows += '</table>';
+            }
+        }
+
+        return _rows;
+    }
+
+</script>
+
+<div style="margin: 0 auto;" class="site-container">
+    <div class="site-inner-container site-inner-container-reporting-override">
+        <div id="form_header" class="form-tab-content form-tab-content-reporting-override">
+            <div class="tablebody">
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <div id="deepen" class="form-header-block" style="text-align: left;">
+                            Admin: Post Sahaj TTC Report
+                            <div class="smallertext" style="margin-top:7px;">
+                                Please see below Post Sahaj TTC feedback for country
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="step_form" class="form-tab-content form-tab-content-reporting-override">
+            <div class="tablebody">
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <span style="font-style: italic;" class="smallertext">Last updated {{ user_summary_last_updated_datetime }}</span>
+                    </div>
+                </div>
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <table id="post_ttc_feedback_summary" class="display nowrap cell-border">
+                            <thead class="an-dtbl-title">
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Evaluations</th>
+                                    <th>TTC Dates</th>
+                                    <th>TTC Location</th>
+                                    <th>Email</th>
+                                    <th>Cell Phone</th>
+                                    <th>Home Phone</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th colspan="8" style="text-align:left">Total Submitted Feedback:</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

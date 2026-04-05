@@ -1,40 +1,76 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from '@playwright/test';
+import { defineBddConfig } from 'playwright-bdd';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, '../..');
+
+const browserBddTestDir = defineBddConfig({
+  featuresRoot: projectRoot,
+  features: path.join(projectRoot, 'specs/features/browser/**/*.feature'),
+  steps: path.join(__dirname, 'steps/**/*.ts'),
+  outputDir: path.join(__dirname, '.features-gen'),
+});
 
 /**
- * Playwright configuration for UI parity audit tests.
+ * Playwright configuration for browser BDD, UI parity, and security tests.
  *
- * These tests compare legacy UI snapshots with new UI snapshots by loading
- * static HTML files and verifying structural/functional parity.
+ * IMPORTANT: baseURL is scoped to the browser-bdd project only.
+ * The parity and security projects use file:// URLs and must NOT inherit baseURL.
+ *
+ * All paths are absolute (resolved from project root) because this config
+ * lives in test/playwright/ -- relative paths would double up.
  */
 export default defineConfig({
-  testDir: './test/playwright',
+  testDir: __dirname,
   testMatch: '**/*.spec.ts',
 
-  // Output directory for test results
-  outputDir: './test/playwright/results',
+  outputDir: path.join(projectRoot, 'test-results'),
 
-  // Run tests in headless mode (CI-friendly)
   use: {
     headless: true,
-    // Capture screenshot on failure for debugging
     screenshot: 'only-on-failure',
+    // NO baseURL here -- file:// tests would break
   },
 
-  // Run tests in parallel for faster feedback
   fullyParallel: true,
 
-  // Report configuration
   reporter: [
     ['list'],
-    ['html', { outputFolder: './test/playwright/results/html-report' }],
+    ['html', { outputFolder: path.join(projectRoot, 'test/playwright/html-report') }],
   ],
 
-  // Worker configuration
   workers: process.env.CI ? 2 : 4,
-
-  // Timeout for each test (30 seconds default)
   timeout: 30 * 1000,
-
-  // Retry on CI only (flaky network/filesystem)
   retries: process.env.CI ? 2 : 0,
+
+  webServer: {
+    command: 'npx next dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+    cwd: projectRoot,
+  },
+
+  projects: [
+    {
+      name: 'browser-bdd',
+      testDir: browserBddTestDir,
+      testMatch: '**/*.spec.js',
+      use: { baseURL: 'http://localhost:3000' },
+    },
+    {
+      name: 'parity',
+      testDir: __dirname,
+      testMatch: 'ui_parity.spec.ts',
+      // no baseURL -- uses file:// URLs
+    },
+    {
+      name: 'security',
+      testDir: __dirname,
+      testMatch: 'redirect-sanitization.spec.ts',
+      // no baseURL -- uses file:// URLs
+    },
+  ],
 });

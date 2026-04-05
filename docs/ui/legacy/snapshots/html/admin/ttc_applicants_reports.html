@@ -1,0 +1,901 @@
+<link rel="stylesheet" type="text/css" href="javascript/datatables/datatables.min.css" />
+<script type="text/javascript" src="javascript/datatables/datatables.min.js"></script>
+
+<link href="javascript/select2/css/select2.min.css" rel="stylesheet" />
+<script src="javascript/select2/js/select2.min.js"></script>
+<link href="styles/an-select2.css" rel="stylesheet" />
+<link href="styles/an-datatables.css" rel="stylesheet" />
+
+<style>
+    td.details-control {
+        background: url('javascript/datatables/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('javascript/datatables/details_close.png') no-repeat center center;
+    }
+
+    table.dataTable thead th {
+        border-bottom: 2px solid #ccc;
+    }
+
+    table.dataTable tfoot th {
+        border-top: 2px solid #ccc;
+    }
+
+    /* Unsetting margin to fix misaligned body */
+    table.dataTable {
+        margin: unset;
+    }
+
+    table.dataTable td, .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>td, .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>td {
+        vertical-align: top;
+    }
+
+</style>
+
+<script type="text/javascript">
+
+    var ttc_country_and_dates = JSON.parse('{{ttc_country_and_dates|safe}}');
+    
+    var user_data = undefined;
+    var table = undefined;
+    var forms = {}
+
+    var count_lo = 0;
+    var count_hi = 100;
+
+    function get_user_data() {
+        if (user_data) {
+            return;
+        }
+        console.log('[get_user_data] Getting user summary');
+        var jqxhr = $.get("reporting/user-summary/get-by-user",
+            {
+            })
+            .done(function (data) {
+                // result = data.results;
+                // alert(JSON.stringify(data.results[0].formatted_address));
+                // alert(JSON.stringify(data.results));
+                user_data = JSON.parse(data);
+
+                load_table_data();                
+            })
+            .fail(function () {
+                // return address;
+            })
+            .always(function () {
+                // 
+            });            
+    }
+
+    function report_filter(_applicant, _application, _report, _show_lifetime) {
+        if (_report == "") {
+            return true;
+        } else if (_report == "intros_organized") {
+            if (
+                _application.hasOwnProperty('data') &&
+                _application['data'].hasOwnProperty('i_last1year_introtalks') &&
+                // empty strings will be considered as 0
+                !isNaN(_application['data']['i_last1year_introtalks']) &&
+                parseInt(_application['data']['i_last1year_introtalks']) >= parseInt(count_lo) &&
+                parseInt(_application['data']['i_last1year_introtalks']) <= parseInt(count_hi)
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (_report == "enrollments_mentioned") {
+            if (
+                _application.hasOwnProperty('data') &&
+                _application['data'].hasOwnProperty('i_enrollment') &&
+                // empty strings will be considered as 0
+                !isNaN(_application['data']['i_enrollment']) &&
+                parseInt(_application['data']['i_enrollment']) >= parseInt(count_lo) &&
+                parseInt(_application['data']['i_enrollment']) <= parseInt(count_hi)
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (_report == "enrollments_list_count") {
+            if (
+                _application['{{REPORTING_KEY}}'].hasOwnProperty('enrolled_people_count') &&
+                parseInt(_application['{{REPORTING_KEY}}']['enrolled_people_count']) >= parseInt(count_lo) &&
+                parseInt(_application['{{REPORTING_KEY}}']['enrolled_people_count']) <= parseInt(count_hi)
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (_report == "only_kids_courses") {
+            if (
+                _application.hasOwnProperty('data') &&
+                (
+                    (
+                        _application['data'].hasOwnProperty('i_course_wishlist_yp') &&
+                        _application['data']['i_course_wishlist_yp'] === false &&
+                        _application['data'].hasOwnProperty('i_course_wishlist_hp') &&
+                        _application['data']['i_course_wishlist_hp'] === false
+                    ) &&
+                    (
+                        (
+                            _application['data'].hasOwnProperty('i_course_wishlist_yes') &&
+                            _application['data']['i_course_wishlist_yes'] === true
+                        ) ||
+                        (
+                            _application['data'].hasOwnProperty('i_course_wishlist_artexcel') &&
+                            _application['data']['i_course_wishlist_artexcel'] === true
+                        )
+                    )
+                )
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (_report == "no_prereq") {
+            if (
+                _application['{{REPORTING_KEY}}']['prereq_no_count'] > 0
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (_report == "not_ready" && !_show_lifetime) {
+            if (
+                _application['{{REPORTING_KEY}}']['eval_teaching_readiness_not_ready_now_count'] > 0
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (_report == "not_ready" && _show_lifetime) {
+            if (
+                _applicant['{{REPORTING_KEY}}']['lifetime_eval_teaching_readiness_not_ready_now_count'] > 0
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (_report == "less_than_3_rating" && !_show_lifetime) {
+            if (
+                _application['{{REPORTING_KEY}}']['evaluator_ratings_below_3'] > 0
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (_report == "less_than_3_rating" && _show_lifetime) {
+            if (
+                _applicant['{{REPORTING_KEY}}']['lifetime_evaluator_ratings_below_3'] > 0
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (_report == "no_of_courses_org") {
+            if (
+                _application['{{REPORTING_KEY}}'].hasOwnProperty('org_courses_count') &&
+                _application['{{REPORTING_KEY}}']['org_courses_count'] >= parseInt(count_lo) &&
+                _application['{{REPORTING_KEY}}']['org_courses_count'] <= parseInt(count_hi)
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (_report == "late_vtp_30") {
+            if (
+                _application['{{REPORTING_KEY}}'].hasOwnProperty('prettc_date_to_deadline_days') &&
+                !isEmpty(_application['{{REPORTING_KEY}}']['prettc_date_to_deadline_days'])
+            ) {
+                if (_application['{{REPORTING_KEY}}']['prettc_date_to_deadline_days'] < 30) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else if (_report == "late_vtp_90") {
+            if (
+                _application['{{REPORTING_KEY}}'].hasOwnProperty('prettc_date_to_deadline_days') &&
+                !isEmpty(_application['{{REPORTING_KEY}}']['prettc_date_to_deadline_days'])
+            ) {
+                if (_application['{{REPORTING_KEY}}']['prettc_date_to_deadline_days'] < 90) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
+
+    function get_table_data() {
+        var _selected_ttcs = $('#ttc_list').val();
+        if (_selected_ttcs.length > 1) {
+            document.getElementById('show_lifetime_yes').checked = true;
+        }
+        let _show_lifetime = true;
+        if ($('input[name=show_lifetime]:checked').val() == 'no') {
+            _show_lifetime = false;
+        }
+
+        var _selected_report = document.getElementById('select_report').value;
+
+        let applicant_data = [];
+        let _unmapped_evaluations = [];
+
+        for (const _ae in user_data) {
+            if (user_data[_ae].hasOwnProperty('ttc_application')) {
+                let _applicant = user_data[_ae]['ttc_application'];
+                _selected_ttcs.forEach(_selected_ttc => {
+                    if (_applicant.hasOwnProperty(_selected_ttc)) {
+                        let _application = _applicant[_selected_ttc];
+
+                        if ('data' in _application) {
+                            let _name = _application['data']['i_fname'] + ' ' + _application['data']['i_lname'];
+
+                            let _user_ttc = _application['form_instance_page_data']['i_ttc_country_and_dates'];
+                            let _prettc_date_str = _application['data']['i_prettc_date'];
+                            let _prettc_date_to_deadline_days = null;
+                            for (let i = 0; i < ttc_country_and_dates.length && _prettc_date_str && _prettc_date_str.trim().length == 7; i++) {
+                                const t = ttc_country_and_dates[i];
+                                if (t['value'] == _user_ttc) {
+                                    let _prettc_date = 0
+                                    let _ttc_deadline = 0
+                                    try {
+                                        _ttc_deadline = new Date(t['display_until']);
+                                        _prettc_date = new Date(_prettc_date_str.substring(0, 3) + '01/' + _prettc_date_str.substring(3));
+                                        _prettc_date_to_deadline_days = Math.round(Math.abs(_ttc_deadline - _prettc_date) / (1000 * 60 * 60 * 24)).toString();
+                                    } catch (error) {
+                                        _prettc_date_to_deadline_days = null;
+                                    }
+                                }
+                            }
+                            _application['{{REPORTING_KEY}}']['prettc_date_to_deadline_days'] = _prettc_date_to_deadline_days;
+
+                            let _show_candidate = report_filter(_applicant, _application, _selected_report, _show_lifetime);
+                            if (_show_candidate) {
+                                // console.log('[get_table_data] Adding application for ' + _name + ' [' + _ae + ']');
+                                let _age = calculateAge(_application['data']['i_date_of_birth']);
+
+                                let _show_lifetime = $('input[name=show_lifetime]:checked');
+                                let _evaluator_names = [];
+                                let _eval_volunteer_mental_fitness = [];
+
+                                let _evaluations = [];
+                                for (const _t in _application['{{REPORTING_KEY}}']['evaluations']) {
+                                    for (const _ae in _application['{{REPORTING_KEY}}']['evaluations'][_t]) {
+                                        _evaluation = user_data[_t]['ttc_evaluation'][_selected_ttc][_ae];
+                                        _evaluations.push(_evaluation);
+                                    }
+                                }
+                                let _lifetime_evaluations = [];
+                                for (const _fi in _applicant['{{REPORTING_KEY}}']['lifetime_evaluations']) {
+                                    for (const _t in _applicant['{{REPORTING_KEY}}']['lifetime_evaluations'][_fi]) {
+                                        for (const _ae in _applicant['{{REPORTING_KEY}}']['lifetime_evaluations'][_fi][_t]) {
+                                            _evaluation = user_data[_t]['ttc_evaluation'][_fi][_ae];
+                                            _lifetime_evaluations.push(_evaluation);
+                                        }
+                                    }
+                                }
+
+                                if (_show_lifetime.val() == 'no') {
+                                    for (let i = 0; i < _evaluations.length; i++) {
+                                        const _evaluation = _evaluations[i];
+                                        _evaluator_names.push(_evaluation.data.i_name);
+                                        _eval_volunteer_mental_fitness.push(_evaluation.data.i_volunteer_mental_fitness);
+                                    }
+                                    _eval_teaching_readiness = _application['{{REPORTING_KEY}}']['eval_teaching_readiness'] || {};
+                                    _evaluator_ratings_below_3 = _application['{{REPORTING_KEY}}']['evaluator_ratings_below_3'] || '';
+                                } else {
+                                    for (let i = 0; i < _lifetime_evaluations.length; i++) {
+                                        const _evaluation = _lifetime_evaluations[i];
+                                        _evaluator_names.push(_evaluation.data.i_name);
+                                        _eval_volunteer_mental_fitness.push(_evaluation.data.i_volunteer_mental_fitness);
+                                    }
+                                    _eval_teaching_readiness = _applicant['{{REPORTING_KEY}}']['lifetime_eval_teaching_readiness'] || {};
+                                    _evaluator_ratings_below_3 = _applicant['{{REPORTING_KEY}}']['lifetime_evaluator_ratings_below_3'] || '';
+                                }
+
+                                let _applicant_rec = {
+                                    name: _name,
+                                    email: _ae,
+                                    status: _application['{{REPORTING_KEY}}']['reporting_status'],
+                                    evals: _evaluations.length,
+                                    lifetime_evals: _lifetime_evaluations.length,
+                                    last_update_datetime: _application['last_update_datetime_est'],
+                                    age: _age || '',
+                                    gender: _application['data']['i_gender'] || '',
+                                    cellphone: _application['data']['i_cellphone'] || '',
+                                    homephone: _application['data']['i_homephone'] || '',
+                                    city: _application['data']['i_address_city'] || '',
+                                    state: _application['data']['i_address_state'] || '',
+                                    enrollment_count: _application['data']['i_enrollment'],
+                                    enrollment_list_count: _application['{{REPORTING_KEY}}']['enrolled_people_count'] || '0',
+                                    prereq_no_count: _application['{{REPORTING_KEY}}']['prereq_no_count'] || '0',
+                                    eval_teaching_readiness: dict2bullets(_eval_teaching_readiness),
+                                    evaluator_ratings_below_3: _evaluator_ratings_below_3 || '0',
+                                    org_courses_count: _application['{{REPORTING_KEY}}']['org_courses_count'] || '0',
+                                    course_organized_count: _application['data']['i_course_organized_count'] || '',
+                                    course_assisted_count: _application['data']['i_course_assisted_count'] || '',
+                                    intro_talk_count: _application['data']['i_last1year_introtalks'] || '',
+                                    prettc_teacher: _application['data']['i_prettc_teacher'] || '',
+                                    prettc_date: _application['data']['i_prettc_date'] || '',
+                                    prettc_date_to_deadline_days: _prettc_date_to_deadline_days,
+                                    prettc_location: _application['data']['i_prettc_location'] || '',
+                                    youthteacher: _application['data']['i_youthteacher'] || '',
+                                    course_wishlist: array2bullets(_application['data']['i_course_wishlist'] || []),
+                                    special_interest_groups: array2bullets(_application['data']['i_special_interest_groups'] || []),
+                                    evaluator_names: array2bullets(_evaluator_names),
+                                    eval_volunteer_mental_fitness: array2bullets(_eval_volunteer_mental_fitness),
+                                    evaluations: _evaluations,
+                                    lifetime_evaluations: _lifetime_evaluations,
+                                    form_instance: _application['form_instance']
+                                }
+
+                                // console.log('[get_table_data] _application = ' + JSON.stringify(_application));
+                                // console.log('[get_table_data] _applicant_rec = ' + JSON.stringify(_applicant_rec));
+                                applicant_data.push(_applicant_rec);
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (user_data[_ae].hasOwnProperty('ttc_evaluation')) {
+                let _evaluator = user_data[_ae]['ttc_evaluation'];
+                _selected_ttcs.forEach(_selected_ttc => {
+                    if (_evaluator.hasOwnProperty(_selected_ttc)) {
+                        for (const _ve in _evaluator[_selected_ttc]) {
+                            let _evaluation = _evaluator[_selected_ttc][_ve];
+                            if ('[Reporting.KEY]' in _evaluation && 'is_reporting_matched' in _evaluation['[Reporting.KEY]'] && _evaluation['[Reporting.KEY]']['is_reporting_matched'] == 'N') {
+                                console.log('[get_table_data] Adding unmapped evaluation from ' + _ae);
+                                let _matched_ttc_list = _evaluation['lifetime_reporting_matched_ttc_list'];
+                                if (_matched_ttc_list !== undefined) {
+                                    _matched_ttc_list = _matched_ttc_list.filter(function (n) {
+                                        return _selected_ttcs.indexOf(n) !== -1;
+                                    });
+                                }
+                                if (!_matched_ttc_list || _matched_ttc_list.length == 0) {
+                                    _unmapped_evaluations.push(_evaluation);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+        }
+
+        if (_unmapped_evaluations.length > 0) {
+            applicant_data.push({
+                name: 'UNMAPPED EVALUATIONS',
+                email: '',
+                status: '',
+                evals: '',
+                lifetime_evals: '',
+                last_update_datetime: '',
+                age: '',
+                gender: '',
+                cellphone: '',
+                homephone: '',
+                city: '',
+                state: '',
+                enrollment_count: '',
+                enrollment_list_count: '',
+                prereq_no_count: '',
+                eval_teaching_readiness: '',
+                evaluator_ratings_below_3: '',
+                org_courses_count: '',
+                course_organized_count: '',
+                course_assisted_count: '',
+                prettc_teacher: '',
+                prettc_date: '',
+                prettc_date_to_deadline_days: '',
+                prettc_location: '',
+                youthteacher: '',
+                course_wishlist: '',
+                special_interest_groups: '',
+                evaluator_names: '',
+                eval_volunteer_mental_fitness: '',
+                evaluations: _unmapped_evaluations,
+                lifetime_evals: [],
+                form_instance: ''
+            });
+        }
+
+        return applicant_data;
+    }
+
+    function show_report() {
+        var _selected_report = document.getElementById('select_report').value;
+        if (
+            _selected_report == 'no_of_courses_org' ||
+            _selected_report == 'intros_organized' ||
+            _selected_report == 'enrollments_mentioned' ||
+            _selected_report == 'enrollments_list_count'
+        ) {
+            $("[name='count_slider_section']").show();
+        } else {
+            $("[name='count_slider_section']").hide();
+        }
+        load_table_data();
+    }
+
+    function load_table_data() {
+        let applicant_data = get_table_data();
+        // console.log('[load_table_data] applicant_data = \n' + JSON.stringify(applicant_data));
+        console.log('[load_table_data] applicant_data row count = ' + applicant_data.length.toString());
+
+        if (table) {
+            table.clear();
+            table.rows.add(applicant_data);
+            table.draw();
+        } else {
+            // Search header
+            table = $('#ttc_applicants_summary').DataTable({
+                data: applicant_data,
+                // responsive: true,
+                // fixedColumns: true,
+                orderCellsTop: true,
+                // fixedHeader: true,
+                scrollX: true,
+                // colReorder: true,
+                iDisplayLength: 50,
+                dom: 'Bfrtlip',
+                buttons: [
+                    {'extend': 'copy', 'className': 'an-simple-button'},
+                    {'extend': 'excel', 'className': 'an-simple-button'}, 
+                    {'extend': 'pdf', 'className': 'an-simple-button'}, 
+                    {'extend': 'print', 'className': 'an-simple-button'}
+                ],     
+                columns: [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
+                    { data: "name" },
+                    { data: "email" },
+                    { data: "status" },
+                    { data: "last_update_datetime" },
+                    { data: "evals" },
+                    { data: "lifetime_evals" },
+                    { data: "evaluator_names" },
+                    { data: "eval_teaching_readiness" },
+                    { data: "evaluator_ratings_below_3" },
+                    { data: "eval_volunteer_mental_fitness" },
+                    { data: "age" },
+                    { data: "gender" },
+                    { data: "cellphone" },
+                    { data: "homephone" },
+                    { data: "city" },
+                    { data: "state" },
+                    { data: "org_courses_count" },
+                    { data: "course_organized_count" },
+                    { data: "course_assisted_count" },
+                    { data: "intro_talk_count" },
+                    { data: "enrollment_count" },
+                    { data: "enrollment_list_count" },
+                    { data: "prereq_no_count" },
+                    { data: "prettc_teacher" },
+                    { data: "prettc_date" },
+                    { data: "prettc_date_to_deadline_days" },
+                    { data: "prettc_location" },
+                    { data: "youthteacher" },
+                    { data: "course_wishlist" },
+                    { data: "special_interest_groups" }
+                ],
+                columnDefs: [
+                    {
+                        render: function (data, type, row, meta) {
+                            return data;
+                        },
+                        targets: [0,1,2,3,4,5,6]
+                    },
+                    {
+                        render: function (data, type, row, meta) {
+                            let idx = '-' + meta.row.toString() + '-' + meta.col.toString();
+                            let _view_mode = $('input[name=view_mode]:checked');
+                            let _content;
+                            if (_view_mode.val() == 'c') {
+                                _content = getShowHideHTML(data, idx, 19, '[+]', '[-]', true);
+                            } else {
+                                _content = getShowHideHTML(data, idx);
+                            }
+                            return "<div style='white-space:normal;max-width:200px;'>" + _content + "</div>";
+                        },
+                        targets: '_all'
+                    }
+                ],
+                order: [[1, 'asc']],
+                rowCallback: function (row, data, index) {
+                    $(row).find('td:eq(3)').css('color', getStatusColor(data.status));
+                },
+                footerCallback: function (tfoot, data, start, end, display) {
+                    var submitted = 0;
+
+                    var api = this.api();
+                    submitted = api.column(3).data().reduce(function (a, b) {
+                            var _a = a
+                            if (b == 'submitted' || b == 'complete') {
+                                _a += 1;
+                            }
+                            return _a;
+                        }, 
+                        0
+                    )
+             
+                    // Update footer
+                    $(tfoot).find('th:eq(1)').html(
+                        'Total Submitted Applications: ' + submitted.toString()
+                    );
+                }
+            });            
+
+            // Add event listener for opening and closing details
+            $('#ttc_applicants_summary tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                    hideAllChildren(tr);
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                    showAllChildren(tr);
+                }
+            });
+
+        }
+    }
+
+    function view_form(form_type, email, form_instance) {
+        var jqxhr = $.get("reporting/user-report/get-user-application-html",
+            {
+                email: email,
+                form_type: form_type,
+                form_instance: form_instance
+            })
+            .done(function (data) {
+                // alert(data);
+                postFullscreenMessage(data);
+            })
+            .fail(function () {
+                // alert("failed1");
+                postErrorMessage("There was an error retrieving the application");
+                $('#step_post_submit_message').html("There was an error retrieving the data Sorry for the inconvenience.");
+            });
+    }
+
+    function save_ttcdesk_data(form_type, email, form_instance, decision) {
+        var comment = $('#local_ttcdesk_comments-' + email + '-' + form_instance).val();
+        var jqxhr = $.post("/users/upload-ttcdesk-data",
+            {
+                email: email,
+                form_type: form_type,
+                form_instance: form_instance,
+                ttcdesk_data: JSON.stringify(
+                    {
+                        comment: comment
+                    }
+                )
+            })
+            .done(function (data) {
+                // alert(data);
+                postFullscreenMessage(data);
+            })
+            .fail(function () {
+                // alert("failed1");
+                postErrorMessage("There was an error saving the comments");
+                $('#step_post_submit_message').html("There was an error retrieving the data Sorry for the inconvenience.");
+            });
+    }
+
+    function view_form_standalone(form_type, email, form_instance) {
+        window.open("reporting/user-report/get-user-application?email=" + email + "&form_type=" + form_type + "&form_instance=" + form_instance);
+    }
+
+    function view_form_standalone_combined(email, print_on_load) {
+        let _forms = JSON.stringify(forms[email]);
+        window.open("reporting/user-report/get-user-application-combined?forms=" + _forms + '&print_on_load=' + print_on_load);
+    }
+
+    $(document).ready(function () {
+        $('#ttc_list').attr('multiple', 'multiple');
+        $('#ttc_list').select2();
+
+        $('#ttc_applicants_summary thead tr').clone(true).appendTo('#ttc_applicants_summary thead');
+        $('#ttc_applicants_summary thead tr:eq(1) th:not(:eq(0))').each(function (i) {
+            // var title = $(this).text();
+            $(this).html('<input class="table_column_search_textbox" type="textbox" placeholder="Search" />');
+
+            $('input', this).on('keyup change', function () {
+                // Offsite of 1 since the first column is not searchable
+                if (table.column(i + 1).search() !== this.value) {
+                    table
+                        .column(i + 1)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+
+        $(function () {
+            $("#count_slider").slider({
+                range: true,
+                min: 0,
+                max: 100,
+                values: [0, 100],
+                slide: function (event, ui) {
+                    $("#i_count").val("Between " + ui.values[0] + " to " + ui.values[1] + "");
+                    count_lo = parseInt(ui.values[0]);
+                    count_hi = parseInt(ui.values[1]);
+                    load_table_data();
+                }
+            });
+            $("#i_count").val("Between 0 to 100");
+            $("[name='count_slider_section']").hide();
+        });
+
+        console.log('[ttc_applicants_summary][ready] called');
+        get_user_data();  
+    }); // When the page first loads
+    
+    // function init() {
+    //     console.log('[ttc_applicants_summary][init] called');
+    //     get_user_data();
+    // }
+
+    /* Formatting function for row details - modify as you need */
+    function format(d) {
+        // `d` is the original data object for the row
+        let _rows = '';
+        let _forms = [];
+        _forms.push(
+            {
+                'form_type': 'ttc_application',
+                'email': d.email,
+                'form_instance': d.form_instance
+            }
+        );
+
+        // Unmapped evaluations
+        if (d.email == '') {
+            for (let i = 0; i < d.evaluations.length; i++) {
+                const _e = d.evaluations[i];
+                // Unmapped evaluations
+                _rows +=
+                    '<tr>' +
+                        '<td style="background-color: white;">Evaluator:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_name + '</td>' +
+                        '<td style="background-color: white;">Email:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_email_aol + '</td>' +
+                        '<td style="background-color: white;">Status:</td>' +
+                        '<td style="background-color: white; color: ' + getStatusColor(_e['{{REPORTING_KEY}}'].reporting_status) + ';">' + _e['{{REPORTING_KEY}}'].reporting_status + '</td>' +
+                        '<td style="background-color: white;"><a class="an-simple-button" onclick="javascript:view_form_standalone(\'ttc_evaluation\', \'' + _e.email + '\',\'' + _e.form_instance + '\');">View</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                        '<td style="background-color: white;">Volunteer:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_volunteer_name + '</td>' +
+                        '<td style="background-color: white;">Email:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_volunteer_email + '</td>' +
+                        '<td style="background-color: white;"></td>' +
+                        '<td style="background-color: white;"></td>' +
+                        '<td style="background-color: white;"></td>' +
+                    '</tr>';
+                if (i == d.evaluations.length-1) {
+                    _rows +=
+                        '<tr>' +
+                            '<td style="background-color: #fafafa; line-height: 5px; " colspan="6"></td>' +
+                        '</tr>';                    
+                }
+            }
+        } else {
+            let _show_lifetime = $('input[name=show_lifetime]:checked');
+            let _evaluations;
+            if (_show_lifetime.val() == 'no') {
+                _evaluations = d.evaluations;
+            } else {
+                _evaluations = d.lifetime_evaluations;
+            }
+            for (let i = 0; i < _evaluations.length; i++) {
+                const _e = _evaluations[i];
+
+                // alert(JSON.stringify(_e));
+
+                let _ttc_dates = '';
+                if (_show_lifetime.val() == 'yes') {
+                    if (_e.ttc_metadata) {
+                        _ttc_dates = _e.ttc_metadata.display;
+                    } else {
+                        _ttc_dates = _e.data.dates || _e.data.Dates || _e.data.i_ttc_country_and_dates.toUpperCase();
+                    }
+                    _ttc_dates = '<td style="background-color: white;">TTC:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _ttc_dates + '</td>';
+                }
+
+                // Unmapped evaluations
+                _rows +=
+                    '<tr>' +
+                        _ttc_dates +
+                        '<td style="background-color: white;">Evaluator:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + _e.data.i_name + '</td>' +
+                        '<td style="background-color: white;">Email:</td>' +
+                        '<td style="background-color: white; border-right:1px solid #eee;">' + (_e.data.i_email_aol ? _e.data.i_email_aol : _e.email) + '</td>' +
+                        '<td style="background-color: white;">Status:</td>' +
+                        '<td style="background-color: white; color: ' + getStatusColor(_e['{{REPORTING_KEY}}'].reporting_status) + ';">' + _e['{{REPORTING_KEY}}'].reporting_status + '</td>' +
+                        '<td style="background-color: white;"><a class="an-simple-button" onclick="javascript:view_form_standalone(\'ttc_evaluation\', \'' + _e.email + '\',\'' + _e.form_instance + '\');">View</td>' +
+                    '</tr>';
+                _forms.push(
+                    {
+                        'form_type': 'ttc_evaluation',
+                        'email': _e.email,
+                        'form_instance': _e.form_instance
+                    }
+                );
+            }
+        }
+
+        forms[d.email] = _forms;
+        
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border: 1px solid #eee; background-color: white;">' +
+                _rows +
+            '</table>' + 
+            '<div style="margin-top:13px; margin-bottom:7px;">' + 
+                '<a class="an-simple-button" onclick="javascript:view_form_standalone_combined(\'' + d.email + '\', \'Y\');">Print</a>&nbsp;' + 
+                '<a class="an-simple-button" onclick="javascript:view_form_standalone_combined(\'' + d.email + '\', \'N\');">View with evaluations (new window)</a>&nbsp;' + 
+                '<a class="an-simple-button" onclick="javascript:view_form(\'ttc_application\', \'' + d.email + '\',\'' + d.form_instance + '\');">View Application</a>&nbsp;' +
+                '<a class="an-simple-button" onclick="javascript:view_form_standalone(\'ttc_application\', \'' + d.email + '\',\'' + d.form_instance + '\');">View Application (new window)</a>' + 
+                '<a class="an-simple-button" onclick="javascript:save_ttcdesk_data(\'ttc_application\', \'' + d.email + '\',\'' + d.form_instance + '\');">View Application</a>&nbsp;' +
+                '<input id="local_ttcdesk_comments-' + d.email + '-'+ d.form_instance+ '" class="textarea" >" +
+            '</div>';
+    }
+
+</script>
+
+<div style="margin: 0 auto;" class="site-container">
+    <div class="site-inner-container site-inner-container-reporting-override">
+        <div id="form_header" class="form-tab-content form-tab-content-reporting-override">
+            <div class="tablebody">
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <div id="deepen" class="form-header-block" style="text-align: left;">
+                            Admin: TTC Report
+                            <div class="smallertext" style="margin-top:7px;">
+                                Please see below TTC applications for country 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ ttc_list_html | safe }}
+
+        <div class="form-tab-content form-tab-content-reporting-override" style="margin-top:35px;margin-bottom:23px;">
+            <div class="tablebody">
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <label for="show_lifetime_yes">Show lifetime evaluations?</label>
+                        <span class="smallertext">Show evaluations from other TTCs as well. This is helpful if the teacher submitted evaluations using another TTC</span>
+                    </div>
+                    <div class="tablecell">
+                        <div class="form-rightcol-inner-container form-rightcol-centered">
+                            <form autocomplete="off">
+                                <input type="radio" onchange="load_table_data()" id="show_lifetime_yes" name="show_lifetime" value="yes" required checked>&nbsp;<label class="label_input" name="show_lifetime" for="show_lifetime_yes">Yes</label>
+                                <input type="radio" onchange="load_table_data()" id="show_lifetime_no" name="show_lifetime" value="no" required>&nbsp;<label class="label_input" name="show_lifetime" for="show_lifetime_no">No</label>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div name="select_report" class="tablerow">
+                    <div class="tablecell">
+                        <label for="select_report">Report</label>
+                        <span class="smallertext">Select the report from the dropdown</span>
+                    </div>
+                    <div class="tablecell">
+                        <select onchange="javascript:show_report()" class="textbox" id="select_report">
+                            <option value="">Show All</option>
+                            <option value="no_prereq">1. Answered "No" for any of the pre-requisites</option>
+                            <option value="not_ready">2. Evaluators answered anything other than "Ready Now" for teaching readiness</option>
+                            <option value="less_than_3_rating">3. Evaluators rated them less than 3 on any category</option>
+                            <option value="no_of_courses_org">4. Filter based on # of courses Organized and Assisted</option>
+                            <option value="late_vtp_30">5. Attended VTP date less than 1 month from Application deadline</option>
+                            <option value="late_vtp_90">6. Attended VTP date less than 3 months from Application deadline</option>
+                            <option value="only_kids_courses">7. Only applied for Kids courses</option>
+                            <option value="intros_organized">8. Number of intro talks organized</option>
+                            <option value="enrollments_mentioned">9. Number of enrolled people</option>
+                            <option value="enrollments_list_count">10. Number of enrolled people listed</option>
+                        </select>
+                    </div>
+                </div>
+                <div name="select_report" class="tablerow">
+                    <div name="count_slider_section" class="tablecell">
+                        &nbsp;
+                    </div>
+                    <div name="count_slider_section" class="tablecell">
+                        <input type="text" id="i_count" readonly class="display_only_text" style="max-width: 210px; margin-bottom: 13px;" />
+                        <div id="count_slider" style="max-width: 210px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="step_form" class="form-tab-content form-tab-content-reporting-override">
+            <div class="tablebody">
+                <div class="tablerow">
+                    <div class="tablecell smallertext">
+                        <label for="view_mode_compact">View Mode:</label>&nbsp;
+                        <input type="radio" onchange="load_table_data()" id="view_mode_compact" name="view_mode" value="c" required>&nbsp;<label class="label_input" name="view_mode" for="view_mode_compact">Compact</label>
+                        <input type="radio" onchange="load_table_data()" id="view_mode_expanded" name="view_mode" value="x" required checked>&nbsp;<label class="label_input" name="view_mode" for="view_mode_expanded">Expanded</label>
+                    </div>
+                </div>
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <span style="font-style: italic;" class="smallertext">Last updated {{ user_summary_last_updated_datetime }}</span>
+                    </div>
+                </div>
+                <div class="tablerow">
+                    <div class="tablecell">
+                        <table id="ttc_applicants_summary" class="display nowrap cell-border">
+                            <thead class="an-dtbl-title">
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Last Updated<br><span class="an-dtbl-subtitle">(EST)</span></th>
+                                    <th>Evals</th>
+                                    <th>Evals<br><span class="an-dtbl-subtitle">(lifetime)</span></th>
+                                    <th>Evaluators</th>
+                                    <th>Eval: Teaching Readiness</th>
+                                    <th>Eval: Ratings below 3 (Evals)</th>
+                                    <th>Eval: Mental Fitness</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Cell Phone</th>
+                                    <th>Home Phone</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th># courses listed</th>
+                                    <th># courses organized<br><span class="an-dtbl-subtitle">(last 2 years)</span></th>
+                                    <th># courses assisted<br><span class="an-dtbl-subtitle">(last 2 years)</span></th>
+                                    <th># intro talks<br><span class="an-dtbl-subtitle">(last 1 year)</span></th>
+                                    <th>Enrollment</th>
+                                    <th>Enrollment<br><span class="an-dtbl-subtitle">(listed names)</span></th>
+                                    <th># "No" Pre-Requisites</th>
+                                    <th>VTP teacher</th>
+                                    <th>VTP date</th>
+                                    <th>VTP days<br><span class="an-dtbl-subtitle">(till application deadline)</span></th>
+                                    <th>VTP location</th>
+                                    <th>Youthteacher</th>
+                                    <th>Course wishlist</th>
+                                    <th>Special interest groups</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th colspan="22" style="text-align:left">Total Submitted Applications:</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

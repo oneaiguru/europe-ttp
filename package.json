@@ -29,6 +29,9 @@
     "test:unit": "node --import tsx --test test/bdd/*.test.ts",
     "test:utils": "bun test test/utils/*.test.ts",
     "test:all": "npm run test:unit && npm run test:utils",
+    "test:browser-bdd": "npx bddgen --config test/playwright/playwright.config.ts && playwright test --config test/playwright/playwright.config.ts --project=browser-bdd --grep-invert @pending",
+    "test:parity": "playwright test --config test/playwright/playwright.config.ts --project=parity",
+    "test:playwright:all": "playwright test --config test/playwright/playwright.config.ts",
     "test": "npm run bdd:all"
   },
   "devDependencies": {
@@ -42,6 +45,7 @@
     "@typescript-eslint/parser": "^8.23.0",
     "eslint": "^9.17.0",
     "playwright": "^1.58.1",
+    "playwright-bdd": "^8.5.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.7.2"

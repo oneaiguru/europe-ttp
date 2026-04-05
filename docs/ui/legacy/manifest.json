@@ -1,0 +1,46 @@
+{
+  "entries": [
+    {
+      "id": "admin-settings",
+      "kind": "admin",
+      "legacy_path": "admin/admin_settings.html",
+      "snapshot_path": "snapshots/html/admin/admin_settings.html",
+      "include": true
+    },
+    {
+      "id": "ttc-applicants-summary",
+      "kind": "admin",
+      "legacy_path": "admin/ttc_applicants_summary.html",
+      "snapshot_path": "snapshots/html/admin/ttc_applicants_summary.html",
+      "include": true
+    },
+    {
+      "id": "ttc-applicants-reports",
+      "kind": "admin",
+      "legacy_path": "admin/ttc_applicants_reports.html",
+      "snapshot_path": "snapshots/html/admin/ttc_applicants_reports.html",
+      "include": true
+    },
+    {
+      "id": "ttc-applicants-integrity",
+      "kind": "admin",
+      "legacy_path": "admin/ttc_applicants_integrity.html",
+      "snapshot_path": "snapshots/html/admin/ttc_applicants_integrity.html",
+      "include": true
+    },
+    {
+      "id": "post-ttc-course-feedback-summary",
+      "kind": "admin",
+      "legacy_path": "admin/post_ttc_course_feedback_summary.html",
+      "snapshot_path": "snapshots/html/admin/post_ttc_course_feedback_summary.html",
+      "include": true
+    },
+    {
+      "id": "post-sahaj-ttc-course-feedback-summary",
+      "kind": "admin",
+      "legacy_path": "admin/post_sahaj_ttc_course_feedback_summary.html",
+      "snapshot_path": "snapshots/html/admin/post_sahaj_ttc_course_feedback_summary.html",
+      "include": true
+    }
+  ]
+}

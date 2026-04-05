@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "id": "post-ttc-self-evaluation",
+      "kind": "form",
+      "snapshot_path": "snapshots/html/form/post-ttc-self-evaluation.html",
+      "include": true
+    },
+    {
+      "id": "ttc-applicant-profile",
+      "kind": "form",
+      "snapshot_path": "snapshots/html/form/ttc-applicant-profile.html",
+      "include": true
+    }
+  ]
+}

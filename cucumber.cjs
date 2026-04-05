@@ -16,6 +16,8 @@ module.exports = {
   import: [
     'test/typescript/steps/**/*.ts',
   ],
+  // Exclude @browser features -- those use playwright-bdd, not Cucumber step definitions
+  tags: 'not @browser',
   format: [
     'json:test/reports/typescript_bdd.json',
     'summary',
