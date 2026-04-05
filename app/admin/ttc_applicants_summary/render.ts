@@ -17,6 +17,16 @@ export type AdminDashboardRenderOptions = {
   ttcListHtml: string;
 };
 
+function getStatusClass(status: string): string {
+  if (!status) return 'text-[#333]';
+  var s = status.toLowerCase();
+  if (s.indexOf('complete') === 0) return 'text-[#2e7d32]';
+  if (s === 'submitted') return 'text-[#1565c0]';
+  if (s === 'pending' || s === 'not started') return 'text-[#e65100]';
+  if (s === 'in progress') return 'text-[#f9a825]';
+  return 'text-[#333]';
+}
+
 /**
  * Render the TTC Applicants Summary admin page body content.
  *
@@ -205,23 +215,23 @@ function format(d) {
       var _e = d.evaluations[i];
       _rows +=
         '<tr>' +
-          '<td style="background-color:white;">Evaluator:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_name||'') + '</td>' +
-          '<td style="background-color:white;">Email:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_email_aol||'') + '</td>' +
-          '<td style="background-color:white;">Status:</td>' +
-          '<td style="background-color:white;color:' + getStatusColor(_e.reporting_status) + ';">' + (_e.reporting_status||'') + '</td>' +
-          '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'ttc_evaluation\\',\\'' + (_e.email||'') + '\\',\\'' + (_e.form_instance||'') + '\\');">View</a></td>' +
+          '<td class="bg-white">Evaluator:</td>' +
+          '<td class="bg-white border-r border-r-[#eee]">' + (_e.data.i_name||'') + '</td>' +
+          '<td class="bg-white">Email:</td>' +
+          '<td class="bg-white border-r border-r-[#eee]">' + (_e.data.i_email_aol||'') + '</td>' +
+          '<td class="bg-white">Status:</td>' +
+          '<td class="bg-white ' + getStatusClass(_e.reporting_status) + '">' + (_e.reporting_status||'') + '</td>' +
+          '<td class="bg-white"><a class="an-simple-button" onclick="view_form_standalone(\\'ttc_evaluation\\',\\'' + (_e.email||'') + '\\',\\'' + (_e.form_instance||'') + '\\');">View</a></td>' +
         '</tr>' +
         '<tr>' +
-          '<td style="background-color:white;">Volunteer:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_volunteer_name||'') + '</td>' +
-          '<td style="background-color:white;">Email:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_e.data.i_volunteer_email||'') + '</td>' +
-          '<td style="background-color:white;"></td><td style="background-color:white;"></td><td style="background-color:white;"></td>' +
+          '<td class="bg-white">Volunteer:</td>' +
+          '<td class="bg-white border-r border-r-[#eee]">' + (_e.data.i_volunteer_name||'') + '</td>' +
+          '<td class="bg-white">Email:</td>' +
+          '<td class="bg-white border-r border-r-[#eee]">' + (_e.data.i_volunteer_email||'') + '</td>' +
+          '<td class="bg-white"></td><td class="bg-white"></td><td class="bg-white"></td>' +
         '</tr>';
       if (i === d.evaluations.length - 1) {
-        _rows += '<tr><td style="background-color:#fafafa;line-height:5px;" colspan="7"></td></tr>';
+        _rows += '<tr><td class="bg-[#fafafa] leading-[5px]" colspan="7"></td></tr>';
       }
     }
   } else {
@@ -234,18 +244,18 @@ function format(d) {
         var _display = '';
         if (_ev.ttc_metadata) { _display = _ev.ttc_metadata.display; }
         else { _display = _ev.data.dates || _ev.data.Dates || (_ev.data.i_ttc_country_and_dates||'').toUpperCase(); }
-        _ttc_dates = '<td style="background-color:white;">TTC:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + _display + '</td>';
+        _ttc_dates = '<td class="bg-white">TTC:</td>' +
+          '<td class="bg-white border-r border-r-[#eee]">' + _display + '</td>';
       }
       _rows +=
         '<tr>' + _ttc_dates +
-          '<td style="background-color:white;">Evaluator:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_ev.data.i_name||'') + '</td>' +
-          '<td style="background-color:white;">Email:</td>' +
-          '<td style="background-color:white;border-right:1px solid #eee;">' + (_ev.data.i_email_aol||_ev.email||'') + '</td>' +
-          '<td style="background-color:white;">Status:</td>' +
-          '<td style="background-color:white;color:' + getStatusColor(_ev.reporting_status) + ';">' + (_ev.reporting_status||'') + '</td>' +
-          '<td style="background-color:white;"><a class="an-simple-button" onclick="view_form_standalone(\\'ttc_evaluation\\',\\'' + (_ev.email||'') + '\\',\\'' + (_ev.form_instance||'') + '\\');">View</a></td>' +
+          '<td class="bg-white">Evaluator:</td>' +
+          '<td class="bg-white border-r border-r-[#eee]">' + (_ev.data.i_name||'') + '</td>' +
+          '<td class="bg-white">Email:</td>' +
+          '<td class="bg-white border-r border-r-[#eee]">' + (_ev.data.i_email_aol||_ev.email||'') + '</td>' +
+          '<td class="bg-white">Status:</td>' +
+          '<td class="bg-white ' + getStatusClass(_ev.reporting_status) + '">' + (_ev.reporting_status||'') + '</td>' +
+          '<td class="bg-white"><a class="an-simple-button" onclick="view_form_standalone(\\'ttc_evaluation\\',\\'' + (_ev.email||'') + '\\',\\'' + (_ev.form_instance||'') + '\\');">View</a></td>' +
         '</tr>';
       _forms.push({form_type:'ttc_evaluation', email:_ev.email, form_instance:_ev.form_instance});
     }
@@ -253,9 +263,9 @@ function format(d) {
 
   forms[d.email] = _forms;
 
-  return '<table cellpadding="5" cellspacing="0" border="0" style="padding:0 13px;border:1px solid #eee;background-color:white;">' +
+  return '<table class="border border-[#eee] bg-white p-[0_13px] border-separate border-spacing-0">' +
     _rows + '</table>' +
-    '<div style="margin-top:13px;margin-bottom:7px;">' +
+    '<div class="mt-[13px] mb-[7px]">' +
       '<a class="an-simple-button" onclick="view_form_standalone_combined(\\'' + d.email + '\\',\\'Y\\');">Print</a>&nbsp;' +
       '<a class="an-simple-button" onclick="view_form_standalone_combined(\\'' + d.email + '\\',\\'N\\');">View with evaluations (new window)</a>&nbsp;' +
       '<a class="an-simple-button" onclick="view_form(\\'ttc_application\\',\\'' + d.email + '\\',\\'' + d.form_instance + '\\');">View Application</a>&nbsp;' +
@@ -274,19 +284,19 @@ $(document).ready(function() {
 
   return `${pageStyles}
 <div class="site-container">
-  <div class="form-header-block" style="text-align:left;">
+  <div class="form-header-block text-left">
     ${escapeHtml(ADMIN_DASHBOARD_TITLE)}
-    <div class="smallertext" style="margin-top:7px;">
+    <div class="smallertext mt-[7px]">
       Please see below TTC applications for country
     </div>
   </div>
 
   ${ttcListSection}
 
-  <div style="margin-top:35px;margin-bottom:23px;">
+  <div class="mt-[35px] mb-[23px]">
     <label for="show_lifetime_yes">Show lifetime evaluations?</label>
     <span class="smallertext">Show evaluations from other TTCs as well. This is helpful if the teacher submitted evaluations using another TTC</span>
-    <div style="margin-top:8px;">
+    <div class="mt-[8px]">
       <form autocomplete="off">
         <input type="radio" onchange="load_table_data()" id="show_lifetime_yes" name="show_lifetime" value="yes" required>&nbsp;<label for="show_lifetime_yes">Yes</label>
         <input type="radio" onchange="load_table_data()" id="show_lifetime_no" name="show_lifetime" value="no" required checked>&nbsp;<label for="show_lifetime_no">No</label>
@@ -294,8 +304,8 @@ $(document).ready(function() {
     </div>
   </div>
 
-  <table id="${escapeHtmlAttr(ADMIN_DASHBOARD_TABLE_ID)}" class="display nowrap" style="width:100%;">
-    <thead style="font-family:Ubuntu;font-weight:300;text-transform:uppercase;">
+  <table id="${escapeHtmlAttr(ADMIN_DASHBOARD_TABLE_ID)}" class="display nowrap w-full">
+    <thead class="font-light uppercase">
       <tr>
         <th></th>
         <th>Name</th>
@@ -314,7 +324,7 @@ $(document).ready(function() {
     <tfoot>
       <tr>
         <th></th>
-        <th colspan="11" style="text-align:left;">Total Complete Applications: <i style="font-weight:normal;">loading</i>, Total Submitted Applications: <i style="font-weight:normal;">loading</i></th>
+        <th colspan="11" class="text-left">Total Complete Applications: <i class="font-normal">loading</i>, Total Submitted Applications: <i class="font-normal">loading</i></th>
       </tr>
     </tfoot>
   </table>
