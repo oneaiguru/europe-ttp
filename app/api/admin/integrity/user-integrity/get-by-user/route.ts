@@ -1,7 +1,12 @@
-import { MOCK_INTEGRITY_DATA } from '../../../mock-data';
+import { readJson, GCS_PATHS } from '../../../../../utils/gcs';
+import { requireAdminOrCron } from '../../../../../utils/auth-middleware';
 
-export async function GET() {
-  return new Response(JSON.stringify(MOCK_INTEGRITY_DATA), {
+export async function GET(request: Request): Promise<Response> {
+  const auth = await requireAdminOrCron(request);
+  if (auth instanceof Response) return auth;
+
+  const data = await readJson(GCS_PATHS.USER_INTEGRITY_BY_USER);
+  return new Response(JSON.stringify(data), {
     headers: { 'content-type': 'text/plain' },
   });
 }
