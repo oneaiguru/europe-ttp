@@ -1,20 +1,13 @@
 import { wrapAdminShell } from '../../../admin/shared/admin-shell';
 import { renderReports, REPORTS_EXTRA_HEAD_CSS, REPORTS_EXTRA_CDN_JS } from '../../../admin/ttc_applicants_reports/render';
-
-// TODO: In production, ttcListHtml and ttcCountryAndDates come from config/storage layer.
-const DEFAULT_TTC_LIST_HTML = `
-<div class="mt-4">
-  <label for="ttc_list" class="font-light">Select TTC:</label>
-  <select id="ttc_list" class="w-full max-w-[600px]">
-    <option value="default">Default TTC</option>
-  </select>
-</div>`;
+import { getTtcListHtml } from '../../../utils/admin-helpers';
 
 export async function GET() {
+  const { html: ttcListHtml, json: ttcCountryAndDates } = await getTtcListHtml();
   const bodyHtml = renderReports({
     reportingKey: 'reporting',
-    ttcCountryAndDates: '[]',
-    ttcListHtml: DEFAULT_TTC_LIST_HTML,
+    ttcCountryAndDates,
+    ttcListHtml,
   });
   const page = wrapAdminShell({
     title: 'TTC Applicants Reports',
