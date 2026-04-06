@@ -23,6 +23,6 @@
 		"admin_set_config": "/admin/set-config",
 		"admin_get_config": "/admin/get-config",
 		"user_summary_load": "/jobs/reporting/user-summary/load",
-		"user_integrity_load": "/jobs/reporting/user-integrity/load"
+		"user_integrity_load": "/jobs/integrity/user-integrity/load"
 	}
 }
