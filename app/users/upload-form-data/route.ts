@@ -9,6 +9,7 @@
 // Import stream-based body reader for secure size enforcement
 import { readBodyWithLimit, readBodyBytesWithLimit, isPayloadTooLargeError } from '../../utils/request';
 import { checkRateLimit } from '../../utils/rate-limit';
+import { TTCPortalUser } from '../../utils/ttc-portal-user';
 
 /**
  * Check if the application is running in production mode.
@@ -301,15 +302,35 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
-  // 5. Form data persistence is intentionally deferred.
-  // The current implementation validates and acknowledges submissions without storing them.
-  // See MIGRATION_DECISIONS.md for the full rationale and future work items.
-  // Note: normalizePayload() would be called when storing data in a future implementation.
+  // 5. Persist form data to GCS
+  const formUser = await TTCPortalUser.create(user);
+  formUser.setHomeCountry(
+    validation.data!.user_home_country_iso
+    || request.headers.get('x-appengine-country')
+    || request.headers.get('x-vercel-ip-country')
+    || ''
+  );
+
+  // form_data / form_instance_page_data arrive as JSON strings from form-urlencoded
+  // but as objects from JSON callers. Parse only if string.
+  const formData = typeof validation.data!.form_data === 'string'
+    ? JSON.parse(validation.data!.form_data) : validation.data!.form_data;
+  const pageData = typeof validation.data!.form_instance_page_data === 'string'
+    ? JSON.parse(validation.data!.form_instance_page_data) : validation.data!.form_instance_page_data;
+
+  formUser.setFormData(
+    validation.data!.form_type!,
+    validation.data!.form_instance || '',
+    formData,
+    pageData,
+    validation.data!.form_instance_display || ''
+  );
+  await formUser.saveUserData();
 
   return Response.json(
     {
       ok: true,
-      user: user, // Echo user for verification (not full payload)
+      user: user,
     },
     { status: 200 }
   );
