@@ -423,79 +423,65 @@ export async function loadUserSummary(): Promise<void> {
                 if (processCurrent) {
                   const afiReporting = (ttcAppC[afi] as Record<string, unknown>)[KEY] as Record<string, unknown>;
                   afiReporting['evaluations_submitted_count'] = ((afiReporting['evaluations_submitted_count'] as number) || 0) + 1;
+                }
+                if (processLifetime) {
+                  ttcAppReporting['lifetime_evaluations_submitted_count'] = ((ttcAppReporting['lifetime_evaluations_submitted_count'] as number) || 0) + 1;
+                }
 
-                  // Teaching readiness
-                  const teachingReadiness = String(ed['i_volunteer_teaching_readiness'] || '');
-                  if (teachingReadiness) {
+                // Teaching readiness
+                const teachingReadiness = String(ed['i_volunteer_teaching_readiness'] || '');
+                if (teachingReadiness) {
+                  if (processCurrent) {
+                    const afiReporting = (ttcAppC[afi] as Record<string, unknown>)[KEY] as Record<string, unknown>;
                     if (!afiReporting['eval_teaching_readiness']) afiReporting['eval_teaching_readiness'] = {};
                     const tr = afiReporting['eval_teaching_readiness'] as Record<string, number>;
                     tr[teachingReadiness] = (tr[teachingReadiness] || 0) + 1;
-                    if (teachingReadiness !== 'ready_now') {
-                      afiReporting['eval_teaching_readiness_not_ready_now_count'] = ((afiReporting['eval_teaching_readiness_not_ready_now_count'] as number) || 0) + 1;
-                    }
                   }
-
                   if (processLifetime) {
                     if (!ttcAppReporting['lifetime_eval_teaching_readiness']) ttcAppReporting['lifetime_eval_teaching_readiness'] = {};
                     const ltr = ttcAppReporting['lifetime_eval_teaching_readiness'] as Record<string, number>;
                     ltr[teachingReadiness] = (ltr[teachingReadiness] || 0) + 1;
-                    if (teachingReadiness !== 'ready_now') {
+                  }
+
+                  if (teachingReadiness !== 'ready_now') {
+                    if (processCurrent) {
+                      const afiReporting = (ttcAppC[afi] as Record<string, unknown>)[KEY] as Record<string, unknown>;
+                      afiReporting['eval_teaching_readiness_not_ready_now_count'] = ((afiReporting['eval_teaching_readiness_not_ready_now_count'] as number) || 0) + 1;
+                    }
+                    if (processLifetime) {
                       ttcAppReporting['lifetime_eval_teaching_readiness_not_ready_now_count'] = ((ttcAppReporting['lifetime_eval_teaching_readiness_not_ready_now_count'] as number) || 0) + 1;
                     }
                   }
+                }
 
-                  // Ratings below 3
-                  for (const q of Object.keys(ed)) {
-                    if (q.startsWith('i_volunteer_rating_') && !q.endsWith('_question') && !q.endsWith('_explanation')) {
-                      const rating = parseInt(String(ed[q]), 10);
-                      if (!isNaN(rating) && rating <= 2) {
-                        if (processCurrent) {
-                          afiReporting['evaluator_ratings_below_3'] = ((afiReporting['evaluator_ratings_below_3'] as number) || 0) + 1;
-                        }
-                        if (processLifetime) {
-                          ttcAppReporting['lifetime_evaluator_ratings_below_3'] = ((ttcAppReporting['lifetime_evaluator_ratings_below_3'] as number) || 0) + 1;
-                        }
+                // Ratings below 3
+                for (const q of Object.keys(ed)) {
+                  if (q.startsWith('i_volunteer_rating_') && !q.endsWith('_question') && !q.endsWith('_explanation')) {
+                    const rating = parseInt(String(ed[q]), 10);
+                    if (!isNaN(rating) && rating <= 2) {
+                      if (processCurrent) {
+                        const afiReporting = (ttcAppC[afi] as Record<string, unknown>)[KEY] as Record<string, unknown>;
+                        afiReporting['evaluator_ratings_below_3'] = ((afiReporting['evaluator_ratings_below_3'] as number) || 0) + 1;
                       }
-                    }
-                  }
-                } else if (processLifetime) {
-                  // processCurrent is false but processLifetime may be true
-                  ttcAppReporting['lifetime_evaluations_submitted_count'] = ((ttcAppReporting['lifetime_evaluations_submitted_count'] as number) || 0) + 1;
-
-                  // Teaching readiness (lifetime only)
-                  const teachingReadiness = String(ed['i_volunteer_teaching_readiness'] || '');
-                  if (teachingReadiness) {
-                    if (!ttcAppReporting['lifetime_eval_teaching_readiness']) ttcAppReporting['lifetime_eval_teaching_readiness'] = {};
-                    const ltr = ttcAppReporting['lifetime_eval_teaching_readiness'] as Record<string, number>;
-                    ltr[teachingReadiness] = (ltr[teachingReadiness] || 0) + 1;
-                    if (teachingReadiness !== 'ready_now') {
-                      ttcAppReporting['lifetime_eval_teaching_readiness_not_ready_now_count'] = ((ttcAppReporting['lifetime_eval_teaching_readiness_not_ready_now_count'] as number) || 0) + 1;
-                    }
-                  }
-
-                  // Ratings below 3 (lifetime only)
-                  for (const q of Object.keys(ed)) {
-                    if (q.startsWith('i_volunteer_rating_') && !q.endsWith('_question') && !q.endsWith('_explanation')) {
-                      const rating = parseInt(String(ed[q]), 10);
-                      if (!isNaN(rating) && rating <= 2) {
+                      if (processLifetime) {
                         ttcAppReporting['lifetime_evaluator_ratings_below_3'] = ((ttcAppReporting['lifetime_evaluator_ratings_below_3'] as number) || 0) + 1;
                       }
                     }
                   }
                 }
-
-                // Update reporting status
-                const [appStatus2, evalStatus2] = getReportingStatus(
-                  'ttc_application',
-                  !!(a['is_form_submitted']),
-                  !!(a['is_form_complete']),
-                  ((ttcAppC[afi] as Record<string, unknown>)[KEY] as Record<string, unknown>)['evaluations_submitted_count'] as number || 0,
-                  (ttcAppC[KEY] as Record<string, unknown>)['lifetime_evaluations_submitted_count'] as number || 0,
-                );
-                const afiReporting2 = (ttcAppC[afi] as Record<string, unknown>)[KEY] as Record<string, unknown>;
-                afiReporting2['reporting_status'] = appStatus2;
-                afiReporting2['evaluations_reporting_status'] = evalStatus2;
               }
+
+              // Update reporting status (runs on every match, not just submitted)
+              const afiReporting2 = (ttcAppC[afi] as Record<string, unknown>)[KEY] as Record<string, unknown>;
+              const [appStatus2, evalStatus2] = getReportingStatus(
+                'ttc_application',
+                !!(a['is_form_submitted']),
+                !!(a['is_form_complete']),
+                (afiReporting2['evaluations_submitted_count'] as number) || 0,
+                (ttcAppReporting['lifetime_evaluations_submitted_count'] as number) || 0,
+              );
+              afiReporting2['reporting_status'] = appStatus2;
+              afiReporting2['evaluations_reporting_status'] = evalStatus2;
 
               // Mark evaluation as matched
               if (processCurrent) {
