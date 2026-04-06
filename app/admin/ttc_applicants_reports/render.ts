@@ -16,13 +16,15 @@ export type ReportsRenderOptions = {
   reportingKey: string;
   ttcCountryAndDates: string;
   ttcListHtml: string;
+  userSummaryLastUpdatedDatetime: string;
+  userIntegrityLastUpdatedDatetime: string;
 };
 
 export const REPORTS_EXTRA_HEAD_CSS = `<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">`;
 export const REPORTS_EXTRA_CDN_JS = `<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>`;
 
 export function renderReports(options: ReportsRenderOptions): string {
-  const { reportingKey, ttcCountryAndDates, ttcListHtml } = options;
+  const { reportingKey, ttcCountryAndDates, ttcListHtml, userSummaryLastUpdatedDatetime, userIntegrityLastUpdatedDatetime } = options;
   const rk = escapeHtml(reportingKey);
 
   const pageStyles = `
@@ -636,6 +638,10 @@ $(document).ready(function() {
         </tr>
       </tfoot>
     </table>
+  </div>
+
+  <div class="text-sm italic text-gray-500">
+    Last updated ${escapeHtml(userSummaryLastUpdatedDatetime)}
   </div>
 
   <div id="step_post_submit_message"></div>

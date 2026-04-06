@@ -1,4 +1,4 @@
-import { readJson, GCS_PATHS } from './gcs';
+import { readJson, getFileMetadata, GCS_PATHS } from './gcs';
 
 /**
  * Port of admin.py:82-138 get_ttc_list_html().
@@ -33,4 +33,32 @@ export async function getTtcListHtml(userHomeCountry?: string): Promise<{ html: 
         </select></div>
     </div></div></div>`;
   return { html, json: JSON.stringify(allOptions) }; // json uses ALL options (unfiltered, for client-side use)
+}
+
+/**
+ * Port of admin.py:158-174 get_user_reporting_last_updated_datetime().
+ * Returns formatted timestamps for the summary and integrity data files.
+ * Summary reads from USER_SUMMARY_BY_FORM_TYPE; integrity reads from USER_INTEGRITY_BY_USER.
+ */
+export async function getLastUpdatedTimestamps(): Promise<{
+  user_summary_last_updated_datetime: string;
+  user_integrity_last_updated_datetime: string;
+}> {
+  async function getFormattedDate(path: string): Promise<string> {
+    try {
+      const meta = await getFileMetadata(path);
+      const d = meta.updated;
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    } catch {
+      return '';
+    }
+  }
+
+  const [user_summary_last_updated_datetime, user_integrity_last_updated_datetime] = await Promise.all([
+    getFormattedDate(GCS_PATHS.USER_SUMMARY_BY_FORM_TYPE),
+    getFormattedDate(GCS_PATHS.USER_INTEGRITY_BY_USER),
+  ]);
+
+  return { user_summary_last_updated_datetime, user_integrity_last_updated_datetime };
 }

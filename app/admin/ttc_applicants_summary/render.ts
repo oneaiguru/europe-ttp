@@ -15,6 +15,8 @@ export const ADMIN_DASHBOARD_TABLE_ID = 'ttc_applicants_summary';
 
 export type AdminDashboardRenderOptions = {
   ttcListHtml: string;
+  userSummaryLastUpdatedDatetime: string;
+  userIntegrityLastUpdatedDatetime: string;
 };
 
 function getStatusClass(status: string): string {
@@ -34,7 +36,7 @@ function getStatusClass(status: string): string {
  * The route wraps this in wrapAdminShell() which adds CDN links and base CSS.
  */
 export function renderAdminDashboard(options: AdminDashboardRenderOptions): string {
-  const { ttcListHtml } = options;
+  const { ttcListHtml, userSummaryLastUpdatedDatetime, userIntegrityLastUpdatedDatetime } = options;
 
   const pageStyles = `
 <style>

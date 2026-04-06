@@ -14,10 +14,12 @@ export const INTEGRITY_TABLE_ID = 'ttc_applicants_summary';
 export type IntegrityRenderOptions = {
   integrityKey: string;
   ttcListHtml: string;
+  userSummaryLastUpdatedDatetime: string;
+  userIntegrityLastUpdatedDatetime: string;
 };
 
 export function renderIntegrityReport(options: IntegrityRenderOptions): string {
-  const { integrityKey, ttcListHtml } = options;
+  const { integrityKey, ttcListHtml, userSummaryLastUpdatedDatetime, userIntegrityLastUpdatedDatetime } = options;
   const escapedKey = escapeHtml(integrityKey);
 
   const pageStyles = `
@@ -254,6 +256,10 @@ $(document).ready(function() {
         </tr>
       </tfoot>
     </table>
+  </div>
+
+  <div class="text-sm italic text-gray-500">
+    Last updated ${escapeHtml(userIntegrityLastUpdatedDatetime)}
   </div>
 
   <div id="step_post_submit_message"></div>

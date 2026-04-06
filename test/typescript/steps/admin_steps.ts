@@ -66,6 +66,8 @@ async function renderAdminDashboardHtml(): Promise<string> {
   const module = await import('../../../app/admin/ttc_applicants_summary/render');
   return module.renderAdminDashboard({
     ttcListHtml: '<div><select id="ttc_list"><option value="test_ttc">Test TTC</option></select></div>',
+    userSummaryLastUpdatedDatetime: '',
+    userIntegrityLastUpdatedDatetime: '',
   });
 }
 
