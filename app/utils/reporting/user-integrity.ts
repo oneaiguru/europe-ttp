@@ -4,6 +4,17 @@ import { getTtcList, getReportingStatus } from './reporting-utils';
 const DATA_RETENTION_DAYS = 730;
 const KEY = 'integrity';
 
+/** Convert UTC datetime string to Eastern timezone display string. */
+function utcToEastern(utcStr: string): string {
+  const d = new Date(utcStr + ' UTC');
+  return d.toLocaleString('en-US', {
+    timeZone: 'America/New_York',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: false,
+  }).replace(/(\d+)\/(\d+)\/(\d+),?\s*/, '$3-$1-$2 ');
+}
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /** Recursively convert Set instances to Arrays for JSON serialization. */
@@ -90,6 +101,11 @@ export async function loadUserIntegrity(): Promise<void> {
 
         const fd: any = { ...ud.form_data[ft][fiRaw] };
         fd.form_instance = fiRaw;
+
+        // Convert last_update_datetime to Eastern (matching user-summary.ts)
+        if (fd.last_update_datetime) {
+          fd.last_update_datetime_est = utcToEastern(fd.last_update_datetime);
+        }
 
         // Check retention (skip old records) — port of Python line 161
         if (fd.last_update_datetime) {
