@@ -295,7 +295,10 @@ export async function loadUserSummary(): Promise<void> {
       const ttcEvalFi = (userT['ttc_evaluation'] as Record<string, unknown>)[fi] as Record<string, unknown>;
 
       for (const ve of Object.keys(ttcEvalFi)) {
-        const e = ttcEvalFi[ve] as Record<string, unknown>;
+        if (ve === KEY) continue;
+        const eRaw = ttcEvalFi[ve];
+        if (!eRaw || typeof eRaw !== 'object') continue;
+        const e = eRaw as Record<string, unknown>;
         e['email'] = t;
         const ed = { ...(e['data'] as Record<string, unknown> || {}), ...(e['form_instance_page_data'] as Record<string, unknown> || {}) };
         const vn = String(ed['i_volunteer_name'] || '').trim().toLowerCase();
