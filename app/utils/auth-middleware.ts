@@ -155,6 +155,26 @@ const ROUTE_TO_PAGE_KEY: Record<string, string> = {
 };
 
 type AuthResult = { email: string } | Response;
+type GuardDenyMode = 'json' | 'legacy_html';
+type GuardOptions = {
+  denyMode?: GuardDenyMode;
+};
+
+const LEGACY_UNAUTHORIZED_HTML = '<b>UN-AUTHORIZED</b>';
+
+function legacyUnauthorizedResponse(): Response {
+  return new Response(LEGACY_UNAUTHORIZED_HTML, {
+    status: 200,
+    headers: { 'content-type': 'text/html; charset=utf-8' },
+  });
+}
+
+function denyResponse(message: string, status: 401 | 403, options?: GuardOptions): Response {
+  if (options?.denyMode === 'legacy_html') {
+    return legacyUnauthorizedResponse();
+  }
+  return Response.json({ error: message }, { status });
+}
 
 /**
  * Check if request has valid cron header.
@@ -169,11 +189,15 @@ function isCronRequest(request: Request): boolean {
   return request.headers.get('x-appengine-cron') === 'true';
 }
 
+function normalizeAdminEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
 /**
  * Check page permission (port of admin.py:140-155 check_permissions).
  */
 function checkPermissions(email: string, page: string): boolean {
-  const perms = LIST_OF_ADMIN_PERMISSIONS[email];
+  const perms = LIST_OF_ADMIN_PERMISSIONS[normalizeAdminEmail(email)];
   if (!perms) return false;
   return perms.report_permissions.includes(page);
 }
@@ -184,7 +208,7 @@ function checkPermissions(email: string, page: string): boolean {
 export async function requireAuth(request: Request): Promise<AuthResult> {
   const email = await getAuthenticatedUser(request);
   if (!email) {
-    return Response.json({ error: 'Authentication required' }, { status: 401 });
+    return denyResponse('Authentication required', 401);
   }
   return { email };
 }
@@ -195,40 +219,41 @@ export async function requireAuth(request: Request): Promise<AuthResult> {
 export async function requireAdmin(request: Request): Promise<AuthResult> {
   const email = await getAuthenticatedUser(request);
   if (!email) {
-    return Response.json({ error: 'Authentication required' }, { status: 401 });
+    return denyResponse('Authentication required', 401);
   }
-  if (!LIST_OF_ADMINS.has(email)) {
-    return Response.json({ error: 'Admin access required' }, { status: 403 });
+  const normalizedEmail = normalizeAdminEmail(email);
+  if (!LIST_OF_ADMINS.has(normalizedEmail)) {
+    return denyResponse('Admin access required', 403);
   }
-  return { email };
+  return { email: normalizedEmail };
 }
 
 /**
  * Checks user has permission for a specific page.
  */
-export async function requireAdminForPage(request: Request, page: string): Promise<AuthResult> {
+export async function requireAdminForPage(request: Request, page: string, options?: GuardOptions): Promise<AuthResult> {
   const email = await getAuthenticatedUser(request);
   if (!email) {
-    return Response.json({ error: 'Authentication required' }, { status: 401 });
+    return denyResponse('Authentication required', 401, options);
   }
   if (!checkPermissions(email, page)) {
-    return Response.json({ error: 'Permission denied' }, { status: 403 });
+    return denyResponse('Permission denied', 403, options);
   }
-  return { email };
+  return { email: normalizeAdminEmail(email) };
 }
 
 /**
  * Checks user has permission for ANY of the listed pages.
  */
-export async function requireAdminAnyOf(request: Request, pages: string[]): Promise<AuthResult> {
+export async function requireAdminAnyOf(request: Request, pages: string[], options?: GuardOptions): Promise<AuthResult> {
   const email = await getAuthenticatedUser(request);
   if (!email) {
-    return Response.json({ error: 'Authentication required' }, { status: 401 });
+    return denyResponse('Authentication required', 401, options);
   }
   if (!pages.some(page => checkPermissions(email, page))) {
-    return Response.json({ error: 'Permission denied' }, { status: 403 });
+    return denyResponse('Permission denied', 403, options);
   }
-  return { email };
+  return { email: normalizeAdminEmail(email) };
 }
 
 /**
@@ -240,12 +265,13 @@ export async function requireAdminOrCron(request: Request): Promise<AuthResult> 
   }
   const email = await getAuthenticatedUser(request);
   if (!email) {
-    return Response.json({ error: 'Authentication required' }, { status: 401 });
+    return denyResponse('Authentication required', 401);
   }
-  if (!LIST_OF_ADMINS.has(email)) {
-    return Response.json({ error: 'Admin access required' }, { status: 403 });
+  const normalizedEmail = normalizeAdminEmail(email);
+  if (!LIST_OF_ADMINS.has(normalizedEmail)) {
+    return denyResponse('Admin access required', 403);
   }
-  return { email };
+  return { email: normalizedEmail };
 }
 
 /**
@@ -257,12 +283,16 @@ export async function requireAdminAnyOfOrCron(request: Request, pages: string[])
   }
   const email = await getAuthenticatedUser(request);
   if (!email) {
-    return Response.json({ error: 'Authentication required' }, { status: 401 });
+    return denyResponse('Authentication required', 401);
   }
   if (!pages.some(page => checkPermissions(email, page))) {
-    return Response.json({ error: 'Permission denied' }, { status: 403 });
+    return denyResponse('Permission denied', 403);
   }
-  return { email };
+  return { email: normalizeAdminEmail(email) };
 }
 
-export { LIST_OF_ADMINS, LIST_OF_ADMIN_PERMISSIONS, ROUTE_TO_PAGE_KEY };
+export function getReportPermissions(email: string): string[] {
+  return LIST_OF_ADMIN_PERMISSIONS[normalizeAdminEmail(email)]?.report_permissions ?? [];
+}
+
+export { LIST_OF_ADMINS, LIST_OF_ADMIN_PERMISSIONS, ROUTE_TO_PAGE_KEY, LEGACY_UNAUTHORIZED_HTML };

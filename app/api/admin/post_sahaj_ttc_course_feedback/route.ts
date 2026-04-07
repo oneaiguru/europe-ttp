@@ -3,7 +3,7 @@ import { renderPostSahajFeedback } from '../../../admin/post_sahaj_ttc_course_fe
 import { requireAdminForPage } from '../../../utils/auth-middleware';
 
 export async function GET(request: Request): Promise<Response> {
-  const auth = await requireAdminForPage(request, 'post_sahaj_ttc_course_feedback_summary.html');
+  const auth = await requireAdminForPage(request, 'post_sahaj_ttc_course_feedback_summary.html', { denyMode: 'legacy_html' });
   if (auth instanceof Response) return auth;
   const bodyHtml = renderPostSahajFeedback({
     reportingKey: 'reporting',

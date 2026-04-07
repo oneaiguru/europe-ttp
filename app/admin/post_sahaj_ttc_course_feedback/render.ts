@@ -38,6 +38,13 @@ ${FULLSCREEN_MESSAGE_JS}
 
 ${ERROR_MESSAGE_JS}
 
+function postInfoMessage(msg) {
+  var el = document.getElementById('step_post_submit_message');
+  if (el) {
+    el.innerHTML = '<div class="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">' + msg + '</div>';
+  }
+}
+
 ${STRING2DATE_JS}
 
 ${FORMAT_DATE_JS}
@@ -48,7 +55,10 @@ function get_user_data() {
   if (user_data) return;
   $.get("reporting/user-summary/get-by-user", {})
     .done(function(data) {
-      user_data = JSON.parse(data);
+      user_data = JSON.parse(data || '{}');
+      if (!user_data || (typeof user_data === 'object' && Object.keys(user_data).length === 0)) {
+        postInfoMessage('No reporting data yet. Upload data and run reporting jobs.');
+      }
       load_table_data();
     })
     .fail(function() {

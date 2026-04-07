@@ -1,5 +1,6 @@
 import { readJson, readText, writeJson, writeText, listFiles, GCS_PATHS } from '../gcs';
 import { getTtcList, getReportingStatus } from './reporting-utils';
+import { getReportableInstanceKeys } from './form-instance-normalizer';
 
 const DATA_RETENTION_DAYS = 730;
 const KEY = 'integrity';
@@ -96,8 +97,7 @@ export async function loadUserIntegrity(): Promise<void> {
     for (const ft of Object.keys(ud.form_data)) {
       if (ft !== 'ttc_application') continue;
 
-      for (const fiRaw of Object.keys(ud.form_data[ft])) {
-        if (fiRaw === 'default') continue;
+      for (const fiRaw of getReportableInstanceKeys(ud.form_data[ft])) {
 
         const fd: any = { ...ud.form_data[ft][fiRaw] };
         fd.form_instance = fiRaw;
@@ -199,8 +199,7 @@ export async function loadUserIntegrity(): Promise<void> {
     const c1TtcApp = userDataByEmail[c1e]['ttc_application'];
     if (!c1TtcApp) continue;
 
-    for (const c1fi of Object.keys(c1TtcApp)) {
-      if (c1fi === 'default') continue;
+    for (const c1fi of getReportableInstanceKeys(c1TtcApp, [KEY])) {
 
       const c1 = c1TtcApp[c1fi];
       const c1d = c1?.data || {};
@@ -344,8 +343,7 @@ export async function postLoadUserIntegrity(): Promise<void> {
     const ttcApp = userDataByEmail[c1e]['ttc_application'];
     if (!ttcApp) continue;
 
-    for (const c1fi of Object.keys(ttcApp)) {
-      if (c1fi === 'default') continue;
+    for (const c1fi of getReportableInstanceKeys(ttcApp, [KEY])) {
 
       const c1 = ttcApp[c1fi];
       const c1d = c1?.data || {};

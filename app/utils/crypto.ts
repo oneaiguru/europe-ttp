@@ -201,6 +201,7 @@ export function getHmacSecret(): string {
   if (!isDevelopment && DEFAULT_SECRETS.includes(secret)) {
     throw new Error(
       'UPLOAD_HMAC_SECRET is set to a known placeholder value. ' +
+      'This default development value is insecure. ' +
       'This is insecure outside development/test environments. ' +
       'Generate a secure random value with: openssl rand -base64 32'
     );
@@ -243,6 +244,7 @@ export function getSessionHmacSecret(): string {
     if (!isDevelopment && DEFAULT_SECRETS.includes(secret)) {
       throw new Error(
         'SESSION_HMAC_SECRET is set to a known placeholder value. ' +
+        'This default development value is insecure. ' +
         'This is insecure outside development/test environments. ' +
         'Generate a secure random value with: openssl rand -base64 32'
       );

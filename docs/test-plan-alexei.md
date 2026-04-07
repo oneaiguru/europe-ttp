@@ -31,9 +31,10 @@ git checkout main
 docker compose up --build
 ```
 
-Optional for password-enabled login in dev:
-- `DEV_LOGIN_PASSWORD=your-password docker compose up --build`
-- or set it in your environment/`.env` before running compose.
+Dev default for local Docker:
+- password auth is enabled by default via compose: `DEV_LOGIN_PASSWORD=DevPass123`
+- you can still override with `DEV_LOGIN_PASSWORD=your-password docker compose up --build`
+- or set `DEV_LOGIN_CREDENTIALS` for per-email passwords.
 
 This starts:
 - **GCS emulator** (fake storage backend — no Google credentials needed)
@@ -56,6 +57,10 @@ Open http://localhost:8009 in your browser. You should see the landing page with
 Dev mode now accepts email + optional password.
 When `DEV_LOGIN_PASSWORD` or `DEV_LOGIN_CREDENTIALS` is configured, password is validated.
 You can now use a web form: `http://localhost:8009/login`
+- [ ] Open `http://localhost:8009/login` and sign in with:
+  - Email: `akshay.ponda@artofliving.org`
+  - Password: `DevPass123` (or your override)
+- [ ] Verify redirect to `/api/admin/reports_list`
 - [ ] Open a terminal and run: `curl -X POST http://localhost:8009/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"akshay.ponda@artofliving.org\"}"`
 - [ ] If `DEV_LOGIN_PASSWORD` is configured, run: `curl -X POST http://localhost:8009/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"akshay.ponda@artofliving.org\",\"password\":\"REPLACE_WITH_PASSWORD\"}"`
 - [ ] If `DEV_LOGIN_CREDENTIALS` is configured, run: `curl -X POST http://localhost:8009/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"akshay.ponda@artofliving.org\",\"password\":\"REPLACE_WITH_PASSWORD\"}"`
@@ -93,4 +98,5 @@ For each admin page, add the session cookie to your browser (or use curl with `-
 ## Notes
 - The GCS emulator runs inside Docker — all data is temporary (lost when you stop Docker)
 - Admin emails with permissions are hardcoded (use `akshay.ponda@artofliving.org` for full access)
-- Dev mode login accepts any email — no real Google auth needed
+- In Docker dev, password auth is enabled by default (`DevPass123`) unless overridden by env
+- Production session login policy: set `SESSION_LOGIN_HASH_ALGORITHM=bcrypt` and provide `SESSION_LOGIN_CREDENTIALS_BCRYPT` as JSON map of email -> bcrypt hash

@@ -3,7 +3,9 @@ services:
     image: fsouza/fake-gcs-server
     ports:
       - "4443:4443"
-    command: ["-scheme", "http", "-port", "4443"]
+    command: ["-scheme", "http", "-port", "4443", "-backend", "filesystem", "-data", "/storage"]
+    volumes:
+      - fake-gcs-data:/storage
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:4443/storage/v1/b"]
       interval: 2s
@@ -11,16 +13,18 @@ services:
       retries: 5
 
   gcs-init:
-    image: curlimages/curl:latest
+    image: node:20.20.0-slim
     depends_on:
       fake-gcs:
         condition: service_healthy
     restart: "no"
-    entrypoint: >
-      sh -c 'curl -s -X POST "http://fake-gcs:4443/storage/v1/b"
-      -H "Content-Type: application/json"
-      -d "{\"name\":\"artofliving-ttcdesk.appspot.com\"}"
-      && echo " Bucket created"'
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace:ro
+    environment:
+      - STORAGE_EMULATOR_HOST=http://fake-gcs:4443
+      - GCS_BUCKET_NAME=artofliving-ttcdesk.appspot.com
+    command: ["node", "scripts/gcs-seed.mjs"]
 
   ttp-nextjs:
     build: .
@@ -36,5 +40,10 @@ services:
       - STORAGE_EMULATOR_HOST=http://fake-gcs:4443
       - GCS_BUCKET_NAME=artofliving-ttcdesk.appspot.com
       - SESSION_HMAC_SECRET=dev-test-secret-not-for-production
-      - DEV_LOGIN_PASSWORD=${DEV_LOGIN_PASSWORD}
-      - DEV_LOGIN_CREDENTIALS=${DEV_LOGIN_CREDENTIALS}
+      # Stable local test auth: if no env override is provided, use a known dev password.
+      - DEV_LOGIN_PASSWORD=${DEV_LOGIN_PASSWORD:-DevPass123}
+      # Keep map override optional; empty by default to avoid compose warnings.
+      - DEV_LOGIN_CREDENTIALS=${DEV_LOGIN_CREDENTIALS:-}
+
+volumes:
+  fake-gcs-data:

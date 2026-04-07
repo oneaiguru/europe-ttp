@@ -9,6 +9,7 @@
 import { readJson, writeJson, listFiles, getFileMetadata, GCS_PATHS } from '../gcs';
 import { getReportingStatus, getTtcList } from './reporting-utils';
 import { levenshteinB } from './matching';
+import { getReportableInstanceKeys } from './form-instance-normalizer';
 
 const KEY = 'reporting';
 const DATA_RETENTION_DAYS = 730;
@@ -118,8 +119,7 @@ export async function loadUserSummary(): Promise<void> {
       const formData = raw['form_data'] as Record<string, Record<string, FormInstanceData>>;
 
       for (const ft of Object.keys(formData)) {
-        for (const fiRaw of Object.keys(formData[ft])) {
-          if (fiRaw === 'default') continue;
+        for (const fiRaw of getReportableInstanceKeys(formData[ft])) {
 
           const fd: FormInstanceData = { ...formData[ft][fiRaw] };
           fd['form_instance'] = fiRaw;
@@ -298,8 +298,7 @@ export async function loadUserSummary(): Promise<void> {
   for (const t of Object.keys(userDataByEmail)) {
     const userT = userDataByEmail[t] as Record<string, Record<string, unknown>>;
 
-    for (const fi of Object.keys(userT['ttc_evaluation'] || {})) {
-      if (fi === 'default') continue;
+    for (const fi of getReportableInstanceKeys(userT['ttc_evaluation'] as Record<string, unknown> | undefined, [KEY])) {
       const ttcEvalFi = (userT['ttc_evaluation'] as Record<string, unknown>)[fi] as Record<string, unknown>;
 
       for (const ve of Object.keys(ttcEvalFi)) {
@@ -515,8 +514,7 @@ export async function loadUserSummary(): Promise<void> {
     }
 
     // [START] Post-TTC feedback matching (Python lines 528-633)
-    for (const fi of Object.keys(userT['post_ttc_feedback_form'] || {})) {
-      if (fi === 'default') continue;
+    for (const fi of getReportableInstanceKeys(userT['post_ttc_feedback_form'] as Record<string, unknown> | undefined, [KEY])) {
       const feedbackFi = (userT['post_ttc_feedback_form'] as Record<string, unknown>)[fi] as Record<string, unknown>;
 
       for (const ve of Object.keys(feedbackFi)) {
@@ -597,8 +595,7 @@ export async function loadUserSummary(): Promise<void> {
     }
 
     // [START] Post-Sahaj feedback matching (Python lines 636-728)
-    for (const fi of Object.keys(userT['post_sahaj_ttc_feedback_form'] || {})) {
-      if (fi === 'default') continue;
+    for (const fi of getReportableInstanceKeys(userT['post_sahaj_ttc_feedback_form'] as Record<string, unknown> | undefined, [KEY])) {
       const feedbackFi = (userT['post_sahaj_ttc_feedback_form'] as Record<string, unknown>)[fi] as Record<string, unknown>;
 
       for (const ve of Object.keys(feedbackFi)) {

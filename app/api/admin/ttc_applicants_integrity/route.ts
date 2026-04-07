@@ -4,7 +4,7 @@ import { getTtcListHtml, getLastUpdatedTimestamps } from '../../../utils/admin-h
 import { requireAdminForPage } from '../../../utils/auth-middleware';
 
 export async function GET(request: Request): Promise<Response> {
-  const auth = await requireAdminForPage(request, 'ttc_applicants_integrity.html');
+  const auth = await requireAdminForPage(request, 'ttc_applicants_integrity.html', { denyMode: 'legacy_html' });
   if (auth instanceof Response) return auth;
   const { html: ttcListHtml } = await getTtcListHtml();
   const timestamps = await getLastUpdatedTimestamps();

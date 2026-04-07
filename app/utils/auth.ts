@@ -343,7 +343,7 @@ export function extractBearerToken(authHeader: string | null): string | null {
 
   // Use regex to be tolerant of multiple spaces between "Bearer" and the token
   // e.g., "Bearer    <token>" should be valid
-  const match = authHeader.match(/^bearer\s+(.+)$/i);
+  const match = authHeader.match(/^bearer\s+(\S+)$/i);
   if (!match) {
     return null;
   }
