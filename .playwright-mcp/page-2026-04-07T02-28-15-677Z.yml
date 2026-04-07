@@ -1,0 +1,38 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - heading "Admin" [level=1] [ref=e4]
+    - generic [ref=e5]: Please see below TTC applications for country
+  - generic [ref=e6]:
+    - generic [ref=e9]:
+      - generic [ref=e10]: TTC Select the TTC from the dropdown
+      - generic [ref=e11]:
+        - listbox [ref=e12]
+        - combobox [ref=e15]:
+          - list
+          - searchbox "Search" [ref=e17]
+    - generic [ref=e18]:
+      - text: Show lifetime evaluations? Show evaluations from other TTCs as well. This is helpful if the teacher submitted evaluations using another TTC
+      - generic [ref=e20]:
+        - radio "Show lifetime evaluations? Yes" [ref=e21]
+        - text: "Yes"
+        - radio "No" [checked] [ref=e22]
+        - text: "No"
+  - table [ref=e24]:
+    - rowgroup [ref=e25]:
+      - row "Name Status Evals Status Evals Evals (Lifetime) Email Cell Phone Home Phone City State Last Updated (EST)" [ref=e26]:
+        - columnheader [ref=e27]
+        - columnheader "Name" [ref=e28]
+        - columnheader "Status" [ref=e29]
+        - columnheader "Evals Status" [ref=e30]
+        - columnheader "Evals" [ref=e31]
+        - columnheader "Evals (Lifetime)" [ref=e32]
+        - columnheader "Email" [ref=e33]
+        - columnheader "Cell Phone" [ref=e34]
+        - columnheader "Home Phone" [ref=e35]
+        - columnheader "City" [ref=e36]
+        - columnheader "State" [ref=e37]
+        - columnheader "Last Updated (EST)" [ref=e38]
+    - rowgroup [ref=e39]:
+      - 'row "Total Complete Applications: loading, Total Submitted Applications: loading" [ref=e40]':
+        - columnheader [ref=e41]
+        - 'columnheader "Total Complete Applications: loading, Total Submitted Applications: loading" [ref=e42]'

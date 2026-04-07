@@ -1,0 +1,88 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - heading "Europe TTP" [level=1] [ref=e4]
+      - paragraph [ref=e5]: Teacher Training Program — application portal and admin dashboard.
+    - generic [ref=e6]:
+      - heading "Admin Pages" [level=2] [ref=e7]
+      - generic [ref=e8]:
+        - link "Reports List /api/admin/reports_list" [ref=e9] [cursor=pointer]:
+          - /url: /api/admin/reports_list
+          - paragraph [ref=e10]: Reports List
+          - paragraph [ref=e11]: /api/admin/reports_list
+        - link "Permissions /api/admin/permissions" [ref=e12] [cursor=pointer]:
+          - /url: /api/admin/permissions
+          - paragraph [ref=e13]: Permissions
+          - paragraph [ref=e14]: /api/admin/permissions
+        - link "TTC Applicants Summary /api/admin/ttc_applicants_summary" [ref=e15] [cursor=pointer]:
+          - /url: /api/admin/ttc_applicants_summary
+          - paragraph [ref=e16]: TTC Applicants Summary
+          - paragraph [ref=e17]: /api/admin/ttc_applicants_summary
+        - link "TTC Report /api/admin/ttc_applicants_reports" [ref=e18] [cursor=pointer]:
+          - /url: /api/admin/ttc_applicants_reports
+          - paragraph [ref=e19]: TTC Report
+          - paragraph [ref=e20]: /api/admin/ttc_applicants_reports
+        - link "TTC Integrity Report /api/admin/ttc_applicants_integrity" [ref=e21] [cursor=pointer]:
+          - /url: /api/admin/ttc_applicants_integrity
+          - paragraph [ref=e22]: TTC Integrity Report
+          - paragraph [ref=e23]: /api/admin/ttc_applicants_integrity
+        - link "Post TTC Report /api/admin/post_ttc_course_feedback" [ref=e24] [cursor=pointer]:
+          - /url: /api/admin/post_ttc_course_feedback
+          - paragraph [ref=e25]: Post TTC Report
+          - paragraph [ref=e26]: /api/admin/post_ttc_course_feedback
+        - link "Post Sahaj TTC Report /api/admin/post_sahaj_ttc_course_feedback" [ref=e27] [cursor=pointer]:
+          - /url: /api/admin/post_sahaj_ttc_course_feedback
+          - paragraph [ref=e28]: Post Sahaj TTC Report
+          - paragraph [ref=e29]: /api/admin/post_sahaj_ttc_course_feedback
+        - link "Admin Settings /api/admin/settings" [ref=e30] [cursor=pointer]:
+          - /url: /api/admin/settings
+          - paragraph [ref=e31]: Admin Settings
+          - paragraph [ref=e32]: /api/admin/settings
+    - generic [ref=e33]:
+      - heading "Form Pages" [level=2] [ref=e34]
+      - generic [ref=e35]:
+        - link "TTC Application (US) /api/forms/ttc_application_us" [ref=e36] [cursor=pointer]:
+          - /url: /api/forms/ttc_application_us
+          - paragraph [ref=e37]: TTC Application (US)
+          - paragraph [ref=e38]: /api/forms/ttc_application_us
+        - link "TTC Application (Non-US) /api/forms/ttc_application_non_us" [ref=e39] [cursor=pointer]:
+          - /url: /api/forms/ttc_application_non_us
+          - paragraph [ref=e40]: TTC Application (Non-US)
+          - paragraph [ref=e41]: /api/forms/ttc_application_non_us
+        - link "TTC Evaluation /api/forms/ttc_evaluation" [ref=e42] [cursor=pointer]:
+          - /url: /api/forms/ttc_evaluation
+          - paragraph [ref=e43]: TTC Evaluation
+          - paragraph [ref=e44]: /api/forms/ttc_evaluation
+        - link "Applicant Profile /api/forms/ttc_applicant_profile" [ref=e45] [cursor=pointer]:
+          - /url: /api/forms/ttc_applicant_profile
+          - paragraph [ref=e46]: Applicant Profile
+          - paragraph [ref=e47]: /api/forms/ttc_applicant_profile
+        - link "Evaluator Profile /api/forms/ttc_evaluator_profile" [ref=e48] [cursor=pointer]:
+          - /url: /api/forms/ttc_evaluator_profile
+          - paragraph [ref=e49]: Evaluator Profile
+          - paragraph [ref=e50]: /api/forms/ttc_evaluator_profile
+        - link "DSN Application /api/forms/dsn_application" [ref=e51] [cursor=pointer]:
+          - /url: /api/forms/dsn_application
+          - paragraph [ref=e52]: DSN Application
+          - paragraph [ref=e53]: /api/forms/dsn_application
+        - link "Post-TTC Self Evaluation /api/forms/post_ttc_self_evaluation" [ref=e54] [cursor=pointer]:
+          - /url: /api/forms/post_ttc_self_evaluation
+          - paragraph [ref=e55]: Post-TTC Self Evaluation
+          - paragraph [ref=e56]: /api/forms/post_ttc_self_evaluation
+        - link "Post-TTC Feedback /api/forms/post_ttc_feedback" [ref=e57] [cursor=pointer]:
+          - /url: /api/forms/post_ttc_feedback
+          - paragraph [ref=e58]: Post-TTC Feedback
+          - paragraph [ref=e59]: /api/forms/post_ttc_feedback
+        - link "Post-Sahaj Self Evaluation /api/forms/post_sahaj_ttc_self_evaluation" [ref=e60] [cursor=pointer]:
+          - /url: /api/forms/post_sahaj_ttc_self_evaluation
+          - paragraph [ref=e61]: Post-Sahaj Self Evaluation
+          - paragraph [ref=e62]: /api/forms/post_sahaj_ttc_self_evaluation
+        - link "Post-Sahaj Feedback /api/forms/post_sahaj_ttc_feedback" [ref=e63] [cursor=pointer]:
+          - /url: /api/forms/post_sahaj_ttc_feedback
+          - paragraph [ref=e64]: Post-Sahaj Feedback
+          - paragraph [ref=e65]: /api/forms/post_sahaj_ttc_feedback
+        - link "Portal Settings /api/forms/ttc_portal_settings" [ref=e66] [cursor=pointer]:
+          - /url: /api/forms/ttc_portal_settings
+          - paragraph [ref=e67]: Portal Settings
+          - paragraph [ref=e68]: /api/forms/ttc_portal_settings
+  - alert [ref=e69]

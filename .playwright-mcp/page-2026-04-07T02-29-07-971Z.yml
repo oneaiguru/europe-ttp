@@ -1,0 +1,92 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - text: "Admin: TTC Report"
+    - generic [ref=e4]: Please see below TTC applications for country
+  - generic [ref=e5]:
+    - generic [ref=e8]:
+      - generic [ref=e9]: TTC Select the TTC from the dropdown
+      - generic [ref=e10]:
+        - listbox [ref=e11]
+        - combobox [ref=e14]:
+          - list
+          - searchbox "Search" [ref=e16]
+    - generic [ref=e17]:
+      - text: Show lifetime evaluations? Show evaluations from other TTCs as well. This is helpful if the teacher submitted evaluations using another TTC
+      - generic [ref=e19]:
+        - radio "Show lifetime evaluations? Yes" [checked] [ref=e20]
+        - text: "Yes"
+        - radio "No" [ref=e21]
+        - text: "No"
+    - generic [ref=e22]:
+      - text: Report Select the report from the dropdown
+      - combobox "Report" [ref=e24]:
+        - option "Show All" [selected]
+        - option "1. Answered \"No\" for any of the pre-requisites"
+        - option "2. Evaluators answered anything other than \"Ready Now\" for teaching readiness"
+        - option "3. Evaluators rated them less than 3 on any category"
+        - 'option "4. Filter based on # of courses Organized and Assisted"'
+        - option "5. Attended VTP date less than 1 month from Application deadline"
+        - option "6. Attended VTP date less than 3 months from Application deadline"
+        - option "7. Only applied for Kids courses"
+        - option "8. Number of intro talks organized"
+        - option "9. Number of enrolled people"
+        - option "10. Number of enrolled people listed"
+    - generic [ref=e25]:
+      - text: "View Mode:"
+      - 'radio "View Mode: Compact" [ref=e26]'
+      - text: Compact
+      - radio "Expanded" [checked] [ref=e27]
+      - text: Expanded
+  - table [ref=e29]:
+    - rowgroup [ref=e30]:
+      - 'row "Name Email Status Last Updated (EST) Evals Evals (lifetime) Evaluators Eval: Teaching Readiness Eval: Ratings below 3 (Evals) Eval: Mental Fitness Age Gender Cell Phone Home Phone City State # courses listed # courses organized (last 2 years) # courses assisted (last 2 years) # intro talks (last 1 year) Enrollment Enrollment (listed names) # \"No\" Pre-Requisites VTP teacher VTP date VTP days (till application deadline) VTP location Youthteacher Course wishlist Special interest groups" [ref=e31]':
+        - columnheader [ref=e32]
+        - columnheader "Name" [ref=e33]
+        - columnheader "Email" [ref=e34]
+        - columnheader "Status" [ref=e35]
+        - columnheader "Last Updated (EST)" [ref=e36]:
+          - text: Last Updated
+          - text: (EST)
+        - columnheader "Evals" [ref=e37]
+        - columnheader "Evals (lifetime)" [ref=e38]:
+          - text: Evals
+          - text: (lifetime)
+        - columnheader "Evaluators" [ref=e39]
+        - 'columnheader "Eval: Teaching Readiness" [ref=e40]'
+        - 'columnheader "Eval: Ratings below 3 (Evals)" [ref=e41]'
+        - 'columnheader "Eval: Mental Fitness" [ref=e42]'
+        - columnheader "Age" [ref=e43]
+        - columnheader "Gender" [ref=e44]
+        - columnheader "Cell Phone" [ref=e45]
+        - columnheader "Home Phone" [ref=e46]
+        - columnheader "City" [ref=e47]
+        - columnheader "State" [ref=e48]
+        - columnheader "# courses listed" [ref=e49]
+        - columnheader "# courses organized (last 2 years)" [ref=e50]:
+          - text: "# courses organized"
+          - text: (last 2 years)
+        - columnheader "# courses assisted (last 2 years)" [ref=e51]:
+          - text: "# courses assisted"
+          - text: (last 2 years)
+        - columnheader "# intro talks (last 1 year)" [ref=e52]:
+          - text: "# intro talks"
+          - text: (last 1 year)
+        - columnheader "Enrollment" [ref=e53]
+        - columnheader "Enrollment (listed names)" [ref=e54]:
+          - text: Enrollment
+          - text: (listed names)
+        - columnheader "# \"No\" Pre-Requisites" [ref=e55]
+        - columnheader "VTP teacher" [ref=e56]
+        - columnheader "VTP date" [ref=e57]
+        - columnheader "VTP days (till application deadline)" [ref=e58]:
+          - text: VTP days
+          - text: (till application deadline)
+        - columnheader "VTP location" [ref=e59]
+        - columnheader "Youthteacher" [ref=e60]
+        - columnheader "Course wishlist" [ref=e61]
+        - columnheader "Special interest groups" [ref=e62]
+    - rowgroup [ref=e63]:
+      - row "Total Submitted Applications:" [ref=e64]:
+        - columnheader [ref=e65]
+        - columnheader "Total Submitted Applications:" [ref=e66]
+  - generic [ref=e67]: Last updated 2026-04-07 10:26:05

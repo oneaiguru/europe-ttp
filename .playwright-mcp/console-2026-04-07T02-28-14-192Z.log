@@ -1,0 +1,2 @@
+[     617ms] [ERROR] Failed to load resource: net::ERR_SOCKET_NOT_CONNECTED @ https://cdn.tailwindcss.com/:0
+[    1470ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8009/favicon.ico:0

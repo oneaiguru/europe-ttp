@@ -1,0 +1,16 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - heading "Admin Settings" [level=1] [ref=e4]
+    - generic [ref=e5]: Please enter settings for TTC portal
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - text: Whitelisted Users
+        - generic [ref=e10]: (0 added)
+      - generic [ref=e11]: Please enter users who you want to whitelist to allow application or evaluation submission even after the deadline. See the dropdown for users already added.
+    - generic [ref=e13]:
+      - combobox [disabled] [ref=e14]:
+        - option "0 added" [selected]
+      - generic [ref=e15]: + New
+      - generic [ref=e16]: "- Remove"
+    - text: "* *"

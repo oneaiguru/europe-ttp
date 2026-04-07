@@ -1,0 +1,2 @@
+[     653ms] [ERROR] Failed to load resource: net::ERR_SOCKET_NOT_CONNECTED @ https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css:0
+[     906ms] [WARNING] cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation @ https://cdn.tailwindcss.com/:63
