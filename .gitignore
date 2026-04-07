@@ -41,3 +41,7 @@ yarn-error.log*
 # Claude / tooling traces
 .claude-trace/
 .vercel
+
+# Agent orchestration (managed from monorepo, not client-facing)
+.agent/
+.playwright-mcp/
