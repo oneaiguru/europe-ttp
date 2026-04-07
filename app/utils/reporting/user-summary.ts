@@ -53,6 +53,8 @@ const REPORTING_FIELDS = new Set([
   'i_ttc_dates', 'i_ttc_location', 'i_date_of_birth',
   'i_gender', 'i_health_psychiatrist', 'i_volunteer_mental_fitness',
   'i_course_organized_count', 'i_course_assisted_count',
+  'i_volunteer_rating_1', 'i_volunteer_rating_2', 'i_volunteer_rating_3',
+  'i_volunteer_rating_4', 'i_volunteer_rating_5', 'i_volunteer_rating_6',
 ]);
 
 interface FormInstanceData {

@@ -180,11 +180,11 @@ Compared 9 source material groups against 14 output files (10 agent-ideas, 1 dev
 
 ## Top 10 Actionable Gaps (Priority Order)
 
-1. **Revenue targets and blocking skills** — OPEN. $5-10K/mo freelance targets and 3 blocking skills (client-communication, project-scoping, proposal-generation).
+1. **Revenue targets and blocking skills** — CLOSED. Written to `revenue-targets-and-blocking-skills.md`.
 
-2. **Summarization pipeline specs** — OPEN. 2-level hierarchy, 30% compression, 100-token 0/ tier, validated prompt, 89.9% savings.
+2. **Summarization pipeline specs** — CLOSED. Written to `summarization-pipeline-specs.md`.
 
-3. **Plugin bridge transformation** — OPEN. SKILL.md → discovery node + @imports → action card. 3-layer delivery.
+3. **Plugin bridge transformation** — CLOSED. Written to `plugin-bridge-transformation.md` (incl. L0-L3 token budgets).
 
 4. **Parity testing as a reusable skill** — CLOSED. Written to `parity-testing-skill-draft.md`.
 
@@ -192,11 +192,11 @@ Compared 9 source material groups against 14 output files (10 agent-ideas, 1 dev
 
 6. **Agent autonomy guardrails** — CLOSED. Written to `agent-autonomy-guardrails.md` (incl. worker isolation, daily summary, hold override).
 
-7. **Moderator red flags checklist** — OPEN. 8 rejection criteria from Russian handbook, not yet translated.
+7. **Moderator red flags checklist** — CLOSED. Written to `moderator-red-flags-checklist.md`.
 
-8. **L0-L3 token budgets** — OPEN. 4K/8K/12K/16K per agent level.
+8. **L0-L3 token budgets** — CLOSED. Included in `plugin-bridge-transformation.md`.
 
-9. **Hotkey mnemonic system** — OPEN (deferred). Part of things-interaction-design.md, needs dedicated session.
+9. **Hotkey mnemonic system** — DEFERRED. Part of things-interaction-design.md, needs dedicated session.
 
 10. **First client delivery workflow** — CLOSED. Written to `first-client-delivery-workflow.md`.
 
