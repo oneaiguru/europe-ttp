@@ -8,7 +8,8 @@ async function getStorage() {
   if (storageInstance) return storageInstance;
   try {
     const { Storage } = await import('@google-cloud/storage');
-    storageInstance = new Storage();
+    const emulatorHost = process.env.STORAGE_EMULATOR_HOST;
+    storageInstance = new Storage(emulatorHost ? { apiEndpoint: emulatorHost } : {});
     return storageInstance;
   } catch {
     throw new Error('GCS not available — install @google-cloud/storage');

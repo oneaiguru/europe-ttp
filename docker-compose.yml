@@ -1,9 +1,38 @@
 services:
+  fake-gcs:
+    image: fsouza/fake-gcs-server
+    ports:
+      - "4443:4443"
+    command: ["-scheme", "http", "-port", "4443"]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4443/storage/v1/b"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
+
+  gcs-init:
+    image: curlimages/curl:latest
+    depends_on:
+      fake-gcs:
+        condition: service_healthy
+    restart: "no"
+    entrypoint: >
+      sh -c 'curl -s -X POST "http://fake-gcs:4443/storage/v1/b"
+      -H "Content-Type: application/json"
+      -d "{\"name\":\"artofliving-ttcdesk.appspot.com\"}"
+      && echo " Bucket created"'
+
   ttp-nextjs:
     build: .
     ports:
       - "8009:8009"
+    depends_on:
+      gcs-init:
+        condition: service_completed_successfully
     environment:
       - NODE_ENV=development
       - PORT=8009
       - WATCHPACK_POLLING=true
+      - STORAGE_EMULATOR_HOST=http://fake-gcs:4443
+      - GCS_BUCKET_NAME=artofliving-ttcdesk.appspot.com
+      - SESSION_HMAC_SECRET=dev-test-secret-not-for-production
