@@ -259,23 +259,27 @@ export async function loadUserSummary(): Promise<void> {
     for (const fi of Object.keys(userEntry['post_ttc_feedback_form'] || {})) {
       const feedback = (userEntry['post_ttc_feedback_form'] as Record<string, Record<string, unknown>>)[fi] as Record<string, unknown>;
       for (const ve of Object.keys(feedback)) {
-        const veReporting = (feedback[ve] as Record<string, unknown>)[KEY] as Record<string, unknown>;
+        const veReporting = (feedback[ve] as Record<string, unknown>)?.[KEY] as Record<string, unknown> | undefined;
+        if (!veReporting) continue;
         veReporting['is_reporting_matched'] = 'N';
       }
     }
 
     if ('post_sahaj_ttc_self_evaluation_form' in userEntry) {
       const selfEval = userEntry['post_sahaj_ttc_self_evaluation_form'] as Record<string, unknown>;
-      const selfEvalReporting = selfEval[KEY] as Record<string, unknown>;
-      selfEvalReporting['evaluations'] = {};
-      selfEvalReporting['evaluations_submitted_count'] = 0;
-      selfEvalReporting['latest_evaluation_datetime_est'] = '';
+      const selfEvalReporting = selfEval?.[KEY] as Record<string, unknown> | undefined;
+      if (selfEvalReporting) {
+        selfEvalReporting['evaluations'] = {};
+        selfEvalReporting['evaluations_submitted_count'] = 0;
+        selfEvalReporting['latest_evaluation_datetime_est'] = '';
+      }
     }
 
     for (const fi of Object.keys(userEntry['post_sahaj_ttc_feedback_form'] || {})) {
       const feedback = (userEntry['post_sahaj_ttc_feedback_form'] as Record<string, Record<string, unknown>>)[fi] as Record<string, unknown>;
       for (const ve of Object.keys(feedback)) {
-        const veReporting = (feedback[ve] as Record<string, unknown>)[KEY] as Record<string, unknown>;
+        const veReporting = (feedback[ve] as Record<string, unknown>)?.[KEY] as Record<string, unknown> | undefined;
+        if (!veReporting) continue;
         veReporting['is_reporting_matched'] = 'N';
       }
     }
