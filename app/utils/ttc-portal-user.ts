@@ -124,6 +124,12 @@ export class TTCPortalUser {
       instance = formInstance;
     }
 
+    // For evaluation forms, include evaluator email in instance key
+    // (matches Python pattern: TTC_KEY-evaluator@email.com)
+    if (formType === 'ttc_evaluation' && instance !== 'default' && !instance.includes('@') && this.email) {
+      instance = instance + '-' + this.email;
+    }
+
     let form: Partial<FormInstance> = {};
     if (formType in this.formData && instance in this.formData[formType]) {
       form = this.formData[formType][instance];
@@ -175,11 +181,23 @@ export class TTCPortalUser {
     // Email sending is deferred to Phase 6 — skip send_submission_emails
   }
 
+  /** Resolve form instance key, trying email-suffixed key for evaluations */
+  private resolveInstance(formType: string, instance: string): string {
+    if (instance !== 'default' && formType === 'ttc_evaluation' && !instance.includes('@') && this.email) {
+      const suffixed = instance + '-' + this.email;
+      if (formType in this.formData && suffixed in this.formData[formType]) {
+        return suffixed;
+      }
+    }
+    return instance;
+  }
+
   getFormData(formType: string, formInstance: string | null | undefined): Record<string, unknown> {
     let instance = 'default';
     if (formInstance && formInstance.trim() !== '') {
       instance = formInstance;
     }
+    instance = this.resolveInstance(formType, instance);
     if (formType in this.formData && instance in this.formData[formType]) {
       return this.formData[formType][instance].data;
     }
@@ -206,6 +224,7 @@ export class TTCPortalUser {
     if (formInstance && formInstance.trim() !== '') {
       instance = formInstance;
     }
+    instance = this.resolveInstance(formType, instance);
     if (formType in this.formData && instance in this.formData[formType]) {
       return this.formData[formType][instance].is_form_submitted ?? false;
     }
@@ -217,6 +236,7 @@ export class TTCPortalUser {
     if (formInstance && formInstance.trim() !== '') {
       instance = formInstance;
     }
+    instance = this.resolveInstance(formType, instance);
     if (formType in this.formData && instance in this.formData[formType]) {
       return this.formData[formType][instance].is_form_complete ?? false;
     }

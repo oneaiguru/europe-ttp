@@ -182,6 +182,12 @@ export async function loadUserSummary(): Promise<void> {
             }
           } else {
             fi = fiRaw;
+            // For evaluation forms without email in instance key, use the
+            // logged-in user's email — matches Python pattern where evaluation
+            // instance keys contain the evaluator email (e.g. TTC_KEY-email)
+            if (ft === 'ttc_evaluation') {
+              fiEmail = userEmail;
+            }
           }
 
           // Build nested structure
