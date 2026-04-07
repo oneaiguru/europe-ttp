@@ -34,7 +34,11 @@ export async function setAdminConfig(configParams: Record<string, unknown>): Pro
       }
     }
   }
-  config.whitelisted_user_emails = whitelistedEmails;
+  // Merge with existing whitelist (don't wipe — legacy admin.py:47-53 appends)
+  const existingEmails = Array.isArray(config.whitelisted_user_emails)
+    ? (config.whitelisted_user_emails as string[])
+    : [];
+  config.whitelisted_user_emails = [...new Set([...existingEmails, ...whitelistedEmails])];
 
   await writeJson(GCS_PATHS.ADMIN_CONFIG, config);
 }
