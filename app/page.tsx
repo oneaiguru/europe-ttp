@@ -26,6 +26,10 @@ const FORM_LINKS: LinkItem[] = [
   { href: '/api/forms/ttc_portal_settings', label: 'Portal Settings' },
 ];
 
+const AUTH_LINKS: LinkItem[] = [
+  { href: '/login', label: 'Login' },
+];
+
 function LinkGrid({ links, emptyText }: { links: LinkItem[]; emptyText: string }) {
   if (links.length === 0) {
     return <p className="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-500">{emptyText}</p>;
@@ -56,6 +60,11 @@ export default function HomePage() {
           Teacher Training Program — application portal and admin dashboard.
         </p>
       </header>
+
+      <section className="space-y-4">
+        <h2 className="border-b border-slate-200 pb-2 text-xl font-light text-slate-800">Authentication</h2>
+        <LinkGrid links={AUTH_LINKS} emptyText="No auth links are available." />
+      </section>
 
       <section className="space-y-4">
         <h2 className="border-b border-slate-200 pb-2 text-xl font-light text-slate-800">Admin Pages</h2>

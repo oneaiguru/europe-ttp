@@ -10,6 +10,23 @@ import { createHmac, randomBytes, timingSafeEqual } from 'crypto';
 import { importSPKI, jwtVerify, type KeyLike } from 'jose';
 import { getSessionHmacSecret } from './crypto';
 
+function getCookieValue(cookieHeader: string | null, name: string): string | null {
+  if (!cookieHeader) {
+    return null;
+  }
+
+  const prefix = `${name}=`;
+  const tokens = cookieHeader.split(';');
+  for (const token of tokens) {
+    const normalized = token.trim();
+    if (normalized.startsWith(prefix)) {
+      return normalized.slice(prefix.length);
+    }
+  }
+
+  return null;
+}
+
 /**
  * Supported authentication modes.
  */
@@ -358,8 +375,9 @@ export async function getAuthenticatedUser(request: Request): Promise<string | n
 
   if (mode === 'session') {
     // Session mode: Validate bearer token
+    const sessionCookie = getCookieValue(request.headers.get('cookie'), 'session');
     const authHeader = request.headers.get('authorization');
-    const token = extractBearerToken(authHeader);
+    const token = sessionCookie ?? extractBearerToken(authHeader);
 
     if (!token) {
       return null;

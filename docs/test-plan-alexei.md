@@ -55,6 +55,7 @@ Open http://localhost:8009 in your browser. You should see the landing page with
 ### B. Login (Dev Mode)
 Dev mode now accepts email + optional password.
 When `DEV_LOGIN_PASSWORD` or `DEV_LOGIN_CREDENTIALS` is configured, password is validated.
+You can now use a web form: `http://localhost:8009/login`
 - [ ] Open a terminal and run: `curl -X POST http://localhost:8009/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"akshay.ponda@artofliving.org\"}"`
 - [ ] If `DEV_LOGIN_PASSWORD` is configured, run: `curl -X POST http://localhost:8009/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"akshay.ponda@artofliving.org\",\"password\":\"REPLACE_WITH_PASSWORD\"}"`
 - [ ] If `DEV_LOGIN_CREDENTIALS` is configured, run: `curl -X POST http://localhost:8009/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"akshay.ponda@artofliving.org\",\"password\":\"REPLACE_WITH_PASSWORD\"}"`

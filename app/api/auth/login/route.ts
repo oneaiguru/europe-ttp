@@ -1,4 +1,4 @@
-import { generateSessionToken } from '../../../utils/auth';
+import { generateSessionToken, getSessionMaxAge } from '../../../utils/auth';
 import { getSessionHmacSecret } from '../../../utils/crypto';
 import { createHash, timingSafeEqual } from 'node:crypto';
 
@@ -42,6 +42,42 @@ function secureCompare(a: string, b: string): boolean {
   }
 }
 
+function toIntCookieDate(seconds: number): string {
+  const now = new Date();
+  now.setSeconds(now.getSeconds() + seconds);
+  return now.toUTCString();
+}
+
+function buildSessionCookie(token: string): string {
+  const maxAge = getSessionMaxAge();
+  const expires = toIntCookieDate(maxAge);
+  const parts = [
+    `session=${token}`,
+    'Path=/',
+    'HttpOnly',
+    'SameSite=Lax',
+    `Max-Age=${maxAge}`,
+    `Expires=${expires}`,
+  ];
+
+  // Avoid setting Secure for localhost dev to keep local HTTP sessions working.
+  if (process.env.NODE_ENV === 'production') {
+    parts.push('Secure');
+  }
+
+  return parts.join('; ');
+}
+
+function jsonResponseWithSessionToken(token: string, email: string): Response {
+  return new Response(JSON.stringify({ token, email }), {
+    status: 200,
+    headers: {
+      'content-type': 'application/json',
+      'set-cookie': buildSessionCookie(token),
+    },
+  });
+}
+
 export async function POST(request: Request): Promise<Response> {
   const mode = process.env.AUTH_MODE === 'platform' ? 'platform' : 'session';
   const isDev = process.env.NODE_ENV === 'development';
@@ -81,7 +117,7 @@ export async function POST(request: Request): Promise<Response> {
   if (isDev) {
     const secret = getSessionHmacSecret();
     const token = generateSessionToken(email, secret);
-    return Response.json({ token, email });
+    return jsonResponseWithSessionToken(token, email);
   }
 
   // Production session mode: verify Google ID token
@@ -109,7 +145,7 @@ export async function POST(request: Request): Promise<Response> {
     }
     const secret = getSessionHmacSecret();
     const token = generateSessionToken(email, secret);
-    return Response.json({ token, email });
+    return jsonResponseWithSessionToken(token, email);
   } catch {
     return Response.json({ error: 'Invalid or expired token' }, { status: 401 });
   }
