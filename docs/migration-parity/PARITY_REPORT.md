@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This report demonstrates **full parity** between the legacy Python 2.7 App Engine application and the new Node.js 20 + Next.js 16 implementation, as proven by BDD (Behavior-Driven Development) test coverage.
+This report demonstrates **BDD step and feature alignment coverage** between the legacy Python feature set and the new Node.js 20 + Next.js 16 implementation. It is **not sufficient on its own** to prove full runtime parity.
 
 **Key Metrics:**
 - **375 BDD steps** implemented in TypeScript
@@ -184,12 +184,12 @@ npm run bdd:all
 
 ## Conclusion
 
-The TypeScript migration achieves **100% functional parity** with the legacy Python application, as demonstrated by:
+The TypeScript migration demonstrates strong **BDD step alignment** with the legacy Python feature files, but full functional parity still requires verification of the running application's persistence, reporting, integrity, auth, and route behavior.
 
 1. Complete BDD step coverage (375 steps)
-2. All feature files passing
+2. All feature files mapped to TypeScript step implementations
 3. Zero orphan or dead steps
-4. Original Python repo owners can independently verify by copying their step implementations
+4. Further runtime parity validation is still required against the actual application routes and persisted state
 
 ---
 
