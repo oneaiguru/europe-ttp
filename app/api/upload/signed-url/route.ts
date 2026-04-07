@@ -32,7 +32,7 @@ interface GCSConfig {
  * Returns null if GCS is not configured.
  */
 function getGCSConfig(): GCSConfig | null {
-  const bucketName = process.env.BUCKET_NAME;
+  const bucketName = process.env.GCS_BUCKET_NAME;
   const credentials = process.env.GCS_CREDENTIALS; // Optional: uses ADC if not set
 
   if (!bucketName) {
