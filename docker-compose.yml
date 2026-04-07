@@ -36,3 +36,5 @@ services:
       - STORAGE_EMULATOR_HOST=http://fake-gcs:4443
       - GCS_BUCKET_NAME=artofliving-ttcdesk.appspot.com
       - SESSION_HMAC_SECRET=dev-test-secret-not-for-production
+      - DEV_LOGIN_PASSWORD=${DEV_LOGIN_PASSWORD}
+      - DEV_LOGIN_CREDENTIALS=${DEV_LOGIN_CREDENTIALS}

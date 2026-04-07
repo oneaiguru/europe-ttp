@@ -31,6 +31,10 @@ git checkout main
 docker compose up --build
 ```
 
+Optional for password-enabled login in dev:
+- `DEV_LOGIN_PASSWORD=your-password docker compose up --build`
+- or set it in your environment/`.env` before running compose.
+
 This starts:
 - **GCS emulator** (fake storage backend — no Google credentials needed)
 - **Bucket initialization** (creates the storage bucket automatically)
@@ -49,8 +53,11 @@ Open http://localhost:8009 in your browser. You should see the landing page with
 - [ ] All links are clickable
 
 ### B. Login (Dev Mode)
-Dev mode accepts any email without password.
+Dev mode now accepts email + optional password.
+When `DEV_LOGIN_PASSWORD` or `DEV_LOGIN_CREDENTIALS` is configured, password is validated.
 - [ ] Open a terminal and run: `curl -X POST http://localhost:8009/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"akshay.ponda@artofliving.org\"}"`
+- [ ] If `DEV_LOGIN_PASSWORD` is configured, run: `curl -X POST http://localhost:8009/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"akshay.ponda@artofliving.org\",\"password\":\"REPLACE_WITH_PASSWORD\"}"`
+- [ ] If `DEV_LOGIN_CREDENTIALS` is configured, run: `curl -X POST http://localhost:8009/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"akshay.ponda@artofliving.org\",\"password\":\"REPLACE_WITH_PASSWORD\"}"`
 - [ ] Response contains a token
 - [ ] Save this token — you'll need it for admin pages
 

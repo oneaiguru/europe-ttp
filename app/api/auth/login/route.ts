@@ -1,5 +1,46 @@
 import { generateSessionToken } from '../../../utils/auth';
 import { getSessionHmacSecret } from '../../../utils/crypto';
+import { createHash, timingSafeEqual } from 'node:crypto';
+
+type DevCredentials = Record<string, string>;
+
+function getStringValue(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function getDevLoginCredentials(raw: string | undefined): DevCredentials | null {
+  if (!raw) return null;
+
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      return null;
+    }
+
+    const entries = Object.entries(parsed as Record<string, unknown>);
+    const credentials: DevCredentials = {};
+    for (const [email, password] of entries) {
+      if (typeof email !== 'string' || typeof password !== 'string') {
+        return null;
+      }
+      credentials[email.trim().toLowerCase()] = password;
+    }
+
+    return credentials;
+  } catch {
+    return null;
+  }
+}
+
+function secureCompare(a: string, b: string): boolean {
+  const digestA = createHash('sha256').update(a).digest();
+  const digestB = createHash('sha256').update(b).digest();
+  try {
+    return timingSafeEqual(digestA, digestB);
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(request: Request): Promise<Response> {
   const mode = process.env.AUTH_MODE === 'platform' ? 'platform' : 'session';
@@ -12,13 +53,32 @@ export async function POST(request: Request): Promise<Response> {
 
   // Session mode
   const body = await request.json() as Record<string, unknown>;
+  const email = getStringValue(body.email);
+
+  if (!email || !email.includes('@')) {
+    return Response.json({ error: 'Valid email required' }, { status: 400 });
+  }
+
+  const configuredCredentials = getDevLoginCredentials(process.env.DEV_LOGIN_CREDENTIALS);
+  if (configuredCredentials === null && process.env.DEV_LOGIN_CREDENTIALS) {
+    return Response.json({ error: 'Invalid DEV_LOGIN_CREDENTIALS JSON format' }, { status: 500 });
+  }
+
+  const staticPassword = getStringValue(process.env.DEV_LOGIN_PASSWORD);
+  const password = getStringValue(body.password);
+
+  if (configuredCredentials && Object.keys(configuredCredentials).length > 0) {
+    const expectedPassword = configuredCredentials[email.toLowerCase()];
+    if (!password || !expectedPassword || !secureCompare(password, expectedPassword)) {
+      return Response.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
+  } else if (staticPassword) {
+    if (!password || !secureCompare(password, staticPassword)) {
+      return Response.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
+  }
 
   if (isDev) {
-    // Dev mode: accept email-only, no verification
-    const email = typeof body.email === 'string' ? body.email.trim() : '';
-    if (!email || !email.includes('@')) {
-      return Response.json({ error: 'Valid email required' }, { status: 400 });
-    }
     const secret = getSessionHmacSecret();
     const token = generateSessionToken(email, secret);
     return Response.json({ token, email });
