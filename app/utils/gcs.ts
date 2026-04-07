@@ -88,6 +88,20 @@ export async function writeText(path: string, content: string): Promise<void> {
 }
 
 export async function listFiles(prefix: string, minUpdated?: Date): Promise<FileMetadata[]> {
+  const emulatorHost = process.env.STORAGE_EMULATOR_HOST;
+  if (emulatorHost) {
+    const url = `${emulatorHost}/storage/v1/b/${getBucketName()}/o?prefix=${encodeURIComponent(prefix)}`;
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json() as { items?: Array<{ name: string; updated: string; timeCreated: string }> };
+    const results: FileMetadata[] = [];
+    for (const item of data.items || []) {
+      const updated = new Date(item.updated);
+      if (minUpdated && updated <= minUpdated) continue;
+      results.push({ name: item.name, updated, timeCreated: new Date(item.timeCreated) });
+    }
+    return results;
+  }
   const storage = await getStorage();
   const bucket = storage.bucket(getBucketName());
   const [files] = await bucket.getFiles({ prefix });
@@ -109,6 +123,12 @@ export async function listFiles(prefix: string, minUpdated?: Date): Promise<File
 }
 
 export async function fileExists(path: string): Promise<boolean> {
+  const emulatorHost = process.env.STORAGE_EMULATOR_HOST;
+  if (emulatorHost) {
+    const url = `${emulatorHost}/storage/v1/b/${getBucketName()}/o/${encodeURIComponent(path)}`;
+    const res = await fetch(url, { method: 'GET' });
+    return res.ok;
+  }
   const storage = await getStorage();
   const bucket = storage.bucket(getBucketName());
   const [exists] = await bucket.file(path).exists();
@@ -116,6 +136,14 @@ export async function fileExists(path: string): Promise<boolean> {
 }
 
 export async function getFileMetadata(path: string): Promise<FileMetadata> {
+  const emulatorHost = process.env.STORAGE_EMULATOR_HOST;
+  if (emulatorHost) {
+    const url = `${emulatorHost}/storage/v1/b/${getBucketName()}/o/${encodeURIComponent(path)}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`GCS emulator metadata failed: ${res.status} ${path}`);
+    const meta = await res.json() as { name: string; updated: string; timeCreated: string };
+    return { name: meta.name, updated: new Date(meta.updated), timeCreated: new Date(meta.timeCreated) };
+  }
   const storage = await getStorage();
   const bucket = storage.bucket(getBucketName());
   const [metadata] = await bucket.file(path).getMetadata();

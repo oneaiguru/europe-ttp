@@ -83,7 +83,7 @@ export class TTCPortalUser {
       // GCS NotFoundError — initialize with empty data (Python lines 316-319)
       if (e && typeof e === 'object' && 'code' in e && (e as { code: number }).code === 404) {
         this.initializeUser({ email });
-      } else if (e instanceof Error && e.message?.includes('No such object')) {
+      } else if (e instanceof Error && (e.message?.includes('No such object') || e.message?.includes('read failed: 404'))) {
         this.initializeUser({ email });
       } else {
         throw e;

@@ -239,7 +239,8 @@ export async function loadUserSummary(): Promise<void> {
     for (const fi of Object.keys(userEntry['ttc_evaluation'] || {})) {
       const ttcEval = (userEntry['ttc_evaluation'] as Record<string, Record<string, unknown>>)[fi] as Record<string, unknown>;
       for (const ve of Object.keys(ttcEval)) {
-        const veReporting = (ttcEval[ve] as Record<string, unknown>)[KEY] as Record<string, unknown>;
+        const veReporting = (ttcEval[ve] as Record<string, unknown>)?.[KEY] as Record<string, unknown> | undefined;
+        if (!veReporting) continue;
         veReporting['lifetime_reporting_matched_ttc_list'] = new Set<string>();
         veReporting['is_reporting_matched'] = 'N';
       }
@@ -247,10 +248,12 @@ export async function loadUserSummary(): Promise<void> {
 
     if ('post_ttc_self_evaluation_form' in userEntry) {
       const selfEval = userEntry['post_ttc_self_evaluation_form'] as Record<string, unknown>;
-      const selfEvalReporting = selfEval[KEY] as Record<string, unknown>;
-      selfEvalReporting['evaluations'] = {};
-      selfEvalReporting['evaluations_submitted_count'] = 0;
-      selfEvalReporting['latest_evaluation_datetime_est'] = '';
+      const selfEvalReporting = selfEval?.[KEY] as Record<string, unknown> | undefined;
+      if (selfEvalReporting) {
+        selfEvalReporting['evaluations'] = {};
+        selfEvalReporting['evaluations_submitted_count'] = 0;
+        selfEvalReporting['latest_evaluation_datetime_est'] = '';
+      }
     }
 
     for (const fi of Object.keys(userEntry['post_ttc_feedback_form'] || {})) {
