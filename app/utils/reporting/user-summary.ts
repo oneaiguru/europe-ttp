@@ -300,6 +300,7 @@ export async function loadUserSummary(): Promise<void> {
         const ed = { ...(e['data'] as Record<string, unknown> || {}), ...(e['form_instance_page_data'] as Record<string, unknown> || {}) };
         const vn = String(ed['i_volunteer_name'] || '').trim().toLowerCase();
         const tn = String(ed['i_name'] || '').trim();
+        if (!e[KEY]) e[KEY] = {};
         (e[KEY] as Record<string, unknown>)['is_reporting_matched'] = 'N';
 
         for (const c of Object.keys(userDataByEmail)) {
@@ -510,6 +511,7 @@ export async function loadUserSummary(): Promise<void> {
       for (const ve of Object.keys(feedbackFi)) {
         const e = feedbackFi[ve] as Record<string, unknown>;
         e['email'] = t;
+        if (!e[KEY]) e[KEY] = {};
         const ed = { ...(e['data'] as Record<string, unknown> || {}), ...(e['form_instance_page_data'] as Record<string, unknown> || {}) };
         const vn = String(ed['i_ttc_graduate_name'] || '').trim().toLowerCase();
         const tn = String(ed['i_fname'] || '').trim() + ' ' + String(ed['i_lname'] || '').trim();
@@ -518,6 +520,7 @@ export async function loadUserSummary(): Promise<void> {
           const userC = userDataByEmail[c] as Record<string, Record<string, unknown>>;
           if (!('post_ttc_self_evaluation_form' in userC)) continue;
           const selfEvalForm = userC['post_ttc_self_evaluation_form'] as Record<string, unknown>;
+          if (!selfEvalForm[KEY]) selfEvalForm[KEY] = {};
 
           for (const sefi of Object.keys(selfEvalForm)) {
             if (sefi === KEY) continue;
@@ -587,6 +590,7 @@ export async function loadUserSummary(): Promise<void> {
       for (const ve of Object.keys(feedbackFi)) {
         const e = feedbackFi[ve] as Record<string, unknown>;
         e['email'] = t;
+        if (!e[KEY]) e[KEY] = {};
         const ed = { ...(e['data'] as Record<string, unknown> || {}), ...(e['form_instance_page_data'] as Record<string, unknown> || {}) };
         const vn = String(ed['i_ttc_graduate_name'] || '').trim().toLowerCase();
         const tn = String(ed['i_fname'] || '').trim() + ' ' + String(ed['i_lname'] || '').trim();
@@ -595,6 +599,7 @@ export async function loadUserSummary(): Promise<void> {
           const userC = userDataByEmail[c] as Record<string, Record<string, unknown>>;
           if (!('post_sahaj_ttc_self_evaluation_form' in userC)) continue;
           const selfEvalForm = userC['post_sahaj_ttc_self_evaluation_form'] as Record<string, unknown>;
+          if (!selfEvalForm[KEY]) selfEvalForm[KEY] = {};
 
           for (const sefi of Object.keys(selfEvalForm)) {
             if (sefi === KEY) continue;
