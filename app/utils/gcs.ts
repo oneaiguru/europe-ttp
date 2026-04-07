@@ -42,6 +42,15 @@ export interface FileMetadata {
 }
 
 export async function readJson(path: string): Promise<unknown> {
+  const emulatorHost = process.env.STORAGE_EMULATOR_HOST;
+  if (emulatorHost) {
+    // ESM build of @google-cloud/storage uses XML API for downloads,
+    // which fake-gcs-server doesn't support. Use JSON REST API directly.
+    const url = `${emulatorHost}/download/storage/v1/b/${getBucketName()}/o/${encodeURIComponent(path)}?alt=media`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`GCS emulator read failed: ${res.status} ${path}`);
+    return res.json();
+  }
   const storage = await getStorage();
   const bucket = storage.bucket(getBucketName());
   const [contents] = await bucket.file(path).download();
@@ -57,6 +66,13 @@ export async function writeJson(path: string, data: unknown): Promise<void> {
 }
 
 export async function readText(path: string): Promise<string> {
+  const emulatorHost = process.env.STORAGE_EMULATOR_HOST;
+  if (emulatorHost) {
+    const url = `${emulatorHost}/download/storage/v1/b/${getBucketName()}/o/${encodeURIComponent(path)}?alt=media`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`GCS emulator read failed: ${res.status} ${path}`);
+    return res.text();
+  }
   const storage = await getStorage();
   const bucket = storage.bucket(getBucketName());
   const [contents] = await bucket.file(path).download();
