@@ -512,7 +512,10 @@ export async function loadUserSummary(): Promise<void> {
       const feedbackFi = (userT['post_ttc_feedback_form'] as Record<string, unknown>)[fi] as Record<string, unknown>;
 
       for (const ve of Object.keys(feedbackFi)) {
-        const e = feedbackFi[ve] as Record<string, unknown>;
+        if (ve === KEY) continue;
+        const eRaw = feedbackFi[ve];
+        if (!eRaw || typeof eRaw !== 'object') continue;
+        const e = eRaw as Record<string, unknown>;
         e['email'] = t;
         if (!e[KEY]) e[KEY] = {};
         const ed = { ...(e['data'] as Record<string, unknown> || {}), ...(e['form_instance_page_data'] as Record<string, unknown> || {}) };
@@ -591,7 +594,10 @@ export async function loadUserSummary(): Promise<void> {
       const feedbackFi = (userT['post_sahaj_ttc_feedback_form'] as Record<string, unknown>)[fi] as Record<string, unknown>;
 
       for (const ve of Object.keys(feedbackFi)) {
-        const e = feedbackFi[ve] as Record<string, unknown>;
+        if (ve === KEY) continue;
+        const eRaw = feedbackFi[ve];
+        if (!eRaw || typeof eRaw !== 'object') continue;
+        const e = eRaw as Record<string, unknown>;
         e['email'] = t;
         if (!e[KEY]) e[KEY] = {};
         const ed = { ...(e['data'] as Record<string, unknown> || {}), ...(e['form_instance_page_data'] as Record<string, unknown> || {}) };
