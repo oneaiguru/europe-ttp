@@ -1,6 +1,9 @@
 import { renderAdminReportsList } from '../../../admin/reports_list/render';
+import { requireAdminForPage } from '../../../utils/auth-middleware';
 
-export async function GET() {
+export async function GET(request: Request): Promise<Response> {
+  const auth = await requireAdminForPage(request, 'ttc_applicants_reports.html');
+  if (auth instanceof Response) return auth;
   const html = renderAdminReportsList();
   const page = `<!DOCTYPE html>
 <html lang="en">
