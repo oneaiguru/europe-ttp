@@ -40,3 +40,4 @@ yarn-error.log*
 
 # Claude / tooling traces
 .claude-trace/
+.vercel

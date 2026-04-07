@@ -1,0 +1,3 @@
+[     700ms] [ERROR] Failed to load resource: net::ERR_SOCKET_NOT_CONNECTED @ https://cdn.datatables.net/v/dt/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/cr-1.7.0/datatables.min.css:0
+[    1847ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8009/favicon.ico:0
+[    3213ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8009/api/admin/reporting/user-summary/get-by-form-type:0

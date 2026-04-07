@@ -7,10 +7,8 @@
 import { fileURLToPath, pathToFileURL } from 'url';
 import { realpathSync } from 'fs';
 
-const REQUIRED_VERSION = '20.20.0';
-const REQUIRED_MAJOR = 20;
-const REQUIRED_MINOR = 20;
-const REQUIRED_PATCH = 0;
+const REQUIRED_VERSION = '>=20';
+const REQUIRED_MAJOR_MIN = 20;
 
 /**
  * Check Node version and exit if mismatch
@@ -27,7 +25,7 @@ export function checkNodeVersion() {
 
   const [, major, minor, patch] = match.map(Number);
 
-  if (major !== REQUIRED_MAJOR || minor !== REQUIRED_MINOR || patch !== REQUIRED_PATCH) {
+  if (major < REQUIRED_MAJOR_MIN) {
     console.error(`[check-node-version] ERROR: Node.js ${REQUIRED_VERSION} is required.`);
     console.error(`[check-node-version] Current version: ${current}`);
     console.error(`[check-node-version] Install using nvm:`);
