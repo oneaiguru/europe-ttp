@@ -1,0 +1,8 @@
+google-cloud-storage
+requests-toolbelt
+# google-cloud-datastore==1.15.3
+# google-cloud-ndb==1.0.0
+
+# Python BDD dependencies for testing legacy code
+webtest>=3.0.0
+behave>=1.2.6
