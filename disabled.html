@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Art of Living TTC Portal</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="The Art of Living Foundation">
+    <meta name="description" content="Art of Living Teachers Training Portal">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link href='https://fonts.googleapis.com/css?family=Cabin+Condensed:600,400' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800,300italic,400italic,600italic,700italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'> -->
+    <link href='https://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
+    <!-- <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Vollkorn:400italic,400' rel='stylesheet' type='text/css'> -->
+    <link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+
+    <link rel='shortcut icon' href='images/favicon.ico' type='image/x-icon'/ >
+
+    <script type="text/javascript" src="javascript/utils.js"></script>
+
+    <link rel="stylesheet" href="styles/styles.css" type="text/css" />
+    <link rel="stylesheet" href="styles/left-menu.css" type="text/css" />
+    <link rel="stylesheet" href="styles/an-buttons.css" type="text/css" />
+
+    <script type="text/javascript" src="javascript/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="javascript/jquery-ui/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="javascript/jquery-ui/jquery-ui.css"/ >
+    <script type="text/javascript" src="javascript/left-menu.js"></script>
+
+    <!-- <link rel="import" href="bower_components/polymer/polymer.html"> -->
+<!--     <link rel="import" href="bower_components/paper-button/paper-button.html">
+    <link rel="import" href="bower_components/paper-input/paper-input.html"> -->
+
+    <link rel="stylesheet" href="styles/font-awesome/css/font-awesome.min.css" type="text/css" />
+<script>
+
+</script>
+</head>
+
+<body>
+
+<div class="site-wrapper">
+
+    <input id="left_menu-mobile_menu_button" type="checkbox" class="left_menu-mobile_menu_button">
+    <label for="left_menu-mobile_menu_button">
+      <div style="vertical-align: middle;display: inline-block;padding: 0px 7px;">
+          <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+      </div>
+      <img src="images/artofliving-logo-white-2.png" style="
+              margin-top:0px;
+              margin-bottom:-5px;
+              display:inline-block;
+              vertical-align: middle;
+              max-height:60px;
+              ">  
+    </label>
+
+    <div class="header-block" style="display:none;">
+      <div class="header-strip">
+        <div class="header-table">
+          <div class="header-row">
+            <div class="header-cell-left">
+              <img src="images/artofliving-logo-white-2.png" style="
+                margin-top:0px;
+                margin-bottom:-5px;
+                display:inline-block;
+                vertical-align: middle;
+                max-height:60px;
+                ">  
+            </div>
+            <!-- <input id="mobile-menu" type="checkbox" class="mobile-menu"><label for="mobile-menu">menu</label> -->
+            <div class="header-cell-right">
+<!--               <a class="header-link" href="#" style="text-transform:none;" >Home</a>
+              <a class="header-link" href="#email" style="text-transform:none;" >Email.</a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left_menu-container general-text">
+      <div class="left_menu-table">
+        <div class="tablerow">
+          <div class="tablecell header">
+            <a rel="tab" href="welcome.html">
+              <img id="artofliving-logo" src="images/artofliving-logo-white-2.png">
+            </a>
+          </div>
+        </div>
+        <div class="tablerow">
+          <div class="tablecell separator">
+            &nbsp;
+          </div>
+        </div>
+        <div class="tablerow">
+          <div class="tablecell bg-gray" style="text-align: left;">
+            <div style="font-size: 13px; font-weight:300; padding: 13px;line-height: 15px; text-align: left; display: inline-block;">
+              <div style="display: inline-block;">Logged in as</div><br>
+              <div style="
+                  font-size: 15px;
+                  font-weight: 400;
+                  margin-top: 5px;
+                  display: inline-block;
+                  line-height: 19px;
+              ">{{ user_email_addr }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tablerow">
+          <div class="tablecell">
+            {% if user_email_addr %}
+            <a href="{{ user_logout_url }}" class="login-logout">
+              <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;LOGOUT
+            </a>
+            {% else %}
+            <a href="{{ user_login_url }}" class="login-logout">
+              <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;LOGIN
+            </a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="tablerow">
+          <div class="tablecell">
+            <img id="user_image">
+          </div>
+        </div>
+        <!-- <div class="tablerow" style="position: absolute; bottom: 0;">
+          <div class="tablecell">
+            <div style="font-size: 13px; font-weight:300; padding: 3px;line-height: 15px; text-align: left; display: block;">
+              <a style="display: inline;" href="http://www.artofliving.org/us-en/privacy-policy">Privacy Policy</a>
+              <a style="display: inline;" href="http://www.artofliving.org/us-en/terms-use">Terms of Use</a>
+            </div>
+          </div>          
+        </div> -->
+      </div>
+
+    </div>
+
+    <div id="site-container" class="section-container" style="background-color:white;">
+      <div style="margin: 0 auto;" class="site-container">
+        <div class="site-inner-container">
+          <div id="welcome_form_success" class="form-tab-content generic-container-shadow" style="display:none;"></div>
+          <div id="welcome_form" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+            <div class="tablebody">
+              <div class="tablerow">
+                <div class="tablecell">
+                  <div id="deepen" class="form-header-block" style="text-align: left;">
+                    Welcome
+                    <div class="smallertext" style="margin-top:7px;">
+                      to the Art of Living TTC Portal
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tablerow">
+                <div class="tablecell">
+                  <br>
+                  The TTC Portal is not available on Mobile. Please use the portal from a Desktop web browser.<br>
+                  <br>
+                </div>
+              </div>
+              <div class="tablerow">
+                <div class="tablecell">
+                  <img class="content-maxwidth" style="border-radius: 13px;" src="images/welcome-banner.jpg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+</div>
+
+<div class="status_bar_error" id="txtHintError" style="display:none;">Status bar Error</div>
+<div class="status_bar" id="txtHint" style="display:none;">Status bar</div>
+
+<div class="status_bar_full_screen_container" id="txtHintFSBG" style="display:none;">
+  <div class="status_bar_full_screen" id="txtHintFS" style="display:none;">Status bar</div>
+</div>
+
+<iframe id="hiddeniframe" name="hiddeniframe" src="blank.html" style="display:none"></iframe>
+
+<div style="display:none;" id="jqWidth"></div>
+<div style="display:none;" id="jqHeight"></div>
+</body>
+
+</html>
