@@ -1,0 +1,234 @@
+[
+	{
+		"value": "us_20180601",
+		"display": "Jun 1 to Jun 17, 2018 in United States",
+		"display_until": "2018-03-11 11:59:59",
+		"display_countries": [
+			"US"
+		],
+		"display_data": {
+			"country": "United States",
+			"venue": "Art of Living Retreat Center, Boone, NC",
+			"dates": "Jun 1 to Jun 17, 2018",
+			"youth_ttc_dates": "Jun 7 to Jun 17, 2018",
+			"application_deadline": "March 11th, 2018, midnight PST",
+			"applicant_evaluation_deadline": "March 11th, 2018, midnight PST",
+			"confirmation_of_acceptance_deadline": "April 29th, 2018, midnight PST",
+			"fee_payment_deadline": "May 8th, 2018, midnight PST",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "ca_20180901",
+		"display": "Sep 1 to Sep 15, 2018 in Canada",
+		"display_until": "2018-06-24 23:59:59",
+		"display_countries": [
+			"CA"
+		],
+		"display_data": {
+			"country": "Canada",
+			"venue": "International Art of Living Centre, Canada",
+			"dates": "Sep 1 to Sep 15, 2018",
+			"application_deadline": "June 23rd, 2018, 11:59pm EST",
+			"applicant_evaluation_deadline": "August 1st, 2018, 11:59pm EST",
+			"confirmation_of_acceptance_deadline": "August 7th, 2018, 11:59pm EST",
+			"fee_payment_deadline": "August 7th, 2018, 11:59pm EST",
+			"fees": "$4500 CAD"
+		}
+	},
+	{
+		"value": "us_ca_20180901",
+		"display": "Sep 1 to Sep 15, 2018 in Canada",
+		"display_until": "2018-07-16 02:59:59",
+		"display_countries": [
+			"US"
+		],
+		"display_data": {
+			"country": "Canada",
+			"venue": "International Art of Living Centre, Canada",
+			"dates": "Sep 1 to Sep 15, 2018",
+			"application_deadline": "July 15th, 2018, 11:59pm PST",
+			"applicant_evaluation_deadline": "August 1st, 2018, 11:59pm PST",
+			"confirmation_of_acceptance_deadline": "August 7th, 2018, 11:59pm PST",
+			"fee_payment_deadline": "August 7th, 2018, 11:59pm PST",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "us_in_2019",
+		"display": "Jan 1 to 15, 2019 in India",
+		"display_until": "2018-11-02 02:59:59",
+		"display_countries": [
+			"US"
+		],
+		"display_data": {
+			"country": "India",
+			"venue": "Bangalore Ashram, India",
+			"dates": "Jan 1 to 15, 2019",
+			"application_deadline": "Oct 31st, 2018, 11:59pm PST",
+			"applicant_evaluation_deadline": "Nov 21st, 2018, 11:59pm PST",
+			"confirmation_of_acceptance_deadline": "Nov 21st, 2018, 11:59pm PST",
+			"fee_payment_deadline": "Nov 30th, 2018, 11:59pm PST",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "us_br_2019",
+		"display": "Jul 20 to Aug 4, 2019 in Brazil",
+		"display_until": "2020-03-01 23:59:59",
+		"display_countries": [
+			"US"
+		],
+		"display_data": {
+			"country": "Brazil",
+			"venue": "Brazil",
+			"dates": "Jul 20 to Aug 4, 2019",
+			"application_deadline": "May 19th, 2019, 11:59pm PST",
+			"applicant_evaluation_deadline": "Jun 20th, 2019, 11:59pm PST",
+			"confirmation_of_acceptance_deadline": "Jun 20th, 2019, 11:59pm PST",
+			"fee_payment_deadline": "Jun 30th, 2019, 11:59pm PST",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "us_2019",
+		"display": "Aug 2 to 18, 2019 in United States",
+		"display_until": "2021-12-31 23:59:59",
+		"display_countries": [
+			"US"
+		],
+		"display_data": {
+			"country": "United States",
+			"venue": "Art of Living Retreat Center, Boone, NC",
+			"dates": "Aug 2 to 18, 2019",
+			"youth_programs_ttc_dates": "Aug 8 to 18, 2019",
+			"application_and_evaluation_submission_deadline": "May 12th, 2019, midnight PST",
+			"confirmation_of_acceptance_deadline": "Jun 24th, 2019, midnight PST",
+			"fee_payment_deadline": "Jul 1st, 2019, midnight PST",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "ca_2019",
+		"display": "Aug 31 to Sep 15, 2019 in Canada",
+		"display_until": "2021-12-31 23:59:59",
+		"display_countries": [
+			"CA", "US"
+		],
+		"display_data": {
+			"country": "Canada",
+			"venue": "International Art of Living Centre, Canada",
+			"dates": "Aug 31 to Sep 15, 2019",
+			"application_deadline": "June 10th, 2019, 11:59pm EST",
+			"applicant_evaluation_deadline": "July 25th, 2019, 11:59pm EST",
+			"confirmation_of_acceptance_deadline": "July 25th, 2019, 11:59pm EST",
+			"fee_payment_deadline": "August 1st, 2019, 11:59pm EST",
+			"fees": "$4500 CAD"
+		}
+	},
+	{
+		"value": "us_in_2020",
+		"display": "Jan 1 to 15, 2020 in India",
+		"display_until": "2021-12-31 23:59:59",
+		"display_countries": [
+			"US"
+		],
+		"display_data": {
+			"country": "India",
+			"venue": "Bangalore Ashram, India",
+			"dates": "Jan 1 to 15, 2020",
+			"application_and_evaluation_submission_deadline": "Nov 15th, 2019, 11:59pm PST",
+			"confirmation_of_acceptance_deadline": "Nov 21st, 2019, 11:59pm PST",
+			"fee_payment_deadline": "Nov 30th, 2019, 11:59pm PST",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "us_202004",
+		"display": "Apr 24 - May 10, 2020 in United States",
+		"display_until": "2021-12-31 23:59:59",
+		"display_countries": [
+			"US"
+		],
+		"display_data": {
+			"country": "United States",
+			"venue": "Art of Living Texas Ashram, Uvalde, TX",
+			"dates": "Apr 24 - May 10, 2020 in United States",
+			"youth_programs_ttc_dates": "Apr 30 - May 10, 2020 in United States",
+			"application_and_evaluation_submission_deadline": "Mar 1st, 2020, midnight PST",
+			"confirmation_of_acceptance_deadline": "Mar 28th, 2020, midnight PST",
+			"fee_payment_deadline": "Apr 5th, 2020, midnight PST",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "us_202006",
+		"display": "Jul 31 - Aug 16, 2020 in United States",
+		"display_until": "2021-12-31 23:59:59",
+		"display_countries": [
+			"US"
+		],
+		"display_data": {
+			"country": "United States",
+			"venue": "Art of Living Retreat Center, Boone, NC",
+			"dates": "Jul 31 - Aug 16, 2020",
+			"youth_programs_ttc_dates": "Aug 6 - Aug 16, 2020",
+			"application_and_evaluation_submission_deadline": "Extended until furtner notice",
+			"confirmation_of_acceptance_deadline": "Jun 30th, 2020, midnight EST",
+			"fee_payment_deadline": "Jul 7th, 2020, midnight PST",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "us_202012",
+		"display": "Hybrid TTC Oct 2020 in United States",
+		"display_until": "2022-12-31 23:59:59",
+		"display_countries": [
+			"US"
+		],
+		"display_data": {
+			"country": "United States",
+			"venue": "Art of Living Retreat Center, Boone, NC",
+			"dates": "October 2020",
+			"youth_programs_ttc_dates": "October 2020",
+			"application_and_evaluation_submission_deadline": "Aug 23rd, 2020, midnight PDT",
+			"confirmation_of_acceptance_deadline": "(TBD)",
+			"fee_payment_deadline": "(TBD)",
+			"fees": "$4500 USD"
+		}
+	},
+	{
+		"value": "ca_202012",
+		"display": "Sep 19 to Oct 4, 2020 in Canada",
+		"display_until": "2021-12-31 23:59:59",
+		"display_countries": [
+			"CA"
+		],
+		"display_data": {
+			"country": "Canada",
+			"venue": "International Art of Living Centre, Canada",
+			"dates": "Sep 19 to Oct 4, 2020",
+			"application_and_evaluation_submission_deadline": "Jul 26th, 2020, midnight PDT",
+			"confirmation_of_acceptance_deadline": "Aug 15th, 2020, midnight PDT",
+			"fee_payment_deadline": "(TBD)",
+			"fees": "$4500 CAD"
+		}
+	},
+	{
+		"value": "in_202012",
+		"display": "TBD in India",
+		"display_until": "2021-12-31 23:59:59",
+		"display_countries": [
+			"IN"
+		],
+		"display_data": {
+			"country": "India",
+			"venue": "Art of Living Bangalore Ashram",
+			"dates": "(TBD)",
+			"application_and_evaluation_submission_deadline": "(TBD)",
+			"confirmation_of_acceptance_deadline": "(TBD)",
+			"fee_payment_deadline": "(TBD)",
+			"fees": "$4500 CAD"
+		}
+	}
+]

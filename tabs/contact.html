@@ -1,0 +1,53 @@
+<script type="text/javascript" src="javascript/jquery-1.11.1.min.js"></script>
+
+      <div style="margin: 0 auto;" class="site-container">
+        <div class="site-inner-container">
+          <div id="contact_form_success" class="form-tab-content generic-container-shadow" style="display:none;"></div>
+          <div id="contact_form" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+<!--               <div class="tableheader" style="display:tablerow;">
+                <div class="tablecell">
+                  
+                </div>
+              </div> -->
+              <div class="tablebody">
+                <div class="tablerow">
+                  <div class="tablecell">
+                    <div id="deepen" class="form-header-block" style="text-align: left;">
+                      <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;Contact
+                      <div class="smallertext" style="margin-top:7px;">
+                        Please contact the appropriate TTC desk for your country from below contacts
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div id="contact_details" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+              <div class="tablebody">                
+                <div class="tablerow">
+                  <div class="tablecell">
+                    &nbsp;
+                  </div>
+                  <div class="tablecell">
+                    &nbsp;
+                  </div>
+                </div>
+                <div class="tablerow">
+                  <div class="tablecell">
+                    {{user_home_country}} TTC Desk
+                    <div class="smallertext">
+                      The TTC Desk team
+                    </div>
+                  </div>
+                  <div class="tablecell">
+                     {% if user_home_country_iso == 'CA' %}
+                      <a href="mailto:ttcdesk@artofliving.ca">ttcdesk@artofliving.ca</a>
+                    {% else %}
+                      <a href="mailto:ttc@artofliving.org">ttc@artofliving.org</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
