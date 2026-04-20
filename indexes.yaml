@@ -1,0 +1,13 @@
+indexes:
+
+- kind: ShortenedURL
+  ancestor: no
+  properties:
+  - short_name: short_name
+
+- kind: ShortenedURL
+  ancestor: no
+  properties:
+  - creator_id: creator_id
+  - update_datetime: update_datetime
+    direction: desc
