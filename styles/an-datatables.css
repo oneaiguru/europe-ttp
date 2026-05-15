@@ -1,0 +1,14 @@
+
+th.an-dtbl-title, thead.an-dtbl-title {
+    font-family: Ubuntu;
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 15px;
+    text-align: left;
+}
+
+.an-dtbl-subtitle {
+    text-transform: none;
+    font-size: 13px;
+    text-align: center;
+}
