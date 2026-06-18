@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Art of Living TTC Portal</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="The Art of Living Foundation">
+    <meta name="description" content="The Art of Living Teacher's Training Portal">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link href='https://fonts.googleapis.com/css?family=Cabin+Condensed:600,400' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800,300italic,400italic,600italic,700italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+    <!-- <link href='https://fonts.googleapis.com/css?family=Vollkorn:400italic,400' rel='stylesheet' type='text/css'> -->
+
+    <!-- <link href='https://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet"> -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+    <link rel='shortcut icon' href='images/favicon.ico' type='image/x-icon'/ >
+
+    <script type="text/javascript" src="javascript/utils.js"></script>
+
+    <link rel="stylesheet" href="styles/styles.css" type="text/css" />
+    <link rel="stylesheet" href="styles/left-menu.css" type="text/css" />
+    <link rel="stylesheet" href="styles/an-buttons.css" type="text/css" />
+
+    <script type="text/javascript" src="javascript/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="javascript/jquery-ui/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="javascript/jquery-ui/jquery-ui.css"/ >
+    <script type="text/javascript" src="javascript/left-menu.js"></script>
+
+    <!-- <link rel="import" href="bower_components/polymer/polymer.html"> -->
+<!--     <link rel="import" href="bower_components/paper-button/paper-button.html">
+    <link rel="import" href="bower_components/paper-input/paper-input.html"> -->
+
+    <link rel="stylesheet" href="styles/font-awesome/css/font-awesome.min.css" type="text/css" />
+<script>
+  function simulateClickIfHashLink() {
+    var page;
+    var loginRequired=false;
+    var param = "";
+    var link_type = "form";
+    if(window.location.hash) {
+      var len = window.location.hash.indexOf('?');
+      if (len == -1) {
+        len = window.location.hash.length;
+      } else {
+        param = window.location.hash.substring(len);
+      }
+      page = window.location.hash.substring(1, len);
+      if (!page.endsWith('.pdf')) {
+        page = page + ".html" + param;
+      }
+      var t = $('a[href="' + window.location.hash.substring(1, len) + '.html"]');
+      loginRequired = t.attr('data-login');
+      link_type = t.attr('rel');
+    } else {
+      page = "welcome.html";
+      link_type = "tab";
+    }
+    // $("a[href='" + page + "']").click();
+    if (link_type == "tab") {
+      displayPageContents(page,loginRequired);
+    } else if (link_type == "admin") {
+      displayAdminPageContents(page, loginRequired);
+    } else {
+      displayFormContents(page,loginRequired);
+    }
+  }
+
+  $(function(){
+    $("a[rel='tab']").click(function(e){
+      //e.preventDefault(); 
+      /*  
+      if uncomment the above line, html5 nonsupported browers won't change the url but will display the ajax content;
+      if commented, html5 nonsupported browers will reload the page to the specified link. 
+      */
+
+      $('#left_menu-mobile_menu_button').prop('checked', false);
+      
+      //get the link location that was clicked
+      pageurl = $(this).attr('href');
+      loginRequired = $(this).attr('data-login');
+
+      displayPageContents(pageurl, loginRequired);
+      return false;  
+    });
+
+    $("a[rel='form']").click(function(e){
+      //e.preventDefault(); 
+      /*  
+      if uncomment the above line, html5 nonsupported browers won't change the url but will display the ajax content;
+      if commented, html5 nonsupported browers will reload the page to the specified link. 
+      */
+
+      $('#left_menu-mobile_menu_button').prop('checked', false);
+      
+      //get the link location that was clicked
+      pageurl = $(this).attr('href');
+      loginRequired = $(this).attr('data-login');
+
+      displayFormContents(pageurl, loginRequired);
+      return false;  
+    });
+
+    $("a[rel='admin']").click(function (e) {
+      //e.preventDefault(); 
+      /*  
+      if uncomment the above line, html5 nonsupported browers won't change the url but will display the ajax content;
+      if commented, html5 nonsupported browers will reload the page to the specified link. 
+      */
+
+      $('#left_menu-mobile_menu_button').prop('checked', false);
+
+      //get the link location that was clicked
+      pageurl = $(this).attr('href');
+      loginRequired = $(this).attr('data-login');
+
+      displayAdminPageContents(pageurl, loginRequired);
+      return false;
+    });
+    
+    $("a[rel='doc']").click(function(e){
+      $('#left_menu-mobile_menu_button').prop('checked', false);
+      
+      //get the link location that was clicked
+      docName = $(this).attr('href');
+
+      displayPDF(docName);
+      return false;  
+    });
+  });
+
+  function displayPDF (docName) {
+    if (docName.indexOf(".pdf") == -1) {
+      $('#site-container').html("");
+      return;
+    };
+
+    data = '<div style="height:100%;width:100%;">\
+        <object data="https://storage.googleapis.com/{{ default_bucket_name }}/docs/' + docName + '" type="application/pdf" style="width:100%;height:100%;">\
+            <a target="_blank" href="https://storage.googleapis.com/{{ default_bucket_name }}/docs/' + docName + '">Click here to view the document</a>\
+        </object>\
+    </div>';
+
+    $('#site-container').html(data);
+    // to change the browser URL to 'docName'
+    // remove ".html" from the URL and make it a bookmark
+    if(docName!=window.location){
+      window.history.pushState({path:docName},'',"#" + docName);
+    }
+  }
+
+  function displayPageContents (pageurl, loginRequired) {
+    if (pageurl.indexOf(".html") == -1) {
+      if (pageurl.endsWith('.pdf')) {
+        displayPDF(pageurl);
+      } else {
+        $('#site-container').html("");        
+      }
+      return;
+    };
+
+    if (loginRequired == "true" && "{{ user_email_addr }}" == "") {
+      var callback_url = "#" + pageurl.replace(".html", "")
+      $.ajax(
+        {
+          url:"tabs/signin.html",
+          data: {
+            callback_url: callback_url
+          },
+          success: function(data){
+            $('#site-container').html(data);
+          }
+        }
+      );
+      pageurl = 'signin.html';
+    } else {
+      //to get the ajax content and display in div with id 'content'
+      // $.ajax({url:pageurl+'?rel=tab',success: function(data){
+      $.ajax({url:"tabs/" + pageurl,
+        data: {
+          user_home_country_iso: $('#user_home_country_iso').val(),
+          user_home_country: $('#user_home_country').html()
+        },
+        success: function(data){
+          $('#site-container').html(data);
+        }
+      });
+    }    
+    // to change the browser URL to 'pageurl'
+    // remove ".html" from the URL and make it a bookmark
+    if(pageurl!=window.location){
+      window.history.pushState({path:pageurl},'',"#" + pageurl.replace(".html", ""));
+    }
+  }
+
+  function displayFormContents (pageurl, loginRequired) {
+    if (pageurl.indexOf(".html") == -1) {
+      if (pageurl.endsWith('.pdf')) {
+        displayPDF(pageurl);
+      } else {
+        $('#site-container').html("");        
+      }
+      return;
+    };
+
+    if (loginRequired == "true" && "{{ user_email_addr }}" == "") {
+      var callback_url = "#" + pageurl.replace(".html", "")
+      $.ajax(
+        {
+          url:"form/signin.html",
+          data: {
+            callback_url: callback_url
+          },
+          success: function(data){
+            $('#site-container').html(data);
+          }
+        }
+      );
+      pageurl = 'signin.html';
+    } else {
+      //to get the ajax content and display in div with id 'content'
+      // $.ajax({url:pageurl+'?rel=tab',success: function(data){
+      $.ajax({url:"form/" + pageurl,
+        data: {
+          user_home_country_iso: $('#user_home_country_iso').val(),
+          user_home_country: $('#user_home_country').html()
+        },
+        success: function(data){
+          $('#site-container').html(data);
+        }
+      });
+    }    
+    // to change the browser URL to 'pageurl'
+    // remove ".html" from the URL and make it a bookmark
+    if(pageurl!=window.location){
+      window.history.pushState({path:pageurl},'',"#" + pageurl.replace(".html", ""));
+    }
+  }
+
+  function displayAdminPageContents(pageurl, loginRequired) {
+    if (pageurl.indexOf(".html") == -1) {
+      if (pageurl.endsWith('.pdf')) {
+        displayPDF(pageurl);
+      } else {
+        $('#site-container').html("");
+      }
+      return;
+    };
+
+    if (loginRequired == "true" && "{{ user_email_addr }}" == "") {
+      var callback_url = "#" + pageurl.replace(".html", "")
+      $.ajax(
+        {
+          url: "form/signin.html",
+          data: {
+            callback_url: callback_url
+          },
+          success: function (data) {
+            $('#site-container').html(data);
+          }
+        }
+      );
+      pageurl = 'signin.html';
+    } else {
+      //to get the ajax content and display in div with id 'content'
+      // $.ajax({url:pageurl+'?rel=tab',success: function(data){
+      $.ajax({
+        url: "admin/" + pageurl,
+        data: {
+          user_home_country_iso: $('#user_home_country_iso').val(),
+          user_home_country: $('#user_home_country').html()
+        },
+        success: function (data) {
+          $('#site-container').html(data);
+          // if (typeof init === "function") {
+          //   init();
+          // }
+        }
+      });
+    }
+    // to change the browser URL to 'pageurl'
+    // remove ".html" from the URL and make it a bookmark
+    if (pageurl != window.location) {
+      window.history.pushState({ path: pageurl }, '', "#" + pageurl.replace(".html", ""));
+    }
+  }
+
+
+  $(function() {
+    $('a[href*="#"]:not([href="#"])').click(function() {
+      if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+        var target = $(this.hash);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+        if (target.length) {
+          $('html,body').animate({
+            scrollTop: target.offset().top
+          }, 1000);
+          $('#'+target.attr('id')+'-location').focus();
+          return false;
+        }
+      }
+    });
+  });
+
+  function jqUpdateSize() {
+      // Get the dimensions of the viewport
+      var width = $(window).width();
+      var height = $(window).height();
+
+      if (width <= 768) {
+          $('.mobile-display-only').show();
+          $('.desktop-display-only').hide();
+      } else {
+          $('.mobile-display-only').hide();
+          $('.desktop-display-only').show();
+      };
+
+      $('#jqWidth').html(width);      // Display the width
+      $('#jqHeight').html(height);    // Display the height
+
+  };
+
+  $(document).ready(function() {
+    console.log('[ttc_portal][ready] called');
+    checkBrowserVersion();
+    jqUpdateSize();
+    initializeRequiredFields();
+
+    // S
+    simulateClickIfHashLink();
+
+    initiate_menu_items();
+
+    // $('.header-link').click(function () {
+    //   $('#mobile-menu').prop('checked', false);
+    // });
+
+    // $('input[name="i_org"]').change(function () {
+    //   if ($('input[name="i_org"]:checked').is(':checked')) {
+    //     showInputs(3);
+    //   };
+    // });
+
+    // $('input[name="i_request_type"]').change(function () {
+    //   if ($('input[name="i_request_type"]:checked').is(':checked')) {
+    //     showInputs(2);
+    //   };
+    // });
+
+    // $.getJSON("https://www.googleapis.com/plus/v1/people/{{user_id}}?fields=image&key={{google_public_api_key}}", function( data ) {
+    //   if ('image' in data && 'url' in data['image']) {
+    //     $('#user_image').attr('src', data['image']['url']);
+    //   }
+    // });
+
+  }); // When the page first loads
+
+  $(window).resize(jqUpdateSize);     // When the browser changes size
+
+
+  // -- GLOBAL VARIABLES AND FUNCTIONS FOR SUB PAGES -----------------------------------
+
+  // Global variable for use in prepareTicket, createTicket and updateTicket
+  var ticketDetails;
+
+  function showInfoMessage (message) {
+    if($('#step_info').length == 0)
+    {
+      $('#step_form').before(' \
+        <div id="step_info" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;"> \
+          <div class="tablebody"> \
+            <div class="tablerow"> \
+              <div class="tablecell"> \
+                  <div id="info_message"></div> \
+              </div> \
+            </div> \
+          </div> \
+        </div>');
+    }
+    $('#info_message').html(message);
+    $('#step_info').show(150);
+  }
+
+  function showLoadingIndicator (btnName) {
+    if (btnName) {
+      $('#' + btnName + '-loading13').css('visibility','visible');
+      return;
+    }
+    if($('#loading13').length == 0)
+    {
+      var busyIndicatorHTML = ' \
+        <div id="loading13" class="tablebody" style="display:none;"> \
+          <div class="tablerow"> \
+            <div class="tablecell" style="text-align:center;"> \
+                <img style="width:40px; height:40px;" src="images/loading-flipflop.gif"> \
+            </div> \
+          </div> \
+        </div>';
+
+      if($('#step_info').length > 0) {
+        $('#step_info').after(busyIndicatorHTML);
+      } else {
+        $('#step_form').before(busyIndicatorHTML);
+      }
+    }
+    // hideLoadingIndicator();
+  }
+
+  function hideLoadingIndicator (btnName) {
+    if (btnName) {
+      $('#' + btnName + '-loading13').css('visibility','hidden');
+      return;
+    }
+    $('#loading13').hide();
+  }
+
+</script>
+</head>
+
+<body>
+
+<div class="site-wrapper">
+
+    <input id="left_menu-mobile_menu_button" type="checkbox" class="left_menu-mobile_menu_button">
+    <label for="left_menu-mobile_menu_button">
+      <div style="vertical-align: middle;display: inline-block;padding: 0px 7px;">
+          <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+      </div>
+      <img src="images/artofliving-logo-white-2.png" style="
+              margin-top:0px;
+              margin-bottom:-5px;
+              display:inline-block;
+              vertical-align: middle;
+              max-height:60px;
+              ">  
+    </label>
+
+    <div class="header-block" style="display:none;">
+      <div class="header-strip">
+        <div class="header-table">
+          <div class="header-row">
+            <div class="header-cell-left">
+              <img src="images/artofliving-logo-white-2.png" style="
+                margin-top:0px;
+                margin-bottom:-5px;
+                display:inline-block;
+                vertical-align: middle;
+                max-height:60px;
+                ">  
+            </div>
+            <!-- <input id="mobile-menu" type="checkbox" class="mobile-menu"><label for="mobile-menu">menu</label> -->
+            <div class="header-cell-right">
+<!--               <a class="header-link" href="#" style="text-transform:none;" >Home</a>
+              <a class="header-link" href="#email" style="text-transform:none;" >Email.</a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left_menu-container general-text">
+      <div class="left_menu-table">
+        <div class="tablerow">
+          <div class="tablecell header">
+            <a rel="tab" href="welcome.html">
+              <img id="artofliving-logo" src="images/artofliving-logo-white-2.png">
+            </a>
+          </div>
+        </div>
+        <div class="tablerow">
+          <div class="tablecell separator">
+            &nbsp;
+          </div>
+        </div>
+        <div class="tablerow">
+          <div id="section-happiness_program" menu-status="expanded" class="tablecell section-header">
+            Happiness Program
+          </div>
+        </div>
+        <div name="section-happiness_program" class="tablebody">
+          <div class="tablerow">
+            <div class="tablecell">
+              <b>TTC</b>
+            </div>
+          </div>
+          <div class="tablerow">
+            <div class="tablecell">
+              <a rel="form" href="ttc_application.html">
+                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Application
+              </a>
+            </div>
+          </div>
+          <div class="tablerow">
+            <div class="tablecell">
+              <a rel="form" href="ttc_evaluation.html">
+                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Evaluation
+              </a>
+            </div>
+          </div>
+          <div class="tablerow">
+            <div class="tablecell">
+              <b>Post TTC</b>
+            </div>
+          </div>
+          <div class="tablerow">
+            <div class="tablecell">
+              <a rel="form" href="post_ttc_self_evaluation_form.html">
+                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Self Evaluation
+                <div class="smallertext">
+                  for new teachers
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="tablerow">
+            <div class="tablecell">
+              <a rel="form" href="post_ttc_feedback_form.html">
+                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Feedback
+                <div class="smallertext">
+                  to new teachers
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="tablerow">
+          <div id="section-sahaj" menu-status="expanded" class="tablecell section-header">
+            Sahaj
+          </div>
+        </div>
+        <div name="section-sahaj" class="tablebody">
+          <div class="tablerow">
+            <div class="tablecell">
+              <b>Post TTC</b>
+            </div>
+          </div>
+          <div class="tablerow">
+            <div class="tablecell">
+              <a rel="form" href="post_sahaj_ttc_self_evaluation_form.html">
+                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Self Evaluation
+                <div class="smallertext">
+                  for new teachers
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="tablerow">
+            <div class="tablecell">
+              <a rel="form" href="post_sahaj_ttc_feedback_form.html">
+                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Feedback
+                <div class="smallertext">
+                  for new teachers
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        {% if user_email_addr in list_of_admins %}
+        <div class="tablerow">
+          <div id="section-admin" menu-status="expanded" class="tablecell section-header" style="color: #0071b6;">
+            <i class="fa fa-shield fa-fw" aria-hidden="true" style="color: #0071b6; margin-left: -9px;"></i>&nbsp;Admin
+          </div>
+        </div>
+          {% if 'ttc_applicants_summary.html' in user_report_permissions %}
+          <!-- <div name="section-admin" class="tablebody">
+            <div class="tablerow">
+              <div class="tablecell">
+                <a rel="admin" href="ttc_applicants_summary.html">
+                  <i class="fa fa-table fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;TTC Summary
+                </a>
+              </div>
+            </div>
+          </div> -->
+          {% endif  %}
+          {% if 'ttc_applicants_reports.html' in user_report_permissions %}
+          <div name="section-admin" class="tablebody">
+            <div class="tablerow">
+              <div class="tablecell">
+                <a rel="admin" href="ttc_applicants_reports.html">
+                  <i class="fa fa-table fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;TTC Report
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% if 'ttc_applicants_integrity.html' in user_report_permissions %}
+          <div name="section-admin" class="tablebody">
+            <div class="tablerow">
+              <div class="tablecell">
+                <a rel="admin" href="ttc_applicants_integrity.html">
+                  <i class="fa fa-table fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;TTC Integrity Report
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% if 'post_ttc_course_feedback_summary.html' in user_report_permissions %}
+          <div name="section-admin" class="tablebody">
+            <div class="tablerow">
+              <div class="tablecell">
+                <a rel="admin" href="post_ttc_course_feedback_summary.html">
+                  <i class="fa fa-table fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Post TTC Report
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endif  %}
+          {% if 'post_sahaj_ttc_course_feedback_summary.html' in user_report_permissions %}
+          <div name="section-admin" class="tablebody">
+            <div class="tablerow">
+              <div class="tablecell">
+                <a rel="admin" href="post_sahaj_ttc_course_feedback_summary.html">
+                  <i class="fa fa-table fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Post Sahaj TTC Report
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% if 'admin_settings.html' in user_report_permissions %}
+          <div name="section-admin" class="tablebody">
+            <div class="tablerow">
+              <div class="tablecell">
+                <a rel="admin" href="admin_settings.html">
+                  <i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Admin Settings
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endif %}
+        <div class="tablerow">
+          <div id="section-contact" menu-status="expanded" class="tablecell section-header">
+            Contact
+          </div>
+        </div>
+        <div name="section-contact" class="tablebody">
+          <div class="tablerow">
+            <div class="tablecell">
+              <a rel="tab" href="contact.html">
+                <i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Contact
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="tablerow">
+          <div id="section-profile" menu-status="expanded" class="tablecell section-header">
+            Profile
+          </div>
+        </div>
+        <div name="section-profile" class="tablebody">
+          <div class="tablerow">
+            <div class="tablecell">
+              <a rel="form" href="ttc_applicant_profile.html">
+                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Applicant Profile
+              </a>
+            </div>
+          </div>
+        </div>
+        <div name="section-profile" class="tablebody">
+          <div class="tablerow">
+            <div class="tablecell">
+              <a rel="form" href="ttc_evaluator_profile.html">
+                <i class="fa fa-file-text-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Evaluator Profile
+              </a>
+            </div>
+          </div>
+        </div> -->
+        <div class="tablerow">
+          <div id="section-documents" menu-status="expanded" class="tablecell section-header">
+            Docs
+          </div>
+        </div>
+        <div name="section-documents" class="tablebody">
+          {% if user_home_country_iso == 'CA' %}
+            <div class="tablerow">
+              <div class="tablecell">
+                <a rel="doc" href="ttc_requirements_canada.pdf">
+                  <i class="fa fa-file-pdf-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;TTC Requirements
+                </a>
+              </div>
+            </div>
+          {% else %}
+            <div class="tablerow">
+              <div class="tablecell">
+                <a rel="doc" href="ttc_requirements.pdf">
+                  <i class="fa fa-file-pdf-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;TTC Requirements
+                </a>
+              </div>
+            </div>
+            <div class="tablerow">
+              <div class="tablecell">
+                <a rel="doc" href="ttc_ppt-application_and_process.pdf">
+                  <i class="fa fa-file-pdf-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Application &amp; Process
+                </a>
+              </div>
+            </div>
+            <div class="tablerow">
+              <div class="tablecell">
+                <a rel="doc" href="ttc_ppt-organizing_and_assisting_courses.pdf">
+                  <i class="fa fa-file-pdf-o fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Organizing &amp; Assisting
+                </a>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        <div class="tablerow">
+          <div class="tablecell whitespace">
+            &nbsp;
+          </div>
+        </div>
+        <div class="tablerow">
+          <div class="tablecell bg-gray" style="text-align: left;">
+            <div style="font-size: 13px; font-weight:300; padding: 13px;line-height: 15px; text-align: left; display: inline-block;">
+              <a rel="tab" href="settings.html" style="padding-left: 0;">
+                <div style="display: inline-block;">Home country (click to change)</div>
+                <br>
+                <div id="user_home_country" style="
+                            font-size: 15px;
+                            font-weight: 400;
+                            margin-top: 5px;
+                            display: inline-block;
+                            line-height: 19px;
+                        ">{{ user_home_country }}</div>
+                <input id="user_home_country_iso" type="hidden" value="{{ user_home_country_iso }}">
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="tablerow">
+          <div class="tablecell bg-gray" style="text-align: left;">
+            <div style="font-size: 13px; font-weight:300; padding: 13px;line-height: 15px; text-align: left; display: inline-block;">
+              <div style="display: inline-block;">Logged in as</div><br>
+              <div style="
+                  font-size: 15px;
+                  font-weight: 400;
+                  margin-top: 5px;
+                  display: inline-block;
+                  line-height: 19px;
+              ">{{ user_email_addr }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tablerow">
+          <div class="tablecell">
+            {% if user_email_addr %}
+            <a href="{{ user_logout_url }}" class="login-logout">
+              <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;LOGOUT
+            </a>
+            {% else %}
+            <a href="{{ user_login_url }}" class="login-logout">
+              <i class="fa fa-sign-in fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;LOGIN
+            </a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="tablerow">
+          <div class="tablecell">
+            <img id="user_image">
+          </div>
+        </div>
+        <!-- <div class="tablerow" style="position: absolute; bottom: 0;">
+          <div class="tablecell">
+            <div style="font-size: 13px; font-weight:300; padding: 3px;line-height: 15px; text-align: left; display: block;">
+              <a style="display: inline;" href="http://www.artofliving.org/us-en/privacy-policy">Privacy Policy</a>
+              <a style="display: inline;" href="http://www.artofliving.org/us-en/terms-use">Terms of Use</a>
+            </div>
+          </div>          
+        </div> -->
+      </div>
+
+    </div>
+
+    <div id="site-container" class="section-container" style="background-color:white;">
+      <br>
+      <br>
+    </div>
+
+
+</div>
+
+<div class="status_bar_error" id="txtHintError" style="display:none;">Status bar Error</div>
+<div class="status_bar" id="txtHint" style="display:none;">Status bar</div>
+
+<div class="status_bar_full_screen_container" id="txtHintFSBG" style="display:none;">
+  <div class="status_bar_full_screen" id="txtHintFS" style="display:none;">Status bar</div>
+</div>
+
+<iframe id="hiddeniframe" name="hiddeniframe" src="blank.html" style="display:none"></iframe>
+
+<div style="display:none;" id="jqWidth"></div>
+<div style="display:none;" id="jqHeight"></div>
+</body>
+
+</html>

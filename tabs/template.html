@@ -1,0 +1,175 @@
+<script type="text/javascript" src="javascript/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="javascript/jquery-ui/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="javascript/jquery-ui/jquery-ui.css"/ >
+<link rel="stylesheet" href="styles/jquery-ui-custom.css" type="text/css" />
+<script type="text/javascript">
+
+  function prepareTicket () {
+    // Assign variable a value.
+    // NOTE: ticketDetails is already declared.
+    ticketDetails = { 
+        jira_details: {
+            fields: {
+               project:
+               {
+                  key: 'PROJECT_KEY'
+               },
+               summary: "",
+               description: "",
+               issuetype: {
+                  name: ""
+               }
+           }
+        }
+    };
+
+    // SAMPLE value assigns
+    // If an email is required to requestor, assign requestor_name and requestor_email
+    // NOTES:
+    // - The custom field numbers are for example only
+    // - All fields need to be appended to description. This description gets displayed on the confirmation screen.
+
+    // Combining two fields into one
+    var name = $('#i_fname').val() + " " + $('#i_lname').val();
+    ticketDetails.jira_details.fields.description += "Name: " + name + "\n";
+    ticketDetails.requestor_name = name;
+    ticketDetails.jira_details.fields.customfield_12345 = $('#i_fname').val();
+    ticketDetails.jira_details.fields.customfield_23456 = $('#i_lname').val();
+
+    var requestorEmail = $('#i_email').val();
+    ticketDetails.jira_details.fields.description += "Alternate Email: " + requestorEmail + "\n";
+    ticketDetails.requestor_email = requestorEmail;
+    ticketDetails.jira_details.fields.customfield_34567 = requestorEmail;
+
+    var additionalDetails = $('#i_additional_details').val();
+    ticketDetails.jira_details.fields.description += "Additional Details: " + additionalDetails + "\n";
+
+    // Assign a value to the summary field, which becomes the subject of the JIRA ticket
+    // ticketDetails.jira_details.fields.summary = variable
+
+    return true;
+
+  }
+
+  $(document).ready(function() {
+    // Intializes required fields and adds * sign to the labels
+    initializeRequiredFields();
+  }); // When the page first loads
+</script>
+      <div style="margin: 0 auto;" class="site-container">
+        <div class="site-inner-container">
+          <div id="email_form" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+              <!-- HEADER SECTION -->
+              <div class="tablebody">
+                  <div class="tablerow">
+                    <div class="tablecell">
+                      <div id="deepen" class="form-header-block" style="text-align: left;">
+                        PAGE TITLE
+                        <div class="smallertext" style="margin-top:7px;">
+                          SMALL DESCRIPTION
+                        </div>
+                        <!-- <hr class="gradient-separator"> -->
+                        <hr class="left-gradient-separator">
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
+              <!-- 
+                SECTION WITH ALL FORM INPUTS 
+                NOTES:
+                - Do not change the id - step_form
+                - All inputs are to be named i_XXX, preferrably with an "_" separating words
+              -->
+              <div id="step_form" class="tablebody">
+
+                  <!-- 
+                    SAMPLE CODE
+                   -->
+                  <!-- 
+                    SECTION TITLE
+                    Here we have the title for Requestor Info. Similarly other sections may be created.
+                    For sections that reveal based on inputs, please refer to usage of SPAN usage to create 
+                    sections in email_support.php
+                   -->
+                  <div class="tablerow">
+                    <div class="tablecell">
+                      <div class="titletext">
+                        Requester Info
+                      </div>
+                      <div class="smallertext">
+                        Please enter your name and contact info below
+                      </div>
+                    </div>
+                  </div>
+
+                  <!--
+                    SAMPLE INPUTS
+                    Here we have inputs for first name, last name, email and additional inputs.
+                    NOTES:
+                    - email input is of type = email, that way validation is provided against email fields 
+                    - Additional details is a sample textarea input
+                   -->
+                  <div class="tablerow">
+                    <div class="tablecell">
+                      <label for="i_fname">First Name</label>
+                    </div>
+                    <div class="tablecell">
+                      <input id="i_fname" type="textbox" placeholder="First Name *" required>
+                    </div>
+                  </div>
+
+                  <div class="tablerow">
+                    <div class="tablecell">
+                      <label for="i_lname">Last Name</label>
+                    </div>
+                    <div class="tablecell">
+                      <input id="i_lname" type="textbox" placeholder="Last Name *" required>
+                    </div>
+                  </div>
+
+                  <div class="tablerow">
+                    <div class="tablecell">
+                      <label for="i_email">Email Address</label>
+                    </div>
+                    <div class="tablecell">
+                      <input id="i_email" type="email" placeholder="Email Address *" required>
+                    </div>
+                  </div>
+
+                  <div class="tablerow">
+                    <div class="tablecell">
+                      <label for="i_additional_details">Additional Details</label>
+                      <div class="smallertext">
+                        Provide any additional details here
+                      </div>
+                    </div>
+                    <div class="tablecell">
+                      &nbsp;
+                    </div>
+                  </div>
+                  <div class="tablerow" style="display:block;">
+                    <div class="tablecell" style="display:block;">
+                      <textarea id="i_additional_details" type="textarea" placeholder="Additional Details *" style="width:100%;"></textarea>
+                    </div>
+                  </div>
+              </div>
+
+              <!-- 
+                BUTTON/SUBMIT SECTION
+                This section is to be left unchanged, unless additional buttons are required.
+                NOTES:
+                - The ids of the buttons here are not to be changed
+                - The onlick for edit and submit buttons should also not be changed
+               -->
+              <div id="step_submit" class="tablebody">
+                  <div class="tablerow">
+                      <div class="tablecell">
+                        <input id="btn_submit" type="button" class="c2a" value="Submit" onclick="submitTicket()" />
+                        <input id="btn_edit" type="button" class="btn-misc" value="Edit" style="display:none;" onclick="editTicket()" />
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>

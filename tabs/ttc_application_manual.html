@@ -1,0 +1,834 @@
+<link rel="stylesheet" href="javascript/node_modules/material-components-web/dist/material-components-web.css">
+<script type="text/javascript">
+
+  function new_evaluating_teacher() {
+    var _prev_val = $("#i_eval_teachers").val();
+    if (_prev_val != "") {
+      $('#i_eval_teachers').append($('<option>', {
+        value: "", 
+        text: "New Entry"
+      }));
+      $("#i_eval_teachers").val("").change();
+    }
+  }
+
+  function remove_evaluating_teacher() {
+    var _val = $("#i_eval_teachers").val();
+    if (_val != "") {
+      $("#i_eval_teachers option[value='"+_val+"']").remove();
+      $("#i_eval_teachers").change();
+      var _num_eval_teachers = $("#i_eval_teachers option[value!='']").length;
+      $('#i_eval_teachers_count').html(_num_eval_teachers);
+      if (_num_eval_teachers == 0) {
+        new_evaluating_teacher();
+      }
+    }
+  }
+
+  function save_evaluating_teacher() {
+    if(!checkFieldsNonEmpty([
+      "i_eval_teacher_name",
+      "i_eval_teacher_email",
+      "i_eval_teacher_category"
+    ])) {
+      postErrorMessage("Please enter all details to save");
+      return false;
+    }
+    if (checkEmailField('i_eval_teacher_email')) {
+      var _prev_val = $("#i_eval_teachers").val().trim();
+      var _name = $('#i_eval_teacher_name').val().trim();
+      var _email = $('#i_eval_teacher_email').val().trim();
+      var _category = $('#i_eval_teacher_category').val().trim();
+      var _val = JSON.stringify(
+        {
+          i_eval_teacher_name: _name,
+          i_eval_teacher_email: _email,
+          i_eval_teacher_category: _category
+        }
+      )
+      if (_prev_val == _val) {
+        $("#i_eval_teachers option[value='"+_prev_val+"']").remove();
+      } else {
+        if($("#i_eval_teachers option[email='"+_email+"']").length > 0) {
+          postErrorMessage("This email has already been added")
+          return false;
+        }
+      }
+      $('#i_eval_teachers').append($('<option>', {
+        value: _val, 
+        text: _name,
+        email: _email
+      }));
+      $("#i_eval_teachers").val(_val);
+      if (_prev_val == "") {
+        $("#i_eval_teachers option[value='"+_prev_val+"']").remove();
+      }
+      $('#i_eval_teachers_count').html($("#i_eval_teachers option[value!='']").length);
+      postDoneMessage("Teacher Added");
+    }
+  }
+
+  function showYouthCourseTeacherAdditionalInfo(infoType)
+  {
+    if(infoType == 1)
+    {
+      if(document.getElementById("i_youthteacher_yes").checked)
+      {
+        $('tr[name^=i_youthteacher_2weekttc]').show();
+        document.getElementById("i_youthteacher_youthcourses").style.display="block";
+        document.getElementById("i_youthteacher_2weekttc_yes").required=true;
+        initializeRequiredFields();
+      }
+      else if(document.getElementById("i_youthteacher_no").checked)
+      {
+        $('tr[name^=i_youthteacher_2weekttc]').hide();
+        document.getElementById("i_youthteacher_youthcourses").style.display="none";
+        document.getElementById("i_youthteacher_2weekttc_yes").required=false;
+        resetNonMandatoryFields();
+      }
+    }
+    // Changed to include if parent question is also NO
+    if(infoType == 1 || infoType == 2)
+    {
+      if(document.getElementById("i_youthteacher_2weekttc_yes").checked)
+      {
+        $('tr[name=i_youthteacher_2weekttc_details]').show();
+        document.getElementById("i_youthteacher_2weekttc_date").required=true;
+        document.getElementById("i_youthteacher_2weekttc_location").required=true;
+        document.getElementById("i_youthteacher_2weekttc_teacher").required=true;
+        initializeRequiredFields();
+      }
+      // Remove if parent question is checked as NO
+      if(document.getElementById("i_youthteacher_2weekttc_no").checked || document.getElementById("i_youthteacher_no").checked)
+      {
+        $('tr[name=i_youthteacher_2weekttc_details]').hide();
+        document.getElementById("i_youthteacher_2weekttc_date").required=false;
+        document.getElementById("i_youthteacher_2weekttc_location").required=false;
+        document.getElementById("i_youthteacher_2weekttc_teacher").required=false;
+        resetNonMandatoryFields();
+      }
+    }
+    parent.resizeIframe(window.frameElement.id,true);
+  }
+
+  $(document).ready(function() {
+    initializeRequiredFields();
+
+    $('#i_eval_teachers').on('change', function() {
+      // alert("test");
+      var _val = $(this).val();
+      if (_val) {
+        var _val = JSON.parse($(this).val());
+        $('#i_eval_teacher_name').val(_val["i_eval_teacher_name"]);
+        $('#i_eval_teacher_email').val(_val["i_eval_teacher_email"]);
+        $('#i_eval_teacher_category').val(_val["i_eval_teacher_category"]);
+      } else {
+        $('#i_eval_teacher_name').val("");
+        $('#i_eval_teacher_email').val("");
+        $('#i_eval_teacher_category').val("local_teacher");
+      }
+        // if ($("#i_eval_teachers option[value!='']").length == 0) {
+        //   $('#i_eval_teacher_name').val("");
+        //   $('#i_eval_teacher_email').val("");
+        //   $('#i_eval_teacher_category').val("local_teacher");
+        // }
+    });
+
+    var headerBottomPosition = $('#ttc_application_header').offset().top + $('#ttc_application_header').height();
+    alert(headerBottomPosition);
+    $(window).scroll(function () {
+      alert(headerBottomPosition);
+      if ($(window).scrollTop() <= headerBottomPosition) {
+        $('#ttc_application_header_desc').hide(150);
+        console.log($(window).scrollTop())
+      }
+      else {
+        $('#ttc_application_header_desc').hide(150);
+        console.log($(window).scrollTop())
+      }
+    });
+
+    $("input[id*='date']").datepicker({
+      changeMonth: true,
+      changeYear: true,
+      dateFormat: "d-M-yy",
+      yearRange: "1900:yy"
+    });
+
+
+  }); // When the page first loads
+</script>
+      <div style="margin: 0 auto;" class="site-container">
+        <div class="site-inner-container">
+          <div id="ttc_application_header" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+
+              <div class="tablebody">
+                  <div class="tablerow">
+                    <div class="tablecell">
+                      <div id="ttc_application_header_title" class="form-header-block" style="text-align: left;">
+                        TTC Application
+                        <div id="ttc_application_header_desc" class="smallertext" style="margin-top:13px;">
+                          Note: This TTC Application form should be filled by TTC applicants only. Please answer all questions truthfully and with detail and clarity. Your responses will remain confidential and will only be reviewed by the TTC Trainers and the TTC desk team.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="ttc_application_form" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+
+              <div id="step_form-page1" class="tablebody" >
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_country">Country where you want to apply for TTC</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_country" value="USA" required>
+                      </div>
+                    </div>
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_dates">TTC Dates for the country you wish to attend (from and To)</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_dates" value="{{ ttc_dates }}" required>
+                      </div>
+                    </div>
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_youthteacher_hidden">Are you an active ART EXCEL / YES Course teacher applying to become an Art of Living Teacher?</label>
+                        <input type="hidden" id="i_youthteacher_hidden" value="youthteacher" required>
+                      </div>
+                      <div class="tablecell">
+                        <div class="form-rightcol-inner-container form-rightcol-centered">
+                          <form>
+                            <input onchange="javascript:showYouthCourseTeacherAdditionalInfo(1)" type="radio" id="i_youthteacher_yes" name="i_youthteacher" value="yes" required>&nbsp;<label class="label_input" for="i_youthteacher_yes">Yes</label>
+                            &nbsp;&nbsp;
+                            <input onchange="javascript:showYouthCourseTeacherAdditionalInfo(1)" type="radio" id="i_youthteacher_no" name="i_youthteacher" value="no">&nbsp;<label class="label_input" for="i_youthteacher_no">No</label>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tablerow" name="i_youthteacher_2weekttc_question" style="display: none;">
+                      <div class="tablecell">
+                        <label for="i_youthteacher_2weekttc_hidden">Have you completed a 2 week TTC before?</label>
+                        <input type="hidden" id="i_youthteacher_2weekttc_hidden" value="youthteacher_2weekttc" required>
+                      </div>
+                      <div class="tablecell">
+                        <div class="form-rightcol-inner-container form-rightcol-centered">
+                          <form>
+                            <input onchange="javascript:showYouthCourseTeacherAdditionalInfo(2)" type="radio" id="i_youthteacher_2weekttc_yes" name="i_youthteacher_2weekttc" value="yes">&nbsp;<label class="label_input" for="i_youthteacher_2weekttc_yes">Yes</label>
+                            &nbsp;&nbsp;
+                            <input onchange="javascript:showYouthCourseTeacherAdditionalInfo(2)" type="radio" id="i_youthteacher_2weekttc_no" name="i_youthteacher_2weekttc" value="no">&nbsp;<label class="label_input" for="i_youthteacher_2weekttc_no">No</label>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tablerow" name="i_youthteacher_2weekttc_details" style="display: none;">
+                      <div class="tablecell">
+                        <div class="titletext">
+                          TTC Details
+                        </div>
+                        <div class="smallertext">
+                          Please give details of the two week TTC you have completed
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tablerow" name="i_youthteacher_2weekttc_details" style="display: none;">
+                      <div class="tablecell">
+                        <label for="i_youthteacher_2weekttc_date">Month and Year</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_youthteacher_2weekttc_date">
+                      </div>
+                    </div>
+                    <div class="tablerow" name="i_youthteacher_2weekttc_details" style="display: none;">
+                      <div class="tablecell">
+                        <label for="i_youthteacher_2weekttc_location">Location (City, State, Country)</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_youthteacher_2weekttc_location">
+                      </div>
+                    </div>
+                    <div class="tablerow" name="i_youthteacher_2weekttc_details" style="display: none;">
+                      <div class="tablecell">
+                        <label for="i_youthteacher_2weekttc_teacher">TTC Teacher Name</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_youthteacher_2weekttc_teacher">
+                      </div>
+                    </div>          
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <div id="i_youthteacher_youthcourses" class="tablebody" style="display: none;">
+                          <div class="tablerow">
+                            <div class="tablecell">
+                              <label>Please list the Art Excel / YES courses that you have taught in the last 2 years</label>
+                            </div>
+                          </div>
+                          <div class="tablerow">
+                            <div class="tablecell">
+                              <span id="i_youthcourses"></span>
+                            </div>
+                          </div>
+                          <div class="tablerow">
+                            <div class="tablecell">
+                              <input class="button_2" id="btnAddYouthCourse" type="button" value="Add Course" onclick="addYouthCourseInfoInputs()" />
+                            </div>
+                            <div class="tablecell">
+                              &nbsp;
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <div class="silver-hr"></div>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_course_wishlist_hidden">Which courses would you like to teach?</label>
+                        <input type="hidden" id="i_course_wishlist_hidden" value="course_wishlist" required>
+                      </div>
+                      <div class="tablecell">
+                        <div class="form-rightcol-inner-container form-rightcol-left">
+                          <input type="checkbox" id="i_course_wishlist_hp" value="hp">&nbsp;<label class="label_input" for="i_course_wishlist_hp">Happiness Program</label>
+                          <br>
+                          <input type="checkbox" id="i_course_wishlist_yp" value="yp">&nbsp;<label class="label_input" for="i_course_wishlist_yp"><b>yes</b>plus</label>
+                          <br>
+                          <input type="checkbox" id="i_course_wishlist_yes" value="yes">&nbsp;<label class="label_input" for="i_course_wishlist_yes">YES</label>
+                          <br>
+                          <input type="checkbox" id="i_course_wishlist_artexcel" value="artexcel">&nbsp;<label class="label_input" for="i_course_wishlist_artexcel">Art Excel</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <div class="silver-hr"></div>
+                      </div>
+                    </div>
+                    <div class="tablerow" name="i_youthteacher_2weekttc_details">
+                      <div class="tablecell">
+                        <div class="titletext">
+                          Personal Information
+                        </div>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_fname">First Name</label>
+                      </div>
+                      <div class="tablecell">
+                        <!-- <input class="textbox" type="textbox" id="i_fname" required> -->
+<!--                         <div class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+                          <input type="text" class="mdc-text-field__input" id="i_fname" >
+                          <div class="mdc-text-field__outline">
+                            <svg>
+                              <path class="mdc-text-field__outline-path"/>
+                            </svg>
+                          </div>
+                          <div class="mdc-text-field__idle-outline"></div>
+                        </div> -->
+<div class="mdc-text-field mdc-text-field--outlined">
+  <input type="text" id="text-field-no-js" class="mdc-text-field__input" placeholder="Hint text">
+</div>
+
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_lname">Last Name</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_lname" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_gender_hidden">Gender</label>
+                        <input type="hidden" id="i_gender_hidden" value="gender" required>
+                      </div>
+                      <div class="tablecell">
+                        <div class="form-rightcol-inner-container form-rightcol-centered">
+                          <form>
+                            <input type="radio" id="i_gender_male" name="i_gender" value="male" required>&nbsp;<label class="label_input" for="i_gender_male">Male</label>
+                            &nbsp;&nbsp;
+                            <input type="radio" id="i_gender_female" name="i_gender" value="female">&nbsp;<label class="label_input" for="i_gender_female">Female</label>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_date_of_birth">Date Of Birth</label>
+                      </div>
+                      <div class="tablecell">
+                        <input type="tel" id="i_date_of_birth" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_cellphone">Cell Phone</label>
+                      </div>
+                      <div class="tablecell">
+                        <input type="tel" id="i_cellphone" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_homephone">Home Phone</label>
+                      </div>
+                      <div class="tablecell">
+                        <input type="tel" id="i_homephone">
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_email_aol">Email Address (artofliving.org)</label>
+                        <div class="smallertext">
+                          If you do not have an artofliving.org email ID yet, please get one by submitting a request <a target="_blank" style="font-weight:bold;" href="http://support-us.artofliving.org/#email_support">HERE</a> before you submit this form.
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="email" id="i_email_aol" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_email_other">Email Address (other)</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="email" id="i_email_other" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <b>Current Mailing address</b>
+                      </div>
+                      <div class="tablecell">
+                        &nbsp;
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_address_street_1">Street Address</label>
+                        <div class="smallertext">
+                          The complete mailing address
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input id="i_address_street_1" type="textbox" placeholder="Street Address *" required >
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        &nbsp;
+                      </div>
+                      <div class="tablecell">
+                        <input id="i_address_street_2" type="textbox" placeholder="Street Address (line 2)" >
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        &nbsp;&nbsp;<label for="i_address_city">City</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_address_city" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        &nbsp;&nbsp;<label for="i_address_state">State</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_address_state" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        &nbsp;&nbsp;<label for="i_address_zip">ZIP</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_address_zip" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        &nbsp;&nbsp;<label for="i_address_country">Country</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_address_country" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_ghangout_id">Google Hangout ID</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_ghangout_id" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_education">Educational Qualifications</label>
+                      </div>
+                      <div class="tablecell">
+                        <textarea class="maxwidth" id="i_education" rows="3" cols="40" required></textarea>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_profession">Profession</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_profession" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_jobtitle">Job Title</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_jobtitle">
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_company">Name of Company</label>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_company">
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_maritalstatus">Marital Status</label>
+                      </div>
+                      <div class="tablecell">
+                        <select class="textbox" name="maritalstatus" id="i_maritalstatus" required>
+                          <option value="">Select</option>
+                          <option value="1">Single</option>
+                          <option value="2">Married</option>
+                          <option value="3">Divorced / Separated</option>
+                          <option value="4">Widowed</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_photofile">Upload Photo</label><br>
+                        <div class="smallertext">
+                          Allowed file formats [jpg|jpeg|png|gif]<br>
+                          Photos should be &lt; 3MB<br>
+                          Please submit a <b>clear, front facing photo</b>
+                        </div>
+                        <input type="hidden" id="i_photofile" value="" required>
+                      </div>
+                      <div class="tablecell">
+                        <div class="form-rightcol-inner-container form-rightcol-centered">
+                          <form action="{{ photo_upload_url }}" method="post" enctype="multipart/form-data" target="hiddeniframe" onsubmit="uploadStarted()">
+                            <input type="file" name="photofile" id="photofile"><br>
+                            <input type="submit" class="an-simple-button" name="upload" value="Upload">
+                            <span id="uploadMessage"></span>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <div class="silver-hr"></div>
+                      </div>
+                    </div>
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <div class="titletext">
+                          Evaluating Teachers (3 required) (<span id="i_eval_teachers_count">0</span> added)
+                        </div>
+                        <div class="smallertext">
+                          (You need to have 3 teachers who have known you for atleast 6 months, AND you have organized for and/or assisted with, who will write evaluations on your behalf. See the TTC requirements document for more details)
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <select id="i_eval_teachers" required>
+                          <option value="">New Entry</option>
+                        </select>
+                      </div>
+                    </div>
+
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_eval_teacher_name">Name</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_eval_teacher_name" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_eval_teacher_email">Email</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="email" id="i_eval_teacher_email" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_eval_teacher_category">Teacher Type</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <select name="eval_teacher_category" id="i_eval_teacher_category" required>
+                          <option value="local_teacher">Local teacher</option>
+                          <option value="visiting_teacher">Visiting teacher</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        &nbsp;
+                      </div>
+                      <div class="tablecell maxwidth">
+                        <div style="display: table;">
+                          <div class="tablerow">
+                            <div style="text-align: left;display: table-cell;">
+                              <a class="an-simple-button" onclick="javascript:new_evaluating_teacher();">&nbsp;<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>&nbsp;</a>&nbsp;&nbsp;
+                            </div>
+                            <div style="text-align: right;display: table-cell;">
+                              <a class="an-simple-button" onclick="javascript:remove_evaluating_teacher();">&nbsp;<i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i>&nbsp;</a>&nbsp;&nbsp;
+                            </div>
+                            <div style="text-align: right;display: table-cell;">
+                              <a class="an-simple-button" onclick="javascript:save_evaluating_teacher();"><i class="fa fa-check-square fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Save</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="smallertext" style="margin-top:7px;text-align: left;font-style: italic;">
+                          Remember to save your entry
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <div class="silver-hr"></div>
+                      </div>
+                    </div>
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <div class="titletext">
+                          Happiness Program details
+                        </div>
+                        <div class="smallertext">
+                          Please list details of the first Art of Living Happiness Program/Part-1/Yesplus course that you attended
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_part1_date">Month and Year of the course</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_part1_date" placeholder="Month and Year of the course" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_part1_location">Location</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_part1_location" placeholder="" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_part1_teacher">Teacher</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_part1_teacher" placeholder="" required>
+                      </div>
+                    </div>
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <div class="silver-hr"></div>
+                      </div>
+                    </div>
+
+                    <div class="tablerow" >
+                      <div class="tablecell">
+                        <div class="titletext">
+                          Sahaj Samadhi (Art of Meditation) details
+                        </div>
+                        <div class="smallertext">
+                          Please list details of the first Art of Meditation (Sahaj Samadhi) course you attended
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_aom_date">Month and Year of the course</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_aom_date" placeholder="Month and Year of the course" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_aom_location">Location</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_aom_location" placeholder="" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_aom_teacher">Teacher</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_aom_teacher" placeholder="" required>
+                      </div>
+                    </div>
+
+
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <div class="silver-hr"></div>
+                      </div>
+                    </div>
+
+                    <div class="tablerow" >
+                      <div class="tablecell">
+                        <div class="titletext">
+                          Pre-TTC / VT details
+                        </div>
+                        <div class="smallertext">
+                          Please list details of the most recent PreTTC/Volunteer Training Program that you attended
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_prettc_date">Month and Year of the course</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_prettc_date" placeholder="Month and Year of the course" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_prettc_location">Location</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_prettc_location" placeholder="" required>
+                      </div>
+                    </div>
+                    <div class="tablerow">
+                      <div class="tablecell">
+                        <label for="i_prettc_teacher">Teacher</label>
+                        <div class="smallertext">
+                        </div>
+                      </div>
+                      <div class="tablecell">
+                        <input class="textbox" type="textbox" id="i_prettc_teacher" placeholder="" required>
+                      </div>
+                    </div>
+
+                </div>
+              </div>
+
+
+              <div id="step_submit" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+                  <div class="tablebody">
+                      <div class="tablerow">
+                          <div class="tablecell">
+                            <input id="btn_submit" type="button" class="c2a" value="Submit" onclick="submitTicket()" />
+                            <input id="btn_edit" type="button" class="btn-misc" value="Edit" style="display:none;" onclick="editTicket()" />
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div id="step_post_submit" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+                  <div class="tablebody">
+                      <div class="tablerow">
+                          <div id="step_post_submit_message" class="tablecell"></div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+        </div>
+      </div>
+
+<script>
+  // Note: This example requires that you consent to location sharing when
+  // prompted by your browser. If you see the error "The Geolocation service
+  // failed.", it means you probably did not give permission for the browser to
+  // locate you.
+
+  function initMap() {
+    // [START Setting typeahead city field]
+    var autocomplete;
+    var countryRestrict = {'country': 'us'};
+    autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */ (
+          document.getElementById('i_city')), {
+        types: ['(cities)'],
+        componentRestrictions: countryRestrict
+      });
+
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        var city = $('#i_city').val()
+        if (city) {
+            var cityArr = $('#i_city').val().split(',');
+            $('#i_city').val(cityArr[0]);
+            $('#i_state').val(cityArr[1]);          
+        }
+    });
+    // [START Setting typeahead city field]
+  }
+
+  function handleLocationError() {
+    // $('#img-ghcourses-search_in_progress').hide();
+    // $('#img-ghercourses-search_in_progress').hide();
+  }
+</script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRXv1cpuBAO5GFZhjR3VT96QOnbuGPvKY&libraries=places&callback=initMap">
+</script>
+<script src="javascript/node_modules/material-components-web/dist/material-components-web.js"></script>
+<script>mdc.autoInit()</script>

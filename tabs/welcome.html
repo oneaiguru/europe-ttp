@@ -1,0 +1,77 @@
+<script type="text/javascript" src="javascript/jquery-1.11.1.min.js"></script>
+<script type="text/javascript">
+
+  $(document).ready(function() {
+  }); // When the page first loads
+</script>
+      <div style="margin: 0 auto;" class="site-container">
+        <div class="site-inner-container">
+          <div id="welcome_form_success" class="form-tab-content generic-container-shadow" style="display:none;"></div>
+          <div id="welcome_form" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+              <div class="tablebody">
+                <div class="tablerow">
+                  <div class="tablecell">
+                    <div id="deepen" class="form-header-block" style="text-align: left;">
+                      Welcome
+                      <div class="smallertext" style="margin-top:7px;">
+                        to the Art of Living TTC Portal
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tablerow">
+                  <div class="tablecell">
+                    <br>
+                    Click on an option on the sidebar to continue.<br>
+                    <br>
+                    {% if user_home_country_iso not in ['CA', 'US', 'IN'] %}
+                      Your home country is currently set to <b>{{user_home_country}}</b>. This is an unsupported country.<br>
+                    {% else %}
+                      Your home country is currently set to <b>{{user_home_country}}</b>. If you want to change your home country click on the sidebar.<br>
+                    {% endif %}
+                    If you need to submit an evaluation or application for another country, then scroll to the bottom on the left menu to change your home country.<br>
+                    <br>
+                  </div>
+                </div>
+                <div class="tablerow">
+                  <div class="tablecell">
+                    <img class="content-maxwidth" style="border-radius: 13px;" src="images/welcome-banner.jpg" />
+                  </div>
+                </div>
+                {% if user_home_country_iso == 'US' %}
+                <div class="tablerow">
+                  <div class="tablecell">
+                    <br>
+                      <b>Message from TTC Desk:</b><br>
+                      <br>
+                      To apply for 2022 TTC in USA, please click here: <a href="https://aolf.me/ttcapp">https://aolf.me/ttcapp</a><br>
+                      <br>
+                      Those who have started filling out the TTC application for a prior TTC but did not complete your application or evaluation fully, please fill the application again in the new link above.<br>
+                      <br>
+                      Those who have already been accepted for a prior TTC, please email <a href="mailto:ttc@artofliving.org">ttc@artofliving.org</a><br>
+                      <!--
+                      Dear Teachers and Volunteers,<br>
+                      <br>
+                      TTC Portal is now open for receiving applications towards a Hybrid TTC in Oct/Dec 2021.<br>
+                      <br>
+                      We encourage everyone to start submitting the applications for this Hybrid TTC 2021 ASAP because we will again be reviewing and accepting TTC candidates on a first come first serve basis.<br>
+                      <br>
+                      A few things to keep in mind for TTC Application process:<br>
+                      <ul>
+                        <li>A Hybrid TTC consists of 2 consecutive weekends online (Oct 22-24 & Oct 29-31), a 10 day online section (Dec 11-21) and then 7 days in-person at a later date.</li>
+                        <li>A TTC Application is deemed complete only when the TTC applicant submits their application form and minimum 3 qualifying evaluating teachers also submit their evaluation for the applicant. It is a responsibility of the TTC applicant to make sure that the evaluations are also submitted in time.</li>
+                        <li>Evaluating teachers can visit the portal anytime and submit their evaluation. It is not required that they wait for the applicant to first submit their application form to be able to submit the evaluation.</li>
+                        <li>If an applicant has already started their application process for an earlier TTC, they will be able to access their apps and complete it.</li>
+                        <li>TTC requirements can be found here: <a href="https://ttcportal.aolf.app">https://ttcportal.aolf.app/#ttc_requirements.pdf</a></li>
+                      </ul>
+                      <i>** It is required to participate in both the online and in–person sections to complete TTC.</i><br>
+                      <br>
+                      Jai Gurudev!<br>
+                      <br>-->
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+          </div>
+        </div>
+      </div>

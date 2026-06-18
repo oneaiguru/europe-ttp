@@ -1,0 +1,323 @@
+<script type="text/javascript" src="javascript/typeahead.bundle.js"></script>
+<link rel="stylesheet" type="text/css" href="styles/an-typeahead.css">
+
+<script type="text/javascript">
+
+  function disableInputs(is_recoverable) {
+    $("input[id^=i_],textarea[id^=i_],select[id^=i_]").prop("disabled", true);
+    if (!is_recoverable) {
+      $('input[name=btns_save_submit]').remove();
+      $('#step_submit').show();
+    } else {
+      $('#step_submit').hide();
+    }
+  }
+
+  function enableInputs() {
+    $("input[id^=i_],textarea[id^=i_],select[id^=i_]").prop("disabled", false);
+    $('#step_submit').show();
+  }
+
+  // [START country_drop_down]
+  var countries_raw = {{countries|safe}};
+
+  var countries_arr = [];
+  var countries_map = {};
+  var countries_iso_abbr_map = {};
+  for (var i = 0; i < countries_raw.length; i++) {
+    // countries_arr.push(countries_raw[i]['name'] + " [" + countries_raw[i]['iso_abbr'] + "]");
+    countries_arr.push(countries_raw[i]['name']);
+    countries_map[countries_raw[i]['name']] = countries_raw[i]['iso_abbr'];
+    countries_iso_abbr_map[countries_raw[i]['iso_abbr']] = countries_raw[i]['name'];
+  }
+
+  // $(document).data('countries_map', countries_map);
+
+  // var countries = new Bloodhound({
+  //   datumTokenizer: Bloodhound.tokenizers.whitespace,
+  //   queryTokenizer: Bloodhound.tokenizers.whitespace,
+  //   local: countries_arr
+  // });
+
+  // $('#i_country_dropdown .typeahead').typeahead(null, {
+  //   name: 'countries',
+  //   limit: 10,
+  //   source: countries
+  // });
+
+  // if ('{{user_country}}' && '{{user_country}}'.trim() != '') {
+  //   try {
+  //     $('#i_country_dropdown .typeahead').typeahead('val',countries_iso_abbr_map['{{user_country}}']);
+  //   } 
+  //   catch(err) {
+  //     console.log("unknown country");
+  //   }
+  // }
+  // [END country_drop_down]
+
+    function getPageData() {
+        var _form_data = {};
+
+        var _parent = $('#settings_page')
+
+        _parent.find("input[id^=i_],textarea[id^=i_],select[id^=i_]").each(function (i, obj) {
+            var _id = $(this).attr('id');
+            var _name = $(this).attr('name');
+
+            var _input_type = $(this).attr('type');
+            if (_input_type && _input_type != 'hidden') {
+                if (_input_type == 'checkbox') {
+                    _form_data[_id] = document.getElementById(_id).checked;
+                } else if (_input_type == 'radio') {
+                    _form_data[_name] = $('input[name=' + _name + ']:checked').val();
+                } else {
+                    _form_data[_id] = $(this).val();
+                }
+            } else if ($('#' + _id).is("select")) {
+                _form_data[_id] = $(this).val();
+            }
+        });
+        return _form_data;
+    }
+
+    function savePage(is_form_submitted) {
+        var _form_data = getPageData();
+
+        console.log("[savePage] data = \n" + JSON.stringify(_form_data));
+
+        var jqxhr = $.post("users/set-config",
+            {
+                config_params: JSON.stringify(_form_data)
+            })
+            .done(function (data) {
+                // alert(data);
+                try {
+                    var params = JSON.parse(data);
+                    var _msg = params.message;
+                    if (_msg) {
+                        $('#step_post_submit_message').html(_msg);
+                    }
+                } catch (err) {
+                    console.log("[loadSettings] could not parse return data");
+                }
+                postDoneMessage("Your data has been saved");
+                var _homeCountryISO = $('#i_home_country').val();
+                $('#user_home_country_iso').val(_homeCountryISO);
+                if (_homeCountryISO in countries_iso_abbr_map) {
+                    console.log('[loadSettings] Setting home country');
+                    $('#user_home_country').html(countries_iso_abbr_map[_homeCountryISO]);
+                }
+            })
+            .fail(function () {
+                // alert("failed1");
+                postErrorMessage("There was an error saving your data");
+                $('#step_post_submit_message').html("There was an error saving your data. Sorry for the inconvenience.");
+            })
+            .always(function () {
+                hideLoadingIndicator("btn_submit");
+            });
+    }
+
+    function loadSettings(form_instance) {
+        disableInputs(true);
+
+        var jqxhr = $.get("users/get-config",
+            {
+            })
+            .done(function (data) {
+                // alert(data);
+                var _form_data = JSON.parse(data);
+
+                console.log('[loadSettings] data = \n' + data);
+
+                $("input[id^=i_],textarea[id^=i_],select[id^=i_]").each(function (i, obj) {
+                    var _id = $(this).attr('id');
+                    var _name = $(this).attr('name');
+                    if (_id in _form_data) {
+                        console.log('[loadSettings] ' + _id + ' = ' + JSON.stringify(_form_data[_id]));
+                    } else if (_name in _form_data) {
+                        console.log('[loadSettings] ' + _name + ' = ' + JSON.stringify(_form_data[_name]));
+                    }
+                    var _input_type = $(this).attr('type');
+                    if (_input_type && _input_type != 'hidden') {
+                        if (_input_type == 'radio') {
+                            if (_name in _form_data) {
+                                if ($('#' + _id).val() == _form_data[_name]) {
+                                    $('#' + _id).prop('checked', true);
+                                }
+                            }
+                        } else {
+                            if (_id in _form_data) {
+                                if (_input_type == 'checkbox') {
+                                    $('#' + _id).prop('checked', _form_data[_id]);
+                                } else {
+                                    // all other inputs
+                                    console.log('[loadSettings] setting ' + _id + ' = ' + JSON.stringify(_form_data[_id]));
+                                    $('#' + _id).val(_form_data[_id]);
+                                }
+                            }
+                        }
+                    } else if ($('#' + _id).is("select")) {
+                        if (_id in _form_data) {
+                            $('#' + _id).val(_form_data[_id]).change();
+                        }
+                    }
+                });
+
+                enableInputs();
+
+                postDoneMessage("Your settings have been retrieved");
+            })
+            .fail(function () {
+                // alert("failed1");
+                postErrorMessage("There was an error retrieving your settings. Please refresh the page.");
+                $('#step_post_submit_message').html("There was an error retrieving your data Sorry for the inconvenience.");
+            })
+            .always(function () {
+                hideLoadingIndicator("btn_submit");
+            });
+    }
+
+    $(document).ready(function () {
+
+        loadSettings();
+
+        initializeRequiredFields();
+
+    }); // When the page first loads
+
+</script>
+      <div style="margin: 0 auto;" class="site-container">
+        <div class="site-inner-container" style="position: relative;">
+          <div id="form_header" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+
+              <div class="tablebody">
+                  <div class="tablerow">
+                    <div class="tablecell">
+                      <div id="deepen" class="form-header-block" style="text-align: left;">
+                        <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;&nbsp;Settings
+                        <div class="smallertext" style="margin-top:13px;">
+                            Please enter settings for the TTC portal
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="step_form" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+              
+            <div id="settings_page" class="tablebody" is-form-instance-identifier="false" >
+                <div class="tablerow">
+                    <div class="tablecell">
+                    <div class="colspanhack">
+                        <br>
+                        <!-- <div class="pagetitletext">
+                        <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;&nbsp;TTC Portal Settings
+                        </div> -->
+                        <hr class="pagetitle-hr">
+                    </div>
+                    </div>
+                </div>
+                        
+                <div name="home_country" class="tablerow">
+                  <div class="tablecell">
+                    <label for="i_home_country" class="label_required">Your home country</label>
+                    <span class="smallertext"></span>
+                  </div>
+                  <div class="tablecell">
+                    <select is-form-instance-identifier="false" has-display-only-inputs="false" class="textbox" id="i_home_country" name="i_home_country" required="">
+                        <option value="">Select</option>
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="IN">India</option>
+                    </select>
+                  </div>
+                </div>
+                
+            
+            </div>
+                
+
+            <br>
+            <br>
+            <br>
+
+          </div>
+          
+          <div id="step_submit" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;position:fixed;bottom:0px;background-color:white;z-index:13;">
+              <div class="tablebody">
+                  <div class="tablerow">
+                      <div class="tablecell" style="
+                        padding-bottom: 5px; 
+                        line-height: 40px; 
+                        border-top: 1px solid #eee;
+                      ">
+                          <a id="btn_save" name="btns_save_submit" class="an-c2a-button" onclick="javascript:savePage(false);">
+                            <i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Save
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="step_post_submit" class="form-tab-content" style="display:table;text-align:center;margin:0 auto;">
+              <div class="tablebody">
+                  <div class="tablerow">
+                      <div id="step_post_submit_message" class="tablecell"></div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+      </div>
+
+<script>
+  // Note: This example requires that you consent to location sharing when
+  // prompted by your browser. If you see the error "The Geolocation service
+  // failed.", it means you probably did not give permission for the browser to
+  // locate you.
+
+  function initMap() {
+    // [START Setting typeahead city field]
+    var autocomplete;
+    var countryRestrict = {'country': "{{ user_country or 'us' }}".toLowerCase()};
+    autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */ (
+          document.getElementById('i_address_city')), {
+        types: ['(cities)'],
+        componentRestrictions: countryRestrict
+      });
+
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        var city = $('#i_address_city').val()
+        if (city) {
+            var cityArr = $('#i_address_city').val().split(',');
+            $('#i_address_city').val(cityArr[0]);
+            $('#i_address_state').val(cityArr[1]);          
+        }
+    });
+
+    $('#i_country_dropdown .typeahead').bind('typeahead:select', function(ev, suggestion) {
+      console.log('Selection: ' + suggestion);
+
+      var countries_map = $(document).data('countries_map');
+      var countryRestrict = {'country': 'us'};
+      if ($('#i_country').val()) {
+        var country_iso_abbr = countries_map[$('#i_country').val()];
+        $('#i_country_iso_abbr').val(country_iso_abbr);
+        countryRestrict = {'country': country_iso_abbr.toLowerCase()};
+      }
+
+      autocomplete.setComponentRestrictions(countryRestrict);
+    });
+  }
+
+  function handleLocationError() {
+    // $('#img-ghcourses-search_in_progress').hide();
+    // $('#img-ghercourses-search_in_progress').hide();
+  }
+</script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRXv1cpuBAO5GFZhjR3VT96QOnbuGPvKY&libraries=places&callback=initMap">
+</script>
