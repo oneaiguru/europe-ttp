@@ -1,0 +1,313 @@
+{
+  "extracted_at": "2026-02-02T17:07:20.121057+00:00",
+  "routes": [
+    {
+      "path": "/(.*html)?",
+      "handler": "Admin",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "admin.py",
+      "line": 248
+    },
+    {
+      "path": "/admin/(.*)?",
+      "handler": "Admin",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "admin.py",
+      "line": 249
+    },
+    {
+      "path": "/admin/(.*)?",
+      "handler": "Admin",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "admin.py",
+      "line": 250
+    },
+    {
+      "path": "/api/upload-form",
+      "handler": "UploadForm",
+      "methods": [
+        "POST"
+      ],
+      "file": "api.py",
+      "line": 330
+    },
+    {
+      "path": "/reporting/user-summary/load",
+      "handler": "Reporting",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "backup/user_summary-20201224-1.py",
+      "line": 751
+    },
+    {
+      "path": "/reporting/user-summary/get-by-form-type",
+      "handler": "Reporting",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "backup/user_summary-20201224-1.py",
+      "line": 752
+    },
+    {
+      "path": "/reporting/user-summary/get-by-user",
+      "handler": "Reporting",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "backup/user_summary-20201224-1.py",
+      "line": 753
+    },
+    {
+      "path": "/jobs/reporting/user-summary/load",
+      "handler": "Reporting",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "backup/user_summary-20201224-1.py",
+      "line": 754
+    },
+    {
+      "path": "/disabled",
+      "handler": "Disabled",
+      "methods": [
+        "GET"
+      ],
+      "file": "disabled.py",
+      "line": 74
+    },
+    {
+      "path": "/(.*html)?",
+      "handler": "Form",
+      "methods": [
+        "GET"
+      ],
+      "file": "form.py",
+      "line": 877
+    },
+    {
+      "path": "/createpdf/*",
+      "handler": "CreatePDF",
+      "methods": [
+        "GET"
+      ],
+      "file": "pyutils/createpdf.py",
+      "line": 62
+    },
+    {
+      "path": "/upload/get_signed_url/*",
+      "handler": "SignedUrlHandler",
+      "methods": [
+        "GET"
+      ],
+      "file": "pyutils/upload.py",
+      "line": 79
+    },
+    {
+      "path": "/upload/postdownload/*",
+      "handler": "PostUploadHandler",
+      "methods": [
+        "POST"
+      ],
+      "file": "pyutils/upload.py",
+      "line": 80
+    },
+    {
+      "path": "/(.*html)?",
+      "handler": "PrintForm",
+      "methods": [
+        "GET"
+      ],
+      "file": "reporting/print_form.py",
+      "line": 745
+    },
+    {
+      "path": "/integrity/user-integrity/load",
+      "handler": "Integrity",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "reporting/user_integrity.py",
+      "line": 406
+    },
+    {
+      "path": "/integrity/user-integrity/get-by-user",
+      "handler": "Integrity",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "reporting/user_integrity.py",
+      "line": 407
+    },
+    {
+      "path": "/jobs/integrity/user-integrity/load",
+      "handler": "Integrity",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "reporting/user_integrity.py",
+      "line": 408
+    },
+    {
+      "path": "/jobs/integrity/user-integrity/postload",
+      "handler": "Integrity",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "reporting/user_integrity.py",
+      "line": 409
+    },
+    {
+      "path": "/reporting/user-report/get-user-application-html",
+      "handler": "UserReport",
+      "methods": [
+        "GET"
+      ],
+      "file": "reporting/user_report.py",
+      "line": 493
+    },
+    {
+      "path": "/reporting/user-report/get-user-application-combined",
+      "handler": "UserReport",
+      "methods": [
+        "GET"
+      ],
+      "file": "reporting/user_report.py",
+      "line": 494
+    },
+    {
+      "path": "/reporting/user-report/get-user-application",
+      "handler": "UserReport",
+      "methods": [
+        "GET"
+      ],
+      "file": "reporting/user_report.py",
+      "line": 495
+    },
+    {
+      "path": "/reporting/user-summary/load",
+      "handler": "Reporting",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "reporting/user_summary.py",
+      "line": 757
+    },
+    {
+      "path": "/reporting/user-summary/get-by-user",
+      "handler": "Reporting",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "reporting/user_summary.py",
+      "line": 758
+    },
+    {
+      "path": "/jobs/reporting/user-summary/load",
+      "handler": "Reporting",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "reporting/user_summary.py",
+      "line": 759
+    },
+    {
+      "path": "/(.*html)?",
+      "handler": "Tabs",
+      "methods": [
+        "GET"
+      ],
+      "file": "tabs.py",
+      "line": 73
+    },
+    {
+      "path": "/*",
+      "handler": "TTCPortal",
+      "methods": [
+        "GET"
+      ],
+      "file": "ttc_portal.py",
+      "line": 83
+    },
+    {
+      "path": "/users/upload-form-data",
+      "handler": "UsersService",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "ttc_portal_user.py",
+      "line": 467
+    },
+    {
+      "path": "/users/get-form-data",
+      "handler": "UsersService",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "ttc_portal_user.py",
+      "line": 468
+    },
+    {
+      "path": "/users/get-form-instances",
+      "handler": "UsersService",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "ttc_portal_user.py",
+      "line": 469
+    },
+    {
+      "path": "/users/set-config",
+      "handler": "UsersService",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "ttc_portal_user.py",
+      "line": 470
+    },
+    {
+      "path": "/users/get-config",
+      "handler": "UsersService",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "ttc_portal_user.py",
+      "line": 471
+    },
+    {
+      "path": "/users/reporting/get-form-data-for-user",
+      "handler": "UsersService",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "file": "ttc_portal_user.py",
+      "line": 472
+    }
+  ]
+}

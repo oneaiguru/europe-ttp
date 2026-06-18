@@ -1,0 +1,48 @@
+{
+  "extracted_at": "2026-02-02T17:07:20.121057+00:00",
+  "reports": [
+    {
+      "name": "User Summary Report",
+      "description": "Generates user summary data and writes to GCS; provides per-user summary retrieval.",
+      "endpoint": [
+        "/reporting/user-summary/load",
+        "/reporting/user-summary/get-by-user",
+        "/jobs/reporting/user-summary/load"
+      ],
+      "file": "reporting/user_summary.py",
+      "line": 757
+    },
+    {
+      "name": "User Integrity Report",
+      "description": "Generates user integrity data and applicant enrolled CSV; provides per-user integrity retrieval.",
+      "endpoint": [
+        "/integrity/user-integrity/load",
+        "/integrity/user-integrity/get-by-user",
+        "/jobs/integrity/user-integrity/load",
+        "/jobs/integrity/user-integrity/postload"
+      ],
+      "file": "reporting/user_integrity.py",
+      "line": 406
+    },
+    {
+      "name": "User Application Report",
+      "description": "Generates user application report output (HTML/forms/combined) for admin review.",
+      "endpoint": [
+        "/reporting/user-report/get-user-application-html",
+        "/reporting/user-report/get-user-application-combined",
+        "/reporting/user-report/get-user-application"
+      ],
+      "file": "reporting/user_report.py",
+      "line": 493
+    },
+    {
+      "name": "Print Form Report",
+      "description": "Renders printable form HTML for admin review.",
+      "endpoint": [
+        "/(.*html)?"
+      ],
+      "file": "reporting/print_form.py",
+      "line": 745
+    }
+  ]
+}

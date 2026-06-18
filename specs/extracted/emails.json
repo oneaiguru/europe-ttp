@@ -1,0 +1,26 @@
+{
+  "extracted_at": "2026-02-02T17:07:20.121057+00:00",
+  "emails": [
+    {
+      "name": "user_confirmation_email",
+      "trigger": "form submission (is_form_submitted)",
+      "template_id": "dynamic (form metadata)",
+      "file": "ttc_portal_user.py",
+      "line": 126
+    },
+    {
+      "name": "owner_confirmation_email",
+      "trigger": "form submission (is_form_submitted)",
+      "template_id": "dynamic (form metadata)",
+      "file": "ttc_portal_user.py",
+      "line": 151
+    },
+    {
+      "name": "other_confirmation_emails",
+      "trigger": "form submission (is_form_submitted) for dynamic email fields",
+      "template_id": "dynamic (form metadata)",
+      "file": "ttc_portal_user.py",
+      "line": 178
+    }
+  ]
+}

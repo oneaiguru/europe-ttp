@@ -1,0 +1,167 @@
+{
+  "extracted_at": "2026-02-02T17:07:20.121057+00:00",
+  "forms": [
+    {
+      "name": "ttc_application",
+      "handler": "Form",
+      "fields": [
+        "i_address_country",
+        "i_country",
+        "i_ttc_country"
+      ],
+      "file": "form.py",
+      "line": 571
+    },
+    {
+      "name": "ttc_evaluation",
+      "handler": "Form",
+      "fields": [
+        "i_address_country",
+        "i_country",
+        "i_ttc_country"
+      ],
+      "file": "form.py",
+      "line": 573
+    },
+    {
+      "name": "ttc_applicant_profile",
+      "handler": "Form",
+      "fields": [
+        "i_address_country",
+        "i_country",
+        "i_ttc_country"
+      ],
+      "file": "form.py",
+      "line": 575
+    },
+    {
+      "name": "ttc_evaluator_profile",
+      "handler": "Form",
+      "fields": [
+        "i_address_country",
+        "i_country",
+        "i_ttc_country"
+      ],
+      "file": "form.py",
+      "line": 577
+    },
+    {
+      "name": "post_ttc_self_evaluation_form",
+      "handler": "Form",
+      "fields": [
+        "i_address_country",
+        "i_country",
+        "i_ttc_country"
+      ],
+      "file": "form.py",
+      "line": 579
+    },
+    {
+      "name": "post_ttc_feedback_form",
+      "handler": "Form",
+      "fields": [
+        "i_address_country",
+        "i_country",
+        "i_ttc_country"
+      ],
+      "file": "form.py",
+      "line": 581
+    },
+    {
+      "name": "post_sahaj_ttc_self_evaluation_form",
+      "handler": "Form",
+      "fields": [
+        "i_address_country",
+        "i_country",
+        "i_ttc_country"
+      ],
+      "file": "form.py",
+      "line": 583
+    },
+    {
+      "name": "post_sahaj_ttc_feedback_form",
+      "handler": "Form",
+      "fields": [
+        "i_address_country",
+        "i_country",
+        "i_ttc_country"
+      ],
+      "file": "form.py",
+      "line": 585
+    },
+    {
+      "name": "ttc_portal_settings",
+      "handler": "Form",
+      "fields": [
+        "i_address_country",
+        "i_country",
+        "i_ttc_country"
+      ],
+      "file": "form.py",
+      "line": 587
+    },
+    {
+      "name": "ttc_application",
+      "handler": "PrintForm",
+      "fields": [
+        "i_country"
+      ],
+      "file": "reporting/print_form.py",
+      "line": 534
+    },
+    {
+      "name": "ttc_evaluation",
+      "handler": "PrintForm",
+      "fields": [
+        "i_country"
+      ],
+      "file": "reporting/print_form.py",
+      "line": 536
+    },
+    {
+      "name": "ttc_applicant_profile",
+      "handler": "PrintForm",
+      "fields": [
+        "i_country"
+      ],
+      "file": "reporting/print_form.py",
+      "line": 538
+    },
+    {
+      "name": "ttc_evaluator_profile",
+      "handler": "PrintForm",
+      "fields": [
+        "i_country"
+      ],
+      "file": "reporting/print_form.py",
+      "line": 540
+    },
+    {
+      "name": "post_ttc_self_evaluation_form",
+      "handler": "PrintForm",
+      "fields": [
+        "i_country"
+      ],
+      "file": "reporting/print_form.py",
+      "line": 542
+    },
+    {
+      "name": "post_ttc_feedback_form",
+      "handler": "PrintForm",
+      "fields": [
+        "i_country"
+      ],
+      "file": "reporting/print_form.py",
+      "line": 544
+    },
+    {
+      "name": "ttc_portal_settings",
+      "handler": "PrintForm",
+      "fields": [
+        "i_country"
+      ],
+      "file": "reporting/print_form.py",
+      "line": 546
+    }
+  ]
+}
